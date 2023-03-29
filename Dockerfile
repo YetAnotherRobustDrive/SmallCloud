@@ -6,13 +6,9 @@ COPY package.json .
 
 RUN npm config set legacy-peer-deps true
 
-RUN npm install
+RUN npm install --save-dev jest 
 
-RUN npm install --save-dev jest
-
-RUN npm install redux
-
-RUN npm install @reduxjs/toolkit
+RUN npm install redux @reduxjs/toolkit react-vis
 
 EXPOSE 3000
 
