@@ -2,15 +2,34 @@ package org.mint.smallcloud.group;
 
 import org.mint.smallcloud.user.User;
 
+import javax.persistence.*;
 import java.util.List;
 import java.util.stream.Collectors;
 
+@Entity
 public class Group {
+
+    @Id
+    @Column(name = "GROUP_ID")
     private Long id;
+
+    @Column(name = "NAME")
     private String name;
+
+    @Column(name = "PARENT")
     private Group parent;
+
+    @Column(name = "CHILDREN")
     private List<Group> children;
+
+    @ManyToMany
+    @JoinColumn(name = "USER_ID")
+    @Column(name = "MANAGER")
     private User manager;
+
+    @ManyToMany
+    @JoinColumn(name = "USER_ID")
+    @Column(name = "MEMBERS")
     private List<User> members;
 
     public static Group of(User manager, String name) { return new Group(); }
@@ -28,8 +47,8 @@ public class Group {
     public Long getId() { return id; }
     public GroupTree getSubGroups() {
         return new GroupTree(
-            id, name,
-            this.children.stream().map(Group::getSubGroups).collect(Collectors.toList())
+                id, name,
+                this.children.stream().map(Group::getSubGroups).collect(Collectors.toList())
         );
     }
 

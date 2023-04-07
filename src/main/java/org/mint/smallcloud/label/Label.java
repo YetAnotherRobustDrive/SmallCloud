@@ -3,12 +3,27 @@ package org.mint.smallcloud.label;
 import org.mint.smallcloud.file.File;
 import org.mint.smallcloud.user.User;
 
+import javax.persistence.*;
 import java.util.List;
 
+@Entity
 public class Label {
+
+    @Id
+    @Column(name = "LABEL_ID")
     private Long id;
+
+    @Column(name = "NAME")
     private String name;
+
+    @ManyToOne
+    @JoinColumn(name = "USER_ID")
+    @Column(name = "OWNER")
     private User owner;
+
+    @ManyToOne
+    @JoinColumn(name = "FILE_ID")
+    @Column(name = "FILES")
     private List<File> files;
 
     public static Label of(User user, String name) {

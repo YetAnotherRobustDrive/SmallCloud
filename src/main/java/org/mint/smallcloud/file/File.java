@@ -6,19 +6,50 @@ import org.mint.smallcloud.label.Label;
 import org.mint.smallcloud.share.Share;
 import org.mint.smallcloud.user.User;
 
+import javax.persistence.*;
+import javax.print.attribute.standard.MediaSize;
 import java.time.LocalDateTime;
 import java.util.*;
 
+@Entity
 public class File {
+
+    @Id
+    @Column(name = "FILE_ID")
     private Long id;
-    private String description;
+
+    //@Column(name = "DESCRIPTION")
+    //private String description;
+
+    @Temporal(TemporalType.TIMESTAMP)
+    @Column(name = "CREATE_DATE")
     private LocalDateTime createdDate;
+
+    @Column(name = "SIZE")
     private Long size;
+
+    @Column(name = "FILE_TYPE")
     private FileTypeVO fileType;
+
+    @Column(name = "FOLDER")
     private File folder;
+
+    @Column(name = "LOCATION")
     private FileLocation location;
+
+    @ManyToOne
+    @JoinColumn(name = "USER_ID")
+    @Column(name = "AUTHOR")
     private User author;
+
+    @OneToMany
+    @JoinColumn(name = "SHARE_ID")
+    @Column(name = "SHARES")
     private List<Share> Shares;
+
+    @OneToMany
+    @JoinColumn(name = "LABEL_ID")
+    @Column(name = "LABELS")
     private List<Label> labels;
 
     public Path getFilePath() {
@@ -32,7 +63,7 @@ public class File {
     }
     public Long getId() { return id; }
     public String getName() { return fileType.getName(); }
-    public String getDescription() { return description; }
+    //public String getDescription() { return description; }
     public LocalDateTime getCreatedDate() { return createdDate; }
     public Long getSize() { return size; }
     public FileTypeVO getFileType() { return fileType; }
@@ -43,7 +74,7 @@ public class File {
     public List<Label> getLabels() { return labels; }
 
     public void setName(String name) {  }
-    public void setDescription(String description) { this.description = description; }
+    //public void setDescription(String description) { this.description = description; }
     public void setFileType(FileTypeVO fileType) { this.fileType = fileType; }
     public void setFolder(File folder) { this.folder = folder; }
     public void setLocation(FileLocation location) { this.location = location; }
