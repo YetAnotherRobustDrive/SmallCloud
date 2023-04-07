@@ -13,8 +13,7 @@ public abstract class Share {
     private Long id;
 
     @ManyToOne
-    @JoinColumn(name = "FILE_ID")
-    @Column(name = "FILE")
+    @JoinColumn(name = "FILE")
     private File file;
 
     public Long getId() { return id; }

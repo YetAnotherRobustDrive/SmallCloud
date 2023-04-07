@@ -21,7 +21,7 @@ public class File {
     //@Column(name = "DESCRIPTION")
     //private String description;
 
-    @Temporal(TemporalType.TIMESTAMP)
+    //@Temporal(TemporalType.TIMESTAMP)
     @Column(name = "CREATE_DATE")
     private LocalDateTime createdDate;
 
@@ -38,17 +38,14 @@ public class File {
     private FileLocation location;
 
     @ManyToOne
-    @JoinColumn(name = "USER_ID")
-    @Column(name = "AUTHOR")
+    @JoinColumn(name = "AUTHOR")
     private User author;
 
-    @OneToMany
-    @JoinColumn(name = "SHARE_ID")
+    @OneToMany(mappedBy = "file")
     @Column(name = "SHARES")
     private List<Share> Shares;
 
-    @OneToMany
-    @JoinColumn(name = "LABEL_ID")
+    @OneToMany(mappedBy = "files")
     @Column(name = "LABELS")
     private List<Label> labels;
 

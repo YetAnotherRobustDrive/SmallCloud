@@ -17,13 +17,11 @@ public class Label {
     private String name;
 
     @ManyToOne
-    @JoinColumn(name = "USER_ID")
-    @Column(name = "OWNER")
+    @JoinColumn(name = "OWNER")
     private User owner;
 
-    @ManyToOne
-    @JoinColumn(name = "FILE_ID")
-    @Column(name = "FILES")
+    @ManyToOne(targetEntity = File.class)
+    @JoinColumn(name = "FILES")
     private List<File> files;
 
     public static Label of(User user, String name) {

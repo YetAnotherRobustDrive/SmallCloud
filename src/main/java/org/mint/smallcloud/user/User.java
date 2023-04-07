@@ -25,32 +25,29 @@ public class User {
     @Column(name = "NICKNAME", nullable = false, length = 15)
     private String nickname;
 
-    @Temporal(TemporalType.TIMESTAMP)
+    //@Temporal(TemporalType.TIMESTAMP)
     @Column(name = "JOINED_DATE")
     private LocalDateTime joinedDate;
 
     @Column(name = "IS_LOCKED")
     private boolean isLocked;
 
-    @Temporal(TemporalType.TIMESTAMP)
+    //@Temporal(TemporalType.TIMESTAMP)
     @Column(name = "CHANGE_PW_DATE")
     private LocalDateTime changedPwDate;
 
-    @ManyToMany
-    @JoinColumn(name = "GROUP_ID")
-    @Column(name = "GROUP")
+    @ManyToOne
+    @JoinColumn(name = "GROUP")
     private Group group;
 
     @Column(name = "PROFILE_IMAGE_LOCATION")
     private FileLocation profileImageLocation;
 
-    @OneToMany
-    @JoinColumn(name = "FILE_ID")
+    @OneToMany(mappedBy = "author")
     @Column(name = "FILES")
     private List<File> files;
 
-    @OneToMany
-    @JoinColumn(name = "LABEL_ID")
+    @OneToMany(mappedBy = "owner")
     @Column(name = "LABELS")
     private List<Label> labels;
 

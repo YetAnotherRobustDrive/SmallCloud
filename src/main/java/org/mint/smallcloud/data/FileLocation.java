@@ -1,6 +1,8 @@
 package org.mint.smallcloud.data;
 
-public class FileLocation {
+import java.io.Serializable;
+
+public class FileLocation implements Serializable {
     private final String location;
 
     public FileLocation(String location) { this.location = location; }
