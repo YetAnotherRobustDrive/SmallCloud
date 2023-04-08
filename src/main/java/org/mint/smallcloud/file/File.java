@@ -42,11 +42,9 @@ public class File {
     private User author;
 
     @OneToMany(mappedBy = "file")
-    @Column(name = "SHARES")
     private List<Share> Shares;
 
     @OneToMany(mappedBy = "files")
-    @Column(name = "LABELS")
     private List<Label> labels;
 
     public Path getFilePath() {

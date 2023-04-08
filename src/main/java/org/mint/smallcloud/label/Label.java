@@ -21,7 +21,6 @@ public class Label {
     private User owner;
 
     @ManyToOne(targetEntity = File.class)
-    @JoinColumn(name = "FILES")
     private List<File> files;
 
     public static Label of(User user, String name) {

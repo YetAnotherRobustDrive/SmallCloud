@@ -44,11 +44,9 @@ public class User {
     private FileLocation profileImageLocation;
 
     @OneToMany(mappedBy = "author")
-    @Column(name = "FILES")
     private List<File> files;
 
     @OneToMany(mappedBy = "owner")
-    @Column(name = "LABELS")
     private List<Label> labels;
 
     static User of(String loginId, String loginPw, String nickname) { return new User(); }

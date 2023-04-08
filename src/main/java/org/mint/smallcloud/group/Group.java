@@ -20,17 +20,13 @@ public class Group {
     private Group parent;
 
     @OneToMany(mappedBy = "parent")
-    @Column(name = "CHILDREN")
     private List<Group> children;
 
     @OneToMany(mappedBy = "group")
-    @Column(name = "MEMBERS")
     private List<User> members;
 
     @Column(name = "MANAGER")
     private User manager;
-
-
 
     public static Group of(User manager, String name) { return new Group(); }
     public void addMember(User user) { }
