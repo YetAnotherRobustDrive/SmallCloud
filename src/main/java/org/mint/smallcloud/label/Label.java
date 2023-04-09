@@ -7,6 +7,7 @@ import javax.persistence.*;
 import java.util.List;
 
 @Entity
+@Table(name = "LABELS")
 public class Label {
 
     @Id
@@ -20,7 +21,7 @@ public class Label {
     @JoinColumn(name = "OWNER")
     private User owner;
 
-    @ManyToOne(targetEntity = File.class)
+    @ManyToMany(mappedBy = "labels")
     private List<File> files;
 
     public static Label of(User user, String name) {

@@ -7,6 +7,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @Entity
+@Table(name = "GROUPS")
 public class Group {
 
     @Id
@@ -16,7 +17,8 @@ public class Group {
     @Column(name = "NAME")
     private String name;
 
-    @Column(name = "PARENT")
+    @ManyToOne
+    @JoinColumn(name = "PARENT_ID")
     private Group parent;
 
     @OneToMany(mappedBy = "parent")
@@ -25,7 +27,9 @@ public class Group {
     @OneToMany(mappedBy = "group")
     private List<User> members;
 
-    @Column(name = "MANAGER")
+
+    @ManyToOne
+    @JoinColumn(name = "MANAGER_ID")
     private User manager;
 
     public static Group of(User manager, String name) { return new Group(); }

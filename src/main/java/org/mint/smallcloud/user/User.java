@@ -1,6 +1,5 @@
 package org.mint.smallcloud.user;
 
-import lombok.*;
 import org.mint.smallcloud.data.FileLocation;
 import org.mint.smallcloud.file.File;
 import org.mint.smallcloud.group.Group;
@@ -25,14 +24,12 @@ public class User {
     @Column(name = "NICKNAME", nullable = false, length = 15)
     private String nickname;
 
-    //@Temporal(TemporalType.TIMESTAMP)
     @Column(name = "JOINED_DATE")
     private LocalDateTime joinedDate;
 
     @Column(name = "IS_LOCKED")
     private boolean isLocked;
 
-    //@Temporal(TemporalType.TIMESTAMP)
     @Column(name = "CHANGE_PW_DATE")
     private LocalDateTime changedPwDate;
 

@@ -1,10 +1,10 @@
 package org.mint.smallcloud.file;
 
-public class FolderVO {
+public class Folder {
     private final Long id;
     private final String name;
 
-    public FolderVO(Long id, String name) {
+    public Folder(Long id, String name) {
         this.id = id;
         this.name = name;
     }

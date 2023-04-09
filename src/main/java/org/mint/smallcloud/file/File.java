@@ -1,5 +1,6 @@
 package org.mint.smallcloud.file;
 
+import lombok.NoArgsConstructor;
 import org.mint.smallcloud.data.FileLocation;
 import org.mint.smallcloud.group.Group;
 import org.mint.smallcloud.label.Label;
@@ -7,31 +8,30 @@ import org.mint.smallcloud.share.Share;
 import org.mint.smallcloud.user.User;
 
 import javax.persistence.*;
-import javax.print.attribute.standard.MediaSize;
 import java.time.LocalDateTime;
 import java.util.*;
 
 @Entity
+@Table(name = "FILES")
+@NoArgsConstructor
 public class File {
 
     @Id
     @Column(name = "FILE_ID")
     private Long id;
 
-    //@Column(name = "DESCRIPTION")
-    //private String description;
-
-    //@Temporal(TemporalType.TIMESTAMP)
     @Column(name = "CREATE_DATE")
     private LocalDateTime createdDate;
 
     @Column(name = "SIZE")
     private Long size;
 
-    @Column(name = "FILE_TYPE")
-    private FileTypeVO fileType;
+    @Embedded
+    private FileType fileType;
 
-    @Column(name = "FOLDER")
+
+    @OneToOne
+    @JoinColumn(name = "FOLDER_ID")
     private File folder;
 
     @Column(name = "LOCATION")
@@ -44,14 +44,19 @@ public class File {
     @OneToMany(mappedBy = "file")
     private List<Share> Shares;
 
-    @OneToMany(mappedBy = "files")
+    @ManyToMany
+    @JoinTable(
+            name = "FILE_LABEL",
+            joinColumns = @JoinColumn(name = "FILE_ID"),
+            inverseJoinColumns = @JoinColumn(name = "LABEL_ID")
+    )
     private List<Label> labels;
 
     public Path getFilePath() {
         File cur = folder;
-        LinkedList<FolderVO> folders = new LinkedList<>();
+        LinkedList<Folder> folders = new LinkedList<>();
         while (cur != null) {
-            folders.addFirst(new FolderVO(cur.getId(), cur.getName()));
+            folders.addFirst(new Folder(cur.getId(), cur.getName()));
             cur = cur.folder;
         }
         return new Path(folders);
@@ -61,7 +66,7 @@ public class File {
     //public String getDescription() { return description; }
     public LocalDateTime getCreatedDate() { return createdDate; }
     public Long getSize() { return size; }
-    public FileTypeVO getFileType() { return fileType; }
+    public FileType getFileType() { return fileType; }
     public File getFolder() { return folder; }
     public FileLocation getLocation() { return location; }
     public User getAuthor() { return author; }
@@ -70,7 +75,7 @@ public class File {
 
     public void setName(String name) {  }
     //public void setDescription(String description) { this.description = description; }
-    public void setFileType(FileTypeVO fileType) { this.fileType = fileType; }
+    public void setFileType(FileType fileType) { this.fileType = fileType; }
     public void setFolder(File folder) { this.folder = folder; }
     public void setLocation(FileLocation location) { this.location = location; }
     public void addShare(Share share) {}

@@ -1,13 +1,15 @@
 spring:
   datasource:
-    driver-class-name: com.mysql.cj.jdbc.Driver
-    username: root
-    password: pw
-    url: jdbc:mysql://localhost:3333/test
+    driver-class-name: org.mariadb.jdbc.Driver
+    url: jdbc:mariadb://localhost:3333/test_db?serverTimezone=Asia/Seoul
+    username: myuser
+    password: mypassword
   jpa:
-    properties:
-      hibernate:
-        dialect: org.hibernate.dialect.MySQL5Dialect
-        show_sql: true
     hibernate:
       ddl-auto: create
+    database-platform: org.hibernate.dialect.MariaDB103Dialect
+    properties:
+      hibernate:
+        show_sql: true
+        format_sql: true
+        globally_quoted_identifiers: true

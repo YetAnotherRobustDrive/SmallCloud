@@ -6,6 +6,8 @@ import org.mint.smallcloud.user.User;
 import javax.persistence.*;
 
 @Entity
+@Inheritance(strategy = InheritanceType.JOINED)
+@DiscriminatorColumn
 public abstract class Share {
 
     @Id
