@@ -1,12 +1,21 @@
 import React from "react";
-import "../../css/sidebar.css"
+import "../../css/sidebar.css";
+import { AiFillStar, AiFillHome } from 'react-icons/ai';
+import { BsFillTrashFill } from 'react-icons/bs';
 
-export default function Shortcut(){
+export default function Shortcut() {
   return (
     <div className="shortcut">
-      <a href="">고객센터</a>
-      <a href="">약관</a>
-      <a href="">공지사항</a>
+      <div className="bar">
+        <AiFillHome />
+        <span>Home</span>
+      </div>
+      <div className="bar">
+        <AiFillStar />Favorites
+      </div>
+      <div className="bar">
+        <BsFillTrashFill />Trash
+      </div>
     </div>
   )
 }

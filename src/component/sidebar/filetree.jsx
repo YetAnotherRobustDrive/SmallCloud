@@ -4,9 +4,7 @@ import "../../css/sidebar.css"
 export default function Filetree(){
   return (
     <div className="filetree">
-      <a href="">고객센터</a>
-      <a href="">약관</a>
-      <a href="">공지사항</a>
+      <div>파일트리 출력 예정</div>
     </div>
   )
 }
