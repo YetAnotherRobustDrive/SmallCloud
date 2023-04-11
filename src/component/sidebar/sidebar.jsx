@@ -5,9 +5,10 @@ import Footer from "./footer";
 import Shortcut from "./shortcut";
 import Usage from "./usage";
 
-export default function Sidebar(){
+export default function Sidebar() {
   return (
     <div className="sidebar">
+      <div className="stub" />
       <Shortcut />
       <Filetree />
       <Usage />

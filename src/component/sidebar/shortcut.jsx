@@ -11,10 +11,12 @@ export default function Shortcut() {
         <span>Home</span>
       </div>
       <div className="bar">
-        <AiFillStar />Favorites
+        <AiFillStar />
+        <span>Favorites</span>
       </div>
       <div className="bar">
-        <BsFillTrashFill />Trash
+        <BsFillTrashFill />
+        <span>Trash</span>
       </div>
     </div>
   )
