@@ -27,7 +27,6 @@ public class Group {
     @OneToMany(mappedBy = "group")
     private List<User> members;
 
-
     @ManyToOne
     @JoinColumn(name = "MANAGER_ID")
     private User manager;
