@@ -76,3 +76,21 @@
     min-height: 75px;
     max-height: 75px;
 }
+
+.menuBox{
+    display: flex;
+    width: 100%;
+    min-height: 50px;
+    border-top: 1px solid black;
+    align-items: center;
+    justify-content: center;
+}
+
+.menuBox:hover{
+    background-color: #ececec;
+}
+
+.menuBox .link {
+    color: black;
+    text-decoration: none;
+}

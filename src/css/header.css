@@ -67,3 +67,7 @@ img {
     padding: 5px;
     font-size: 30px;
 }
+
+.link {
+    text-decoration: none;
+}

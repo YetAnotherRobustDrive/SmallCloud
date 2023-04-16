@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { Link } from "react-router-dom";
 import logo_img from "../../config/img/logo.png"
 import configData from "../../config/config.json"
 import "../../css/login.css"
@@ -19,11 +20,11 @@ export default function Signup() {
             <input type="text" placeholder="ID" />
             <input type="password" placeholder="PW" />
             <input type="password" placeholder="PW Check" />
+            <input type="text" placeholder="Nickname" />
             <div className="buttons">
-                <button>회원가입</button>
-                <button>로그인</button>
+                <button>가입 신청</button>
             </div>
-            <a href="">로그인에 문제가 있으신가요?</a>
+            <Link to='/login-ask'>가입에 문제가 있으신가요?</Link>
         </div>
     )
 }

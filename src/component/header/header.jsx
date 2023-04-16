@@ -1,15 +1,19 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
+import { Link } from "react-router-dom";
 import "../../css/header.css"
 import AlertAndMy from "./alertAndMy";
 import Logo from "./logo";
 import SearchBar from "./searchBar";
 
-export default function Header(){
+export default function Header() {
+
   return (
     <div className="header">
-        <Logo/>
-        <SearchBar />
-        <AlertAndMy />
+      <Link to='/' style={{textDecoration: "none", color:"black"}}>
+        <Logo />
+      </Link>
+      <SearchBar />
+      <AlertAndMy />
     </div>
   )
 }
