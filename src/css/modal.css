@@ -1,0 +1,28 @@
+.modalOuter {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.modalOuter button {
+    border: none;
+    background-color: white;
+    float: right;
+    margin-top: 10px;
+}
+
+.modalOuter input {
+    margin-top: 30px;
+    margin-bottom: 30px;
+}
+
+.modalOuter .nick {
+    margin-top: 10px;
+    font-size: larger;
+}
+
+.modalOuter img {
+    width: 20%;
+    margin: 0;
+    padding: 0;
+}

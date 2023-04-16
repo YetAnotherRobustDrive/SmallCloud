@@ -39,7 +39,10 @@
     display: flex;
 }
 
-.login .buttons input{
+.login .buttons button{
     border: none;
     border-radius: 5px;
+    margin: 10px;
+    padding-left: 10px;
+    padding-right: 10px;
 }
