@@ -25,7 +25,7 @@ export default function ModalOk(props) {
     return (
         <Modal isOpen={isModalOpen} style={modalStyle}>
             <div className="modalOuter">
-                <span>{props.text}</span>
+                <span className="customSpan">{props.text}</span>
                 <div className="btn">
                     <button onClick={modalClose}>확인</button>
                 </div>
