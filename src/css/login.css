@@ -1,0 +1,45 @@
+.login {
+    width: 100vw;
+    display: flex;
+    height: 100vh;
+    flex-direction: column;
+    align-items: center;
+}
+
+.login span {
+    padding-top: 30px;
+    padding-bottom: 30px;
+    font-size: 40px;
+    font-weight: 500;
+    max-width: 50%;
+    overflow: hidden;
+}
+
+.login img {
+    padding-top: 100px;
+    width: 20vw;
+    height: auto;
+}
+
+.login input{
+    margin: 5px;
+    border: none;
+    border-bottom: 2px solid #666666;
+    font-size: 20px;
+}
+
+.login a {
+    margin: 0;
+    padding: 0;
+    color: #666666;
+    padding-top: 20px;
+}
+
+.login .buttons {
+    display: flex;
+}
+
+.login .buttons input{
+    border: none;
+    border-radius: 5px;
+}
