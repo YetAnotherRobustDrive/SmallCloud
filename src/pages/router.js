@@ -6,6 +6,7 @@ import LoginAsk from './loginAsk';
 import Signup from './signup';
 import Mypage from './mypage';
 import AdminRules from './admin/rules';
+import AdminUserCtrl from './admin/userCtrl';
 
 export default () => (
     <Router>
@@ -17,6 +18,7 @@ export default () => (
             <Route path='/mypage' element={<Mypage/>} />
             <Route path='/admin' element={<AdminRules/>} />
             <Route path='/admin/rules' element={<AdminRules/>} />
+            <Route path='/admin/user-ctrl' element={<AdminUserCtrl/>} />
         </Routes>
     </Router>
 )

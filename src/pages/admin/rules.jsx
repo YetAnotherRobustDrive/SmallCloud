@@ -67,7 +67,7 @@ export default function AdminRules() {
                     <RuleBox
                         title="1인당 업로드 용량"
                         desc="사용자 1인의 최대 업로드 용량 제한을 설정합니다.">
-                        <RuleInput desc="주기"/>
+                        <RuleInput desc="용량(GB)"/>
                     </RuleBox>
                 </TitledBox>
                 <TitledBox
