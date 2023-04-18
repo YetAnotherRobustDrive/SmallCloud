@@ -1,6 +1,6 @@
 import React from "react";
-import Header from "../header/header";
-import SidebarMypage from "../sidebar/sidebarMypage";
+import Header from "../component/header/header";
+import SidebarMypage from "../component/sidebar/sidebarMypage";
 
 export default function Mypage() {
     return (

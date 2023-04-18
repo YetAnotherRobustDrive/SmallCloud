@@ -1,8 +1,7 @@
 import React, { useState } from "react";
-import logo_img from "../../config/img/logo.png"
-import configData from "../../config/config.json"
-import "../../css/login.css"
-import "../../css/modal.css"
+import logo_img from "../config/img/logo.png"
+import "../css/login.css"
+import "../css/modal.css"
 
 export default function LoginAsk() {
 

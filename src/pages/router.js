@@ -1,11 +1,11 @@
 import React from 'react';
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import MainPage from './mainPage';
-import LoginPage from './component/login/login';
-import LoginAsk from './component/login/loginAsk';
-import Signup from './component/login/signup';
-import Mypage from './component/mypage/mypage';
-import AdminRules from './component/admin/rules';
+import LoginPage from './login';
+import LoginAsk from './loginAsk';
+import Signup from './signup';
+import Mypage from './mypage';
+import AdminRules from './admin/rules';
 
 export default () => (
     <Router>
