@@ -1,0 +1,94 @@
+.rulebox{
+    width: 100%;
+    background-color: #ececec;
+    margin-bottom: 2px;
+    margin-top: 2px;
+}
+
+.texts{
+    float: left;
+    padding: 10px;
+    padding-top: 5px;
+}
+
+.texts .title {
+    font-size: large;
+    padding-bottom: 10px;
+}
+
+.texts .desc {
+    font-size: small;
+    padding-left: 10px;
+}
+
+.interac{
+    float: right;
+    height: 100%;
+    padding: 15px;
+}
+
+.titledBox {
+    display: flex;
+    flex-direction: column;
+}
+
+.titledBox .head{
+    float: left;
+    width: fit-content;
+    display: flex;
+    padding: 5px;
+    padding-left: 10px;
+    padding-top: 10px;
+}
+
+.titledBox .head .icon {
+    font-size: xx-large;
+    padding-right: 5px;
+    display: flex;
+    align-items: center;
+}
+
+.titledBox .head .text {
+    font-size: x-large;
+}
+
+.titledBox .child {
+    width: calc(100% - 60px);
+    display: flex;
+    flex-direction: column;
+    padding-left: 30px;
+    padding-right: 30px;
+    padding-bottom: 10px;
+}
+
+.tgBtn {
+    font-size: 40px;
+    height: 100%;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+}
+
+.tgBtn .stateText {
+    font-size: medium;
+    height: 100%;
+    padding-right: 10px;
+}
+
+.ruleInput {
+    display: flex;
+    flex-direction: column;
+    align-items: end;
+    width: fit-content;
+}
+
+.ruleInput .new{
+    width: fit-content;
+    padding: 0;
+    margin: 0;
+}
+
+.ruleInput .new input{
+    border-radius: 3px;
+    border: 1px solid black;
+}

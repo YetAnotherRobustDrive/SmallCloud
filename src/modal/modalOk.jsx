@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import Modal from 'react-modal';
 
-export default function ModalOk(props) {
+export default function ModalOk({children}) {
 
     const [isModalOpen, setIsModalOpen] = useState(true);
 
@@ -25,7 +25,7 @@ export default function ModalOk(props) {
     return (
         <Modal isOpen={isModalOpen} style={modalStyle}>
             <div className="modalOuter">
-                <span className="customSpan">{props.text}</span>
+                <span className="customSpan">{children}</span>
                 <div className="btn">
                     <button onClick={modalClose}>확인</button>
                 </div>
