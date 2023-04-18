@@ -60,7 +60,7 @@ img {
 .two {
     display: flex;
     align-items: center;
-    margin: 5px;
+    padding: 5px;
 }
 
 .two div {
