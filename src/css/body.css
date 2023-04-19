@@ -1,0 +1,11 @@
+.bodyHeader{
+    border: 1px solid black;
+    height: 20px;
+    display: flex;
+    align-items: center;
+    padding: 10px;
+    padding-left: 20px;
+    background-color: #ececec;
+    font-weight: bold;
+    font-size: larger;
+}
