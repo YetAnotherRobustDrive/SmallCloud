@@ -5,7 +5,7 @@
     margin-top: 2px;
 }
 
-.texts{
+.texts {
     float: left;
     padding: 10px;
     padding-top: 5px;
@@ -21,7 +21,7 @@
     padding-left: 10px;
 }
 
-.interac{
+.interac {
     float: right;
     height: 100%;
     padding: 15px;
@@ -91,4 +91,41 @@
 .ruleInput .new input{
     border-radius: 3px;
     border: 1px solid black;
+}
+
+.profile {
+    display: flex;
+    align-items: center;
+}
+
+.profile img {
+    padding: 20px;
+    max-width: 20%;
+    padding-right: 30px;
+}
+
+.profile .userinfo {
+    max-width: 70%;
+    min-width: 160px;
+}
+
+.profile .userinfo .text{
+    border-bottom: 1px solid #666666;
+    margin-bottom: 10px;
+    min-width: 400px;
+}
+
+.profile .userinfo .text .title{
+    font-size: larger;
+}
+
+.profile .userinfo .text .value{
+    font-size: medium;
+    float: right;
+}
+
+.initBtn {
+    border: none;
+    padding: 6px;
+    font-size: larger;
 }

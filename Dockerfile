@@ -4,9 +4,9 @@ WORKDIR /app
 
 COPY package.json .
 
-RUN npm install
-
 RUN npm config set legacy-peer-deps true
+
+RUN npm install
 
 EXPOSE 3000
 
