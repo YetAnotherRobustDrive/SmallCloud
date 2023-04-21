@@ -10,7 +10,7 @@ export default function CustomIcon(props) {
 
     useEffect(() => {
         setIcon(
-            props.type === "file" ? <FcFile /> : <FcFolder />
+            props.type == "file" ? <FcFile /> : <FcFolder />
         )
         setLeft(() => {
             switch (props.stage) {

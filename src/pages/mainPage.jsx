@@ -6,6 +6,9 @@ import BodyFrame from "../component/bodyframe";
 import NarrowBox from "../component/main/narrowBox";
 import CustomIcon from "../component/main/customIcon";
 
+import datas from '../fakeJSON/direcFiles.json'
+import GridBox from "../component/main/gridBox";
+
 export default function MainPage() {
     return (
         <>
@@ -14,10 +17,20 @@ export default function MainPage() {
             <BodyFrame>
                 <BodyHeader text="공유 파일" />
                 <NarrowBox>
-                    <CustomIcon type="file" stage="DRAFT" secu="CONFIDENTIAL"/>
-                    <CustomIcon type="folder" stage="DRAFT" secu="CONFIDENTIAL"/>
+                    {
+                        datas.map((data) => {
+                            return <CustomIcon type={data.type} stage={data.writingStage} secu={data.securityLevel} />
+                        })
+                    }
                 </NarrowBox>
                 <BodyHeader text="내 파일" />
+                <GridBox>
+                    {
+                        datas.map((data) => {
+                            return <CustomIcon type={data.type} stage={data.writingStage} secu={data.securityLevel} />
+                        })
+                    }
+                </GridBox>
             </BodyFrame>
         </>
     )

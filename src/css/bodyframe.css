@@ -4,4 +4,25 @@
     top: 75px;
     left: 220px;
     width: calc(100% - 220px);
+    z-index: -100;
+}
+
+.narrow {
+    height: 120px;
+    display: flex;
+    overflow-x:scroll;
+    overflow-y: hidden;
+    position: relative;
+}
+
+.gridscroll{
+    overflow-y: scroll;
+    overflow-x: hidden;
+    height: calc(100vh - 279px);
+}
+
+.gridbox {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(110px, 1fr));
+    place-items: center;
 }

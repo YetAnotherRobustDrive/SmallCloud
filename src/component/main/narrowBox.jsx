@@ -1,8 +1,10 @@
 import React from "react";
+import '../../css/bodyframe.css'
 
 export default function NarrowBox(props) {
+
     return (
-        <div style={{ height: "100px", display:"flex" }}>
+        <div className="narrow">
             {props.children}
         </div>
     )
