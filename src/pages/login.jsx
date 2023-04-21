@@ -4,7 +4,7 @@ import logo_img from '../config/img/logo.png'
 import configData from "../config/config.json"
 import "../css/login.css"
 import "../css/modal.css"
-import ModalOk from "../modal/modalOk";
+import ModalOk from "../component/modal/modalOk";
 
 export default function LoginPage() {
 
