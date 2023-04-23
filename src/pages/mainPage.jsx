@@ -5,9 +5,9 @@ import BodyHeader from "../component/main/bodyHeader";
 import BodyFrame from "../component/bodyframe";
 import NarrowBox from "../component/main/narrowBox";
 import CustomIcon from "../component/main/customIcon";
+import GridBox from "../component/main/gridBox";
 
 import datas from '../fakeJSON/direcFiles.json'
-import GridBox from "../component/main/gridBox";
 
 export default function MainPage() {
     return (
