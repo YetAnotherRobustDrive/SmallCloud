@@ -1,7 +1,7 @@
 import React from "react";
 import "../../css/sidebar.css"
-import Filetree from "./filetree";
-import Footer from "./footer";
+import Filetree from "./Filetree";
+import Footer from "./Footer";
 import Shortcut from "./shortcut";
 import Usage from "./usage";
 

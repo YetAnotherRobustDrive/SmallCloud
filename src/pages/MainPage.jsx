@@ -1,11 +1,11 @@
 import React from "react";
-import Sidebar from "../component/sidebar/sidebar"
-import Header from "../component/header/header"
-import BodyHeader from "../component/main/bodyHeader";
-import BodyFrame from "../component/bodyframe";
-import NarrowBox from "../component/main/narrowBox";
-import CustomIcon from "../component/main/customIcon";
-import GridBox from "../component/main/gridBox";
+import Sidebar from "../component/sidebar/Sidebar"
+import Header from "../component/header/Header"
+import BodyHeader from "../component/main/BodyHeader";
+import BodyFrame from "../component/Bodyframe";
+import NarrowBox from "../component/main/NarrowBox";
+import CustomIcon from "../component/main/CustomIcon";
+import GridBox from "../component/main/GridBox";
 
 import datas from '../fakeJSON/direcFiles.json'
 

@@ -1,9 +1,9 @@
 import React from "react";
 import RuleBox from "../../component/admin/ruleBox";
 import TitledBox from "../../component/admin/titledBox";
-import BodyFrame from "../../component/bodyframe";
-import Header from "../../component/header/header";
-import SidebarAdmin from "../../component/sidebar/sidebarAdmin";
+import BodyFrame from "../../component/Bodyframe";
+import Header from "../../component/header/Header";
+import SidebarAdmin from "../../component/sidebar/SidebarAdmin";
 import {AiOutlineUserSwitch, AiOutlineFileUnknown} from 'react-icons/ai';
 import {CgPassword} from 'react-icons/cg'
 import ToggleBtn from "../../component/admin/toggleBtn";

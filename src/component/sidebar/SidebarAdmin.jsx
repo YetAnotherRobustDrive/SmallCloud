@@ -1,6 +1,6 @@
 import React from "react";
 import "../../css/sidebar.css"
-import Footer from "./footer";
+import Footer from "./Footer";
 import { Link } from "react-router-dom";
 
 export default function SidebarAdmin() {

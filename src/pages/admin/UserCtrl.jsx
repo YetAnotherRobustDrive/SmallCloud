@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from "react";
 import RuleBox from "../../component/admin/ruleBox";
 import TitledBox from "../../component/admin/titledBox";
-import BodyFrame from "../../component/bodyframe";
-import Header from "../../component/header/header";
-import SidebarAdmin from "../../component/sidebar/sidebarAdmin";
+import BodyFrame from "../../component/Bodyframe";
+import Header from "../../component/header/Header";
+import SidebarAdmin from "../../component/sidebar/SidebarAdmin";
 import ToggleBtn from "../../component/admin/toggleBtn";
 import RuleInput from "../../component/admin/ruleInput";
 import default_profile_img from '../../img/defalutProfile.png'

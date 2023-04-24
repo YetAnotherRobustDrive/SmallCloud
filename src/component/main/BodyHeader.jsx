@@ -3,8 +3,8 @@ import '../../css/body.css'
 import {TfiViewListAlt, TfiViewGrid} from 'react-icons/tfi'
 
 export default function BodyHeader(props){
-    const [sort, setSort] = useState("");//↑↓
-    const [view, setView] = useState(""); //TfiViewListAlt TfiViewGrid
+    const [sort, setSort] = useState('');//↑↓
+    const [view, setView] = useState(''); //TfiViewListAlt TfiViewGrid
 
     useState(() => {
         if(props.addon == "true"){
