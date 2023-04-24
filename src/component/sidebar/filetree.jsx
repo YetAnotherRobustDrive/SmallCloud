@@ -26,7 +26,7 @@ export default function Filetree() {
       taps += '     '; 
     }
     if (depth != 0) {
-      taps += 'L';      
+      taps += 'L';
     } 
 
     return folder.map((d) => {

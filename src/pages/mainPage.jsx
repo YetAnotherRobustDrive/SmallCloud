@@ -23,7 +23,7 @@ export default function MainPage() {
                         })
                     }
                 </NarrowBox>
-                <BodyHeader text="내 파일" />
+                <BodyHeader text="내 파일" addon="true"/>
                 <GridBox>
                     {
                         datas.map((data) => {

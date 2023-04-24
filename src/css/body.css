@@ -1,5 +1,7 @@
 .bodyHeader{
+    position: relative;
     border: 1px solid black;
+    border-right: none;
     height: 20px;
     display: flex;
     align-items: center;
@@ -8,4 +10,25 @@
     background-color: #ececec;
     font-weight: bold;
     font-size: larger;
+}
+
+.bodyHeader .options {
+    position: absolute;
+    font-weight: 200;
+    font-size: smaller;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 10px;
+    height: 22px;
+    margin: 0;
+    right: 0;
+}
+
+.bodyHeader .options div {
+    padding-right: 10px;
+}
+
+.bodyHeader .options svg {
+    padding-top: 5px;
 }

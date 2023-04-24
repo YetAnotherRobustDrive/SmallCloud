@@ -27,6 +27,6 @@
     {
         "id": 6,
         "name": "string",
-        "type": "file"
+        "type": "folder"
     }
 ]
