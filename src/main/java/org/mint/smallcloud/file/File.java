@@ -30,9 +30,9 @@ public class File {
     private FileType fileType;
 
 
-    @OneToOne
+    @ManyToOne
     @JoinColumn(name = "FOLDER_ID")
-    private File folder;
+    private Folder folder;
 
     @Column(name = "LOCATION")
     private FileLocation location;
