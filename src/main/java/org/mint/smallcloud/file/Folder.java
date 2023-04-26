@@ -21,14 +21,14 @@ public class Folder {
     @Column(name = "CREATE_DATE")
     private LocalDateTime createdDate;
 
-
-    @Column(name = "PARENTS_FOLDER")
+    @ManyToOne
+    @JoinColumn(name = "PARENTFOLDER_ID")
     private Folder parentFolder;
 
-    @OneToMany(mappedBy = "file")
+    @OneToMany(mappedBy = "folder")
     private List<File> filesublist;
 
-    @OneToMany(mappedBy = "folder")
+    @OneToMany(mappedBy = "parentFolder")
     private List<Folder> foldersublist;
 
     public Long getId() { return id; }
@@ -42,5 +42,3 @@ public class Folder {
     public void setCreatedDate(LocalDateTime localDateTime) { this.createdDate = createdDate; }
     public void setParentFolder(Folder parentFolder) { this.parentFolder = parentFolder; }
 }
-
-// 폴더 트리 만들기위해 연관관계 생각해야댐 - parentFolder, foldersublist

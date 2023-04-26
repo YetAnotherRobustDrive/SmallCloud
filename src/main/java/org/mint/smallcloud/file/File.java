@@ -52,22 +52,23 @@ public class File {
     )
     private List<Label> labels;
 
-    public Path getFilePath() {
-        File cur = folder;
-        LinkedList<Folder> folders = new LinkedList<>();
-        while (cur != null) {
-            folders.addFirst(new Folder(cur.getId(), cur.getName()));
-            cur = cur.folder;
-        }
-        return new Path(folders);
-    }
+//    public Path getFilePath() {
+//        File cur = folder;
+//        LinkedList<Folder> folders = new LinkedList<>();
+//        while (cur != null) {
+//            folders.addFirst(new Folder(cur.getId(), cur.getName()));
+//            cur = cur.folder;
+//        }
+//        return new Path(folders);
+//    }
+
     public Long getId() { return id; }
     public String getName() { return fileType.getName(); }
     //public String getDescription() { return description; }
     public LocalDateTime getCreatedDate() { return createdDate; }
     public Long getSize() { return size; }
     public FileType getFileType() { return fileType; }
-    public File getFolder() { return folder; }
+//    public File getFolder() { return folder; }
     public FileLocation getLocation() { return location; }
     public User getAuthor() { return author; }
     public List<Share> getShares() { return Shares; }
@@ -76,7 +77,7 @@ public class File {
     public void setName(String name) {  }
     //public void setDescription(String description) { this.description = description; }
     public void setFileType(FileType fileType) { this.fileType = fileType; }
-    public void setFolder(File folder) { this.folder = folder; }
+//    public void setFolder(File folder) { this.folder = folder; }
     public void setLocation(FileLocation location) { this.location = location; }
     public void addShare(Share share) {}
     public void deleteShare(Share share) {}
