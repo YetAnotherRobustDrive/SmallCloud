@@ -1,0 +1,15 @@
+.dropdown-options {
+    border: 2px solid black;
+    border-radius: 10px;
+    align-items: center;
+    background-color: white;
+    z-index: 99;
+    position: relative;
+    width: fit-content;
+}
+
+.dropdown-options .dropdown-option {
+    width: fit-content;
+    text-align: center;
+    padding: 5px 10px 5px 10px;
+}

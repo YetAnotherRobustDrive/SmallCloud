@@ -1,26 +1,27 @@
 import React, { useState } from "react";
 import '../../css/body.css'
-import {TfiViewListAlt, TfiViewGrid} from 'react-icons/tfi'
+import { TfiViewListAlt, TfiViewGrid } from 'react-icons/tfi'
+import SortDropdown from "../dropdown/SortDropdown";
 
-export default function BodyHeader(props){
-    const [sort, setSort] = useState('');//↑↓
-    const [view, setView] = useState(''); //TfiViewListAlt TfiViewGrid
+export default function BodyHeader(props) {
 
-    useState(() => {
-        if(props.addon == "true"){
-            setSort("이름↑");
-            setView(<TfiViewGrid/>);
-        }
-    }, [])
+    const [view, setView] = useState(false); //TfiViewListAlt TfiViewGrid
+
+    function clickView() {
+        setView(!view)
+        //fetch here
+    }
 
     return (
         <div className="bodyHeader">
             {props.text}
-            <div className="options">
-                <div>{sort}</div>
-                <div>{view}</div>
-            </div>
+            {props.addon && (
+                <div className="options">
+                    <div className="option"><SortDropdown /></div>
+                    <div className="option" onClick={clickView}>{view ? <TfiViewListAlt /> : <TfiViewGrid />}</div>
+                </div>)
+            }
         </div>
     )
-    
+
 } 

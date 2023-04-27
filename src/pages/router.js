@@ -1,14 +1,14 @@
 import React from 'react';
 import { BrowserRouter as Router, Navigate, Route, Routes } from 'react-router-dom';
-import MainPage from './mainPage';
-import LoginPage from './login';
-import LoginAsk from './loginAsk';
-import Signup from './signup';
-import Mypage from './mypage';
-import AdminRules from './admin/rules';
-import AdminUserCtrl from './admin/userCtrl';
-import Upload from './upload';
-import Download from './download';
+import MainPage from './MainPage';
+import LoginPage from './Login';
+import LoginAsk from './LoginAsk';
+import Signup from './Signup';
+import Mypage from './Mypage';
+import AdminRules from './admin/Rules';
+import AdminUserCtrl from './admin/UserCtrl';
+import Upload from './Upload';
+import Download from './Download';
 
 export default () => (
     <Router>

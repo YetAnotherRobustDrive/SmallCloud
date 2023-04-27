@@ -2,8 +2,8 @@ import React from "react";
 import "../../css/sidebar.css"
 import Filetree from "./Filetree";
 import Footer from "./Footer";
-import Shortcut from "./shortcut";
-import Usage from "./usage";
+import Shortcut from "./Shortcut";
+import Usage from "./Usage";
 
 export default function Sidebar() {
   return (

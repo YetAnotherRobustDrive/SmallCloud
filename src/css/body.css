@@ -25,7 +25,7 @@
     right: 0;
 }
 
-.bodyHeader .options div {
+.bodyHeader .options .option {
     padding-right: 10px;
 }
 
