@@ -17,6 +17,7 @@ import java.util.*;
 public class File {
 
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "FILE_ID")
     private Long id;
 

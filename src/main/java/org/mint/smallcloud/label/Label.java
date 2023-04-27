@@ -11,6 +11,7 @@ import java.util.List;
 public class Label {
 
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "LABEL_ID")
     private Long id;
 

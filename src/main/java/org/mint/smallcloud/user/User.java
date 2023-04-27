@@ -16,6 +16,7 @@ import java.util.List;
 @NoArgsConstructor
 public class User {
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "USER_ID")
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;

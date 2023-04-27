@@ -11,6 +11,7 @@ import java.util.stream.Collectors;
 public class Group {
 
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "GROUP_ID")
     private Long id;
 

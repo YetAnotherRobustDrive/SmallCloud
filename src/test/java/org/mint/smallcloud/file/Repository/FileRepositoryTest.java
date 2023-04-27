@@ -1,6 +1,7 @@
 package org.mint.smallcloud.file.Repository;
 
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.TestFactory;
 import org.mint.smallcloud.data.FileLocation;
 import org.mint.smallcloud.file.File;
 import org.mint.smallcloud.file.FileType;
@@ -44,5 +45,31 @@ class FileRepositoryTest {
         assertEquals("testAuthor", author.getNickname());
         assertEquals(123L,fileSize);
 
+    }
+    
+    @Test
+    public void findById() {
+        FileLocation fileLocation = new FileLocation("testLocation");
+        FileType fileType = new FileType("testName", "txtType");
+        LocalDateTime localDateTime = LocalDateTime.of(2023, 4,23,12,34,56);
+
+        User author = new User();
+        author.setNickname("testAuthor");
+
+        File file1 = new File();
+        Long fileSize = 123L;
+
+        File file = new File();
+        file.setFileType(fileType);
+
+        File findFileById = fileRepository.findById(1L).get();
+
+        System.out.println(findFileById);
+        System.out.println(findFileById.getId());
+        System.out.println(findFileById.getName());
+        System.out.println(findFileById.getFileType());
+        System.out.println(findFileById.getCreatedDate());
+        System.out.println(findFileById.getLocation());
+        System.out.println(findFileById.getAuthor());
     }
 }
