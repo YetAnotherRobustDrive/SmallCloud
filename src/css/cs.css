@@ -1,0 +1,56 @@
+.extendBox {
+    width: calc(100% - 20px);
+    border: 1px solid black;
+    border-radius: 5px;
+    margin: 10px;
+}
+
+.extendBox .head {
+    display: flex; 
+    position: relative;   
+    padding: 10px;
+}
+
+.extendBox .btn {
+    font-size: 25px;
+    position: absolute;
+    right: 10px;
+}
+
+.extendBox .child {
+    overflow-y: scroll;
+    width: calc(100% - 20px);
+    min-height: 100px;
+    resize: none;
+    border-left: none;
+    border-right: none;
+    border-bottom: none;
+}
+
+.terms {
+    height: 300px;
+    padding: 10px;
+}
+
+.terms .inner {
+    border: 1px solid black;
+    height: 100%
+}
+
+.ask {
+    height: 300px;
+    padding: 10px;
+    position: relative;
+}
+
+.ask .inner {
+    border: 1px solid black;
+    height: calc(100% - 40px);
+}
+
+.ask .askBtn{
+    position: absolute;
+    right: 0;
+    height: 25px;
+    margin: 10px;
+}

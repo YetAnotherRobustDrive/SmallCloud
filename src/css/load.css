@@ -1,10 +1,4 @@
-/*
-<div className="loadTitleBox">
-<div className="titleT">{props.title}</div>
-<div className="child">
-*/
-
-.loadTitleBox {
+.LoadListBox {
     padding: 15px;
 }
 
@@ -23,4 +17,18 @@
     padding: 10px;
     max-height: 250px;
     overflow-y: scroll;
+}
+
+.UploadBtn {
+    position: fixed;
+    bottom: 0;
+    right: 0;
+    padding-right: 30px;    
+    font-size: 75px;
+    color: white;
+}
+
+.UploadBtn svg {
+    background-color: #666666;
+    border-radius: 75px;
 }

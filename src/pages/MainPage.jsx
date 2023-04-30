@@ -8,6 +8,7 @@ import CustomIcon from "../component/main/CustomIcon";
 import GridBox from "../component/main/GridBox";
 
 import datas from '../fakeJSON/direcFiles.json'
+import UploadBtn from "../component/main/UploadBtn";
 
 export default function MainPage() {
     return (
@@ -31,6 +32,7 @@ export default function MainPage() {
                         })
                     }
                 </GridBox>
+                <UploadBtn/>
             </BodyFrame>
         </>
     )

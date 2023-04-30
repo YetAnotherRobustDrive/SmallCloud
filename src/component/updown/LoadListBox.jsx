@@ -1,10 +1,10 @@
 import React, { useState } from "react";
 import '../../css/load.css'
 
-export default function LoadTitleBox(props){
+export default function LoadListBox(props){
 
     return (
-        <div className="loadTitleBox">
+        <div className="LoadListBox">
             <div className="titleT">{props.title}</div>
             <div className="child">
                 {props.children}

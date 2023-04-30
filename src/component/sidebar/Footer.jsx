@@ -1,13 +1,14 @@
 import React from "react";
+import { Link } from "react-router-dom";
 import "../../css/sidebar.css"
 
 export default function Footer(){
   return (
     <div className="footer">
       <div className="links">
-        <a href="">고객센터</a>
-        <a className="middle" href="">약관</a>
-        <a href="">공지사항</a>
+        <Link to="/cs/notice">고객센터</Link>
+        <Link to="/cs/terms" className="middle">약관</Link>
+        <Link to="/cs/notice">공지사항</Link>
       </div>
       <div className="copyright">Copyright 2023. Mint. All rights reserved.</div>
     </div>

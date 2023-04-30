@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import BodyFrame from "../component/Bodyframe";
 import Header from "../component/header/Header";
 import Sidebar from "../component/sidebar/Sidebar";
-import LoadTitleBox from "../component/updown/LoadTitle";
+import LoadListBox from "../component/updown/LoadListBox";
 import ProgressBar from "../component/updown/ProgressBar";
 import '../css/load.css'
 
@@ -24,12 +24,12 @@ export default function Upload(){
             <Header/>
             <Sidebar/>
             <BodyFrame>
-                <LoadTitleBox title="현재 업로드 중인 파일">
+                <LoadListBox title="현재 업로드 중인 파일">
                     <ProgressBar 
                     name="test.txt"
                     value={progress}/>
-                </LoadTitleBox>
-                <LoadTitleBox title="업로드 예정 파일 목록">
+                </LoadListBox>
+                <LoadListBox title="업로드 예정 파일 목록">
                     <div>test</div>
                     <div>test</div>
                     <div>test</div>
@@ -46,8 +46,8 @@ export default function Upload(){
                     <div>test</div>
                     <div>test</div>
                     <div>test</div>
-                </LoadTitleBox>
-                <LoadTitleBox title="업로드 완료 파일 목록">
+                </LoadListBox>
+                <LoadListBox title="업로드 완료 파일 목록">
                     <div>test</div>
                     <div>test</div>
                     <div>test</div>
@@ -64,7 +64,7 @@ export default function Upload(){
                     <div>test</div>
                     <div>test</div>
                     <div>test</div>
-                </LoadTitleBox>
+                </LoadListBox>
             </BodyFrame>
         </>
     )
