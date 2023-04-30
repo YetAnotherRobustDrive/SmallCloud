@@ -17,7 +17,7 @@ import java.util.*;
 public class File {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "FILE_ID")
     private Long id;
 
