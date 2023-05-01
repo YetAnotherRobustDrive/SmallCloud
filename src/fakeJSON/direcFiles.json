@@ -15,7 +15,7 @@
         "writingStage": "EXPIRED",
         "name": "string",
         "size": 0,
-        "type": "file",
+        "type": "folder",
         "thumbnail": "string",
         "shared": true
     },
@@ -35,7 +35,7 @@
         "writingStage": "EXPIRED",
         "name": "string",
         "size": 0,
-        "type": "file",
+        "type": "folder",
         "thumbnail": "string",
         "shared": true
     },
@@ -55,7 +55,7 @@
         "writingStage": "EXPIRED",
         "name": "string",
         "size": 0,
-        "type": "file",
+        "type": "folder",
         "thumbnail": "string",
         "shared": true
     },
@@ -75,7 +75,7 @@
         "writingStage": "EXPIRED",
         "name": "string",
         "size": 0,
-        "type": "file",
+        "type": "folder",
         "thumbnail": "string",
         "shared": true
     },

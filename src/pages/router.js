@@ -13,6 +13,7 @@ import Notice from './Notice';
 import Terms from './Terms';
 import FAQ from './FAQ';
 import Ask from './Ask';
+import ErrorPage from './ErrorPage';
 
 export default () => (
     <Router>
@@ -33,7 +34,8 @@ export default () => (
             <Route path='/admin' element={<AdminRules/>} />
             <Route path='/admin/rules' element={<AdminRules/>} />
             <Route path='/admin/user-ctrl' element={<AdminUserCtrl/>} />
-            <Route path="*" element={<Navigate to="/" />} />
+            <Route path='/error' element={<ErrorPage/>} />
+            <Route path="*" element={<Navigate to="/error" />} />
         </Routes>
     </Router>
 )
