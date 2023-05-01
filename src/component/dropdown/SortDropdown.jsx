@@ -15,7 +15,7 @@ export default function SortDropdown() {
 
     const handleOptionClick = (option) => {
         setSelected(option);
-        setIsOpen(true);
+        setIsOpen(false);
     };
 
     return (
