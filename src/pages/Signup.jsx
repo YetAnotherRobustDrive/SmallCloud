@@ -4,6 +4,8 @@ import logo_img from "../config/img/logo.png"
 import configData from "../config/config.json"
 import "../css/login.css"
 import "../css/modal.css"
+import ModalCheckPw from '../component/modal/ModalCheckPw'
+import ModalConfirmRemove from '../component/modal/ModalConfirmRemove'
 
 export default function Signup() {
 
@@ -25,6 +27,8 @@ export default function Signup() {
                 <button>가입 신청</button>
             </div>
             <Link to='/login-ask'>가입에 문제가 있으신가요?</Link>
+            <ModalConfirmRemove></ModalConfirmRemove>
+            <ModalCheckPw></ModalCheckPw>
         </div>
     )
 }
