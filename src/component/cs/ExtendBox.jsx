@@ -9,10 +9,10 @@ export default function ExtendBox(props) {
         setIsOpen(!isOpen);
     }
     return (
-        <div className="extendBox">
-            <div className="head">
+        <div className="extendBox" >
+            <div className="head" onClick={handleClick}>
                 <span className="title">{props.title}</span>
-                <div className="btn" onClick={handleClick}>{isOpen ? <FiChevronUp /> : <FiChevronDown />}</div>
+                <div className="btn" >{isOpen ? <FiChevronUp /> : <FiChevronDown />}</div>
             </div>
             {isOpen &&
                 <div className="child">{props.children}</div>

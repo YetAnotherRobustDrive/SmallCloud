@@ -21,7 +21,8 @@ export default () => (
             <Route exact path='/' element={<MainPage/>} />
             <Route path='/register' element={<Signup/>} />
             <Route path='/login' element={<LoginPage/>} />
-            <Route path='/login-ask' element={<LoginAsk/>} />
+            <Route path='/login/ask' element={<LoginAsk/>} />
+            
             <Route path='/mypage' element={<Mypage/>} />
             <Route path='/upload' element={<Upload/>} />
             <Route path='/download' element={<Download/>} />
@@ -34,6 +35,7 @@ export default () => (
             <Route path='/admin' element={<AdminRules/>} />
             <Route path='/admin/rules' element={<AdminRules/>} />
             <Route path='/admin/user-ctrl' element={<AdminUserCtrl/>} />
+
             <Route path='/error' element={<ErrorPage/>} />
             <Route path="*" element={<Navigate to="/error" />} />
         </Routes>
