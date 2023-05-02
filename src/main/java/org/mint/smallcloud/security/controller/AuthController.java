@@ -1,6 +1,5 @@
 package org.mint.smallcloud.security.controller;
 
-import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.mint.smallcloud.security.UserDetailsProvider;
@@ -10,7 +9,6 @@ import org.mint.smallcloud.security.jwt.JwtTokenDto;
 import org.mint.smallcloud.security.jwt.JwtUserService;
 import org.mint.smallcloud.user.UserService;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.context.SecurityContext;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;

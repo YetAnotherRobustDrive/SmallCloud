@@ -1,13 +1,7 @@
 spring:
-  datasource:
-    driver-class-name: org.mariadb.jdbc.Driver
-    url: jdbc:mariadb://localhost:3333/test_db?serverTimezone=Asia/Seoul
-    username: myuser
-    password: mypassword
+  profiles:
+    default: local
   jpa:
-    hibernate:
-      ddl-auto: create
-    database-platform: org.hibernate.dialect.MariaDB103Dialect
     properties:
       hibernate:
         show_sql: true

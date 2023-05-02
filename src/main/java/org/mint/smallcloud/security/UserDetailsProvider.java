@@ -33,7 +33,7 @@ public class UserDetailsProvider {
 
 
     /**
-     * {@link UserDetails}를 context에 저장합니다.
+     * {@link UserDetails}를 spring context에 저장합니다.
      *
      * @param authentication 저장할 인증정보
      * @throws ServiceException {@link Authentication}이 {@link UserDetails}가 아니라면 internal server error로 throw
