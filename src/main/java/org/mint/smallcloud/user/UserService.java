@@ -2,6 +2,9 @@ package org.mint.smallcloud.user;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.mint.smallcloud.exception.ExceptionStatus;
+import org.mint.smallcloud.exception.ServiceException;
+import org.mint.smallcloud.security.dto.LoginDto;
 import org.mint.smallcloud.security.dto.RegisterDto;
 import org.mint.smallcloud.user.dto.UserDetailsDto;
 import org.mint.smallcloud.user.repository.UserRepository;
@@ -34,6 +37,13 @@ public class UserService {
                 registerDto.getName());
         userRepository.save(user);
     }
+
+    public void checkPassword(LoginDto loginDto) {
+        User user = userExceptionService.getUserByLoginId(loginDto.getId());
+        if (!user.getPassword().equals(loginDto.getPassword()))
+            throw new ServiceException(ExceptionStatus.WRONG_PASSWORD);
+    }
+
     public List<String> searchUser(String query) { return new ArrayList<>(); }
     public String getUserInfo(Long userId) {return "";}
     public void deactivateUser() {}

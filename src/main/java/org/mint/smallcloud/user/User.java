@@ -60,7 +60,7 @@ public class User {
         this.changedPwDate = LocalDateTime.now();
     }
 
-    static User of(String loginId, String loginPw, String nickname) {
+    public static User of(String loginId, String loginPw, String nickname) {
         return new User(loginId, loginPw, nickname);
     }
 
