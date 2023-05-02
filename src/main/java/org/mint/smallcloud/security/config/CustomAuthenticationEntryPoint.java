@@ -1,7 +1,6 @@
 package org.mint.smallcloud.security.config;
 
 import lombok.RequiredArgsConstructor;
-import org.mint.smallcloud.exception.ServiceException;
 import org.mint.smallcloud.security.FilterExceptionManager;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.web.AuthenticationEntryPoint;
