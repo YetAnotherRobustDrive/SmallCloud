@@ -24,6 +24,12 @@ public class SecurityConfig {
     private final FilterExceptionManager filterExceptionManager;
     private final CustomAuthenticationEntryPoint authenticationEntryPoint;
     private final CustomAccessDeniedHandler accessDeniedHandler;
+    private final String[] PERMIT_ALL = {
+            "/auth/login",
+            "/auth/register",
+            "/auth/refresh",
+            "/docs"
+    };
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
@@ -35,9 +41,7 @@ public class SecurityConfig {
                 .authorizeRequests()
                 .antMatchers("/auth/admin").hasRole(Roles.ADMIN.getRole())
                 .antMatchers("/auth/user").hasRole(Roles.COMMON.getRole())
-                .antMatchers("/auth/login").permitAll()
-                .antMatchers("/auth/register").permitAll()
-                .antMatchers("/auth/refresh").permitAll()
+                .antMatchers(PERMIT_ALL).permitAll()
                 .anyRequest().authenticated()
                 .and()
                 .formLogin().disable()
@@ -50,4 +54,6 @@ public class SecurityConfig {
 
         return http.build();
     }
+
+
 }

@@ -21,6 +21,7 @@ public class FilterExceptionManager {
     private static final String ATTRIBUTE_NAME = "exception";
     private static final String CONTENT_TYPE_NAME = "Content-Type";
     private static final String CONTENT_TYPE = "application/json";
+    private static final String UTF_8 = "utf-8";
     private final ObjectMapper objectMapper;
     public void addException(HttpServletRequest request, Exception exception) {
         request.setAttribute(ATTRIBUTE_NAME, exception);
@@ -52,6 +53,7 @@ public class FilterExceptionManager {
     private void setResponseDto(HttpServletResponse response, ErrorResponseDto responseDto) throws IOException {
         response.setStatus(responseDto.getStatusCode());
         response.setHeader(CONTENT_TYPE_NAME, CONTENT_TYPE);
+        response.setCharacterEncoding(UTF_8);
         response.getWriter()
                 .write(objectMapper.writeValueAsString(responseDto));
     }
