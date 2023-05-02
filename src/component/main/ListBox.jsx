@@ -7,7 +7,7 @@ export default function ListBox(props) {
     return (
         <div className="listbox">
             <div className="icon">
-                {props.type == "file" ? <FcFile /> : <FcFolder />}
+                {data.type == "file" ? <FcFile /> : <FcFolder />}
             </div>
             <div className="name">{data.name}</div>
             <div className="size">{data.size}</div>

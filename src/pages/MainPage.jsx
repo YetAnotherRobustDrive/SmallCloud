@@ -13,7 +13,7 @@ import datas from '../fakeJSON/direcFiles.json'
 
 export default function MainPage() {
 
-    const [isGrid, setIsGrid] = useState(true);
+    const [isGrid, setIsGrid] = useState(false);
 
     return (
         <>
@@ -40,7 +40,6 @@ export default function MainPage() {
                 }
                 {!isGrid &&
                     <>
-                    <div className="listTitle">제목</div>
                     <div className="listscroll">{
                         datas.map((data) => {
                             return <ListBox data={data} />
