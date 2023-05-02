@@ -14,18 +14,24 @@ import Terms from './Terms';
 import FAQ from './FAQ';
 import Ask from './Ask';
 import ErrorPage from './ErrorPage';
+import Favorites from './Favorites';
+import Trash from './Trash';
 
 export default () => (
     <Router>
         <Routes>
-            <Route exact path='/' element={<MainPage/>} />
+            <Route exact path='/' element={<MainPage />} />
+            <Route path='/favorites' element={<Favorites />} />
+            <Route path='/trash' element={<Trash />} />
+
+
             <Route path='/register' element={<Signup/>} />
             <Route path='/login' element={<LoginPage/>} />
             <Route path='/login/ask' element={<LoginAsk/>} />
             
             <Route path='/mypage' element={<Mypage/>} />
             <Route path='/upload' element={<Upload/>} />
-            <Route path='/download' element={<Download/>} />
+            <Route path='/download' element={<Download />} />
 
             <Route path='/cs/notice' element={<Notice/>} />
             <Route path='/cs/terms' element={<Terms/>} />

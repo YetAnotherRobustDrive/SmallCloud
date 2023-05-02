@@ -6,10 +6,10 @@ import { Link } from "react-router-dom";
 export default function MypageDropdown() {
 
     const options = [
-        { value: "name_asc", label: "회원정보" },
-        { value: "name_desc", label: <Link to='/upload'>업로드 목록</Link> },
-        { value: "name_desc", label: <Link to='/download'>다운로드 목록</Link> },
-        { value: "time_desc", label: "로그아웃" }
+        { label: <Link to='/mypage'>마이페이지</Link>  },
+        { label: <Link to='/upload'>업로드 목록</Link> },
+        { label: <Link to='/download'>다운로드 목록</Link> },
+        { label: <Link to='/logout'>로그아웃</Link> }
     ];
 
     const [isOpen, setIsOpen] = useState(false);
