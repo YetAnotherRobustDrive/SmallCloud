@@ -12,12 +12,16 @@ package org.mint.smallcloud.exception;
  * @see ExceptionStatus
  */
 public class ServiceException extends RuntimeException {
-    final ExceptionStatus status;
+    private final ExceptionStatus status;
 
     /**
      * @param status exception에 대한 정보에 대한 enum
      */
     public ServiceException(ExceptionStatus status) {
         this.status = status;
+    }
+
+    public ExceptionStatus getStatus() {
+        return status;
     }
 }
