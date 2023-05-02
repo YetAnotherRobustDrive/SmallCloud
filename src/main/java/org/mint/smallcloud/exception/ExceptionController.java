@@ -10,9 +10,10 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 public class ExceptionController {
     @ExceptionHandler(ServiceException.class)
     public ResponseEntity<?> serviceExceptionHandler(ServiceException e) {
-        log.info("called ExceptionController for {}", e.status.getError());
+        ErrorResponseDto responseDto = e.getStatus().getResponseDto();
+        log.info("called ExceptionController for {}", responseDto.getError());
         return ResponseEntity
-                .status(e.status.getStatusCode())
-                .body(e.status);
+                .status(responseDto.getStatusCode())
+                .body(e.getStatus());
     }
 }

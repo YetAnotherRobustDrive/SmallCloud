@@ -1,0 +1,41 @@
+= SmallCloud API 명세
+:doctype: book
+:icons: font
+:source-highlighter: highlightjs // 코드들의 하이라이팅을 highlightjs를 사용
+:toc: left // Table Of Contents(목차)를 문서의 좌측에 두기
+:toclevels: 2 // 목차 레벨 설정
+:sectlinks:
+// :sectnums: // 분류별 자동으로 숫자를 달아줌
+// :docinfo: shared-head
+
+[[overview]]
+== 인증 관련 (auth)
+
+=== 등록 (register)
+
+==== 명세
+operation::Register[snippets='http-request,request-fields']
+
+==== 성공
+operation::Register[snippets='http-response']
+
+==== 실패
+operation::RegisterFail[snippets='http-response']
+IMPORTANT: 유저가 이미 존재할 때
+
+
+=== 로그인 (login)
+
+=== 명세
+operation::Login[snippets='http-request,request-fields']
+
+=== 성공
+operation::Login[snippets='http-response']
+
+==== 실패
+operation::WrongPassword[snippets='http-response']
+IMPORTANT: 비밀번호가 잘못되었을 때
+
+operation::NotFoundUserLogin[snippets='http-response']
+IMPORTANT: 유저를 찾을 수 없을 때
+
