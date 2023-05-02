@@ -32,7 +32,7 @@ export default function Favorites() {
                 }
                 {!isGrid &&
                     <>
-                    <div className="listscroll" style={{ height: "calc(100vh - 117px)" }}>{
+                        <div className="listscroll" style={{ height: "calc(100vh - 117px)" }}>{
                             datas.map((data) => {
                                 return <ListBox data={data} />
                             })

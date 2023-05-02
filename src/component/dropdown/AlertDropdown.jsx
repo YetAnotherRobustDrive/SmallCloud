@@ -5,10 +5,10 @@ import { BsBell } from "react-icons/bs"
 export default function AlertDropdown() {
 
     const datas = [ //replace with fetched data
-        { value: "name_asc", label: "1111" },
-        { value: "name_desc", label: "2222" },
-        { value: "time_asc", label: "시간 ↑" },
-        { value: "time_desc", label: "시간 ↓" }
+        { label: "1111" },
+        { label: "2222" },
+        { label: "시간 ↑" },
+        { label: "시간 ↓" }
     ];
 
     const [isOpen, setIsOpen] = useState(false);

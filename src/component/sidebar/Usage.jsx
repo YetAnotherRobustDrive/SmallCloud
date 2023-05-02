@@ -22,16 +22,16 @@ export default function Usage() {
     labels: [
     ],
     datasets: [{
-      data: [per, 100-per],
-      backgroundColor: function(context) {
-          const chart = context.chart;
-          const {_, chartArea} = chart;
-          if (!chartArea) {
-            // This case happens on initial chart load
-            return;
-          }
-          return [getColor(per), 'rgb(255,255,255)'];
-        },
+      data: [per, 100 - per],
+      backgroundColor: function (context) {
+        const chart = context.chart;
+        const { _, chartArea } = chart;
+        if (!chartArea) {
+          // This case happens on initial chart load
+          return;
+        }
+        return [getColor(per), 'rgb(255,255,255)'];
+      },
       borderColor: 'rgb(0, 0, 0)',
       borderWidth: 2,
       hoverOffset: 4
@@ -40,7 +40,7 @@ export default function Usage() {
 
   return (
     <div className="usage" >
-      <Pie id="usage" data={data}/>
+      <Pie id="usage" data={data} />
       <div>
         <div style={{ paddingBottom: "10px", fontSize: "large" }}><b>사용량</b></div>
         <div><b>{per} GB</b></div>
@@ -51,21 +51,21 @@ export default function Usage() {
 }
 
 function getColor(percent) {
-  var r = parseInt(106 + (149 * percent/100)),
-      g = parseInt(236 - (70 * percent/100)),
-      b = parseInt(120 + (13 * percent/100));
+  var r = parseInt(106 + (149 * percent / 100)),
+    g = parseInt(236 - (70 * percent / 100)),
+    b = parseInt(120 + (13 * percent / 100));
 
   var RGB = [r, g, b];
   const rgbcode = '#'
-      + convertToTwoDigitHexCodeFromDecimal(RGB[0])
-      + convertToTwoDigitHexCodeFromDecimal(RGB[1])
-      + convertToTwoDigitHexCodeFromDecimal(RGB[2]);
+    + convertToTwoDigitHexCodeFromDecimal(RGB[0])
+    + convertToTwoDigitHexCodeFromDecimal(RGB[1])
+    + convertToTwoDigitHexCodeFromDecimal(RGB[2]);
   return rgbcode;
 }
 
-function convertToTwoDigitHexCodeFromDecimal(decimal){
-    var code = Math.round(decimal).toString(16);
+function convertToTwoDigitHexCodeFromDecimal(decimal) {
+  var code = Math.round(decimal).toString(16);
 
-    (code.length > 1) || (code = '0' + code);
-    return code;
+  (code.length > 1) || (code = '0' + code);
+  return code;
 }
