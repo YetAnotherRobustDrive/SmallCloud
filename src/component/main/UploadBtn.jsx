@@ -5,40 +5,35 @@ import '../../css/load.css'
 export default function UploadBtn() {
 
     const datas = [ //replace with fetched data
-        { label: "1111" },
-        { label: "2222" },
-        { label: "3333" },
-        { label: "4444" },
-        { label: "5555" }
+        { id: "1", label: "1111" },
+        { id: "2", label: "2222" },
+        { id: "3", label: "3333" },
+        { id: "4", label: "4444" },
+        { id: "5", label: "5555" }
     ];
 
     const [isOpen, setIsOpen] = useState(false);
 
-    const handleOptionClick = () => {
-        setIsOpen(false);
-    };
-
     return (
         <div className="upload-btn">
-            <div className="btn-header" onClick={() => setIsOpen(!isOpen)}>
-                <button className="btn"><AiFillPlusCircle /></button>
+            <div className="btn-header" >
                 {isOpen && (
-                    <>
+                    <div className="open-space">
                         <div className="title">업로드 처리 목록</div>
-                        <ul className="works" onMouseLeave={() => setIsOpen(false)}>
-                            {datas.map((option) => (
+                        <ul className="works" >
+                            {datas.map((data) => (
                                 <li
-                                    key={option.value}
+                                    key={data.id}
                                     className="work"
-                                    onClick={() => handleOptionClick(option)}
                                 >
-                                    {option.label}
+                                    {data.label}
                                 </li>
                             ))}
                         </ul>
-                        <button className="upBtn">업로드 추가하기</button>
-                    </>
+                        <div className="upBtn">업로드 추가</div>
+                    </div>
                 )}
+                <div className="btn" onClick={() => setIsOpen(!isOpen)}><AiFillPlusCircle /></div>
             </div>
         </div>
     )
