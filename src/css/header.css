@@ -57,6 +57,12 @@ img {
 .searchbar input {
     width: 100%;
     border: none;
+    font-size: large;
+    font-weight: 200;
+}
+
+.searchbar input:focus {
+    outline: none;
 }
 
 .two {

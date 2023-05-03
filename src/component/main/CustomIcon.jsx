@@ -45,6 +45,7 @@ export default function CustomIcon(props) {
                     <div className="left">{left}</div>
                     <div className="right">{right}</div>
                 </div>
+                <span className="name">{props.name}</span>
             </div>
         </div>
     )

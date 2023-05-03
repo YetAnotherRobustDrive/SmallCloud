@@ -33,7 +33,12 @@ export default function MainPage() {
                     <GridBox height="calc(100vh - 279px)">
                         {
                             datas.map((data) => {
-                                return <CustomIcon type={data.type} stage={data.writingStage} secu={data.securityLevel} />
+                                return <CustomIcon 
+                                key={data.id}
+                                name={data.name}
+                                type={data.type} 
+                                stage={data.writingStage} 
+                                secu={data.securityLevel} />
                             })
                         }
                     </GridBox>
@@ -42,7 +47,7 @@ export default function MainPage() {
                     <>
                     <div className="listscroll" style={{ height: "calc(100vh - 279px)" }}>{
                         datas.map((data) => {
-                            return <ListBox data={data} />
+                            return <ListBox key={data.id} data={data} />
                         })
                     }
                     </div>
