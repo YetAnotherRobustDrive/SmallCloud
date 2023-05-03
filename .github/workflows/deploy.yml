@@ -3,7 +3,10 @@ name: SmallCloud-CD
 on:
   workflow_dispatch:
   pull_request:
-    branches: [ "main" ]
+    branches:
+      - master
+    types: [ closed ]
+  
 
 jobs:
   build:
