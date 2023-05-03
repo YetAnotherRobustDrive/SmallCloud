@@ -50,7 +50,7 @@ export default function MainPage() {
                 }
                 {!isGrid &&
                     <>
-                    <div className="listscroll" style={{ height: "calc(100vh - 279px)" }}>{
+                    <div className="listscroll" style={{ height: "calc(100vh - 299px)" }}>{
                         datas.map((data) => {
                             return <ListBox key={data.id} data={data} />
                         })
