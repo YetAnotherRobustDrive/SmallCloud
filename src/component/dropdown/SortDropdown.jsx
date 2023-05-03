@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import '../../css/dropdown.css'
 
-export default function SortDropdown() {  
+export default function SortDropdown() {
 
     const options = [
         { value: "name_asc", label: "이름 ↑" },
@@ -24,7 +24,7 @@ export default function SortDropdown() {
                 {!isOpen && (selected ? selected.label : "")}
             </div>
             {isOpen && (
-                <div className="dropdown-options">
+                <div className="dropdown-options" onMouseLeave={() => setIsOpen(false)}>
                     {options.map((option) => (
                         <div
                             key={option.value}

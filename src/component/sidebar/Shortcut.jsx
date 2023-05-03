@@ -14,12 +14,16 @@ export default function Shortcut() {
         </Link>
       </div>
       <div className="bar">
-        <AiFillStar />
-        <span>Favorites</span>
+        <Link to='/favorites' style={{ textDecoration: "none", color: "black" }}>
+          <AiFillStar />
+          <span>Favorites</span>
+        </Link>
       </div>
       <div className="bar">
-        <BsFillTrashFill />
-        <span>Trash</span>
+        <Link to='/trash' style={{ textDecoration: "none", color: "black" }}>
+          <BsFillTrashFill />
+          <span>Trash</span>
+        </Link>
       </div>
     </div>
   )

@@ -11,7 +11,7 @@ import ListBox from "../component/main/ListBox";
 
 import datas from '../fakeJSON/direcFiles.json'
 
-export default function MainPage() {
+export default function Favorites() {
 
     const [isGrid, setIsGrid] = useState(true);
 
@@ -20,17 +20,9 @@ export default function MainPage() {
             <Header />
             <Sidebar />
             <BodyFrame>
-                <BodyHeader text="공유 파일" />
-                <NarrowBox>
-                    {
-                        datas.map((data) => {
-                            return <CustomIcon type={data.type} stage={data.writingStage} secu={data.securityLevel} />
-                        })
-                    }
-                </NarrowBox>
-                <BodyHeader text="내 파일" addon={setIsGrid} view={isGrid} />
+                <BodyHeader text="Favorites" addon={setIsGrid} view={isGrid} />
                 {isGrid &&
-                    <GridBox height="calc(100vh - 279px)">
+                    <GridBox height="calc(100vh - 117px)">
                         {
                             datas.map((data) => {
                                 return <CustomIcon type={data.type} stage={data.writingStage} secu={data.securityLevel} />
@@ -40,12 +32,12 @@ export default function MainPage() {
                 }
                 {!isGrid &&
                     <>
-                    <div className="listscroll" style={{ height: "calc(100vh - 279px)" }}>{
-                        datas.map((data) => {
-                            return <ListBox data={data} />
-                        })
-                    }
-                    </div>
+                        <div className="listscroll" style={{ height: "calc(100vh - 117px)" }}>{
+                            datas.map((data) => {
+                                return <ListBox data={data} />
+                            })
+                        }
+                        </div>
                     </>
                 }
                 <UploadBtn />

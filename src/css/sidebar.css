@@ -69,6 +69,12 @@
 .shortcut .bar span{
     padding-left: 10px;
     font-size: 20px;
+    height: 100%;
+}
+
+.shortcut .bar a {
+    display: flex;
+    align-items: center;
 }
 
 .filetree {
