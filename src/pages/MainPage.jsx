@@ -24,13 +24,18 @@ export default function MainPage() {
                 <NarrowBox>
                     {
                         datas.map((data) => {
-                            return <CustomIcon type={data.type} stage={data.writingStage} secu={data.securityLevel} />
+                            return <CustomIcon 
+                            key={data.id}
+                            name={data.name}
+                            type={data.type} 
+                            stage={data.writingStage} 
+                            secu={data.securityLevel} />
                         })
                     }
                 </NarrowBox>
                 <BodyHeader text="내 파일" addon={setIsGrid} view={isGrid} />
                 {isGrid &&
-                    <GridBox height="calc(100vh - 279px)">
+                    <GridBox height="calc(100vh - 299px)">
                         {
                             datas.map((data) => {
                                 return <CustomIcon 

@@ -25,7 +25,12 @@ export default function Trash() {
                     <GridBox height="calc(100vh - 117px)">
                         {
                             datas.map((data) => {
-                                return <CustomIcon type={data.type} stage={data.writingStage} secu={data.securityLevel} />
+                                return <CustomIcon 
+                                key={data.id}
+                                name={data.name}
+                                type={data.type} 
+                                stage={data.writingStage} 
+                                secu={data.securityLevel} />
                             })
                         }
                     </GridBox>
