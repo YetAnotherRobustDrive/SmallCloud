@@ -1,4 +1,4 @@
-package org.mint.smallcloud.user;
+package org.mint.smallcloud.security.user;
 
 import lombok.Getter;
 import lombok.NoArgsConstructor;

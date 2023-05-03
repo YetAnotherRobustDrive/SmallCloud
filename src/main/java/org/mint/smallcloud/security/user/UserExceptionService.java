@@ -1,11 +1,10 @@
-package org.mint.smallcloud.user;
+package org.mint.smallcloud.security.user;
 
-import lombok.AllArgsConstructor;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.mint.smallcloud.exception.ExceptionStatus;
 import org.mint.smallcloud.exception.ServiceException;
-import org.mint.smallcloud.user.repository.UserRepository;
+import org.mint.smallcloud.security.user.repository.UserRepository;
 import org.springframework.stereotype.Service;
 
 @Service

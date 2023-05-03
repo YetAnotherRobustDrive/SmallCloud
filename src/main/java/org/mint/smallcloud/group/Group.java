@@ -1,6 +1,6 @@
 package org.mint.smallcloud.group;
 
-import org.mint.smallcloud.user.User;
+import org.mint.smallcloud.security.user.User;
 
 import javax.persistence.*;
 import java.util.List;
