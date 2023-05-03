@@ -19,17 +19,17 @@ export default function UploadBtn() {
     };
 
     return (
-        <div className="dropdown">
-            <div className="dropdown-header" onClick={() => setIsOpen(!isOpen)}>
-                <button className="UploadBtn"><AiFillPlusCircle /></button>
+        <div className="upload-btn">
+            <div className="btn-header" onClick={() => setIsOpen(!isOpen)}>
+                <button className="btn"><AiFillPlusCircle /></button>
                 {isOpen && (
                     <>
                         <div className="title">업로드 처리 목록</div>
-                        <ul className="dropdown-options-bottom" onMouseLeave={() => setIsOpen(false)}>
+                        <ul className="works" onMouseLeave={() => setIsOpen(false)}>
                             {datas.map((option) => (
                                 <li
                                     key={option.value}
-                                    className="dropdown-option"
+                                    className="work"
                                     onClick={() => handleOptionClick(option)}
                                 >
                                     {option.label}

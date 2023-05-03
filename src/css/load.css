@@ -19,16 +19,23 @@
     overflow-y: scroll;
 }
 
-.UploadBtn {
+.upload-btn .btn-header .btn {
     position: fixed;
     bottom: 0;
     right: 0;
     padding-right: 30px;    
     font-size: 75px;
     color: white;
+    z-index: 99;
 }
 
-.UploadBtn svg {
+.upload-btn .btn-header .btn svg {
     background-color: #666666;
     border-radius: 75px;
+}
+
+.upload-btn .btn-header .btn .works{
+    position: fixed;
+    bottom: 0;
+    right: 0;
 }
