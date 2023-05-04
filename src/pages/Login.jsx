@@ -25,6 +25,8 @@ export default function LoginPage() {
                 <Link to='/auth' className="link">로그인</Link>
             </div>
             <Link to='/login-ask'>로그인에 문제가 있으신가요?</Link>
+
+            
             {/* <ModalOk>{"아이디 혹은 비밀번호를 확인해주세요!"}</ModalOk>
             <ModalOk>{"관리자에 의해 비활성화된 계정입니다.\n관리자에게 문의해주세요."}</ModalOk>
             <ModalOk>{"비밀번호가 초기화된 계정입니다.\n관리자에게 문의해주세요."}</ModalOk>

@@ -37,7 +37,7 @@ export default function Signup() {
         }
         console.log(model);
         inputData.delete("password_chk");
-        fetch(configData.API_SERVER + '/auth/register', model)
+        fetch(configData.API_SERVER + 'auth/register', model)
         .then(res => res.json())
         .then(data => console.log(data));
 
