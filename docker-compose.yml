@@ -9,8 +9,17 @@ services:
       MARIADB_DATABASE: test_db
       MARIADB_USER: myuser
       MARIADB_PASSWORD: mypassword
-    ports:
-      - "3333:3306"
+      MYSQL_TCP_PORT: 3333
+    expose:
+      - "3333"
     volumes:
       - ./data:/var/lib/mysql
-
+    container_name: mariadb
+  spring:
+     image: small_cloud
+     build: .
+     ports:
+      - "8000:8000"
+     depends_on:
+      - db
+     container_name: backend
