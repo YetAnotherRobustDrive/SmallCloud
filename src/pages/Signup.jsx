@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import logo_img from "../config/img/logo.png"
 import configData from "../config/config.json"
 import "../css/login.css"
@@ -11,6 +11,9 @@ export default function Signup() {
     const [name, setName] = useState();
     const [isChkWrong, setIsChkWrong] = useState(false);
     const [isEmpty, setIsEmpty] = useState(false);
+    const [isExistUser, setIsExistUser] = useState(false);
+    const [isRegistered, setIsRegistered] = useState(false);
+    const moveTo = useNavigate();
 
     const getName = () => {
         setName(configData.NAME);
@@ -18,15 +21,17 @@ export default function Signup() {
 
     const handleSubmit = (e) => {
         e.preventDefault();
+
         const inputData = new FormData(e.target);
         const value = Object.fromEntries(inputData.entries());
         let model = {
             method: "POST",
-            body: JSON.stringify(value),
             headers: {
                 "Content-Type": "application/json",
             },
+            body: JSON.stringify(value),
         };
+
         if (inputData.get("name") == "" || inputData.get("id") == "" || inputData.get("password") == "" || inputData.get("password_chk") == "") {
             setIsEmpty(true);
             return;
@@ -35,12 +40,19 @@ export default function Signup() {
             setIsChkWrong(true);
             return;
         }
-        console.log(model);
-        inputData.delete("password_chk");
-        fetch(configData.API_SERVER + 'auth/register', model)
-        .then(res => res.json())
-        .then(data => console.log(data));
 
+        inputData.delete("password_chk");
+
+        fetch(configData.API_SERVER + 'auth/register', model)
+            .then(res => {
+                if (!res.ok) {
+                    throw new Error('');
+                }
+                setIsRegistered(true);
+            })
+            .catch(() => {
+                setIsExistUser(true);
+            });
     }
 
     return (
@@ -59,6 +71,8 @@ export default function Signup() {
             <ModalCheckPw></ModalCheckPw> */}
             {isEmpty && <ModalOk close={() => setIsEmpty(false)}>{"입력하지 않은 값이 있습니다."}</ModalOk>}
             {isChkWrong && <ModalOk close={() => setIsChkWrong(false)}>{"비밀번호 확인이 일치하지 않습니다."}</ModalOk>}
+            {isExistUser && <ModalOk close={() => setIsExistUser(false)}>{"이미 존재하는 유저입니다."}</ModalOk>}
+            {isRegistered && <ModalOk close={() => {setIsRegistered(false); moveTo("/login");}}>{"가입되었습니다!!"}</ModalOk>}
         </form>
     )
 }
