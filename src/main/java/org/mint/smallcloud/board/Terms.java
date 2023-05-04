@@ -5,12 +5,12 @@ import lombok.NoArgsConstructor;
 import javax.persistence.*;
 
 @Entity
-@Table(name = "FAQS")
+@Table(name = "TERMS")
 @NoArgsConstructor
-public class FAQ {
+public class Terms {
 
     @Id
-    @Column(name = "FAQ_ID")
+    @Column(name = "TERMS_ID")
     private Long id;
 
     @OneToOne
@@ -18,4 +18,5 @@ public class FAQ {
 
     public Long getId() {return id;}
     public Board getBoardId() {return boardId;}
+
 }

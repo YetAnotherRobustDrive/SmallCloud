@@ -5,7 +5,7 @@ import lombok.NoArgsConstructor;
 import javax.persistence.*;
 
 @Entity
-@Table(name = "FILES")
+@Table(name = "ANNOUNCEMENTS")
 @NoArgsConstructor
 public class Announcement {
 
@@ -13,6 +13,9 @@ public class Announcement {
     @Column(name = "ANNOUNCEMENT_ID")
     private Long id;
 
-    @OneToOne(mappedBy = "id")
+    @OneToOne
     private Board boardId;
+
+    public Long getId() {return id;}
+    public Board getBoardId() {return boardId;}
 }

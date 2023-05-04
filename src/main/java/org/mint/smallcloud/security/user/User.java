@@ -2,6 +2,7 @@ package org.mint.smallcloud.security.user;
 
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.mint.smallcloud.board.Question;
 import org.mint.smallcloud.data.FileLocation;
 import org.mint.smallcloud.file.File;
 import org.mint.smallcloud.group.Group;
@@ -51,6 +52,9 @@ public class User {
 
     @OneToMany(mappedBy = "owner")
     private List<Label> labels;
+
+    @OneToMany(mappedBy = "writer")
+    private List<Question> questions;
 
     private User(String loginId, String loginPw, String nickname) {
         this.loginId = loginId;

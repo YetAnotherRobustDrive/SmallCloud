@@ -4,7 +4,7 @@ import org.junit.jupiter.api.Test;
 import org.mint.smallcloud.data.FileLocation;
 import org.mint.smallcloud.file.File;
 import org.mint.smallcloud.file.FileType;
-import org.mint.smallcloud.user.User;
+import org.mint.smallcloud.security.user.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;

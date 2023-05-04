@@ -17,6 +17,7 @@ import java.util.*;
 public class File {
 
     @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "FILE_ID")
     private Long id;
 
@@ -29,9 +30,10 @@ public class File {
     @Embedded
     private FileType fileType;
 
-    @OneToOne
+
+    @ManyToOne
     @JoinColumn(name = "FOLDER_ID")
-    private File folder;
+    private Folder folder;
 
     @Column(name = "LOCATION")
     private FileLocation location;
@@ -60,13 +62,14 @@ public class File {
 //        }
 //        return new Path(folders);
 //    }
+
     public Long getId() { return id; }
     public String getName() { return fileType.getName(); }
     //public String getDescription() { return description; }
     public LocalDateTime getCreatedDate() { return createdDate; }
     public Long getSize() { return size; }
     public FileType getFileType() { return fileType; }
-    public File getFolder() { return folder; }
+//    public File getFolder() { return folder; }
     public FileLocation getLocation() { return location; }
     public User getAuthor() { return author; }
     public List<Share> getShares() { return Shares; }
@@ -75,7 +78,7 @@ public class File {
     public void setName(String name) {  }
     //public void setDescription(String description) { this.description = description; }
     public void setFileType(FileType fileType) { this.fileType = fileType; }
-    public void setFolder(File folder) { this.folder = folder; }
+//    public void setFolder(File folder) { this.folder = folder; }
     public void setLocation(FileLocation location) { this.location = location; }
     public void addShare(Share share) {}
     public void deleteShare(Share share) {}

@@ -17,27 +17,43 @@ public class Board {
     @Column(name = "TITLE")
     private String title;
 
+    @Column(name = "CONTENT")
+    private String content;
+
+    @Column(name = "CONTACT")
+    private String contact;
+
     @Column(name = "CREATE_DATE")
     private LocalDateTime createdDate;
 
-    @OneToOne(mappedBy = "")
-    private String Announcement;
+    @OneToOne(mappedBy = "boardId")
+    private String announcement;
 
-    @OneToOne(mappedBy = "")
-    private String Answer;
+    @OneToOne(mappedBy = "boardId")
+    private String answer;
 
-    @OneToOne(mappedBy = "")
-    private String FAQ;
+    @OneToOne(mappedBy = "boardId")
+    private String faq;
 
-    @OneToOne(mappedBy = "")
-    private String LoginQuestion;
+    @OneToOne(mappedBy = "boardId")
+    private String loginQuestion;
 
-    @OneToOne(mappedBy = "")
-    private String Question;
+    @OneToOne(mappedBy = "boardId")
+    private String question;
+
+    @OneToOne(mappedBy = "boardId")
+    private String privacy;
+
+    @OneToOne(mappedBy = "boardId")
+    private String terms;
 
     public Long getId() { return  id; }
     public String getTitle() { return title; }
+    public String getContent() { return content; }
+    public String getContact() { return contact; }
     public LocalDateTime getCreatedDate() { return createdDate; }
 
     public void setTitle(String title) {}
+    public void setContent(String content) {}
+    public void setContact(String contact) {}
 }
