@@ -9,7 +9,7 @@ export default function ErrorPage() {
     const [name, setName] = useState();
 
     function getName() {
-        setName(configData.name);
+        setName(configData.NAME);
     }
 
     return (

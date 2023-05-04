@@ -11,7 +11,7 @@ export default function LoginPage() {
     const [name, setName] = useState();
 
     function getName() {
-        setName(configData.name);
+        setName(configData.NAME);
     }
 
     return (
