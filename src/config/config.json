@@ -1,4 +1,4 @@
 {
     "NAME": "YARD",
-    "API_SERVER": "http://121.155.7.179/"
+    "API_SERVER": "http://121.155.7.179:8080/"
 }
