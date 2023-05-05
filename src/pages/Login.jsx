@@ -41,7 +41,7 @@ export default function LoginPage() {
             return;
         }
 
-        fetch(configData.API_SERVER + 'auth/register', model)
+        fetch(configData.API_SERVER + 'auth/login', model)
             .then(res => {
                 if (!res.ok) {
                     throw res.json();
@@ -60,8 +60,8 @@ export default function LoginPage() {
         <form className="login" onLoad={getName} onSubmit={handleSubmit}>
             <img src={logo_img} alt="LOGO" />
             <span className="namespan">{name}</span>
-            <input type="text" placeholder="ID" />
-            <input type="password" placeholder="PW" />
+            <input name='id' type="text" placeholder="ID" />
+            <input name='password' type="password" placeholder="PW" />
             <div className="buttons">
                 <Link to='/register' className="link">회원가입</Link>
                 <button className="link" >로그인</button>
