@@ -9,14 +9,20 @@ import ModalOk from "../component/modal/ModalOk";
 export default function Signup() {
 
     const [name, setName] = useState();
+
     const [isChkWrong, setIsChkWrong] = useState(false);
     const [isEmpty, setIsEmpty] = useState(false);
     const [isExistUser, setIsExistUser] = useState(false);
-    const [isRegistered, setIsRegistered] = useState(false);
+    const [isSuccess, setIsSuccess] = useState(false);
     const moveTo = useNavigate();
 
     const getName = () => {
         setName(configData.NAME);
+    }
+
+    const afterSuccess = () => {
+        setIsSuccess(false); 
+        moveTo("/login");
     }
 
     const handleSubmit = (e) => {
@@ -46,12 +52,12 @@ export default function Signup() {
         fetch(configData.API_SERVER + 'auth/register', model)
             .then(res => {
                 if (!res.ok) {
-                    throw new Error('');
+                    throw new Error('');//실패
                 }
-                setIsRegistered(true);
+                setIsSuccess(true);//성공
             })
             .catch(() => {
-                setIsExistUser(true);
+                setIsExistUser(true);//실패 후 처리
             });
     }
 
@@ -67,12 +73,11 @@ export default function Signup() {
                 <button>가입 신청</button>
             </div>
             <Link to='/login-ask'>가입에 문제가 있으신가요?</Link>
-            {/* <ModalConfirmRemove></ModalConfirmRemove>
-            <ModalCheckPw></ModalCheckPw> */}
+            
             {isEmpty && <ModalOk close={() => setIsEmpty(false)}>{"입력하지 않은 값이 있습니다."}</ModalOk>}
             {isChkWrong && <ModalOk close={() => setIsChkWrong(false)}>{"비밀번호 확인이 일치하지 않습니다."}</ModalOk>}
             {isExistUser && <ModalOk close={() => setIsExistUser(false)}>{"이미 존재하는 유저입니다."}</ModalOk>}
-            {isRegistered && <ModalOk close={() => {setIsRegistered(false); moveTo("/login");}}>{"가입되었습니다!!"}</ModalOk>}
+            {isSuccess && <ModalOk close={afterSuccess}>{"가입되었습니다!!"}</ModalOk>}
         </form>
     )
 }

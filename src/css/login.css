@@ -52,6 +52,10 @@
     width: 70%;
 }
 
+.login button {
+    width: 75px;
+}
+
 .askSpan {
     font-size: medium;
 }

@@ -10,28 +10,67 @@ export default function LoginPage() {
 
     const [name, setName] = useState();
 
+    const [isEmpty, setIsEmpty] = useState(false);
+    const [isFail, setIsFail] = useState(false);
+    const [isSuccess, setIsSuccess] = useState(false);
+    const [message, setMessage] = useState("로그인 에러");
+
     function getName() {
         setName(configData.NAME);
     }
 
+    const afterSuccess = () => {
+        setIsSuccess(false);
+    }
+
+    const handleSubmit = (e) => {
+        e.preventDefault();
+
+        const inputData = new FormData(e.target);
+        const value = Object.fromEntries(inputData.entries());
+        let model = {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify(value),
+        };
+
+        if (inputData.get("id") == "" || inputData.get("password") == "") {
+            setIsEmpty(true);
+            return;
+        }
+
+        fetch(configData.API_SERVER + 'auth/register', model)
+            .then(res => {
+                if (!res.ok) {
+                    throw res.json();
+                }
+                setIsSuccess(true); //로그인성공
+            })
+            .catch((json) => {
+                json.then((data) => {
+                    if (data.message != undefined) setMessage(data.message)
+                    setIsFail(true); //실패 후 처리
+                })
+            });
+    }
+
     return (
-        <div className="login" onLoad={getName}>
+        <form className="login" onLoad={getName} onSubmit={handleSubmit}>
             <img src={logo_img} alt="LOGO" />
             <span className="namespan">{name}</span>
             <input type="text" placeholder="ID" />
             <input type="password" placeholder="PW" />
             <div className="buttons">
                 <Link to='/register' className="link">회원가입</Link>
-                <Link to='/auth' className="link">로그인</Link>
+                <button className="link" >로그인</button>
             </div>
             <Link to='/login-ask'>로그인에 문제가 있으신가요?</Link>
 
-            
-            {/* <ModalOk>{"아이디 혹은 비밀번호를 확인해주세요!"}</ModalOk>
-            <ModalOk>{"관리자에 의해 비활성화된 계정입니다.\n관리자에게 문의해주세요."}</ModalOk>
-            <ModalOk>{"비밀번호가 초기화된 계정입니다.\n관리자에게 문의해주세요."}</ModalOk>
-            <ModalOk>{"비밀번호 만료일 {}\n비밀번호를 변경해주세요."}</ModalOk>
-            <ModalOk>{"비밀번호 만료일이 초과되었습니다.\n관리자에게 문의해주세요."}</ModalOk> */}
-        </div>
+            {isFail && <ModalOk close={() => setIsFail(false)}>{message}</ModalOk>}
+            {isEmpty && <ModalOk close={() => setIsEmpty(false)}>{"입력하지 않은 값이 있습니다."}</ModalOk>}
+            {isSuccess && <ModalOk close={afterSuccess}>{"로그인 성공"}</ModalOk>}
+        </form>
     )
 }
