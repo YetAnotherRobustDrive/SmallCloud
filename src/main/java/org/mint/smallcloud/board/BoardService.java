@@ -16,15 +16,29 @@ public class BoardService {
 
     private final  BoardRepository boardRepository;
 
-    public void getBoard() {
+    public Long save(BoardDto boardDto) {
         Board board = new Board();
-        BoardDto.builder()
-                .contact(board.getContact())
-                .content(board.getContent())
+        Board boardEntity = Board.builder()
+                .title(board.getTitle())
+                .content(boardDto.getContent())
+                .contact(boardDto.getContact())
+                .createdDate(board.getCreatedDate())
                 .build();
-        return boardRepository.findAll(board);
+        return boardRepository.save(boardEntity).getId();
+    }
+
+    public List<Board> findAll() {
+        return boardRepository.findAll();
+    }
+
+    public BoardDto findById(Long boardId) {
+        Board board = boardRepository.findById(boardId)
+                .orElseThrow();
+        return BoardDto.builder()
+                .content(board.getContent())
+                .contact(board.getContact())
+                .build();
     }
 
 
 }
-

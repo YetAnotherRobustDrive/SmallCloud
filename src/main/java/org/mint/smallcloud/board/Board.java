@@ -1,5 +1,6 @@
 package org.mint.smallcloud.board;
 
+import lombok.Builder;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
@@ -56,4 +57,12 @@ public class Board {
     public void setTitle(String title) {}
     public void setContent(String content) {}
     public void setContact(String contact) {}
+
+    @Builder
+    public Board(String title, String content, String contact, LocalDateTime createdDate) {
+        this.title = title;
+        this.content = content;
+        this.contact = contact;
+        this.createdDate = createdDate;
+    }
 }
