@@ -58,6 +58,7 @@ public class AuthController {
 
     @GetMapping("/logout")
     public void logout() {
+        /* TODO: 추후 구현 고려 필수 사항은 아닌 거 같음 */
     }
 
     @Getter
