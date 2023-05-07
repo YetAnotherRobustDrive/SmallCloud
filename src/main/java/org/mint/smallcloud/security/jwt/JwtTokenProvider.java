@@ -6,12 +6,14 @@ import io.jsonwebtoken.security.Keys;
 import lombok.extern.slf4j.Slf4j;
 import org.mint.smallcloud.exception.ExceptionStatus;
 import org.mint.smallcloud.exception.ServiceException;
+import org.mint.smallcloud.user.User;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
 import javax.servlet.http.HttpServletRequest;
@@ -44,29 +46,37 @@ public class JwtTokenProvider {
 
     public JwtTokenDto generateTokenDto(UserDetails user) {
         // 권한들 가져오기
-        long now = (new Date()).getTime();
-
-        // Access Token 생성
-        Date accessTokenExpiresIn = new Date(now + ACCESS_TOKEN_EXPIRE_TIME);
-        String accessToken = Jwts.builder()
-                .setSubject(user.getUsername())       // payload "sub": "name"
-                .claim(AUTHORITIES_KEY, marshalAuth(user.getAuthorities()))        // payload "auth": "ROLE_USER"
-                .setExpiration(accessTokenExpiresIn)        // payload "exp": 1516239022 (예시)
-                .signWith(key, SignatureAlgorithm.HS256)    // header "alg": "HS256"
-                .compact();
+        Date now = new Date();
 
         // Refresh Token 생성
         String refreshToken = Jwts.builder()
                 .setSubject(user.getUsername())
-                .setExpiration(new Date(now + REFRESH_TOKEN_EXPIRE_TIME))
+                .setExpiration(new Date(now.getTime() + REFRESH_TOKEN_EXPIRE_TIME))
                 .signWith(key, SignatureAlgorithm.HS256)
                 .compact();
+
+        String accessToken = generateAccessToken(refreshToken, now);
 
         return JwtTokenDto.builder()
                 .grantType(BEARER_TYPE)
                 .accessToken(accessToken)
                 .refreshToken(refreshToken)
                 .build();
+    }
+
+    public String generateAccessToken(String refreshToken, Date now) {
+        validateToken(refreshToken);
+        String userId = getSubject(refreshToken);
+        UserDetails user = userDetailsService.loadUserByUsername(userId);
+        if (!userId.equals(user.getUsername()))
+            throw new ServiceException(ExceptionStatus.NOT_VALID_JWT_TOKEN);
+        Date accessTokenExpiresIn = new Date(now.getTime() + ACCESS_TOKEN_EXPIRE_TIME);
+        return Jwts.builder()
+                .setSubject(userId)       // payload "sub": "name"
+                .claim(AUTHORITIES_KEY, marshalAuth(user.getAuthorities()))        // payload "auth": "ROLE_USER"
+                .setExpiration(accessTokenExpiresIn)        // payload "exp": 1516239022 (예시)
+                .signWith(key, SignatureAlgorithm.HS256)    // header "alg": "HS256"
+                .compact();
     }
 
     public Authentication getAuthentication(String accessToken) {
@@ -79,6 +89,7 @@ public class JwtTokenProvider {
     }
 
     public void validateToken(String token) {
+        log.info("token: {}", token);
         try {
             Jwts.parserBuilder().setSigningKey(key).build().parseClaimsJws(token);
         } catch (io.jsonwebtoken.security.SecurityException
@@ -92,7 +103,8 @@ public class JwtTokenProvider {
 
     public String resolveTokenFromHeader(HttpServletRequest request) {
         String bearerToken = request.getHeader(AUTHORIZATION_HEADER);
-        if (StringUtils.hasText(bearerToken) && bearerToken.startsWith(BEARER_PREFIX)) {
+        if (StringUtils.hasText(bearerToken)
+            && bearerToken.startsWith(BEARER_PREFIX)) {
             return bearerToken.substring(BEARER_PREFIX.length());
         }
         return null;
