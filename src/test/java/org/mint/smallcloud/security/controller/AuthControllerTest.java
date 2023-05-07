@@ -27,6 +27,7 @@ import javax.transaction.Transactional;
 import java.util.HashMap;
 import java.util.Map;
 
+import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.documentationConfiguration;
 import static org.springframework.restdocs.payload.PayloadDocumentation.fieldWithPath;
@@ -149,5 +150,57 @@ class AuthControllerTest {
         this.mockMvc.perform(TestSnippet.post(url, objectMapper, map))
             .andExpect(status().isForbidden())
             .andDo(document("ElevateUnauth"));
+    }
+
+    @Test
+    @DisplayName("/auth/deregister document")
+    public void deregister() throws Exception {
+        final String url = URL_PREFIX + "/deregister";
+        LoginDto loginDto1 = LoginDto.builder()
+            .id("user1")
+            .password("pw")
+            .build();
+        LoginDto loginDto2 = LoginDto.builder()
+            .id("user2")
+            .password("pw")
+            .build();
+
+        userRepository.save(User.of(loginDto1.getId(),
+            loginDto1.getPassword(), "nickname"));
+        userRepository.save(User.of(loginDto2.getId(),
+            loginDto2.getPassword(), "nickname"));
+
+        JwtTokenDto token = jwtTokenProvider.generateTokenDto(
+            org.springframework.security.core.userdetails.User.builder()
+                .username(loginDto1.getId())
+                .password(loginDto1.getPassword())
+                .roles(Roles.COMMON)
+                .disabled(false)
+                .build());
+        Map<String, String> map = new HashMap<>();
+        map.put("password", "pw");
+        JwtTokenDto privilegeToken = objectMapper.readValue(
+            this.mockMvc.perform(TestSnippet.securePost(URL_PREFIX + "/elevate", token.getAccessToken(), objectMapper, map))
+                .andExpect(status().isOk())
+                .andReturn().getResponse().getContentAsString()
+            , JwtTokenDto.class);
+
+        this.mockMvc.perform(TestSnippet.securePost(url, privilegeToken.getAccessToken()))
+            .andExpect(status().isOk())
+            .andDo(document("Deregister"));
+
+        assertNull(userRepository
+            .findByLoginId(loginDto1.getId()).orElse(null));
+
+        JwtTokenDto commonToken = jwtTokenProvider.generateTokenDto(
+            org.springframework.security.core.userdetails.User.builder()
+                .username(loginDto2.getId())
+                .password(loginDto2.getPassword())
+                .roles(Roles.COMMON)
+                .disabled(false)
+                .build());
+        this.mockMvc.perform(TestSnippet.securePost(url, commonToken.getAccessToken()))
+            .andExpect(status().isForbidden())
+            .andDo(document("DeregisterPrivilege"));
     }
 }

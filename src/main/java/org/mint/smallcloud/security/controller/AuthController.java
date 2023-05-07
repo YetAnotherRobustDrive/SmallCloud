@@ -50,7 +50,8 @@ public class AuthController {
         return jwtUserService.elevate(passwordDto.getPassword());
     }
 
-    @GetMapping("/deregister")
+    @Secured({Roles.S_PRIVILEGE})
+    @PostMapping("/deregister")
     public void deregister() {
         jwtUserService.deregister();
     }

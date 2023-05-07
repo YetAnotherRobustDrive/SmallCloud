@@ -82,3 +82,19 @@ IMPORTANT: 잘못된 pssword를 보냈을 때
 operation::ElevateUnauth[snippets='http-response']
 
 IMPORTANT: 로그인토큰이 잘못되었을 때
+
+=== 유저 삭제 (deregister)
+
+==== 명세
+
+operation::Deregister[snippets='http-request']
+
+==== 성공
+
+operation::Deregister[snippets='http-response']
+
+==== 실패
+
+operation::DeregisterPrivilege[snippets='http-response']
+
+IMPORTANT: 권한이 없을 때

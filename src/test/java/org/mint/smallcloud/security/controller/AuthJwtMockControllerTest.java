@@ -54,7 +54,7 @@ public class AuthJwtMockControllerTest {
         String success = "jwtSuccessToken";
 
         /* token provider mocking */
-        when(tokenProvider.generateAccessToken(eq(refresh), any()))
+        when(tokenProvider.generateAccessTokenFromRefreshToken(eq(refresh), any()))
             .thenReturn(success);
         doNothing().when(tokenProvider).validateToken(refresh);
         when(tokenProvider.resolveTokenFromHeader(any()))

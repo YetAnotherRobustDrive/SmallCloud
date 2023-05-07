@@ -26,6 +26,11 @@ public class TestSnippet {
             .accept(MediaType.APPLICATION_JSON);
     }
 
+    public static MockHttpServletRequestBuilder securePost(String url, String token) throws JsonProcessingException {
+        return RestDocumentationRequestBuilders.post(url)
+            .header(AUTH_NAME, AUTH_VALUE_PREFIX + token)
+            .accept(MediaType.APPLICATION_JSON);
+    }
 
     public static MockHttpServletRequestBuilder secureGet(String url, String token) {
         return RestDocumentationRequestBuilders.get(url)

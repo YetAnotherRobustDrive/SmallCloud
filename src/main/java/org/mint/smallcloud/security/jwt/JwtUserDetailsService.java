@@ -21,19 +21,19 @@ public class JwtUserDetailsService implements UserDetailsService {
         log.info("called JwtUserDetailService");
         UserDetailsDto userDetails = userService.getUserDetails(userName);
         return User.builder()
-                .username(userDetails.getUsername())
-                .password(userDetails.getPassword())
-                .roles(Roles.COMMON)
-                .disabled(userDetails.isDisabled())
-                .build();
+            .username(userDetails.getUsername())
+            .password(userDetails.getPassword())
+            .roles(userDetails.getRoles())
+            .disabled(userDetails.isDisabled())
+            .build();
     }
 
-    public UserDetails elevateUser(UserDetails user) {
+    public UserDetails getElevateUser(UserDetails user) {
         return User.builder()
-                .username(user.getUsername())
-                .password(user.getPassword())
-                .roles(Roles.PRIVILEGE)
-                .disabled(false)
-                .build();
+            .username(user.getUsername())
+            .password(user.getPassword())
+            .roles(Roles.PRIVILEGE)
+            .disabled(false)
+            .build();
     }
 }
