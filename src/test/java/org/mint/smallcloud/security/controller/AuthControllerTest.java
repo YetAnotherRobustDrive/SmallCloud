@@ -2,6 +2,7 @@ package org.mint.smallcloud.security.controller;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import org.hamcrest.Matchers;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -9,21 +10,31 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mint.smallcloud.TestSnippet;
 import org.mint.smallcloud.security.dto.LoginDto;
 import org.mint.smallcloud.security.dto.RegisterDto;
+import org.mint.smallcloud.security.jwt.JwtTokenProvider;
+import org.mint.smallcloud.user.Roles;
 import org.mint.smallcloud.user.User;
 import org.mint.smallcloud.user.repository.UserRepository;
+import org.mockito.ArgumentMatchers;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.restdocs.RestDocumentationContextProvider;
 import org.springframework.restdocs.RestDocumentationExtension;
 import org.springframework.restdocs.payload.RequestFieldsSnippet;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
 
 import javax.transaction.Transactional;
 
+import java.util.Date;
+
+import static org.mockito.ArgumentMatchers.*;
+import static org.mockito.Mockito.*;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.*;
 import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.*;
 import static org.springframework.restdocs.payload.PayloadDocumentation.*;
@@ -42,6 +53,9 @@ class AuthControllerTest {
 
     @Autowired
     private UserRepository userRepository;
+
+    @MockBean
+    private JwtTokenProvider tokenProvider;
 
     @BeforeEach
     void setUp(WebApplicationContext webApplicationContext, RestDocumentationContextProvider restDocumentation) {
@@ -106,4 +120,35 @@ class AuthControllerTest {
                 .andDo(document("WrongPassword", payload));
     }
 
+    @Test
+    @DisplayName("/auth/refresh document")
+    public void refresh() throws Exception {
+        final String url = URL_PREFIX + "/refresh";
+        LoginDto loginDto1 = LoginDto.builder()
+                .id("user1")
+                .password("pw")
+                .build();
+        String refresh = "refresh";
+        String success = "success";
+
+        /* token provider mocking */
+        when(tokenProvider.generateAccessToken(eq(refresh), any()))
+                .thenReturn("success");
+        doNothing().when(tokenProvider).validateToken(refresh);
+        when(tokenProvider.resolveTokenFromHeader(any()))
+                .thenCallRealMethod();
+        /* token provider mocking */
+
+        userRepository.save(User.of(loginDto1.getId(),
+                loginDto1.getPassword(), "nickname"));
+        this.mockMvc.perform(TestSnippet.secureGet(url, refresh))
+                .andExpect(status().isOk())
+                .andExpect(content().string(success))
+                .andDo(document("Refresh"));
+
+        doCallRealMethod().when(tokenProvider).validateToken(any());
+        this.mockMvc.perform(TestSnippet.secureGet(url, "abc"))
+                .andExpect(status().isBadRequest())
+                .andDo(document("RefreshBadToken"));
+    }
 }

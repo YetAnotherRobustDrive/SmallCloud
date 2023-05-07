@@ -437,13 +437,13 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 </style>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 </head>
-<body class="book">
+<body class="book toc2 toc-left">
 <div id="header">
 <h1>SmallCloud API 명세</h1>
 <div class="details">
 <span id="revnumber">version 0.0.1-SNAPSHOT</span>
 </div>
-<div id="toc" class="toc">
+<div id="toc" class="toc2">
 <div id="toctitle">Table of Contents</div>
 <ul class="sectlevel1">
 <li><a href="#overview">인증 관련 (auth)</a>
@@ -451,7 +451,8 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <li><a href="#_등록_register">등록 (register)</a></li>
 <li><a href="#_로그인_login">로그인 (login)</a></li>
 <li><a href="#_명세_2">명세</a></li>
-<li><a href="#_성공_2">성공</a></li>
+<li><a href="#_리프레시_토큰_refresh">리프레시 토큰 (refresh)</a></li>
+<li><a href="#_명세_3">명세</a></li>
 </ul>
 </li>
 </ul>
@@ -469,7 +470,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <h5 id="_명세_http_request"><a class="link" href="#_명세_http_request">HTTP request</a></h5>
 <div class="listingblock">
 <div class="content">
-<pre class="highlight nowrap"><code class="language-http" data-lang="http">POST /auth/register HTTP/1.1
+<pre class="highlightjs highlight nowrap"><code data-lang="http" class="language-http hljs">POST /auth/register HTTP/1.1
 Content-Type: application/json
 Accept: application/json
 Content-Length: 48
@@ -520,7 +521,7 @@ Host: localhost:8080
 <h5 id="_성공_http_response"><a class="link" href="#_성공_http_response">HTTP response</a></h5>
 <div class="listingblock">
 <div class="content">
-<pre class="highlight nowrap"><code class="language-http" data-lang="http">HTTP/1.1 200 OK</code></pre>
+<pre class="highlightjs highlight nowrap"><code data-lang="http" class="language-http hljs">HTTP/1.1 200 OK</code></pre>
 </div>
 </div>
 </div>
@@ -531,7 +532,7 @@ Host: localhost:8080
 <h5 id="_실패_http_response"><a class="link" href="#_실패_http_response">HTTP response</a></h5>
 <div class="listingblock">
 <div class="content">
-<pre class="highlight nowrap"><code class="language-http" data-lang="http">HTTP/1.1 403 Forbidden
+<pre class="highlightjs highlight nowrap"><code data-lang="http" class="language-http hljs">HTTP/1.1 403 Forbidden
 Content-Type: application/json
 Content-Length: 84
 
@@ -563,7 +564,7 @@ Content-Length: 84
 <h4 id="_명세_2_http_request"><a class="link" href="#_명세_2_http_request">HTTP request</a></h4>
 <div class="listingblock">
 <div class="content">
-<pre class="highlight nowrap"><code class="language-http" data-lang="http">POST /auth/login HTTP/1.1
+<pre class="highlightjs highlight nowrap"><code data-lang="http" class="language-http hljs">POST /auth/login HTTP/1.1
 Content-Type: application/json
 Accept: application/json
 Content-Length: 30
@@ -602,28 +603,23 @@ Host: localhost:8080
 </tbody>
 </table>
 </div>
-</div>
-<div class="sect2">
-<h3 id="_성공_2"><a class="link" href="#_성공_2">성공</a></h3>
 <div class="sect3">
-<h4 id="_성공_2_http_response"><a class="link" href="#_성공_2_http_response">HTTP response</a></h4>
-<div class="listingblock">
-<div class="content">
-<pre class="highlight nowrap"><code class="language-http" data-lang="http">HTTP/1.1 200 OK
-Content-Type: application/json
-Content-Length: 301
-
-{"grantType":"Bearer","accessToken":"eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ1c2VyMSIsImF1dGgiOiJST0xFX0NPTU1PTiIsImV4cCI6MTY4MzAzMTA1MX0.JYShU2PS41_uqlgv3LH1OL8YCbTay9MGNTivT-EhL4Y","refreshToken":"eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ1c2VyMSIsImV4cCI6MTY4MzYzNDA1MX0.GwkdvoRnTJarCzbHWjvoG2XL9zfsRwNejR6lKLuTngo"}</code></pre>
-</div>
-</div>
-</div>
-<div class="sect3">
-<h4 id="_실패_2"><a class="link" href="#_실패_2">실패</a></h4>
+<h4 id="_성공_2"><a class="link" href="#_성공_2">성공</a></h4>
 <div class="sect4">
-<h5 id="_실패_2_http_response"><a class="link" href="#_실패_2_http_response">HTTP response</a></h5>
+<h5 id="_성공_2_http_response"><a class="link" href="#_성공_2_http_response">HTTP response</a></h5>
 <div class="listingblock">
 <div class="content">
-<pre class="highlight nowrap"><code class="language-http" data-lang="http">HTTP/1.1 403 Forbidden
+<pre class="highlightjs highlight nowrap"><code data-lang="http" class="language-http hljs">HTTP/1.1 200 OK</code></pre>
+</div>
+</div>
+</div>
+<div class="sect4">
+<h5 id="_실패_2"><a class="link" href="#_실패_2">실패</a></h5>
+<div class="sect5">
+<h6 id="_실패_2_http_response"><a class="link" href="#_실패_2_http_response">HTTP response</a></h6>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight nowrap"><code data-lang="http" class="language-http hljs">HTTP/1.1 403 Forbidden
 Content-Type: application/json
 Content-Length: 80
 
@@ -643,11 +639,11 @@ Content-Length: 80
 </tr>
 </table>
 </div>
-<div class="sect4">
-<h5 id="_실패_2_http_response"><a class="link" href="#_실패_2_http_response">HTTP response</a></h5>
+<div class="sect5">
+<h6 id="_실패_2_http_response"><a class="link" href="#_실패_2_http_response">HTTP response</a></h6>
 <div class="listingblock">
 <div class="content">
-<pre class="highlight nowrap"><code class="language-http" data-lang="http">HTTP/1.1 403 Forbidden
+<pre class="highlightjs highlight nowrap"><code data-lang="http" class="language-http hljs">HTTP/1.1 403 Forbidden
 Content-Type: application/json
 Content-Length: 87
 
@@ -670,13 +666,47 @@ Content-Length: 87
 </div>
 </div>
 </div>
+<div class="sect2">
+<h3 id="_리프레시_토큰_refresh"><a class="link" href="#_리프레시_토큰_refresh">리프레시 토큰 (refresh)</a></h3>
+
+</div>
+<div class="sect2">
+<h3 id="_명세_3"><a class="link" href="#_명세_3">명세</a></h3>
+<div class="dlist">
+<dl>
+<dt class="hdlist1">operation</dt>
+<dd>
+<p>==== 성공</p>
+</dd>
+</dl>
+</div>
+<div class="sect3">
+<h4 id="_실패_3"><a class="link" href="#_실패_3">실패</a></h4>
+<div class="admonitionblock important">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-important" title="Important"></i>
+</td>
+<td class="content">
+refresh 토큰이 잘못되었을 때
+</td>
+</tr>
+</table>
+</div>
+</div>
+</div>
+</div>
 </div>
 </div>
 <div id="footer">
 <div id="footer-text">
 Version 0.0.1-SNAPSHOT<br>
-Last updated 2023-05-02 21:07:17 +0900
+Last updated 2023-05-07 21:48:43 +0900
 </div>
 </div>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.15.6/styles/github.min.css">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.15.6/highlight.min.js"></script>
+<script>hljs.initHighlighting()</script>
 </body>
 </html>

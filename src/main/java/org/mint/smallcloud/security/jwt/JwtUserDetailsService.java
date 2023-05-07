@@ -23,8 +23,17 @@ public class JwtUserDetailsService implements UserDetailsService {
         return User.builder()
                 .username(userDetails.getUsername())
                 .password(userDetails.getPassword())
-                .roles(Roles.COMMON.getRole())
+                .roles(Roles.COMMON)
                 .disabled(userDetails.isDisabled())
+                .build();
+    }
+
+    public UserDetails elevateUser(UserDetails user) {
+        return User.builder()
+                .username(user.getUsername())
+                .password(user.getPassword())
+                .roles(Roles.PRIVILEGE)
+                .disabled(false)
                 .build();
     }
 }
