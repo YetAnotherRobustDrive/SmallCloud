@@ -450,9 +450,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <ul class="sectlevel2">
 <li><a href="#_등록_register">등록 (register)</a></li>
 <li><a href="#_로그인_login">로그인 (login)</a></li>
-<li><a href="#_명세_2">명세</a></li>
 <li><a href="#_리프레시_토큰_refresh">리프레시 토큰 (refresh)</a></li>
-<li><a href="#_명세_3">명세</a></li>
 </ul>
 </li>
 </ul>
@@ -521,7 +519,16 @@ Host: localhost:8080
 <h5 id="_성공_http_response"><a class="link" href="#_성공_http_response">HTTP response</a></h5>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight nowrap"><code data-lang="http" class="language-http hljs">HTTP/1.1 200 OK</code></pre>
+<pre class="highlightjs highlight nowrap"><code data-lang="http" class="language-http hljs">HTTP/1.1 200 OK
+Vary: Origin
+Vary: Access-Control-Request-Method
+Vary: Access-Control-Request-Headers
+X-Content-Type-Options: nosniff
+X-XSS-Protection: 1; mode=block
+Cache-Control: no-cache, no-store, max-age=0, must-revalidate
+Pragma: no-cache
+Expires: 0
+X-Frame-Options: DENY</code></pre>
 </div>
 </div>
 </div>
@@ -533,7 +540,16 @@ Host: localhost:8080
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code data-lang="http" class="language-http hljs">HTTP/1.1 403 Forbidden
+Vary: Origin
+Vary: Access-Control-Request-Method
+Vary: Access-Control-Request-Headers
 Content-Type: application/json
+X-Content-Type-Options: nosniff
+X-XSS-Protection: 1; mode=block
+Cache-Control: no-cache, no-store, max-age=0, must-revalidate
+Pragma: no-cache
+Expires: 0
+X-Frame-Options: DENY
 Content-Length: 84
 
 {"statusCode":403,"message":"유저가 이미 존재합니다.","error":"Forbidden"}</code></pre>
@@ -556,12 +572,10 @@ Content-Length: 84
 </div>
 <div class="sect2">
 <h3 id="_로그인_login"><a class="link" href="#_로그인_login">로그인 (login)</a></h3>
-
-</div>
-<div class="sect2">
-<h3 id="_명세_2"><a class="link" href="#_명세_2">명세</a></h3>
 <div class="sect3">
-<h4 id="_명세_2_http_request"><a class="link" href="#_명세_2_http_request">HTTP request</a></h4>
+<h4 id="_명세_2"><a class="link" href="#_명세_2">명세</a></h4>
+<div class="sect4">
+<h5 id="_명세_2_http_request"><a class="link" href="#_명세_2_http_request">HTTP request</a></h5>
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code data-lang="http" class="language-http hljs">POST /auth/login HTTP/1.1
@@ -574,8 +588,8 @@ Host: localhost:8080
 </div>
 </div>
 </div>
-<div class="sect3">
-<h4 id="_명세_2_request_fields"><a class="link" href="#_명세_2_request_fields">Request fields</a></h4>
+<div class="sect4">
+<h5 id="_명세_2_request_fields"><a class="link" href="#_명세_2_request_fields">Request fields</a></h5>
 <table class="tableblock frame-all grid-all stretch">
 <colgroup>
 <col style="width: 33.3333%;">
@@ -603,13 +617,27 @@ Host: localhost:8080
 </tbody>
 </table>
 </div>
+</div>
 <div class="sect3">
 <h4 id="_성공_2"><a class="link" href="#_성공_2">성공</a></h4>
 <div class="sect4">
 <h5 id="_성공_2_http_response"><a class="link" href="#_성공_2_http_response">HTTP response</a></h5>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight nowrap"><code data-lang="http" class="language-http hljs">HTTP/1.1 200 OK</code></pre>
+<pre class="highlightjs highlight nowrap"><code data-lang="http" class="language-http hljs">HTTP/1.1 200 OK
+Vary: Origin
+Vary: Access-Control-Request-Method
+Vary: Access-Control-Request-Headers
+Content-Type: application/json
+X-Content-Type-Options: nosniff
+X-XSS-Protection: 1; mode=block
+Cache-Control: no-cache, no-store, max-age=0, must-revalidate
+Pragma: no-cache
+Expires: 0
+X-Frame-Options: DENY
+Content-Length: 301
+
+{"grantType":"Bearer","accessToken":"eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ1c2VyMSIsImF1dGgiOiJST0xFX0NPTU1PTiIsImV4cCI6MTY4MzQ4NDEwN30.mHfMWJNX53tTPOA_rOgEbXYUpdKnMap8cRNQ0Zt1rJA","refreshToken":"eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ1c2VyMSIsImV4cCI6MTY4NDA4NzEwN30.iML05YXu9FZZGZdHyDK_sAjDneZBBRyFcfI-MwQAIcI"}</code></pre>
 </div>
 </div>
 </div>
@@ -620,7 +648,16 @@ Host: localhost:8080
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code data-lang="http" class="language-http hljs">HTTP/1.1 403 Forbidden
+Vary: Origin
+Vary: Access-Control-Request-Method
+Vary: Access-Control-Request-Headers
 Content-Type: application/json
+X-Content-Type-Options: nosniff
+X-XSS-Protection: 1; mode=block
+Cache-Control: no-cache, no-store, max-age=0, must-revalidate
+Pragma: no-cache
+Expires: 0
+X-Frame-Options: DENY
 Content-Length: 80
 
 {"statusCode":403,"message":"비밀번호가 다릅니다.","error":"Forbidden"}</code></pre>
@@ -644,7 +681,16 @@ Content-Length: 80
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code data-lang="http" class="language-http hljs">HTTP/1.1 403 Forbidden
+Vary: Origin
+Vary: Access-Control-Request-Method
+Vary: Access-Control-Request-Headers
 Content-Type: application/json
+X-Content-Type-Options: nosniff
+X-XSS-Protection: 1; mode=block
+Cache-Control: no-cache, no-store, max-age=0, must-revalidate
+Pragma: no-cache
+Expires: 0
+X-Frame-Options: DENY
 Content-Length: 87
 
 {"statusCode":403,"message":"유저가 존재하지 않습니다.","error":"Forbidden"}</code></pre>
@@ -668,20 +714,66 @@ Content-Length: 87
 </div>
 <div class="sect2">
 <h3 id="_리프레시_토큰_refresh"><a class="link" href="#_리프레시_토큰_refresh">리프레시 토큰 (refresh)</a></h3>
-
+<div class="sect3">
+<h4 id="_명세_3"><a class="link" href="#_명세_3">명세</a></h4>
+<div class="sect4">
+<h5 id="_명세_3_http_request"><a class="link" href="#_명세_3_http_request">HTTP request</a></h5>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight nowrap"><code data-lang="http" class="language-http hljs">GET /auth/refresh HTTP/1.1
+Authorization: Bearer refresh
+Host: localhost:8080</code></pre>
 </div>
-<div class="sect2">
-<h3 id="_명세_3"><a class="link" href="#_명세_3">명세</a></h3>
-<div class="dlist">
-<dl>
-<dt class="hdlist1">operation</dt>
-<dd>
-<p>==== 성공</p>
-</dd>
-</dl>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_성공_3"><a class="link" href="#_성공_3">성공</a></h4>
+<div class="sect4">
+<h5 id="_성공_3_http_response"><a class="link" href="#_성공_3_http_response">HTTP response</a></h5>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight nowrap"><code data-lang="http" class="language-http hljs">HTTP/1.1 200 OK
+Vary: Origin
+Vary: Access-Control-Request-Method
+Vary: Access-Control-Request-Headers
+Content-Type: text/plain;charset=UTF-8
+Content-Length: 15
+X-Content-Type-Options: nosniff
+X-XSS-Protection: 1; mode=block
+Cache-Control: no-cache, no-store, max-age=0, must-revalidate
+Pragma: no-cache
+Expires: 0
+X-Frame-Options: DENY
+
+jwtSuccessToken</code></pre>
+</div>
+</div>
+</div>
 </div>
 <div class="sect3">
 <h4 id="_실패_3"><a class="link" href="#_실패_3">실패</a></h4>
+<div class="sect4">
+<h5 id="_실패_3_http_response"><a class="link" href="#_실패_3_http_response">HTTP response</a></h5>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight nowrap"><code data-lang="http" class="language-http hljs">HTTP/1.1 400 Bad Request
+Vary: Origin
+Vary: Access-Control-Request-Method
+Vary: Access-Control-Request-Headers
+Content-Type: application/json
+X-Content-Type-Options: nosniff
+X-XSS-Protection: 1; mode=block
+Cache-Control: no-cache, no-store, max-age=0, must-revalidate
+Pragma: no-cache
+Expires: 0
+X-Frame-Options: DENY
+Content-Length: 92
+
+{"statusCode":400,"message":"JWT토큰이 올바르지 않습니다.","error":"Bad Request"}</code></pre>
+</div>
+</div>
+</div>
 <div class="admonitionblock important">
 <table>
 <tr>
@@ -702,7 +794,7 @@ refresh 토큰이 잘못되었을 때
 <div id="footer">
 <div id="footer-text">
 Version 0.0.1-SNAPSHOT<br>
-Last updated 2023-05-07 21:48:43 +0900
+Last updated 2023-05-07 23:44:32 +0900
 </div>
 </div>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.15.6/styles/github.min.css">

@@ -9,8 +9,6 @@ import org.mint.smallcloud.label.Label;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
-import java.time.LocalTime;
-import java.util.Date;
 import java.util.List;
 
 @Getter
@@ -18,7 +16,8 @@ import java.util.List;
 @NoArgsConstructor
 public class User {
     @Id
-    @Column(name = "USER_ID") @GeneratedValue(strategy = GenerationType.AUTO)
+    @Column(name = "USER_ID")
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
     @Column(name = "LOGIN_ID", nullable = false, length = 15, unique = true)
@@ -64,27 +63,78 @@ public class User {
         return new User(loginId, loginPw, nickname);
     }
 
-    public void changePassword(String oldPassword, String newPassword) { }
-    public boolean verifyPassword(String password) { return true; }
-    public void unlock() { }
-    public void lock() { }
-    public boolean isLocked() { return true; }
+    public void changePassword(String oldPassword, String newPassword) {
+    }
 
-    public void setLoginId(String loginId) { this.loginId = loginId; }
-    public void setNickname(String nickname) { this.nickname = nickname; }
-    public void setGroup(Group group) { this.group = group; }
-    public void setProfileImageLocation(FileLocation profileImageLocation) { this.profileImageLocation = profileImageLocation; }
+    public boolean verifyPassword(String password) {
+        return true;
+    }
 
-    public Long getId() { return id; }
-    public String getLoginId() { return loginId; }
-    public String getNickname() { return nickname; }
-    public String getPassword() {return loginPw; }
-    public LocalDateTime getJoinedDate() { return joinedDate; }
-    public LocalDateTime getChangedPwDate() { return changedPwDate; }
-    public Group getGroup() { return group; }
-    public FileLocation getProfileImageLocation() { return profileImageLocation; }
+    public void unlock() {
+    }
 
-    public void addFile(File file) { }
-    public void deleteFile(File file) { }
-    public List<File> getFiles() { return files; }
+    public void lock() {
+    }
+
+    public boolean isLocked() {
+        return true;
+    }
+
+    public void setLoginId(String loginId) {
+        this.loginId = loginId;
+    }
+
+    public void setNickname(String nickname) {
+        this.nickname = nickname;
+    }
+
+    public void setGroup(Group group) {
+        this.group = group;
+    }
+
+    public void setProfileImageLocation(FileLocation profileImageLocation) {
+        this.profileImageLocation = profileImageLocation;
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public String getLoginId() {
+        return loginId;
+    }
+
+    public String getNickname() {
+        return nickname;
+    }
+
+    public String getPassword() {
+        return loginPw;
+    }
+
+    public LocalDateTime getJoinedDate() {
+        return joinedDate;
+    }
+
+    public LocalDateTime getChangedPwDate() {
+        return changedPwDate;
+    }
+
+    public Group getGroup() {
+        return group;
+    }
+
+    public FileLocation getProfileImageLocation() {
+        return profileImageLocation;
+    }
+
+    public void addFile(File file) {
+    }
+
+    public void deleteFile(File file) {
+    }
+
+    public List<File> getFiles() {
+        return files;
+    }
 }

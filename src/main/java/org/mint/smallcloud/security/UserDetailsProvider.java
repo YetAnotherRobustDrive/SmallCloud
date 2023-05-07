@@ -20,10 +20,14 @@ import java.util.Optional;
 public class UserDetailsProvider {
     /**
      * 유저의 id를 가져온다.
+     *
      * @return userId를 담은 {@link Optional}
      */
     public Optional<String> getUserId() {
-        Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        if (authentication == null)
+            return Optional.empty();
+        Object principal = authentication.getPrincipal();
         if (principal instanceof UserDetails) {
             return Optional.of(((UserDetails) principal).getUsername());
         } else {
@@ -39,6 +43,8 @@ public class UserDetailsProvider {
      * @throws ServiceException {@link Authentication}이 {@link UserDetails}가 아니라면 internal server error로 throw
      */
     public void setAuthentication(Authentication authentication) {
+        if (authentication == null)
+            return;
         if (authentication.getPrincipal() instanceof UserDetails) {
             SecurityContextHolder.getContext().setAuthentication(authentication);
         } else {
