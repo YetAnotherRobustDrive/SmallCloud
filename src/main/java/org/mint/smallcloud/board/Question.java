@@ -17,6 +17,10 @@ public class Question {
     @OneToOne
     private Board boardId;
 
+    @ManyToOne
+    @JoinColumn(name = "WRITER")
+    private User writer;
+
     public Long getId() { return id; }
     public Board getBoardId() { return boardId; }
 

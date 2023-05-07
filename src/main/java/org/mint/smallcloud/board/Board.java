@@ -27,26 +27,26 @@ public class Board {
     @Column(name = "CREATE_DATE")
     private LocalDateTime createdDate;
 
-    @OneToOne(mappedBy = "boardId")
-    private String announcement;
-
-    @OneToOne(mappedBy = "boardId")
-    private String answer;
-
-    @OneToOne(mappedBy = "boardId")
-    private String faq;
-
-    @OneToOne(mappedBy = "boardId")
-    private String loginQuestion;
-
-    @OneToOne(mappedBy = "boardId")
-    private String question;
-
-    @OneToOne(mappedBy = "boardId")
-    private String privacy;
-
-    @OneToOne(mappedBy = "boardId")
-    private String terms;
+//    @OneToOne(mappedBy = "boardId")
+//    private String announcement;
+//
+//    @OneToOne(mappedBy = "boardId")
+//    private String answer;
+//
+//    @OneToOne(mappedBy = "boardId")
+//    private String faq;
+//
+//    @OneToOne(mappedBy = "boardId")
+//    private String loginQuestion;
+//
+//    @OneToOne(mappedBy = "boardId")
+//    private String question;
+//
+//    @OneToOne(mappedBy = "boardId")
+//    private String privacy;
+//
+//    @OneToOne(mappedBy = "boardId")
+//    private String terms;
 
     public Long getId() { return  id; }
     public String getTitle() { return title; }

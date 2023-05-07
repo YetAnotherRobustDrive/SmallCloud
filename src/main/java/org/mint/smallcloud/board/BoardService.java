@@ -42,3 +42,6 @@ public class BoardService {
 
 
 }
+
+// 1:1 문의는 유저정보 필요
+// terms 는 날짜순으로 정렬해서 최신 2개 필요
