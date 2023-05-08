@@ -1,0 +1,29 @@
+.fileview {
+    height: calc(100vh - 75px);
+    width: 300px;
+    background-color: white;
+    position: fixed;
+    bottom: 0;
+    right: 0;
+    border-left: 2px solid black;
+}
+
+.fileview .fileviewHead {
+    padding: 10px;
+    width: 100%;
+    border-bottom: 1px solid black;
+    display: flex;
+    position: relative;
+    height: 21px;
+}
+
+.fileview .fileviewHead .filename {
+    max-width: 200px;
+    text-overflow: ellipsis;
+    overflow: hidden;
+}
+
+.fileview .fileviewHead .closeBtn {
+    position: absolute;
+    right: 30px;
+}
