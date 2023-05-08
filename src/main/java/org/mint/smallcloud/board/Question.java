@@ -1,7 +1,7 @@
 package org.mint.smallcloud.board;
 
 import lombok.NoArgsConstructor;
-import org.mint.smallcloud.security.user.User;
+import org.mint.smallcloud.user.User;
 
 import javax.persistence.*;
 
@@ -21,7 +21,12 @@ public class Question {
     @JoinColumn(name = "WRITER")
     private User writer;
 
-    public Long getId() { return id; }
-    public Board getBoardId() { return boardId; }
+    public Long getId() {
+        return id;
+    }
+
+    public Board getBoardId() {
+        return boardId;
+    }
 
 }

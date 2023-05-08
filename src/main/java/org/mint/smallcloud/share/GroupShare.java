@@ -2,7 +2,7 @@ package org.mint.smallcloud.share;
 
 
 import org.mint.smallcloud.group.Group;
-import org.mint.smallcloud.security.user.User;
+import org.mint.smallcloud.user.User;
 
 import javax.persistence.Entity;
 import javax.persistence.JoinColumn;

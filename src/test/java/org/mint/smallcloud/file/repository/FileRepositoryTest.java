@@ -4,7 +4,7 @@ import org.junit.jupiter.api.Test;
 import org.mint.smallcloud.data.FileLocation;
 import org.mint.smallcloud.file.File;
 import org.mint.smallcloud.file.FileType;
-import org.mint.smallcloud.security.user.User;
+import org.mint.smallcloud.user.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
@@ -24,7 +24,7 @@ class FileRepositoryTest {
     public void save() {
         FileLocation fileLocation = new FileLocation("testLocation");
         FileType fileType = new FileType("testName", "txtType");
-        LocalDateTime localDateTime = LocalDateTime.of(2023, 4,23,12,34,56);
+        LocalDateTime localDateTime = LocalDateTime.of(2023, 4, 23, 12, 34, 56);
 
         User author = new User();
         author.setNickname("testAuthor");
@@ -37,20 +37,20 @@ class FileRepositoryTest {
 
         File saveFile = fileRepository.save(file);
 
-        assertEquals("testName",saveFile.getName());
-        assertEquals("txtType",saveFile.getFileType().getType());
-        assertEquals(LocalDateTime.of(2023, 4,23,12,34,56),localDateTime);
-        assertEquals("testLocation",fileLocation.getLocation());
+        assertEquals("testName", saveFile.getName());
+        assertEquals("txtType", saveFile.getFileType().getType());
+        assertEquals(LocalDateTime.of(2023, 4, 23, 12, 34, 56), localDateTime);
+        assertEquals("testLocation", fileLocation.getLocation());
         assertEquals("testAuthor", author.getNickname());
-        assertEquals(123L,fileSize);
+        assertEquals(123L, fileSize);
 
     }
-    
+
     @Test
     public void findById() {
         FileLocation fileLocation = new FileLocation("testLocation");
         FileType fileType = new FileType("testName", "txtType");
-        LocalDateTime localDateTime = LocalDateTime.of(2023, 4,23,12,34,56);
+        LocalDateTime localDateTime = LocalDateTime.of(2023, 4, 23, 12, 34, 56);
 
         User author = new User();
         author.setNickname("testAuthor");
