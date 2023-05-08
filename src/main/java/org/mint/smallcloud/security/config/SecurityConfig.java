@@ -28,12 +28,6 @@ public class SecurityConfig {
     private final FilterExceptionManager filterExceptionManager;
     private final CustomAuthenticationEntryPoint authenticationEntryPoint;
     private final CustomAccessDeniedHandler accessDeniedHandler;
-    private final String[] PERMIT_ALL = {
-        "/auth/login",
-        "/auth/register",
-        "/auth/refresh",
-        "/docs"
-    };
 
     @Bean
     public CorsConfigurationSource corsConfigurationSource() {
@@ -56,8 +50,7 @@ public class SecurityConfig {
             .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
             .and()
             .authorizeRequests()
-            .antMatchers(PERMIT_ALL).permitAll()
-            .anyRequest().authenticated()
+            .anyRequest().permitAll()
             .and()
             .formLogin().disable()
             .logout().invalidateHttpSession(true).deleteCookies("JSESSIONID")
