@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Link } from 'react-router-dom'
 import logo_img from '../config/img/logo.png'
 import configData from "../config/config.json"
@@ -46,13 +46,18 @@ export default function LoginPage() {
                 if (!res.ok) {
                     throw res.json();
                 }
-                setIsSuccess(true); //로그인성공
+                return res.json();
             })
-            .catch((json) => {
+            .then((json) => { // 성공
+                localStorage.setItem("accessToken", json.accessToken);
+                localStorage.setItem("refreshToken", json.refreshToken); 
+                setIsSuccess(true);
+            })
+            .catch((json) => { // 실패
                 json.then((data) => {
                     if (data.message != undefined) setMessage(data.message)
                     setIsFail(true); //실패 후 처리
-                })
+                })  
             });
     }
 
