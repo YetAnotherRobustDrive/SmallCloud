@@ -28,7 +28,7 @@ export default function ModalFileview(props) {
         <div className="fileview">
             <div className='fileviewHead'>
                 <span className='filename'>nameeeeeeeeeeeeeeeeeeeeeee</span>
-                <div className='closeBtn'>열기</div>
+                <div className='closeBtn' onClick={() => props.onClick()}>열기</div>
             </div>
             <Link to="/login">로그인</Link>
             <button onClick={tmp1}>ElevateUser</button>

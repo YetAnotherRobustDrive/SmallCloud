@@ -11,10 +11,12 @@ import ListBox from "../component/main/ListBox";
 
 import datas from '../fakeJSON/direcFiles.json'
 import ModalFileview from "../component/modal/ModalFileview";
+import ModalFileopen from "../component/modal/ModalFileopen";
 
 export default function MainPage() {
 
     const [isGrid, setIsGrid] = useState(true);
+    const [isFileView, setIsFileView] = useState(true);
     const [isFileOpen, setIsFileOpen] = useState(true);
     const [selected, setSelected] = useState();
 
@@ -28,6 +30,7 @@ export default function MainPage() {
                     {
                         datas.map((data) => {
                             return <CustomIcon
+                                onClick={() => setIsFileView(true)}
                                 key={data.id}
                                 name={data.name}
                                 type={data.type}
@@ -42,6 +45,7 @@ export default function MainPage() {
                         {
                             datas.map((data) => {
                                 return <CustomIcon
+                                    onClick={() => setIsFileView(true)}
                                     key={data.id}
                                     name={data.name}
                                     type={data.type}
@@ -64,10 +68,20 @@ export default function MainPage() {
                 }
                 <UploadBtn />
             </BodyFrame>
-            {isFileOpen &&
-                <ModalFileview 
-                file={selected} 
-                after={() => setIsFileOpen(false)}/>
+            {isFileView && (
+                <>
+                    <ModalFileview
+                        onClick={() => setIsFileOpen(true)}
+                        file={selected}
+                        after={() => setIsFileView(false)} />
+                    {isFileOpen &&
+                        <ModalFileopen 
+                        after={() => setIsFileOpen(false)}
+                        />                        
+                    }
+                </>
+            )
+
             }
         </>
     )

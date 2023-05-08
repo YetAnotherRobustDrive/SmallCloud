@@ -6,24 +6,70 @@
     bottom: 0;
     right: 0;
     border-left: 2px solid black;
+    z-index: 99;
 }
 
 .fileview .fileviewHead {
-    padding: 10px;
+    padding: 5px;
     width: 100%;
     border-bottom: 1px solid black;
     display: flex;
     position: relative;
-    height: 21px;
+    height: 31px;
 }
 
 .fileview .fileviewHead .filename {
+    padding: 5px;
     max-width: 200px;
     text-overflow: ellipsis;
     overflow: hidden;
 }
 
 .fileview .fileviewHead .closeBtn {
+    padding: 5px;
     position: absolute;
     right: 30px;
+}
+
+.fileview .fileviewHead .closeBtn:hover {
+    background-color: #e2e2e2;
+}
+
+.fileopen {
+    height: calc(100vh - 75px);
+    width: calc(100vw - 302px);
+    background-color: rgba(0, 0, 0, 0.7);
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    border-left: 2px solid black;
+    z-index: 98;
+}
+
+.fileopen .fileopen-close {
+    height: 40px;
+    width: 40px;
+    position: absolute;
+    right: 10px;
+    top: 10px;
+    z-index: 99;
+    color: white;
+    font-size: 40px;
+    text-align: center;
+    justify-content: center;
+    display: flex;
+}
+
+.fileopen .fileopen-close:hover {
+    background-color: rgba(0, 0, 0, 0.8);
+}
+
+.fileopen .preview {
+    position: absolute;
+    top: calc(50% - 238px);
+    left: calc(50% - 360px);
+    color: white;
+    background-color: rgba(0, 0, 0, 0.75);
+    width: 720px;
+    height: 576px;
 }

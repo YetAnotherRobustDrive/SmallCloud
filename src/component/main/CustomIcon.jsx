@@ -38,7 +38,7 @@ export default function CustomIcon(props) {
         })
     }, [])
     return (
-        <div className="CustomIcon">
+        <div className="CustomIcon" onClick={() => props.onClick()}>
             <div className="icon">
                 {icon}
                 <div className="labels">
