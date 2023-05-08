@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { Link } from 'react-router-dom'
 import logo_img from '../config/img/logo.png'
 import configData from "../config/config.json"
@@ -23,7 +23,7 @@ export default function LoginPage() {
         setIsSuccess(false);
     }
 
-    const handleSubmit = (e) => {
+    const handleSubmit = async (e) => {
         e.preventDefault();
 
         const inputData = new FormData(e.target);
@@ -41,26 +41,21 @@ export default function LoginPage() {
             return;
         }
 
-        fetch(configData.API_SERVER + 'auth/login', model)
-            .then(res => {
-                if (!res.ok) {
-                    throw res.json();
-                }
-                return res.json();
-            })
-            .then((json) => { // 성공
-                localStorage.setItem("accessToken", json.accessToken);
-                localStorage.setItem("refreshToken", json.refreshToken); 
-                setIsSuccess(true);
-            })
-            .catch((json) => { // 실패
-                json.then((data) => {
-                    if (data.message != undefined) setMessage(data.message)
-                    setIsFail(true); //실패 후 처리
-                })  
-            });
+        try {
+            const res = await fetch(configData.API_SERVER + 'auth/login', model);
+            const data = await res.json();
+            if (!res.ok) {
+                throw data;
+            }
+            localStorage.setItem("accessToken", data.accessToken); //성공
+            localStorage.setItem("refreshToken", data.refreshToken);
+            setIsSuccess(true);
+            return;
+        } catch (e) {
+            if (e.message != undefined) setMessage(e.message)
+            setIsFail(true);
+        }
     }
-
     return (
         <form className="login" onLoad={getName} onSubmit={handleSubmit}>
             <img src={logo_img} alt="LOGO" />

@@ -21,11 +21,11 @@ export default function Signup() {
     }
 
     const afterSuccess = () => {
-        setIsSuccess(false); 
+        setIsSuccess(false);
         moveTo("/login");
     }
 
-    const handleSubmit = (e) => {
+    const handleSubmit = async (e) => {
         e.preventDefault();
 
         const inputData = new FormData(e.target);
@@ -46,21 +46,18 @@ export default function Signup() {
             setIsChkWrong(true);
             return;
         }
-
         inputData.delete("password_chk");
 
-        fetch(configData.API_SERVER + 'auth/register', model)
-            .then(res => {
-                if (!res.ok) {
-                    throw new Error('');//실패
-                }
-                setIsSuccess(true);//성공
-            })
-            .catch(() => {
-                setIsExistUser(true);//실패 후 처리
-            });
+        try {
+            const res = await fetch(configData.API_SERVER + 'auth/register', model);
+            if (!res.ok) {
+                throw new Error('');//실패
+            }
+            setIsSuccess(true);//성공
+        } catch (e) {
+            setIsExistUser(true);//실패 후 처리
+        }
     }
-
     return (
         <form className="login" onLoad={getName} onSubmit={handleSubmit}>
             <img src={logo_img} alt="LOGO" />
@@ -73,7 +70,7 @@ export default function Signup() {
                 <button>가입 신청</button>
             </div>
             <Link to='/login-ask'>가입에 문제가 있으신가요?</Link>
-            
+
             {isEmpty && <ModalOk close={() => setIsEmpty(false)}>{"입력하지 않은 값이 있습니다."}</ModalOk>}
             {isChkWrong && <ModalOk close={() => setIsChkWrong(false)}>{"비밀번호 확인이 일치하지 않습니다."}</ModalOk>}
             {isExistUser && <ModalOk close={() => setIsExistUser(false)}>{"이미 존재하는 유저입니다."}</ModalOk>}

@@ -16,11 +16,9 @@ export default async function RefreshToken() {
         if (!res.ok) {
             throw new Error('');
         }
-        else {
-            const token = await res.text();
-            localStorage.setItem("accessToken", token);
-            return true;
-        }        
+        const token = await res.text();
+        localStorage.setItem("accessToken", token);
+        return true;
     } catch (error) {
         return false;
     }
