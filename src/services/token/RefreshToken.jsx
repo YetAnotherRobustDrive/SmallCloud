@@ -1,8 +1,7 @@
-import configData from "../config/config.json"
+import configData from "../../config/config.json"
 
 export default async function RefreshToken() {
     const refreshToken = localStorage.getItem("refreshToken");
-    console.log(refreshToken);
     let model = {
         method: "GET",
         headers: {
@@ -12,7 +11,6 @@ export default async function RefreshToken() {
 
     try {
         const res = await fetch(configData.API_SERVER + 'auth/refresh', model);
-        console.log(res);
         if (!res.ok) {
             throw new Error('');
         }
