@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import logo_img from '../config/img/logo.png'
 import configData from "../config/config.json"
 import "../css/login.css"
@@ -14,6 +14,7 @@ export default function LoginPage() {
     const [isFail, setIsFail] = useState(false);
     const [isSuccess, setIsSuccess] = useState(false);
     const [message, setMessage] = useState("로그인 에러");
+    const navigate = useNavigate();
 
     function getName() {
         setName(configData.NAME);
@@ -21,6 +22,7 @@ export default function LoginPage() {
 
     const afterSuccess = () => {
         setIsSuccess(false);
+        navigate('/');
     }
 
     const handleSubmit = async (e) => {
