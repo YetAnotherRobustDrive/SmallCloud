@@ -1,10 +1,10 @@
-package org.mint.smallcloud.security.user;
+package org.mint.smallcloud.user;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.mint.smallcloud.exception.ExceptionStatus;
 import org.mint.smallcloud.exception.ServiceException;
-import org.mint.smallcloud.security.user.repository.UserRepository;
+import org.mint.smallcloud.user.repository.UserRepository;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -15,8 +15,8 @@ public class UserExceptionService {
 
     public User getUserByLoginId(String loginId) {
         return userRepository
-                .findByLoginId(loginId)
-                .orElseThrow(() -> new ServiceException(ExceptionStatus.NOT_FOUND_USER));
+            .findByLoginId(loginId)
+            .orElseThrow(() -> new ServiceException(ExceptionStatus.NOT_FOUND_USER));
     }
 
     public void checkExistsLoginId(String loginId) {

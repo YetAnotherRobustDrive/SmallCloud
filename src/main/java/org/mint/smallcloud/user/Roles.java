@@ -1,4 +1,4 @@
-package org.mint.smallcloud.security.user;
+package org.mint.smallcloud.user;
 
 import lombok.Getter;
 

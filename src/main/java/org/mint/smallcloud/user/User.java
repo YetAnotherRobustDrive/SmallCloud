@@ -1,4 +1,4 @@
-package org.mint.smallcloud.security.user;
+package org.mint.smallcloud.user;
 
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -19,7 +19,6 @@ public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "USER_ID")
-    @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
     @Column(name = "LOGIN_ID", nullable = false, length = 15, unique = true)
