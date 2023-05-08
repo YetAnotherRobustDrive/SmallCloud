@@ -1,7 +1,7 @@
 package org.mint.smallcloud.label;
 
 import org.mint.smallcloud.file.File;
-import org.mint.smallcloud.user.User;
+import org.mint.smallcloud.security.user.User;
 
 import javax.persistence.*;
 import java.util.List;
@@ -11,6 +11,7 @@ import java.util.List;
 public class Label {
 
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "LABEL_ID")
     private Long id;
 

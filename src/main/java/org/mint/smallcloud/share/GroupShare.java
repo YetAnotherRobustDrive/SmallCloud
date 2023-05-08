@@ -2,12 +2,11 @@ package org.mint.smallcloud.share;
 
 
 import org.mint.smallcloud.group.Group;
-import org.mint.smallcloud.user.User;
+import org.mint.smallcloud.security.user.User;
 
 import javax.persistence.Entity;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
-import javax.persistence.OneToMany;
 
 @Entity
 public class GroupShare extends Share {
