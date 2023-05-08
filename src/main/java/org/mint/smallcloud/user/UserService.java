@@ -20,22 +20,29 @@ public class UserService {
 
     private final UserExceptionService userExceptionService;
     private final UserRepository userRepository;
+
     public UserDetailsDto getUserDetails(String loginId) {
         User user = userExceptionService.getUserByLoginId(loginId);
         return UserDetailsDto.builder()
-                .username(user.getLoginId())
-                .password(user.getPassword())
-                .disabled(user.isLocked())
-                .build();
+            .username(user.getLoginId())
+            .password(user.getPassword())
+            .roles(Roles.COMMON)
+            .disabled(user.isLocked())
+            .build();
     }
 
     public void registerUser(RegisterDto registerDto) {
         userExceptionService.checkExistsLoginId(registerDto.getId());
         User user = User.of(
-                registerDto.getId(),
-                registerDto.getPassword(),
-                registerDto.getName());
+            registerDto.getId(),
+            registerDto.getPassword(),
+            registerDto.getName());
         userRepository.save(user);
+    }
+
+    public void deregisterUser(String userId) {
+        User user = userExceptionService.getUserByLoginId(userId);
+        userRepository.delete(user);
     }
 
     public void checkPassword(LoginDto loginDto) {
@@ -44,8 +51,17 @@ public class UserService {
             throw new ServiceException(ExceptionStatus.WRONG_PASSWORD);
     }
 
-    public List<String> searchUser(String query) { return new ArrayList<>(); }
-    public String getUserInfo(Long userId) {return "";}
-    public void deactivateUser() {}
-    public void resetUserPw() {}
+    public List<String> searchUser(String query) {
+        return new ArrayList<>();
+    }
+
+    public String getUserInfo(Long userId) {
+        return "";
+    }
+
+    public void deactivateUser() {
+    }
+
+    public void resetUserPw() {
+    }
 }

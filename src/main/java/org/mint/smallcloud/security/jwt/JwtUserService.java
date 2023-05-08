@@ -7,7 +7,6 @@ import org.mint.smallcloud.exception.ServiceException;
 import org.mint.smallcloud.security.UserDetailsProvider;
 import org.mint.smallcloud.security.dto.LoginDto;
 import org.mint.smallcloud.user.UserService;
-import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
@@ -30,18 +29,20 @@ public class JwtUserService {
     public String refresh(String refreshToken) {
         Date now = new Date();
         jwtTokenProvider.validateToken(refreshToken);
-        return jwtTokenProvider.generateAccessToken(refreshToken, now);
+        return jwtTokenProvider.generateAccessTokenFromRefreshToken(refreshToken, now);
     }
 
     public JwtTokenDto elevate(String password) {
         String userId = userDetailsProvider.getUserId()
-                .orElseThrow(() -> new ServiceException(ExceptionStatus.NOT_VALID_JWT_TOKEN));
+            .orElseThrow(() -> new ServiceException(ExceptionStatus.NOT_VALID_JWT_TOKEN));
         userService.checkPassword(new LoginDto(userId, password));
         UserDetails user = userDetailsService.loadUserByUsername(userId);
-        user = userDetailsService.elevateUser(user);
+        user = userDetailsService.getElevateUser(user);
         return jwtTokenProvider.generateTokenDto(user);
     }
 
     public void deregister() {
+        String userId = userDetailsProvider.getUserId().orElseThrow(() -> new ServiceException(ExceptionStatus.NOT_VALID_JWT_TOKEN));
+        userService.deregisterUser(userId);
     }
 }
