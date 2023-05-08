@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 import '../../css/fileview.css';
 import DeregisterUser from '../../services/user/DeregisterUser';
 import ElevateUser from '../../services/user/ElevateUser';
+import RefreshToken from "../../services/token/RefreshToken";
 
 export default function ModalFileview(props) {
     const fileData = props.file;
@@ -19,6 +20,10 @@ export default function ModalFileview(props) {
         console.log(message);
     }
 
+    async function tmp3() {
+        await RefreshToken();
+    }
+
     return (
         <div className="fileview">
             <div className='fileviewHead'>
@@ -28,6 +33,7 @@ export default function ModalFileview(props) {
             <Link to="/login">로그인</Link>
             <button onClick={tmp1}>ElevateUser</button>
             <button onClick={tmp2}>DeregisterUser</button>
+            <button onClick={tmp3}>Refresh</button>
             <button onClick={() => props.after()}>닫기</button>
         </div>
     )
