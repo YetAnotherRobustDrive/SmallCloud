@@ -1,6 +1,7 @@
 import configData from "../../config/config.json"
 
 export default async function DeregisterUser() {
+    await RefreshToken();
     const accessToken = localStorage.getItem("accessToken");
     let model = {
         method: "POST",

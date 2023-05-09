@@ -1,6 +1,8 @@
 import configData from "../../config/config.json"
+import RefreshToken from '../token/RefreshToken'
 
 export default async function ElevateUser(pw) {
+    await RefreshToken();
     const accessToken = localStorage.getItem("accessToken");
     let model = {
         method: "POST",

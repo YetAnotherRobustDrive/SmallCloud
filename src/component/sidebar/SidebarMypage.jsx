@@ -16,7 +16,7 @@ export default function SidebarMypage() {
       <div className="menuBox">
         <Link className="link">보안정보</Link>
       </div>
-      <div className="filetree" />
+      <div className="filetreeStub" />
       <Footer />
     </div>
   )

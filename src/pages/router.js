@@ -15,7 +15,9 @@ import QuestionPage from './cs/QuestionPage';
 import AdminConfigPage from './admin/AdminConfigPage';
 import AdminUserCtrlPage from './admin/AdminUserCtrlPage';
 import ErrorPage from './common/ErrorPage';
-import CheckPwRoutes from './mypage/CheckPwRoutes';
+import PrivatePage from './mypage/PrivatePage';
+import ServiceInfoPage from './mypage/ServiceInfoPage';
+import SecurityInfoPage from './mypage/SecurityInfoPage';
 
 export default () => (
     <Router>
@@ -28,8 +30,10 @@ export default () => (
             <Route path='/register' element={<RegisterPage/>} />
             <Route path='/login' element={<LoginPage/>} />
             <Route path='/login/ask' element={<LoginQuestionPage/>} />
-            
-            <Route path='/mypage' element={<CheckPwRoutes />} />
+        
+            <Route path='/mypage' element={<PrivatePage />} />
+            <Route path='/mypage/service' element={<ServiceInfoPage />} />
+            <Route path='/mypage/security' element={<SecurityInfoPage />} />
 
             <Route path='/upload' element={<UploadPage/>} />
             <Route path='/download' element={<DownloadPage />} />
