@@ -1,12 +1,12 @@
-import React, { useState } from "react";
-import BodyFrame from "../component/Bodyframe";
-import Header from "../component/header/Header";
-import Sidebar from "../component/sidebar/Sidebar";
-import LoadListBox from "../component/updown/LoadListBox";
-import ProgressBar from "../component/updown/ProgressBar";
-import '../css/load.css'
+import React from "react";
+import BodyFrame from "../../component/Bodyframe";
+import Header from "../../component/header/Header";
+import Sidebar from "../../component/sidebar/Sidebar";
+import LoadListBox from "../../component/updown/LoadListBox";
+import ProgressBar from "../../component/updown/ProgressBar";
+import '../../css/load.css'
 
-export default function Download(){
+export default function DownloadPage(){
 
     const [progress, setProgress] = React.useState(10);
 

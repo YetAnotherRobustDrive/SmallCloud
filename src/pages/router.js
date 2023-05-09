@@ -1,46 +1,47 @@
 import React from 'react';
 import { BrowserRouter as Router, Navigate, Route, Routes } from 'react-router-dom';
-import MainPage from './MainPage';
-import LoginPage from './Login';
-import LoginAsk from './LoginAsk';
-import Signup from './Signup';
-import Mypage from './Mypage';
-import AdminRules from './admin/Rules';
-import AdminUserCtrl from './admin/UserCtrl';
-import Upload from './Upload';
-import Download from './Download';
-import Notice from './Notice';
-import Terms from './Terms';
-import FAQ from './FAQ';
-import Ask from './Ask';
-import ErrorPage from './ErrorPage';
-import Favorites from './Favorites';
-import Trash from './Trash';
+import MainPage from './common/MainPage';
+import FavoritesPage from './main/FavoritesPage';
+import TrashBinPage from './main/TrashBinPage';
+import RegisterPage from './login/RegisterPage';
+import LoginPage from './login/LoginPage';
+import LoginQuestionPage from './login/LoginQuestionPage';
+import UploadPage from './load/UploadPage';
+import DownloadPage from './load/DownloadPage';
+import NoticePage from './cs/NoticePage';
+import TermsPage from './cs/TermsPage';
+import FaqPage from './cs/FaqPage';
+import QuestionPage from './cs/QuestionPage';
+import AdminConfigPage from './admin/AdminConfigPage';
+import AdminUserCtrlPage from './admin/AdminUserCtrlPage';
+import ErrorPage from './common/ErrorPage';
+import CheckPwRoutes from './mypage/CheckPwRoutes';
 
 export default () => (
     <Router>
         <Routes>
             <Route exact path='/' element={<MainPage />} />
-            <Route path='/favorites' element={<Favorites />} />
-            <Route path='/trash' element={<Trash />} />
+            <Route path='/favorites' element={<FavoritesPage />} />
+            <Route path='/trash' element={<TrashBinPage />} />
 
 
-            <Route path='/register' element={<Signup/>} />
+            <Route path='/register' element={<RegisterPage/>} />
             <Route path='/login' element={<LoginPage/>} />
-            <Route path='/login/ask' element={<LoginAsk/>} />
+            <Route path='/login/ask' element={<LoginQuestionPage/>} />
             
-            <Route path='/mypage' element={<Mypage/>} />
-            <Route path='/upload' element={<Upload/>} />
-            <Route path='/download' element={<Download />} />
+            <Route path='/mypage' element={<CheckPwRoutes />} />
 
-            <Route path='/cs/notice' element={<Notice/>} />
-            <Route path='/cs/terms' element={<Terms/>} />
-            <Route path='/cs/faq' element={<FAQ/>} />
-            <Route path='/cs/ask' element={<Ask/>} />
+            <Route path='/upload' element={<UploadPage/>} />
+            <Route path='/download' element={<DownloadPage />} />
 
-            <Route path='/admin' element={<AdminRules/>} />
-            <Route path='/admin/rules' element={<AdminRules/>} />
-            <Route path='/admin/user-ctrl' element={<AdminUserCtrl/>} />
+            <Route path='/cs/notice' element={<NoticePage/>} />
+            <Route path='/cs/terms' element={<TermsPage/>} />
+            <Route path='/cs/faq' element={<FaqPage/>} />
+            <Route path='/cs/question' element={<QuestionPage/>} />
+
+            <Route path='/admin' element={<AdminConfigPage />} />
+            <Route path='/admin/rules' element={<AdminConfigPage/>} />
+            <Route path='/admin/user-ctrl' element={<AdminUserCtrlPage/>} />
 
             <Route path='/error' element={<ErrorPage/>} />
             <Route path="*" element={<Navigate to="/error" />} />

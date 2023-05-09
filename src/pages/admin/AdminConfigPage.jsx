@@ -9,7 +9,7 @@ import {CgPassword} from 'react-icons/cg'
 import ToggleBtn from "../../component/admin/toggleBtn";
 import RuleInput from "../../component/admin/ruleInput";
 
-export default function AdminRules() {
+export default function AdminConfigPage() {
 
     const testF = (() => {
         alert("clicked!");

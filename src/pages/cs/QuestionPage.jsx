@@ -1,14 +1,14 @@
 import React from "react";
-import Header from "../component/header/Header"
-import BodyFrame from "../component/Bodyframe";
-import SidebarCS from "../component/sidebar/SidebarCS";
-import ExtendBox from "../component/cs/ExtendBox";
-import BodyHeader from "../component/main/BodyHeader";
+import Header from "../../component/header/Header"
+import BodyFrame from "../../component/Bodyframe";
+import SidebarCS from "../../component/sidebar/SidebarCS";
+import ExtendBox from "../../component/cs/ExtendBox";
+import BodyHeader from "../../component/main/BodyHeader";
 
-import datas from "../fakeJSON/FAQ.json"
+import datas from "../../fakeJSON/FAQ.json"
 
 
-export default function Ask() {
+export default function QuestionPage() {
     return (
         <>
             <Header />

@@ -1,10 +1,10 @@
 import React, { useState } from "react";
 import { Link, useNavigate } from 'react-router-dom'
-import logo_img from '../config/img/logo.png'
-import configData from "../config/config.json"
-import "../css/login.css"
-import "../css/modal.css"
-import ModalOk from "../component/modal/ModalOk";
+import logo_img from '../../config/img/logo.png'
+import configData from "../../config/config.json"
+import "../../css/login.css"
+import "../../css/modal.css"
+import ModalOk from "../../component/modal/ModalOk";
 
 export default function LoginPage() {
 

@@ -1,11 +1,12 @@
 import React from "react";
-import Header from "../component/header/Header"
-import BodyFrame from "../component/Bodyframe";
-import SidebarCS from "../component/sidebar/SidebarCS";
-import ExtendBox from "../component/cs/ExtendBox";
-import datas from '../fakeJSON/FAQ.json'
+import Header from "../../component/header/Header"
+import BodyFrame from "../../component/Bodyframe";
+import SidebarCS from "../../component/sidebar/SidebarCS";
+import ExtendBox from "../../component/cs/ExtendBox";
 
-export default function FAQ() {
+import datas from '../../fakeJSON/notice.json'
+
+export default function NoticePage() {
     return (
         <>
             <Header />

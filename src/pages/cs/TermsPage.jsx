@@ -1,10 +1,10 @@
 import React from "react";
-import Header from "../component/header/Header"
-import BodyFrame from "../component/Bodyframe";
-import SidebarCS from "../component/sidebar/SidebarCS";
-import BodyHeader from "../component/main/BodyHeader";
+import Header from "../../component/header/Header"
+import BodyFrame from "../../component/Bodyframe";
+import SidebarCS from "../../component/sidebar/SidebarCS";
+import BodyHeader from "../../component/main/BodyHeader";
 
-export default function Terms() {
+export default function TermsPage() {
     return (
         <>
             <Header />

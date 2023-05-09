@@ -10,7 +10,7 @@ import default_profile_img from '../../img/defalutProfile.png'
 import '../../css/admin.css'
 
 
-export default function AdminUserCtrl() {
+export default function AdminUserCtrlPage() {
 
     const [img, setImg] = useState(null);
 

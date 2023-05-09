@@ -1,17 +1,16 @@
 import React, { useState } from "react";
-import Sidebar from "../component/sidebar/Sidebar"
-import Header from "../component/header/Header"
-import BodyHeader from "../component/main/BodyHeader";
-import BodyFrame from "../component/Bodyframe";
-import NarrowBox from "../component/main/NarrowBox";
-import CustomIcon from "../component/main/CustomIcon";
-import GridBox from "../component/main/GridBox";
-import UploadBtn from "../component/main/UploadBtn";
-import ListBox from "../component/main/ListBox";
+import Sidebar from "../../component/sidebar/Sidebar"
+import Header from "../../component/header/Header"
+import BodyHeader from "../../component/main/BodyHeader";
+import BodyFrame from "../../component/Bodyframe";
+import CustomIcon from "../../component/main/CustomIcon";
+import GridBox from "../../component/main/GridBox";
+import UploadBtn from "../../component/main/UploadBtn";
+import ListBox from "../../component/main/ListBox";
 
-import datas from '../fakeJSON/direcFiles.json'
+import datas from '../../fakeJSON/direcFiles.json'
 
-export default function Trash() {
+export default function FavoritesPage() {
 
     const [isGrid, setIsGrid] = useState(true);
 
@@ -20,7 +19,7 @@ export default function Trash() {
             <Header />
             <Sidebar />
             <BodyFrame>
-                <BodyHeader text="Trash" addon={setIsGrid} view={isGrid} />
+                <BodyHeader text="Favorites" addon={setIsGrid} view={isGrid} />
                 {isGrid &&
                     <GridBox height="calc(100vh - 117px)">
                         {

@@ -1,7 +1,7 @@
 import React, { useState } from "react";
-import logo_img from '../config/img/logo.png'
-import configData from "../config/config.json"
-import "../css/error.css"
+import logo_img from '../../config/img/logo.png'
+import configData from "../../config/config.json"
+import "../../css/error.css"
 import { Link } from "react-router-dom";
 
 export default function ErrorPage() {
