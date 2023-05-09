@@ -1,5 +1,7 @@
 import React, { useState } from "react";
 import Modal from 'react-modal';
+import '../../css/modal.css'
+
 
 export default function ModalOk(props) {
 
@@ -20,14 +22,15 @@ export default function ModalOk(props) {
         },
     }
 
+
     Modal.setAppElement("#root")
 
     return (
-        <Modal onAfterClose={props.close} isOpen={isModalOpen} style={modalStyle}>
+        <Modal onAfterClose={props.close} isOpen={isModalOpen} style={modalStyle} >
             <div className="modalOuter">
                 <span className="customSpan">{props.children}</span>
                 <div>
-                    <button onClick={modalClose}>확인</button>
+                    <button onClick={modalClose} autoFocus>확인</button>
                 </div>
             </div>
         </Modal>

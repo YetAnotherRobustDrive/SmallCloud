@@ -31,3 +31,7 @@
     white-space: pre-line;
     text-align: center;
 }
+
+button:focus {
+    outline: 0;
+}
