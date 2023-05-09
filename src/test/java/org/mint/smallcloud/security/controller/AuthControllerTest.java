@@ -10,8 +10,8 @@ import org.mint.smallcloud.security.dto.LoginDto;
 import org.mint.smallcloud.security.dto.RegisterDto;
 import org.mint.smallcloud.security.jwt.JwtTokenDto;
 import org.mint.smallcloud.security.jwt.JwtTokenProvider;
-import org.mint.smallcloud.user.Roles;
-import org.mint.smallcloud.user.User;
+import org.mint.smallcloud.user.domain.Member;
+import org.mint.smallcloud.user.domain.Roles;
 import org.mint.smallcloud.user.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
@@ -103,7 +103,7 @@ class AuthControllerTest {
             .id("user1")
             .password("pw1")
             .build();
-        userRepository.save(User.of(loginDto1.getId(),
+        userRepository.save(Member.of(loginDto1.getId(),
             loginDto1.getPassword(), "nickname"));
 
         this.mockMvc.perform(TestSnippet.post(url, objectMapper, loginDto1))
@@ -129,7 +129,7 @@ class AuthControllerTest {
             .build();
         Map<String, String> map = new HashMap<>();
         map.put("password", "pw");
-        userRepository.save(User.of(loginDto1.getId(),
+        userRepository.save(Member.of(loginDto1.getId(),
             loginDto1.getPassword(), "nickname"));
         JwtTokenDto token = jwtTokenProvider.generateTokenDto(
             org.springframework.security.core.userdetails.User.builder()
@@ -165,9 +165,9 @@ class AuthControllerTest {
             .password("pw")
             .build();
 
-        userRepository.save(User.of(loginDto1.getId(),
+        userRepository.save(Member.of(loginDto1.getId(),
             loginDto1.getPassword(), "nickname"));
-        userRepository.save(User.of(loginDto2.getId(),
+        userRepository.save(Member.of(loginDto2.getId(),
             loginDto2.getPassword(), "nickname"));
 
         JwtTokenDto token = jwtTokenProvider.generateTokenDto(

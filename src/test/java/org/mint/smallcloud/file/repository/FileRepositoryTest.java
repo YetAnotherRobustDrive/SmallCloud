@@ -1,10 +1,10 @@
 package org.mint.smallcloud.file.repository;
 
 import org.junit.jupiter.api.Test;
-import org.mint.smallcloud.data.FileLocation;
-import org.mint.smallcloud.file.File;
-import org.mint.smallcloud.file.FileType;
-import org.mint.smallcloud.user.User;
+import org.mint.smallcloud.file.domain.File;
+import org.mint.smallcloud.file.domain.FileLocation;
+import org.mint.smallcloud.file.domain.FileType;
+import org.mint.smallcloud.user.domain.Member;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
@@ -26,7 +26,7 @@ class FileRepositoryTest {
         FileType fileType = new FileType("testName", "txtType");
         LocalDateTime localDateTime = LocalDateTime.of(2023, 4, 23, 12, 34, 56);
 
-        User author = new User();
+        Member author = new Member();
         author.setNickname("testAuthor");
 
         File file1 = new File();
@@ -52,7 +52,7 @@ class FileRepositoryTest {
         FileType fileType = new FileType("testName", "txtType");
         LocalDateTime localDateTime = LocalDateTime.of(2023, 4, 23, 12, 34, 56);
 
-        User author = new User();
+        Member author = new Member();
         author.setNickname("testAuthor");
 
         File file1 = new File();

@@ -2,9 +2,9 @@ package org.mint.smallcloud.security.jwt;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.mint.smallcloud.user.Roles;
-import org.mint.smallcloud.user.UserService;
+import org.mint.smallcloud.user.domain.Roles;
 import org.mint.smallcloud.user.dto.UserDetailsDto;
+import org.mint.smallcloud.user.service.UserService;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;

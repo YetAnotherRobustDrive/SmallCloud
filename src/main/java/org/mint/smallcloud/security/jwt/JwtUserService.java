@@ -6,7 +6,7 @@ import org.mint.smallcloud.exception.ExceptionStatus;
 import org.mint.smallcloud.exception.ServiceException;
 import org.mint.smallcloud.security.UserDetailsProvider;
 import org.mint.smallcloud.security.dto.LoginDto;
-import org.mint.smallcloud.user.UserService;
+import org.mint.smallcloud.user.service.UserService;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
