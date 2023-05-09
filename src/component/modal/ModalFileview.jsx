@@ -1,17 +1,16 @@
-import React from "react";
+import React, { useState } from "react";
 import { Link } from 'react-router-dom';
 import '../../css/fileview.css';
 import DeregisterUser from '../../services/user/DeregisterUser';
-import ElevateUser from '../../services/user/ElevateUser';
 import RefreshToken from "../../services/token/RefreshToken";
+import ModalCheckPW from "./ModalCheckPw";
 
 export default function ModalFileview(props) {
+    const [test, setTest] = useState(false);
     const fileData = props.file;
 
     async function tmp1() {
-        const [isOk, message] = await ElevateUser('qwer');
-        console.log(isOk);
-        console.log(message);
+        setTest(true);
     }
 
     async function tmp2() {
@@ -24,6 +23,7 @@ export default function ModalFileview(props) {
         await RefreshToken();
     }
 
+
     return (
         <div className="fileview">
             <div className='fileviewHead'>
@@ -35,6 +35,9 @@ export default function ModalFileview(props) {
             <button onClick={tmp2}>DeregisterUser</button>
             <button onClick={tmp3}>Refresh</button>
             <button onClick={() => props.after()}>닫기</button>
+            {test &&
+                <ModalCheckPW isOpen={test} after={() => setTest(false)}/>
+            }
         </div>
     )
 
