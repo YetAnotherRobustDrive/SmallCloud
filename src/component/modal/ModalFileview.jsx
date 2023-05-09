@@ -1,42 +1,41 @@
 import React, { useState } from "react";
-import { Link } from 'react-router-dom';
 import '../../css/fileview.css';
-import DeregisterUser from '../../services/user/DeregisterUser';
-import RefreshToken from "../../services/token/RefreshToken";
-import ModalCheckPW from "./ModalCheckPw";
+import ModalFileopen from "./ModalFileopen";
+import { AiOutlineClose } from "react-icons/ai";
 
 export default function ModalFileview(props) {
-    const [test, setTest] = useState(false);
+    const [isFileOpen, setIsFileOpen] = useState(false);
+    const [isGeneralSelected, setIsGeneralSelected] = useState(true);
     const fileData = props.file;
-
-    async function tmp1() {
-        setTest(true);
-    }
-
-    async function tmp2() {
-        const [isOk, message] = await DeregisterUser();
-        console.log(isOk);
-        console.log(message);
-    }
-
-    async function tmp3() {
-        await RefreshToken();
-    }
-
 
     return (
         <div className="fileview">
-            <div className='fileviewHead'>
+            <div className='head'>
                 <span className='filename'>nameeeeeeeeeeeeeeeeeeeeeee</span>
-                <div className='closeBtn' onClick={() => props.onClick()}>열기</div>
+                <div className="fileBtn">
+                    <div className='open' onClick={() => setIsFileOpen(true)}>open</div>
+                    <div className='close' onClick={() => props.after()}><AiOutlineClose /></div>
+                </div>
             </div>
-            <Link to="/login">로그인</Link>
-            <button onClick={tmp1}>ElevateUser</button>
-            <button onClick={tmp2}>DeregisterUser</button>
-            <button onClick={tmp3}>Refresh</button>
-            <button onClick={() => props.after()}>닫기</button>
-            {test &&
-                <ModalCheckPW isOpen={test} after={() => setTest(false)}/>
+            <div className="body">
+                <div className="options">
+                    <span
+                        style={isGeneralSelected ? { textDecoration: "underline" } : {}}
+                        onClick={() => setIsGeneralSelected(true)}>
+                        일반
+                    </span>
+                    <span
+                        style={!isGeneralSelected ? { textDecoration: "underline" } : {}}
+                        onClick={() => setIsGeneralSelected(false)}>
+                        공유
+                    </span>
+                </div>
+
+            </div>
+            {isFileOpen &&
+                <ModalFileopen
+                    after={() => setIsFileOpen(false)}
+                />
             }
         </div>
     )

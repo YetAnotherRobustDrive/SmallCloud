@@ -11,13 +11,11 @@ import ListBox from "../component/main/ListBox";
 
 import datas from '../fakeJSON/direcFiles.json'
 import ModalFileview from "../component/modal/ModalFileview";
-import ModalFileopen from "../component/modal/ModalFileopen";
 
 export default function MainPage() {
 
     const [isGrid, setIsGrid] = useState(true);
     const [isFileView, setIsFileView] = useState(true);
-    const [isFileOpen, setIsFileOpen] = useState(true);
     const [selected, setSelected] = useState();
 
     return (
@@ -71,14 +69,8 @@ export default function MainPage() {
             {isFileView && (
                 <>
                     <ModalFileview
-                        onClick={() => setIsFileOpen(true)}
                         file={selected}
                         after={() => setIsFileView(false)} />
-                    {isFileOpen &&
-                        <ModalFileopen 
-                        after={() => setIsFileOpen(false)}
-                        />                        
-                    }
                 </>
             )
 

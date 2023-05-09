@@ -9,7 +9,7 @@
     z-index: 99;
 }
 
-.fileview .fileviewHead {
+.fileview .head {
     padding: 5px;
     width: 100%;
     border-bottom: 1px solid black;
@@ -18,20 +18,42 @@
     height: 31px;
 }
 
-.fileview .fileviewHead .filename {
+.fileview .head .filename {
     padding: 5px;
-    max-width: 200px;
+    max-width: 175px;
     text-overflow: ellipsis;
     overflow: hidden;
 }
 
-.fileview .fileviewHead .closeBtn {
+.fileview .head .fileBtn {
     padding: 5px;
     position: absolute;
-    right: 30px;
+    right: 20px;
+    display: flex;
+    justify-content: center;
+    text-align: center;
+    margin: 0;
+    height: 23px;
 }
 
-.fileview .fileviewHead .closeBtn:hover {
+.fileview .head .fileBtn .close{
+    height: 21px;
+    width: 21px;
+    font-size: 21px;
+    margin-left: 5px;
+    border: 1px solid black;
+}
+
+.fileview .head .fileBtn .open{
+    padding: 0px 5px 3px 5px;
+    border: 1px solid black;
+}
+
+.fileview .head .fileBtn .open:hover{
+    background-color: #e2e2e2;
+}
+
+.fileview .head .fileBtn .close:hover{
     background-color: #e2e2e2;
 }
 
@@ -76,4 +98,20 @@
     background-color: rgba(0, 0, 0, 0.75);
     width: 720px;
     height: 576px;
+}
+
+.fileview .body {
+    height: calc(100% - 31px);
+    width: 100%;
+}
+
+.fileview .body .options {
+    width: 100%;
+    padding: 10px;
+}
+
+.fileview .body .options span{
+    font-size: 20px;
+    margin-right: 5px;
+    text-underline-position: under;
 }
