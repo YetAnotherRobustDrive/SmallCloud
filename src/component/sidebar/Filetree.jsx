@@ -23,10 +23,10 @@ export default function Filetree() {
 
     let taps = '';
     for (let index = 0; index < depth; index++) {
-      taps += '     '; 
+      taps += '   '; 
     }
     if (depth != 0) {
-      taps += 'L';
+      taps += '└';
     } 
 
     return folder.map((d) => {
