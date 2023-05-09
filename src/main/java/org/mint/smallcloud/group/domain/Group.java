@@ -24,7 +24,7 @@ public class Group {
     private String name;
 
     @ManyToOne
-    @JoinColumn(name = "PARENT_ID")
+    @JoinColumn(name = "PARENT_GROUP_ID")
     private Group parentGroup;
 
     @ManyToOne
@@ -48,10 +48,10 @@ public class Group {
     @OneToMany(mappedBy = "group")
     private List<Member> members;
 
-    public Group(String name, Member manager, Group parent) {
+    public Group(String name, Member manager, Group parentGroup) {
         this.name = name;
         this.manager = manager;
-        this.parent = parent;
+        this.parentGroup = parentGroup;
         if (this.manager != null) {
             addMember(manager);
         }

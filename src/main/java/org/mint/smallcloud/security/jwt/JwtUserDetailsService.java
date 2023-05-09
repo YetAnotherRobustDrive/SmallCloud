@@ -2,38 +2,45 @@ package org.mint.smallcloud.security.jwt;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.mint.smallcloud.security.dto.UserDetailsDto;
+import org.mint.smallcloud.security.mapper.UserDetailsResolver;
+import org.mint.smallcloud.user.domain.Role;
 import org.mint.smallcloud.user.domain.Roles;
-import org.mint.smallcloud.user.dto.UserDetailsDto;
-import org.mint.smallcloud.user.service.UserService;
+import org.mint.smallcloud.user.service.MemberService;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.stereotype.Service;
 
-@Slf4j
 @Service
+@Slf4j
 @RequiredArgsConstructor
 public class JwtUserDetailsService implements UserDetailsService {
-    private final UserService userService;
+    private final MemberService userService;
+    private final UserDetailsResolver userDetailsResolver;
 
     @Override
     public UserDetails loadUserByUsername(String userName) {
-        log.info("called JwtUserDetailService");
-        UserDetailsDto userDetails = userService.getUserDetails(userName);
-        return User.builder()
-            .username(userDetails.getUsername())
-            .password(userDetails.getPassword())
-            .roles(userDetails.getRoles())
-            .disabled(userDetails.isDisabled())
-            .build();
+        UserDetailsDto userDetails =
+            userService.getUserDetails(userName);
+        return userDetailsResolver.toUserDetails(userDetails);
     }
 
-    public UserDetails getElevateUser(UserDetails user) {
-        return User.builder()
-            .username(user.getUsername())
-            .password(user.getPassword())
-            .roles(Roles.PRIVILEGE)
-            .disabled(false)
-            .build();
+    public UserDetails loadUserByUsernameAndRole(String userName, Role role) {
+        return getElevatedUser(loadUserByUsername(userName), role);
+    }
+
+    public UserDetails getElevatedUser(UserDetails user, Role targetRole) {
+        if (Role.PRIVILEGE.equals(targetRole)
+            && user.isEnabled()
+            && !Role.ADMIN.equals(userDetailsResolver.getRole(user)
+            .orElse(null)))
+            return User.builder()
+                .username(user.getUsername())
+                .password(user.getPassword())
+                .roles(Roles.PRIVILEGE)
+                .disabled(true)
+                .build();
+        return user;
     }
 }

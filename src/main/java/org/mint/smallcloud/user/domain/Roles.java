@@ -1,9 +1,5 @@
 package org.mint.smallcloud.user.domain;
 
-import lombok.Getter;
-
-
-@Getter
 public class Roles {
     public static final String PREFIX = "ROLE_";
     public static final String ADMIN = "ADMIN";
@@ -12,4 +8,5 @@ public class Roles {
     public static final String S_COMMON = PREFIX + COMMON;
     public static final String PRIVILEGE = "PRIVILEGE";
     public static final String S_PRIVILEGE = PREFIX + PRIVILEGE;
+
 }

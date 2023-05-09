@@ -1,8 +1,9 @@
-package org.mint.smallcloud.user.dto;
+package org.mint.smallcloud.security.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
+import org.mint.smallcloud.user.domain.Role;
 
 @AllArgsConstructor
 @Builder
@@ -10,6 +11,6 @@ import lombok.Getter;
 public class UserDetailsDto {
     private final String username;
     private final String password;
-    private final String roles;
+    private final Role roles;
     private final boolean disabled;
 }

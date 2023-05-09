@@ -1,4 +1,4 @@
-package org.mint.smallcloud.security.jwt;
+package org.mint.smallcloud.security.jwt.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;

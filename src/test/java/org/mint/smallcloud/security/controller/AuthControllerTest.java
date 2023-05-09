@@ -8,11 +8,12 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mint.smallcloud.TestSnippet;
 import org.mint.smallcloud.security.dto.LoginDto;
 import org.mint.smallcloud.security.dto.RegisterDto;
-import org.mint.smallcloud.security.jwt.JwtTokenDto;
-import org.mint.smallcloud.security.jwt.JwtTokenProvider;
+import org.mint.smallcloud.security.dto.UserDetailsDto;
+import org.mint.smallcloud.security.jwt.dto.JwtTokenDto;
+import org.mint.smallcloud.security.jwt.tokenprovider.JwtTokenProvider;
 import org.mint.smallcloud.user.domain.Member;
-import org.mint.smallcloud.user.domain.Roles;
-import org.mint.smallcloud.user.repository.UserRepository;
+import org.mint.smallcloud.user.domain.Role;
+import org.mint.smallcloud.user.repository.MemberRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -47,7 +48,7 @@ class AuthControllerTest {
     private ObjectMapper objectMapper;
 
     @Autowired
-    private UserRepository userRepository;
+    private MemberRepository memberRepository;
 
     @Autowired
     private JwtTokenProvider jwtTokenProvider;
@@ -103,7 +104,7 @@ class AuthControllerTest {
             .id("user1")
             .password("pw1")
             .build();
-        userRepository.save(Member.of(loginDto1.getId(),
+        memberRepository.save(Member.of(loginDto1.getId(),
             loginDto1.getPassword(), "nickname"));
 
         this.mockMvc.perform(TestSnippet.post(url, objectMapper, loginDto1))
@@ -129,16 +130,15 @@ class AuthControllerTest {
             .build();
         Map<String, String> map = new HashMap<>();
         map.put("password", "pw");
-        userRepository.save(Member.of(loginDto1.getId(),
+        memberRepository.save(Member.of(loginDto1.getId(),
             loginDto1.getPassword(), "nickname"));
         JwtTokenDto token = jwtTokenProvider.generateTokenDto(
-            org.springframework.security.core.userdetails.User.builder()
+            UserDetailsDto.builder()
                 .username("user1")
                 .password("pw")
-                .roles(Roles.COMMON)
+                .roles(Role.COMMON)
                 .disabled(false)
                 .build());
-
         this.mockMvc.perform(TestSnippet.securePost(url, token.getAccessToken(), objectMapper, map))
             .andExpect(status().isOk())
             .andDo(document("Elevate", payload));
@@ -165,16 +165,16 @@ class AuthControllerTest {
             .password("pw")
             .build();
 
-        userRepository.save(Member.of(loginDto1.getId(),
+        memberRepository.save(Member.of(loginDto1.getId(),
             loginDto1.getPassword(), "nickname"));
-        userRepository.save(Member.of(loginDto2.getId(),
+        memberRepository.save(Member.of(loginDto2.getId(),
             loginDto2.getPassword(), "nickname"));
 
         JwtTokenDto token = jwtTokenProvider.generateTokenDto(
-            org.springframework.security.core.userdetails.User.builder()
+            UserDetailsDto.builder()
                 .username(loginDto1.getId())
                 .password(loginDto1.getPassword())
-                .roles(Roles.COMMON)
+                .roles(Role.COMMON)
                 .disabled(false)
                 .build());
         Map<String, String> map = new HashMap<>();
@@ -189,18 +189,40 @@ class AuthControllerTest {
             .andExpect(status().isOk())
             .andDo(document("Deregister"));
 
-        assertNull(userRepository
-            .findByLoginId(loginDto1.getId()).orElse(null));
+        assertNull(memberRepository
+            .findByUsername(loginDto1.getId()).orElse(null));
 
         JwtTokenDto commonToken = jwtTokenProvider.generateTokenDto(
-            org.springframework.security.core.userdetails.User.builder()
+            UserDetailsDto.builder()
                 .username(loginDto2.getId())
                 .password(loginDto2.getPassword())
-                .roles(Roles.COMMON)
+                .roles(Role.COMMON)
                 .disabled(false)
                 .build());
         this.mockMvc.perform(TestSnippet.securePost(url, commonToken.getAccessToken()))
             .andExpect(status().isForbidden())
             .andDo(document("DeregisterPrivilege"));
+    }
+
+    @Test
+    @DisplayName("/auth/refresh document")
+    public void refresh() throws Exception {
+        final String url = URL_PREFIX + "/refresh";
+        Member member = Member.of("test1", "password", "nickname");
+        memberRepository.save(member);
+        UserDetailsDto userDto = UserDetailsDto.builder()
+            .username(member.getUsername())
+            .password(member.getPassword())
+            .disabled(member.isLocked())
+            .roles(member.getRole()).build();
+        JwtTokenDto refresh = jwtTokenProvider.generateTokenDto(userDto);
+
+        this.mockMvc.perform(TestSnippet.secureGet(url, refresh.getRefreshToken()))
+            .andExpect(status().isOk())
+            .andDo(document("Refresh"));
+
+        this.mockMvc.perform(TestSnippet.secureGet(url, "abc"))
+            .andExpect(status().isBadRequest())
+            .andDo(document("RefreshBadToken"));
     }
 }

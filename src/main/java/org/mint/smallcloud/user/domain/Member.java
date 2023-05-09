@@ -43,6 +43,10 @@ public class Member {
     @Column(name = "PROFILE_IMAGE_LOCATION")
     private FileLocation profileImageLocation = null;
 
+    @Column(name = "ROLE")
+    @Enumerated(EnumType.STRING)
+    private Role role;
+
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "GROUP")
     private Group group;
@@ -54,16 +58,25 @@ public class Member {
     )
     private List<MemberShare> shares;
 
-    protected Member(String username, String password, String nickname) {
+    protected Member(String username, String password, String nickname, Role role) {
         this.username = username;
         this.password = password;
         this.nickname = nickname;
+        this.role = role;
         this.joinedDate = LocalDateTime.now();
         this.changedPasswordDate = LocalDateTime.now();
     }
 
     public static Member of(String username, String password, String nickname) {
-        return new Member(username, password, nickname);
+        return new Member(username, password, nickname, Role.COMMON);
+    }
+
+    public static Member createCommon(String username, String password, String nickname) {
+        return new Member(username, password, nickname, Role.COMMON);
+    }
+
+    public static Member createAdmin(String username, String password, String nickname) {
+        return new Member(username, password, nickname, Role.ADMIN);
     }
 
     @Override
@@ -85,6 +98,10 @@ public class Member {
 
     public boolean verifyPassword(String password) {
         return this.password.equals(password);
+    }
+
+    public boolean isRole(Role role) {
+        return this.role.equals(role);
     }
 
     public void unlock() {
