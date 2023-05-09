@@ -13,7 +13,7 @@ export default function ModalFileview(props) {
             <div className='head'>
                 <span className='filename'>nameeeeeeeeeeeeeeeeeeeeeee</span>
                 <div className="fileBtn">
-                    <div className='open' onClick={() => setIsFileOpen(true)}>open</div>
+                    <div className='open' onClick={() => setIsFileOpen(true)}>열기</div>
                     <div className='close' onClick={() => props.after()}><AiOutlineClose /></div>
                 </div>
             </div>
