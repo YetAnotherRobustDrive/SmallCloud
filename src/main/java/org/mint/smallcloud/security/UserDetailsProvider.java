@@ -24,14 +24,26 @@ public class UserDetailsProvider {
      * @return userId를 담은 {@link Optional}
      */
     public Optional<String> getUserId() {
+        UserDetails userDetails = getUserDetails();
+        if (userDetails == null)
+            return Optional.empty();
+        return Optional.ofNullable(userDetails.getUsername());
+    }
+
+    /**
+     * UserDetails 를 가져온다.
+     *
+     * @return {@link UserDetails}를 담은 {@link Optional}
+     */
+    public UserDetails getUserDetails() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         if (authentication == null)
-            return Optional.empty();
+            throw new ServiceException(ExceptionStatus.NOT_FOUND_JWT_TOKEN);
         Object principal = authentication.getPrincipal();
         if (principal instanceof UserDetails) {
-            return Optional.of(((UserDetails) principal).getUsername());
+            return ((UserDetails) principal);
         } else {
-            return Optional.empty();
+            throw new ServiceException(ExceptionStatus.NOT_FOUND_JWT_TOKEN);
         }
     }
 

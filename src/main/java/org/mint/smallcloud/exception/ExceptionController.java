@@ -11,9 +11,9 @@ public class ExceptionController {
     @ExceptionHandler(ServiceException.class)
     public ResponseEntity<?> serviceExceptionHandler(ServiceException e) {
         ErrorResponseDto responseDto = e.getStatus().getResponseDto();
-        log.info("called ExceptionController for {}", responseDto.getError());
+        log.info("called ExceptionController for {}: {}", responseDto.getError(), responseDto.getMessage());
         return ResponseEntity
-                .status(responseDto.getStatusCode())
-                .body(e.getStatus());
+            .status(responseDto.getStatusCode())
+            .body(e.getStatus());
     }
 }
