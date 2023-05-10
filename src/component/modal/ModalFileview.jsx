@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import '../../css/fileview.css';
 import ModalFileopen from "./ModalFileopen";
 import { AiOutlineClose } from "react-icons/ai";
+import { MdOpenInFull } from "react-icons/md";
 
 export default function ModalFileview(props) {
     const [isFileOpen, setIsFileOpen] = useState(false);
@@ -13,8 +14,8 @@ export default function ModalFileview(props) {
             <div className='head'>
                 <span className='filename'>nameeeeeeeeeeeeeeeeeeeeeee</span>
                 <div className="fileBtn">
-                    <div className='open' onClick={() => setIsFileOpen(true)}>열기</div>
-                    <div className='close' onClick={() => props.after()}><AiOutlineClose /></div>
+                    <div className='icon' onClick={() => setIsFileOpen(true)}><MdOpenInFull/></div>
+                    <div className='icon' onClick={() => props.after()}><AiOutlineClose /></div>
                 </div>
             </div>
             <div className="body">

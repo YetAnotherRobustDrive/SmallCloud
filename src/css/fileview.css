@@ -36,7 +36,7 @@
     height: 23px;
 }
 
-.fileview .head .fileBtn .close{
+.fileview .head .fileBtn .icon{
     height: 21px;
     width: 21px;
     font-size: 21px;
@@ -47,19 +47,7 @@
     justify-content: center;
 }
 
-.fileview .head .fileBtn .open{
-    padding: 0 5px 0 5px;
-    border: 1px solid black;
-    display: flex;
-    text-align: center;
-    justify-content: center;
-}
-
-.fileview .head .fileBtn .open:hover{
-    background-color: #e2e2e2;
-}
-
-.fileview .head .fileBtn .close:hover{
+.fileview .head .fileBtn .icon:hover{
     background-color: #e2e2e2;
 }
 
