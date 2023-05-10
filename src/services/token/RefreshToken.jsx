@@ -14,8 +14,8 @@ export default async function RefreshToken() {
         if (!res.ok) {
             throw new Error('');
         }
-        const token = await res.text();
-        localStorage.setItem("accessToken", token);
+        const data = await res.json();
+        localStorage.setItem("accessToken", data.result);
         return true;
     } catch (error) {
         return false;
