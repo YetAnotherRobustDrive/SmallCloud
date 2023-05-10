@@ -1,7 +1,22 @@
 import configData from "../../config/config.json"
+import jwtDecode from "jwt-decode";
 
 export default async function RefreshToken() {
+    const time = Math.ceil(Date.now() / 1000);
+    const accessToken = localStorage.getItem("accessToken");
+    const accessTokenExp = jwtDecode(accessToken).exp;
+
+    if (accessTokenExp > time) {
+        return true;
+    }
+
     const refreshToken = localStorage.getItem("refreshToken");
+    const refreshTokenExp = jwtDecode(refreshToken).exp;
+
+    if (refreshTokenExp < time) {
+        return false;
+    }
+
     let model = {
         method: "GET",
         headers: {

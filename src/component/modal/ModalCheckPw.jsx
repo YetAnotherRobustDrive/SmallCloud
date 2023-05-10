@@ -2,14 +2,15 @@ import React, { useEffect, useState } from "react";
 import Modal from 'react-modal';
 import { useNavigate } from 'react-router-dom'
 import default_profile_img from '../../img/defalutProfile.png';
+import RefreshToken from "../../services/token/RefreshToken";
 import ElevateUser from '../../services/user/ElevateUser';
-import ModalOk from "./ModalOk";
 
 export default function ModalCheckPW(props) {
 
     const [isError, setIsError] = useState(false);
     const [count, setCount] = useState(0);
     const [message, setMessage] = useState(false);
+    
     const [nickname, setNickname] = useState("Nick_name");
     const [img, setImg] = useState(null);
     const navigate = useNavigate();
@@ -34,12 +35,20 @@ export default function ModalCheckPW(props) {
 
     const handleSubmit = async (e) => {
         if (e.key == 'Enter') {
+
+            const refreshOk = await RefreshToken();
+            console.log("refresh: "+refreshOk);
+            if(!refreshOk) {
+                window.alert('로그인 정보가 만료돠었습니다.');
+                navigate('/login');
+            }
+
             const [isOk, message] = await ElevateUser(e.target.value);
             if (!isOk) { //fail
                 setCount(count + 1);
                 setMessage(message);
                 if (message == 'JWT토큰이 올바르지 않습니다.') {
-                    window.alert('로그인이 필요합니다.');
+                    window.alert('로그인 정보가 만료돠었습니다.');
                     navigate('/login');
                 }
                 setIsError(true);
