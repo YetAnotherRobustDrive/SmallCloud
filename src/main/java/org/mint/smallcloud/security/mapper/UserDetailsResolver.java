@@ -48,4 +48,18 @@ public class UserDetailsResolver {
             .roles(userDetailsDto.getRoles().getValue())
             .build();
     }
+
+    public UserDetails getElevatedUser(UserDetails userDetails, Role targetRole) {
+        if (Role.PRIVILEGE.equals(targetRole)
+            && userDetails.isEnabled()
+            && !Role.ADMIN.equals(getRole(userDetails)
+            .orElse(null)))
+            return User.builder()
+                .username(userDetails.getUsername())
+                .password(userDetails.getPassword())
+                .roles(Roles.PRIVILEGE)
+                .disabled(true)
+                .build();
+        return userDetails;
+    }
 }
