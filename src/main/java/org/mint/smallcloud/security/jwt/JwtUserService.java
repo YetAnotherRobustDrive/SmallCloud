@@ -18,11 +18,11 @@ import org.springframework.stereotype.Service;
 public class JwtUserService {
     private final JwtTokenProvider jwtTokenProvider;
     private final JwtUserDetailsService userDetailsService;
-    private final MemberService userService;
+    private final MemberService memberService;
     private final UserDetailsResolver userdetailsResolver;
 
     public JwtTokenDto login(LoginDto loginDto) {
-        userService.checkPassword(loginDto);
+        memberService.checkPassword(loginDto);
         return jwtTokenProvider.generateTokenDto(
             userdetailsResolver.toUserDetailsDto(
                 userDetailsService.loadUserByUsername(loginDto.getId())
@@ -35,12 +35,12 @@ public class JwtUserService {
     }
 
     public JwtTokenDto elevate(UserDetails user, String password) {
-        userService.checkPassword(new LoginDto(user.getUsername(), password));
+        memberService.checkPassword(new LoginDto(user.getUsername(), password));
         UserDetailsDto userDetailsDto = userdetailsResolver.toUserDetailsDto(user);
         return jwtTokenProvider.elevateJwtToken(userDetailsDto, Role.PRIVILEGE);
     }
 
-    public void deregister(UserDetails user) {
-        userService.deregisterCommon(user.getUsername());
+    public boolean isElevated(UserDetails user) {
+        return userdetailsResolver.isRole(user, Role.PRIVILEGE);
     }
 }

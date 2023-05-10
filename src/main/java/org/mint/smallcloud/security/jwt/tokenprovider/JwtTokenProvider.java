@@ -62,6 +62,12 @@ public class JwtTokenProvider {
         jwtTokenParser.validate(token);
     }
 
+    public void validateAccessToken(String token) {
+        validateToken(token);
+        if (!jwtTokenParser.getTokenType(token).equals(JwtTokenType.ACCESS))
+            throw new ServiceException(ExceptionStatus.EXPIRED_JWT_TOKEN);
+    }
+
     public String generateNewAccessToken(String refreshToken) {
         LocalDateTime now = LocalDateTime.now();
         if (!jwtTokenParser.isTokenType(refreshToken, JwtTokenType.REFRESH))

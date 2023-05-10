@@ -41,6 +41,14 @@ public class AuthFacadeService {
     }
 
     public void deregister() {
-        jwtUserService.deregister(userDetailsProvider.getUserDetails());
+        memberService.deregisterCommon(
+            userDetailsProvider.getUserDetails().getUsername()
+        );
+    }
+
+    public boolean privileged() {
+        return jwtUserService.isElevated(
+            userDetailsProvider.getUserDetails()
+        );
     }
 }
