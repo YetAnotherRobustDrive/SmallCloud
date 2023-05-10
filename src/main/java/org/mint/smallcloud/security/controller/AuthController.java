@@ -2,6 +2,7 @@ package org.mint.smallcloud.security.controller;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.mint.smallcloud.ResponseDto;
 import org.mint.smallcloud.security.dto.LoginDto;
 import org.mint.smallcloud.security.dto.RegisterDto;
 import org.mint.smallcloud.security.jwt.dto.JwtTokenDto;
@@ -32,8 +33,9 @@ public class AuthController {
     }
 
     @GetMapping("/refresh")
-    public String refresh(HttpServletRequest request) {
-        return authFacadeService.refresh(request);
+    public ResponseDto<String> refresh(HttpServletRequest request) {
+        String result = authFacadeService.refresh(request);
+        return ResponseDto.<String>builder().result(result).build();
     }
 
     @Secured({Roles.S_COMMON, Roles.S_PRIVILEGE})
@@ -49,7 +51,9 @@ public class AuthController {
     }
 
     @GetMapping("/privileged")
-    public boolean privileged() {
+    public ResponseDto<Boolean> privileged() {
+        boolean result = authFacadeService.privileged();
+        return ResponseDto.<Boolean>builder().result(result).build();
     }
 
     @GetMapping("/logout")

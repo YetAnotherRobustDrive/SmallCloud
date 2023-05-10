@@ -19,6 +19,7 @@ import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMock
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.restdocs.RestDocumentationContextProvider;
 import org.springframework.restdocs.RestDocumentationExtension;
+import org.springframework.restdocs.payload.JsonFieldType;
 import org.springframework.restdocs.payload.RequestFieldsSnippet;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
@@ -31,9 +32,9 @@ import java.util.Map;
 import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.documentationConfiguration;
-import static org.springframework.restdocs.payload.PayloadDocumentation.fieldWithPath;
-import static org.springframework.restdocs.payload.PayloadDocumentation.requestFields;
+import static org.springframework.restdocs.payload.PayloadDocumentation.*;
 import static org.springframework.security.test.web.servlet.setup.SecurityMockMvcConfigurers.springSecurity;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @ExtendWith(RestDocumentationExtension.class)
@@ -219,10 +220,50 @@ class AuthControllerTest {
 
         this.mockMvc.perform(TestSnippet.secureGet(url, refresh.getRefreshToken()))
             .andExpect(status().isOk())
-            .andDo(document("Refresh"));
+            .andDo(document("Refresh",
+                responseFields(
+                fieldWithPath("result")
+                    .type(JsonFieldType.STRING)
+                    .description("refresh token")
+            ) ));
 
         this.mockMvc.perform(TestSnippet.secureGet(url, "abc"))
             .andExpect(status().isBadRequest())
             .andDo(document("RefreshBadToken"));
+    }
+
+    @Test
+    @DisplayName("/auth/privileged document")
+    public void privileged() throws Exception {
+        final String url = URL_PREFIX + "/privileged";
+        Member member = Member.of("test1", "password", "nickname");
+        memberRepository.save(member);
+        UserDetailsDto userDto = UserDetailsDto.builder()
+            .username(member.getUsername())
+            .password(member.getPassword())
+            .disabled(member.isLocked())
+            .roles(Role.PRIVILEGE).build();
+        JwtTokenDto token = jwtTokenProvider.generateTokenDto(userDto);
+
+        this.mockMvc.perform(TestSnippet.secureGet(url, token.getAccessToken()))
+            .andExpect(status().isOk())
+            .andExpect(content().json("{result: true}"))
+            .andDo(document("Privileged",
+                responseFields(
+                    fieldWithPath("result")
+                        .type(JsonFieldType.BOOLEAN)
+                        .description("privileged된 유저라면 true")
+                )));
+
+        userDto = UserDetailsDto.builder()
+            .username(member.getUsername())
+            .password(member.getPassword())
+            .disabled(member.isLocked())
+            .roles(Role.COMMON).build();
+        token = jwtTokenProvider.generateTokenDto(userDto);
+        this.mockMvc.perform(TestSnippet.secureGet(url, token.getAccessToken()))
+            .andExpect(status().isOk())
+            .andExpect(content().json("{result: false}"))
+            .andDo(document("PrivilegedFalse"));
     }
 }
