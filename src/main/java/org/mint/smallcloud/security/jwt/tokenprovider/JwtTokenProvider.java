@@ -74,10 +74,9 @@ public class JwtTokenProvider {
             throw new ServiceException(ExceptionStatus.NOT_REFRESH_TOKEN);
         String userId = jwtTokenParser.getSubject(refreshToken);
         Role role = jwtTokenParser.getRole(refreshToken);
-        UserDetails user = userDetailsService.loadUserByUsername(userId);
+        UserDetails user = userDetailsService.loadUserByUsernameAndRole(userId, role);
         if (!userId.equals(user.getUsername()))
             throw new ServiceException(ExceptionStatus.NOT_VALID_JWT_TOKEN);
-        user = userDetailsService.getElevatedUser(user, role);
         return tokenFactory
             .createWithRole(user.getUsername(), now, role)
             .toDto().getAccessToken();
