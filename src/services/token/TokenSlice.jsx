@@ -1,18 +1,17 @@
 import { createSlice } from "@reduxjs/toolkit";
-import configData from '../../config/config.json'
-import IsPrivilegedToken from "./IsPrivilegedToken";
 
 export const TokenSlice = createSlice({
-    name: 'Token',
+    name: 'token',
     initialState: { isPrivileged: false },
     reducers: {
-        check: async (state) => {
-            const res = await IsPrivilegedToken();
-            state.isPrivileged = res
-            console.log("state: " + state.isPrivileged)
+        setPrivilege: (state, action) => {
+            const res = action.payload.res;
+            state.isPrivileged = res;
         }
     }
 })
 
-export const {check} = TokenSlice.actions;
+export const { setPrivilege } = TokenSlice.actions;
 export default TokenSlice.reducer;
+
+export const selectIsPrivileged = (state) => state.token.isPrivileged;

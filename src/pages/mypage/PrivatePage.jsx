@@ -1,26 +1,34 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import Header from "../../component/header/Header";
 import ModalCheckPW from '../../component/modal/ModalCheckPw';
 import SidebarMypage from "../../component/sidebar/SidebarMypage";
+import { selectIsPrivileged, setPrivilege } from "../../services/token/TokenSlice";
 import IsPrivilegedToken from "../../services/token/IsPrivilegedToken";
-import { check } from "../../services/token/TokenSlice";
 
 export default function PrivatePage() {
-    const isNeedPrivilege = useSelector((state) => state.isPrivileged);
+    const isPrivilege = useSelector(selectIsPrivileged);
     const dispatch = useDispatch();
+    
+    const checkPrivilege = async () => {
+        const res = await IsPrivilegedToken();
+        dispatch(setPrivilege({ res }));
+    }
 
-    console.log(isNeedPrivilege);
-    dispatch(check());
-    console.log(isNeedPrivilege);
+    useEffect(() => {
+        checkPrivilege();
+    },[])
 
     return (
         <>
             <Header />
             <SidebarMypage />
-            {isNeedPrivilege &&
+            {!isPrivilege &&
                 <ModalCheckPW
-                    isOpen={isNeedPrivilege} />
+                isOpen={!isPrivilege} 
+                after={() => {
+                    checkPrivilege();
+                }}/>
             }
         </>
     )

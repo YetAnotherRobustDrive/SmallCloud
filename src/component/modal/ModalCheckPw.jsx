@@ -19,7 +19,6 @@ export default function ModalCheckPW(props) {
         if (img === null) {
             setImg(default_profile_img);
         }
-        console.log(props.isOpen);
     }, [])
 
     const modalStyle = {
@@ -35,11 +34,9 @@ export default function ModalCheckPW(props) {
 
     const handleSubmit = async (e) => {
         if (e.key == 'Enter') {
-
             const refreshOk = await RefreshToken();
-            console.log("refresh: "+refreshOk);
             if(!refreshOk) {
-                window.alert('로그인 정보가 만료돠었습니다.');
+                window.alert('로그인 정보가 만료되었습니다.');
                 navigate('/login');
             }
 
@@ -48,7 +45,7 @@ export default function ModalCheckPW(props) {
                 setCount(count + 1);
                 setMessage(message);
                 if (message == 'JWT토큰이 올바르지 않습니다.') {
-                    window.alert('로그인 정보가 만료돠었습니다.');
+                    window.alert('로그인 정보가 만료되었습니다.');
                     navigate('/login');
                 }
                 setIsError(true);
