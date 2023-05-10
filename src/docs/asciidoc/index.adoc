@@ -99,7 +99,7 @@ operation::DeregisterPrivilege[snippets='http-response']
 
 IMPORTANT: 권한이 없을 때
 
-=== 유저 삭제 (deregister)
+=== 특권 유저 확인 (privileged)
 
 ==== 명세
 
