@@ -67,9 +67,10 @@ export default function RegisterPage() {
             <input name="password_chk" type="password" placeholder="PW Check" />
             <input name="name" type="text" placeholder="Nickname" />
             <div className="buttons">
-                <button>가입 신청</button>
+                <Link to='/login' className="link">로그인</Link>
+                <button className="link" >가입 신청</button>
             </div>
-            <Link to='/login-ask'>가입에 문제가 있으신가요?</Link>
+            <Link to='/login/ask'>가입에 문제가 있으신가요?</Link>
 
             {isEmpty && <ModalOk close={() => setIsEmpty(false)}>{"입력하지 않은 값이 있습니다."}</ModalOk>}
             {isChkWrong && <ModalOk close={() => setIsChkWrong(false)}>{"비밀번호 확인이 일치하지 않습니다."}</ModalOk>}

@@ -68,7 +68,7 @@ export default function LoginPage() {
                 <Link to='/register' className="link">회원가입</Link>
                 <button className="link" >로그인</button>
             </div>
-            <Link to='/login-ask'>로그인에 문제가 있으신가요?</Link>
+            <Link to='/login/ask'>로그인에 문제가 있으신가요?</Link>
 
             {isFail && <ModalOk close={() => setIsFail(false)}>{message}</ModalOk>}
             {isEmpty && <ModalOk close={() => setIsEmpty(false)}>{"입력하지 않은 값이 있습니다."}</ModalOk>}
