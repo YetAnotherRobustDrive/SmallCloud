@@ -453,6 +453,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <li><a href="#_리프레시_토큰_refresh">리프레시 토큰 (refresh)</a></li>
 <li><a href="#_특권_유저_변경_elevate">특권 유저 변경 (elevate)</a></li>
 <li><a href="#_유저_삭제_deregister">유저 삭제 (deregister)</a></li>
+<li><a href="#_유저_삭제_deregister_2">유저 삭제 (deregister)</a></li>
 </ul>
 </li>
 </ul>
@@ -639,7 +640,7 @@ Expires: 0
 X-Frame-Options: DENY
 Content-Length: 373
 
-{"grantType":"Bearer","accessToken":"eyJ0b2tlblR5cGUiOiJBQ0NFU1MiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ1c2VyMSIsInJvbGUiOiJDT01NT04iLCJleHAiOjE2ODM2NDEzNzh9.BjPwCVRYLn5IJqPg3rD9_vsu_2NHTAVNji-mDtBQImY","refreshToken":"eyJ0b2tlblR5cGUiOiJSRUZSRVNIIiwiYWxnIjoiSFMyNTYifQ.eyJzdWIiOiJ1c2VyMSIsInJvbGUiOiJDT01NT04iLCJleHAiOjE2ODM4OTg3Nzh9.WWmwCeLELbfOkCRaUxxBa4gZNgbPoOkMGtmwu1xTVVI"}</code></pre>
+{"grantType":"Bearer","accessToken":"eyJ0b2tlblR5cGUiOiJBQ0NFU1MiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ1c2VyMSIsInJvbGUiOiJDT01NT04iLCJleHAiOjE2ODM2ODM0MDN9.sYa27v06leUWEFlznHvZUN0Ud9jrvnwwrLphGq4FfkQ","refreshToken":"eyJ0b2tlblR5cGUiOiJSRUZSRVNIIiwiYWxnIjoiSFMyNTYifQ.eyJzdWIiOiJ1c2VyMSIsInJvbGUiOiJDT01NT04iLCJleHAiOjE2ODM5NDA4MDN9.XNaNR8eBkZpRwo7_ABzbRzUdRK7XVh5nC81zxQmXPyY"}</code></pre>
 </div>
 </div>
 </div>
@@ -723,7 +724,7 @@ Content-Length: 88
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code data-lang="http" class="language-http hljs">GET /auth/refresh HTTP/1.1
-Authorization: Bearer eyJ0b2tlblR5cGUiOiJSRUZSRVNIIiwiYWxnIjoiSFMyNTYifQ.eyJzdWIiOiJ0ZXN0MSIsInJvbGUiOiJDT01NT04iLCJleHAiOjE2ODM4OTg3Nzh9.Z0cryfZ9PHuOZGBft9mQMGcuMFO5_CZmjw1JPIY5CcI
+Authorization: Bearer eyJ0b2tlblR5cGUiOiJSRUZSRVNIIiwiYWxnIjoiSFMyNTYifQ.eyJzdWIiOiJ0ZXN0MSIsInJvbGUiOiJDT01NT04iLCJleHAiOjE2ODM5NDA4MDN9.dbEQjCHFM7MW7pDo1AYnVNlNoSG8kd8yiohPjrN3fWE
 Host: localhost:8080</code></pre>
 </div>
 </div>
@@ -739,16 +740,16 @@ Host: localhost:8080</code></pre>
 Vary: Origin
 Vary: Access-Control-Request-Method
 Vary: Access-Control-Request-Headers
-Content-Type: text/plain;charset=UTF-8
-Content-Length: 157
+Content-Type: application/json
 X-Content-Type-Options: nosniff
 X-XSS-Protection: 1; mode=block
 Cache-Control: no-cache, no-store, max-age=0, must-revalidate
 Pragma: no-cache
 Expires: 0
 X-Frame-Options: DENY
+Content-Length: 170
 
-eyJ0b2tlblR5cGUiOiJBQ0NFU1MiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ0ZXN0MSIsInJvbGUiOiJDT01NT04iLCJleHAiOjE2ODM2NDEzNzh9.1G1UqGXt20850iOlPgecfP-60lUJwnNDVbSBOkmshTo</code></pre>
+{"result":"eyJ0b2tlblR5cGUiOiJBQ0NFU1MiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ0ZXN0MSIsInJvbGUiOiJDT01NT04iLCJleHAiOjE2ODM2ODM0MDN9.BHzexRih1r9s_BKDQkthhZFznTYwlsGz2TTImVqN1eA"}</code></pre>
 </div>
 </div>
 </div>
@@ -800,7 +801,7 @@ refresh 토큰이 잘못되었을 때
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code data-lang="http" class="language-http hljs">POST /auth/elevate HTTP/1.1
 Content-Type: application/json
-Authorization: Bearer eyJ0b2tlblR5cGUiOiJBQ0NFU1MiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ1c2VyMSIsInJvbGUiOiJDT01NT04iLCJleHAiOjE2ODM2NDEzNzd9.drkTX19XyFGrIKa3DmASGuebnCCEDqQPeSdv7EXYaVU
+Authorization: Bearer eyJ0b2tlblR5cGUiOiJBQ0NFU1MiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ1c2VyMSIsInJvbGUiOiJDT01NT04iLCJleHAiOjE2ODM2ODM0MDJ9.TnM9rHMUbupY1kah4bEBq3IoiWsYof710p-XAzq-1uY
 Accept: application/json
 Content-Length: 17
 Host: localhost:8080
@@ -829,7 +830,7 @@ Expires: 0
 X-Frame-Options: DENY
 Content-Length: 381
 
-{"grantType":"Bearer","accessToken":"eyJ0b2tlblR5cGUiOiJBQ0NFU1MiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ1c2VyMSIsInJvbGUiOiJQUklWSUxFR0UiLCJleHAiOjE2ODM2NDEzNzd9.EM0VvNVmP0M6MTNJ25nKdMZnqQyj3VDskJohu9SwT8A","refreshToken":"eyJ0b2tlblR5cGUiOiJSRUZSRVNIIiwiYWxnIjoiSFMyNTYifQ.eyJzdWIiOiJ1c2VyMSIsInJvbGUiOiJQUklWSUxFR0UiLCJleHAiOjE2ODM2NTAzNzd9.td50UisTWsUm_RafbdI_2BTJ6lT63nF0B2m3bIfZSGs"}</code></pre>
+{"grantType":"Bearer","accessToken":"eyJ0b2tlblR5cGUiOiJBQ0NFU1MiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ1c2VyMSIsInJvbGUiOiJQUklWSUxFR0UiLCJleHAiOjE2ODM2ODM0MDN9.yn4KVMhue_8OXReH9SkPGS43-wXNckRiH41bC-RyC9Q","refreshToken":"eyJ0b2tlblR5cGUiOiJSRUZSRVNIIiwiYWxnIjoiSFMyNTYifQ.eyJzdWIiOiJ1c2VyMSIsInJvbGUiOiJQUklWSUxFR0UiLCJleHAiOjE2ODM2OTI0MDN9.RVQ7FfCCh1OCsbVMVdOa_zCThg0DXaSwQst2rZHRnoQ"}</code></pre>
 </div>
 </div>
 </div>
@@ -913,7 +914,7 @@ Content-Length: 88
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code data-lang="http" class="language-http hljs">POST /auth/deregister HTTP/1.1
-Authorization: Bearer eyJ0b2tlblR5cGUiOiJBQ0NFU1MiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ1c2VyMSIsInJvbGUiOiJQUklWSUxFR0UiLCJleHAiOjE2ODM2NDEzNzh9.XJOW75UDI0lwMQN2q1s2sp5q7w7wsHazG2CIWaTkKsQ
+Authorization: Bearer eyJ0b2tlblR5cGUiOiJBQ0NFU1MiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ1c2VyMSIsInJvbGUiOiJQUklWSUxFR0UiLCJleHAiOjE2ODM2ODM0MDN9.yn4KVMhue_8OXReH9SkPGS43-wXNckRiH41bC-RyC9Q
 Accept: application/json
 Host: localhost:8080</code></pre>
 </div>
@@ -977,13 +978,47 @@ Content-Length: 74
 </div>
 </div>
 </div>
+<div class="sect2">
+<h3 id="_유저_삭제_deregister_2"><a class="link" href="#_유저_삭제_deregister_2">유저 삭제 (deregister)</a></h3>
+<div class="sect3">
+<h4 id="_명세_6"><a class="link" href="#_명세_6">명세</a></h4>
+<div class="sect4">
+<h5 id="_명세_6_http_request"><a class="link" href="#_명세_6_http_request">HTTP request</a></h5>
+<div class="dlist">
+<dl>
+<dt class="hdlist1">Snippet http-request not found for operation</dt>
+</dl>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_성공_6"><a class="link" href="#_성공_6">성공</a></h4>
+<div class="sect4">
+<h5 id="_성공_6_http_response"><a class="link" href="#_성공_6_http_response">HTTP response</a></h5>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight nowrap"><code data-lang="http" class="language-http hljs">HTTP/1.1 200 OK
+Vary: Origin
+Vary: Access-Control-Request-Method
+Vary: Access-Control-Request-Headers
+X-Content-Type-Options: nosniff
+X-XSS-Protection: 1; mode=block
+Cache-Control: no-cache, no-store, max-age=0, must-revalidate
+Pragma: no-cache
+Expires: 0
+X-Frame-Options: DENY</code></pre>
+</div>
+</div>
+</div>
+</div>
+</div>
 </div>
 </div>
 </div>
 <div id="footer">
 <div id="footer-text">
 Version 0.0.1-SNAPSHOT<br>
-Last updated 2023-05-08 14:06:51 +0900
+Last updated 2023-05-10 10:19:46 +0900
 </div>
 </div>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.15.6/styles/github.min.css">

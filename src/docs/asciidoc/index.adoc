@@ -98,3 +98,19 @@ operation::Deregister[snippets='http-response']
 operation::DeregisterPrivilege[snippets='http-response']
 
 IMPORTANT: 권한이 없을 때
+
+=== 유저 삭제 (deregister)
+
+==== 명세
+
+operation::Privileged[snippets='http-request']
+
+==== 성공
+
+operation::Privileged[snippets='http-response']
+
+IMPORTANT: 유저가 특권유저일 때
+
+operation::PrivilegedFalse[snippets='http-response']
+
+IMPORTANT: 유저가 특권유저가 아닐 때

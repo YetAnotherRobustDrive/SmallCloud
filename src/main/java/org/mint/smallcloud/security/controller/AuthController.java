@@ -2,14 +2,12 @@ package org.mint.smallcloud.security.controller;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.mint.smallcloud.security.UserDetailsProvider;
+import org.mint.smallcloud.ResponseDto;
 import org.mint.smallcloud.security.dto.LoginDto;
 import org.mint.smallcloud.security.dto.RegisterDto;
-import org.mint.smallcloud.security.jwt.JwtUserService;
 import org.mint.smallcloud.security.jwt.dto.JwtTokenDto;
-import org.mint.smallcloud.security.jwt.tokenprovider.JwtTokenProvider;
+import org.mint.smallcloud.security.service.AuthFacadeService;
 import org.mint.smallcloud.user.domain.Roles;
-import org.mint.smallcloud.user.service.MemberService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.annotation.Secured;
 import org.springframework.web.bind.annotation.*;
@@ -21,41 +19,41 @@ import javax.servlet.http.HttpServletRequest;
 @Slf4j
 @RequiredArgsConstructor
 public class AuthController {
-    private final JwtUserService jwtUserService;
-    private final JwtTokenProvider jwtTokenProvider;
-    private final MemberService memberService;
-    private final UserDetailsProvider userDetailsProvider;
+    private final AuthFacadeService authFacadeService;
 
     @PostMapping("/login")
     public JwtTokenDto login(@RequestBody LoginDto loginDto) {
-        return jwtUserService.login(loginDto);
+        return authFacadeService.login(loginDto);
     }
 
     @PostMapping("/register")
     public ResponseEntity<?> signup(@RequestBody RegisterDto registerDto) {
-        memberService.registerCommon(registerDto);
+        authFacadeService.signup(registerDto);
         return ResponseEntity.ok().build();
     }
 
     @GetMapping("/refresh")
-    public String refresh(HttpServletRequest request) {
-        String refreshToken =
-            jwtTokenProvider.resolveTokenFromHeader(request);
-        return jwtUserService.refresh(refreshToken);
+    public ResponseDto<String> refresh(HttpServletRequest request) {
+        String result = authFacadeService.refresh(request);
+        return ResponseDto.<String>builder().result(result).build();
     }
 
     @Secured({Roles.S_COMMON, Roles.S_PRIVILEGE})
     @PostMapping("/elevate")
     public JwtTokenDto elevate(@RequestBody PasswordDto passwordDto) {
-        return jwtUserService.elevate(
-            userDetailsProvider.getUserDetails(),
-            passwordDto.getPassword());
+        return authFacadeService.elevate(passwordDto.getPassword());
     }
 
     @Secured({Roles.S_PRIVILEGE})
     @PostMapping("/deregister")
     public void deregister() {
-        jwtUserService.deregister(userDetailsProvider.getUserDetails());
+        authFacadeService.deregister();
+    }
+
+    @GetMapping("/privileged")
+    public ResponseDto<Boolean> privileged() {
+        boolean result = authFacadeService.privileged();
+        return ResponseDto.<Boolean>builder().result(result).build();
     }
 
     @GetMapping("/logout")

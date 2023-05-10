@@ -23,6 +23,13 @@ public class UserDetailsResolver {
         return ret;
     }
 
+    public boolean isRole(UserDetails userDetails, Role role) {
+        return getRole(userDetails)
+            .map(e -> e.equals(role))
+            .orElse(false);
+
+    }
+
     public UserDetailsDto toUserDetailsDto(UserDetails userDetails) {
         Optional<Role> role = getRole(userDetails);
         return UserDetailsDto.builder()
