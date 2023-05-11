@@ -2,7 +2,6 @@ package org.mint.smallcloud.security;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.mint.smallcloud.exception.ExceptionStatus;
 import org.mint.smallcloud.exception.ServiceException;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -19,31 +18,19 @@ import java.util.Optional;
 @Slf4j
 public class UserDetailsProvider {
     /**
-     * 유저의 id를 가져온다.
-     *
-     * @return userId를 담은 {@link Optional}
-     */
-    public Optional<String> getUserId() {
-        UserDetails userDetails = getUserDetails();
-        if (userDetails == null)
-            return Optional.empty();
-        return Optional.ofNullable(userDetails.getUsername());
-    }
-
-    /**
      * UserDetails 를 가져온다.
      *
      * @return {@link UserDetails}를 담은 {@link Optional}
      */
-    public UserDetails getUserDetails() {
+    public Optional<UserDetails> getUserDetails() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         if (authentication == null)
-            throw new ServiceException(ExceptionStatus.NOT_FOUND_JWT_TOKEN);
+            return Optional.empty();
         Object principal = authentication.getPrincipal();
         if (principal instanceof UserDetails) {
-            return ((UserDetails) principal);
+            return (Optional.of((UserDetails) principal));
         } else {
-            throw new ServiceException(ExceptionStatus.NOT_FOUND_JWT_TOKEN);
+            return Optional.empty();
         }
     }
 
@@ -61,7 +48,7 @@ public class UserDetailsProvider {
             SecurityContextHolder.getContext().setAuthentication(authentication);
         } else {
             log.error("unexpected authentication");
-            throw new ServiceException(ExceptionStatus.INTERNAL_SERVER_ERROR);
+            throw new IllegalArgumentException("인증 정보가 잘못되었습니다.");
         }
     }
 }

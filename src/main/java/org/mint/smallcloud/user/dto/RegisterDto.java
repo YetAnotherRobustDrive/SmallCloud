@@ -1,4 +1,4 @@
-package org.mint.smallcloud.security.dto;
+package org.mint.smallcloud.user.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;

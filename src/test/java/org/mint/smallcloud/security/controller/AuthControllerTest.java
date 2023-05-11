@@ -7,12 +7,12 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mint.smallcloud.TestSnippet;
 import org.mint.smallcloud.security.dto.LoginDto;
-import org.mint.smallcloud.security.dto.RegisterDto;
 import org.mint.smallcloud.security.dto.UserDetailsDto;
 import org.mint.smallcloud.security.jwt.dto.JwtTokenDto;
 import org.mint.smallcloud.security.jwt.tokenprovider.JwtTokenProvider;
 import org.mint.smallcloud.user.domain.Member;
 import org.mint.smallcloud.user.domain.Role;
+import org.mint.smallcloud.user.dto.RegisterDto;
 import org.mint.smallcloud.user.repository.MemberRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
@@ -24,6 +24,7 @@ import org.springframework.restdocs.payload.RequestFieldsSnippet;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
+import org.springframework.web.filter.CharacterEncodingFilter;
 
 import javax.transaction.Transactional;
 import java.util.HashMap;
@@ -58,6 +59,7 @@ class AuthControllerTest {
     void setUp(WebApplicationContext webApplicationContext, RestDocumentationContextProvider restDocumentation) {
         this.mockMvc = MockMvcBuilders
             .webAppContextSetup(webApplicationContext)
+            .addFilters(new CharacterEncodingFilter("UTF-8", true))
             .apply(documentationConfiguration(restDocumentation))
             .apply(springSecurity())
             .build();
@@ -105,6 +107,10 @@ class AuthControllerTest {
             .id("user1")
             .password("pw1")
             .build();
+        LoginDto notValidDto = LoginDto.builder()
+            .id("fjiowejfioewjoifjweoijf@@@ioewjofijewiofjewiojioewj")
+            .password("fjioewjifojewiofjewiojfioewjfioewjiofjwe")
+            .build();
         memberRepository.save(Member.of(loginDto1.getId(),
             loginDto1.getPassword(), "nickname"));
 
@@ -117,6 +123,9 @@ class AuthControllerTest {
         this.mockMvc.perform(TestSnippet.post(url, objectMapper, wrongPasswordLoginDto1))
             .andExpect(status().isForbidden())
             .andDo(document("WrongPassword", payload));
+        this.mockMvc.perform(TestSnippet.post(url, objectMapper, notValidDto))
+            .andExpect(status().isBadRequest())
+            .andDo(document("NotValidLogin"));
     }
 
     @Test
@@ -222,10 +231,10 @@ class AuthControllerTest {
             .andExpect(status().isOk())
             .andDo(document("Refresh",
                 responseFields(
-                fieldWithPath("result")
-                    .type(JsonFieldType.STRING)
-                    .description("refresh token")
-            ) ));
+                    fieldWithPath("result")
+                        .type(JsonFieldType.STRING)
+                        .description("refresh token")
+                )));
 
         this.mockMvc.perform(TestSnippet.secureGet(url, "abc"))
             .andExpect(status().isBadRequest())
