@@ -14,7 +14,7 @@ export default function SidebarCS() {
         <Link className="link" to="/cs/faq">FAQ</Link>
       </div>
       <div className="menuBox">
-        <Link className="link" to="/cs/ask">1:1 문의</Link>
+        <Link className="link" to="/cs/question">1:1 문의</Link>
       </div>
       <div className="menuBox">
         <Link className="link" to="/cs/notice" >공지사항</Link>
