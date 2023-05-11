@@ -1,30 +1,23 @@
-import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import ModalCheckPW from "../../component/modal/ModalCheckPw";
-import IsPrivilegedToken from "../../services/token/IsPrivilegedToken";
-import { selectIsPrivileged, setPrivilege } from "../../slice/UserSlice";
+import { asyncSetPrivilege } from "../../slice/UserSlice";
+import { useEffect } from "react";
 
 export default function MyPage(props) {
-
-    const isPrivilege = useSelector(selectIsPrivileged);
     const dispatch = useDispatch();
-
-    const updatePrivilege = async () => {
-        const res = await IsPrivilegedToken();
-        dispatch(setPrivilege({ res }));
-    }
+    const isPrivileged = useSelector(state => state.user.isPrivileged);
 
     useEffect(() => {
-        updatePrivilege();
+        dispatch(asyncSetPrivilege());
     }, [])
 
     const render = () => {
-        if (!isPrivilege) {
+        if (!isPrivileged) {
             return (
                 <ModalCheckPW
-                    isOpen={!isPrivilege}
+                    isOpen={!isPrivileged}
                     after={() => {
-                        updatePrivilege();
+                        dispatch(asyncSetPrivilege());
                     }} />
             )
         }
@@ -32,10 +25,5 @@ export default function MyPage(props) {
             return props.link;
         }
     }
-
-    return (
-        <>
-            {render()}
-        </>
-    )
+    return render();
 }

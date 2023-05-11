@@ -34,9 +34,9 @@ export default () => (
             <Route path='/login/ask' element={<LoginQuestionPage/>} />
             <Route path='/logout' element={<LogoutUser/>} />
         
-            <Route path='/mypage' element={<MyPage link=<PrivatePage/>/>} />
-            <Route path='/mypage/service' element={<MyPage link=<ServiceInfoPage/> />} />
-            <Route path='/mypage/security' element={<MyPage link=<SecurityInfoPage/> />} />
+            <Route path='/mypage' element={<MyPage link={<PrivatePage/>}/>} />
+            <Route path='/mypage/service' element={<MyPage link={<ServiceInfoPage />} />} />
+            <Route path='/mypage/security' element={<MyPage link={<SecurityInfoPage />} />} />
 
             <Route path='/upload' element={<UploadPage/>} />
             <Route path='/download' element={<DownloadPage />} />
