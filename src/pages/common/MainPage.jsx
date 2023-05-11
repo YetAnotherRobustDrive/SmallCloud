@@ -15,7 +15,7 @@ import ModalFileview from "../../component/modal/ModalFileview";
 export default function MainPage() {
 
     const [isGrid, setIsGrid] = useState(true);
-    const [isFileView, setIsFileView] = useState(true);
+    const [isFileView, setIsFileView] = useState(false);
     const [selected, setSelected] = useState();
 
     return (
