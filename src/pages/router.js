@@ -1,5 +1,6 @@
 import React from 'react';
 import { BrowserRouter as Router, Navigate, Route, Routes } from 'react-router-dom';
+import LogoutUser from '../services/user/LogoutUser';
 import AdminConfigPage from './admin/AdminConfigPage';
 import AdminUserCtrlPage from './admin/AdminUserCtrlPage';
 import ErrorPage from './common/ErrorPage';
@@ -31,6 +32,7 @@ export default () => (
             <Route path='/register' element={<RegisterPage/>} />
             <Route path='/login' element={<LoginPage/>} />
             <Route path='/login/ask' element={<LoginQuestionPage/>} />
+            <Route path='/logout' element={<LogoutUser/>} />
         
             <Route path='/mypage' element={<MyPage link=<PrivatePage/>/>} />
             <Route path='/mypage/service' element={<MyPage link=<ServiceInfoPage/> />} />
