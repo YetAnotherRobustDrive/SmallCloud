@@ -3,7 +3,7 @@ import { useDispatch, useSelector } from "react-redux";
 import Header from "../../component/header/Header";
 import ModalCheckPW from '../../component/modal/ModalCheckPw';
 import SidebarMypage from "../../component/sidebar/SidebarMypage";
-import { selectIsPrivileged, setPrivilege } from "../../services/token/TokenSlice";
+import { selectIsPrivileged, setPrivilege } from "../../slice/UserSlice";
 import IsPrivilegedToken from "../../services/token/IsPrivilegedToken";
 
 export default function PrivatePage() {
