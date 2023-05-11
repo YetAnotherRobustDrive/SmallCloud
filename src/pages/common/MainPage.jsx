@@ -28,7 +28,10 @@ export default function MainPage() {
                     {
                         datas.map((data) => {
                             return <CustomIcon
-                                onClick={() => setIsFileView(true)}
+                                onClick={() => {
+                                    setSelected(data);
+                                    setIsFileView(true);
+                                }}
                                 key={data.id}
                                 name={data.name}
                                 type={data.type}
