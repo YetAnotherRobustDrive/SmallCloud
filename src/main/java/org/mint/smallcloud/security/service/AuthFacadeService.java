@@ -1,12 +1,11 @@
 package org.mint.smallcloud.security.service;
 
 import lombok.RequiredArgsConstructor;
-import org.mint.smallcloud.security.UserDetailsProvider;
 import org.mint.smallcloud.security.dto.LoginDto;
-import org.mint.smallcloud.security.dto.RegisterDto;
 import org.mint.smallcloud.security.jwt.JwtUserService;
 import org.mint.smallcloud.security.jwt.dto.JwtTokenDto;
 import org.mint.smallcloud.security.jwt.tokenprovider.JwtTokenProvider;
+import org.mint.smallcloud.user.dto.RegisterDto;
 import org.mint.smallcloud.user.service.MemberService;
 import org.springframework.stereotype.Service;
 
@@ -18,7 +17,7 @@ public class AuthFacadeService {
     private final JwtUserService jwtUserService;
     private final JwtTokenProvider jwtTokenProvider;
     private final MemberService memberService;
-    private final UserDetailsProvider userDetailsProvider;
+    private final AuthThrowerService authThrowerService;
 
     public JwtTokenDto login(LoginDto loginDto) {
         return jwtUserService.login(loginDto);
@@ -36,19 +35,18 @@ public class AuthFacadeService {
 
     public JwtTokenDto elevate(String password) {
         return jwtUserService.elevate(
-            userDetailsProvider.getUserDetails(),
+            authThrowerService.getLoginUserDetails(),
             password);
     }
 
     public void deregister() {
         memberService.deregisterCommon(
-            userDetailsProvider.getUserDetails().getUsername()
+            authThrowerService.getLoginUserDetails().getUsername()
         );
     }
 
     public boolean privileged() {
         return jwtUserService.isElevated(
-            userDetailsProvider.getUserDetails()
-        );
+            authThrowerService.getLoginUserDetails());
     }
 }
