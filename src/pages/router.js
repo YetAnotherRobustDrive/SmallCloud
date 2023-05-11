@@ -1,23 +1,24 @@
 import React from 'react';
 import { BrowserRouter as Router, Navigate, Route, Routes } from 'react-router-dom';
-import MainPage from './common/MainPage';
-import FavoritesPage from './main/FavoritesPage';
-import TrashBinPage from './main/TrashBinPage';
-import RegisterPage from './login/RegisterPage';
-import LoginPage from './login/LoginPage';
-import LoginQuestionPage from './login/LoginQuestionPage';
-import UploadPage from './load/UploadPage';
-import DownloadPage from './load/DownloadPage';
-import NoticePage from './cs/NoticePage';
-import TermsPage from './cs/TermsPage';
-import FaqPage from './cs/FaqPage';
-import QuestionPage from './cs/QuestionPage';
 import AdminConfigPage from './admin/AdminConfigPage';
 import AdminUserCtrlPage from './admin/AdminUserCtrlPage';
 import ErrorPage from './common/ErrorPage';
+import MainPage from './common/MainPage';
+import FaqPage from './cs/FaqPage';
+import NoticePage from './cs/NoticePage';
+import QuestionPage from './cs/QuestionPage';
+import TermsPage from './cs/TermsPage';
+import DownloadPage from './load/DownloadPage';
+import UploadPage from './load/UploadPage';
+import LoginPage from './login/LoginPage';
+import LoginQuestionPage from './login/LoginQuestionPage';
+import RegisterPage from './login/RegisterPage';
+import FavoritesPage from './main/FavoritesPage';
+import TrashBinPage from './main/TrashBinPage';
+import MyPage from './mypage/MyPage';
 import PrivatePage from './mypage/PrivatePage';
-import ServiceInfoPage from './mypage/ServiceInfoPage';
 import SecurityInfoPage from './mypage/SecurityInfoPage';
+import ServiceInfoPage from './mypage/ServiceInfoPage';
 
 export default () => (
     <Router>
@@ -31,9 +32,9 @@ export default () => (
             <Route path='/login' element={<LoginPage/>} />
             <Route path='/login/ask' element={<LoginQuestionPage/>} />
         
-            <Route path='/mypage' element={<PrivatePage />} />
-            <Route path='/mypage/service' element={<ServiceInfoPage />} />
-            <Route path='/mypage/security' element={<SecurityInfoPage />} />
+            <Route path='/mypage' element={<MyPage link=<PrivatePage/>/>} />
+            <Route path='/mypage/service' element={<MyPage link=<ServiceInfoPage/> />} />
+            <Route path='/mypage/security' element={<MyPage link=<SecurityInfoPage/> />} />
 
             <Route path='/upload' element={<UploadPage/>} />
             <Route path='/download' element={<DownloadPage />} />

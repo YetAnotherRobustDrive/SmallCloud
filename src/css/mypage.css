@@ -1,0 +1,44 @@
+.editable-column {
+    width: 300px;
+    height: 30px;
+    padding: 5px 0px 0px 0px;
+    display: flex;
+}
+
+.editable-column .texts {
+    border-bottom: 2px solid black;
+    width: 265px;
+    height: 100%;
+    padding: 0;
+    position: relative;
+}
+
+.editable-column .texts .title {
+    position: absolute;
+    font-size: 25px;
+    left: 0;
+    bottom: 0;
+    padding: 0;
+    margin: 0;
+}
+
+.editable-column .texts .value {
+    position: absolute;
+    font-size: 16px;
+    right: 0;
+    bottom: 0;
+    padding: 0;
+    margin: 0;
+}
+
+.editable-column .icon{
+    height: 30px;
+    width: 30px;
+    font-size: 30px;
+    padding-left: 5px;
+    padding-top: 2px;
+}
+
+.editable-column .icon svg:hover{
+    background-color: #e2e2e2;
+}

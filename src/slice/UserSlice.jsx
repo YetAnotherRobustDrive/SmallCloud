@@ -20,5 +20,5 @@ export const UserSlice = createSlice({
 export const { setPrivilege } = UserSlice.actions;
 export default UserSlice.reducer;
 
-export const selectIsPrivileged = (state) => state.token.isPrivileged;
-export const selectNickname = (state) => state.token.nickname;
+export const selectIsPrivileged = (state) => state.user.isPrivileged;
+export const selectNickname = (state) => state.user.nickname;

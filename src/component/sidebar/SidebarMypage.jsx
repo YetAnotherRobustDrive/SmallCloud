@@ -8,13 +8,13 @@ export default function SidebarMypage() {
     <div className="sidebar">
       <div className="stub" />
       <div className="menuBox">
-        <Link className="link">개인정보</Link>
+        <Link className="link" to='/mypage'>개인정보</Link>
       </div>
       <div className="menuBox">
-        <Link className="link">서비스정보</Link>
+        <Link className="link" to='/mypage/service'>서비스정보</Link>
       </div>
       <div className="menuBox">
-        <Link className="link">보안정보</Link>
+        <Link className="link" to='/mypage/security'>보안정보</Link>
       </div>
       <div className="filetreeStub" />
       <Footer />
