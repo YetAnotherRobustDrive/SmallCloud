@@ -38,6 +38,7 @@ export default function ModalCheckPW(props) {
             if(!refreshOk) {
                 window.alert('로그인 정보가 만료되었습니다.');
                 navigate('/login');
+                return;
             }
 
             const [isOk, message] = await ElevateUser(e.target.value);
