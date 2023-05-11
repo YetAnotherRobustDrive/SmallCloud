@@ -8,14 +8,13 @@ export default function ModalFileview(props) {
     const [isFileOpen, setIsFileOpen] = useState(false);
     const [isGeneralSelected, setIsGeneralSelected] = useState(true);
     const fileData = props.file;
-    console.log(fileData);
 
     return (
         <div className="fileview">
             <div className='head'>
                 <span className='filename'>{fileData.name}</span>
                 <div className="fileBtn">
-                    <div className='icon' onClick={() => setIsFileOpen(true)}><MdOpenInFull/></div>
+                    <div className='icon' onClick={() => setIsFileOpen(true)}><MdOpenInFull /></div>
                     <div className='icon' onClick={() => props.after()}><AiOutlineClose /></div>
                 </div>
             </div>
@@ -32,7 +31,19 @@ export default function ModalFileview(props) {
                         공유
                     </span>
                 </div>
-
+                {isGeneralSelected &&
+                    <>
+                        <div>{fileData.id}</div>
+                        <div>{fileData.securityLevel}</div>
+                        <div>{fileData.writingStage}</div>
+                        <div>{fileData.size}</div>
+                    </>
+                }
+                {!isGeneralSelected &&
+                    <>
+                        <div>{fileData.shared ? "공유 O" : "공유 X"}</div>
+                    </>
+                }
             </div>
             {isFileOpen &&
                 <ModalFileopen
