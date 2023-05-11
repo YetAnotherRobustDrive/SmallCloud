@@ -3,13 +3,27 @@ import '../../css/mypage.css'
 
 export default function EditableColumn(props) {
 
+    const handleSubmit = (e) => {
+        e.preventDefault();
+        const inputData = new FormData(e.target);
+        const value = Object.fromEntries(inputData.entries());
+        props.onSubmit(value.userInput);
+    }
+
     return (
-        <div className='editable-column'>
+        <form className='editable-column' onSubmit={handleSubmit}>
             <div className="texts">
                 <span className="title">{props.title}</span>
-                <span className="value">{props.value}</span>
+                <input 
+                name="userInput"
+                className="value" 
+                defaultValue={props.value}
+                type="text"
+                size="10" />
             </div>
-            <div className="icon" onClick={props.onSubmit}><TbEdit /></div>
-        </div>
+            {(props.editable != "false") &&
+                <button type="submit" className="icon" ><TbEdit /></button>
+            }
+        </form>
     )
 }

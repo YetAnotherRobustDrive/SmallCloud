@@ -1,13 +1,10 @@
 import React, { useEffect, useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
-import Header from "../../component/header/Header";
-import ModalCheckPW from '../../component/modal/ModalCheckPw';
-import SidebarMypage from "../../component/sidebar/SidebarMypage";
-import { selectIsPrivileged, setPrivilege } from "../../slice/UserSlice";
-import IsPrivilegedToken from "../../services/token/IsPrivilegedToken";
-import EditableColumn from "../../component/mypage/EditableColumn";
 import BodyFrame from "../../component/Bodyframe";
+import Header from "../../component/header/Header";
+import EditableColumn from "../../component/mypage/EditableColumn";
+import SidebarMypage from "../../component/sidebar/SidebarMypage";
 import default_profile_img from '../../img/defalutProfile.png';
+import '../../css/mypage.css'
 
 export default function PrivatePage() {
     const [img, setImg] = useState(null);
@@ -23,14 +20,30 @@ export default function PrivatePage() {
             <Header />
             <SidebarMypage />
             <BodyFrame>
-                <img 
-                style={{width:"100px"}}
-                src={img}/>
+                <div className="private-profile">
+                <img src={img}/>
                 <EditableColumn
                     title="ID"
                     value="TEST"
-                    onSubmit={() => { console.log('asdf') }}
+                    onSubmit={(e) => { console.log(e) }}
                 />
+                <EditableColumn
+                    title="NAME"
+                    value="TEST"
+                    onSubmit={(e) => { console.log(e) }}
+                />
+                <EditableColumn
+                    title="PW"
+                    value="****"
+                    onSubmit={(e) => { console.log(e) }}
+                />
+                <EditableColumn
+                    title="GROUP"
+                    value="TEST"
+                    editable="false"
+                    onSubmit={(e) => { console.log(e) }}
+                />
+                </div>
             </BodyFrame>
         </>
     )
