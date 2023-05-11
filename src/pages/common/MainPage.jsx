@@ -43,7 +43,10 @@ export default function MainPage() {
                         {
                             datas.map((data) => {
                                 return <CustomIcon
-                                    onClick={() => setIsFileView(true)}
+                                    onClick={() => {
+                                        setSelected(data);
+                                        setIsFileView(true);
+                                    }}
                                     key={data.id}
                                     name={data.name}
                                     type={data.type}
@@ -57,7 +60,6 @@ export default function MainPage() {
                     <>
                         <div className="listscroll" style={{ height: "calc(100vh - 299px)" }}>{
                             datas.map((data) => {
-                                setSelected(data);
                                 return <ListBox key={data.id} data={data} />
                             })
                         }
@@ -73,7 +75,6 @@ export default function MainPage() {
                         after={() => setIsFileView(false)} />
                 </>
             )
-
             }
         </>
     )

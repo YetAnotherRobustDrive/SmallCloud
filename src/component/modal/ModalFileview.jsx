@@ -8,11 +8,12 @@ export default function ModalFileview(props) {
     const [isFileOpen, setIsFileOpen] = useState(false);
     const [isGeneralSelected, setIsGeneralSelected] = useState(true);
     const fileData = props.file;
+    console.log(fileData);
 
     return (
         <div className="fileview">
             <div className='head'>
-                <span className='filename'>nameeeeeeeeeeeeeeeeeeeeeee</span>
+                <span className='filename'>{fileData.name}</span>
                 <div className="fileBtn">
                     <div className='icon' onClick={() => setIsFileOpen(true)}><MdOpenInFull/></div>
                     <div className='icon' onClick={() => props.after()}><AiOutlineClose /></div>

@@ -1,18 +1,21 @@
 import React, { useState } from "react";
-import Sidebar from "../../component/sidebar/Sidebar"
-import Header from "../../component/header/Header"
-import BodyHeader from "../../component/main/BodyHeader";
 import BodyFrame from "../../component/Bodyframe";
+import Header from "../../component/header/Header";
+import BodyHeader from "../../component/main/BodyHeader";
 import CustomIcon from "../../component/main/CustomIcon";
 import GridBox from "../../component/main/GridBox";
-import UploadBtn from "../../component/main/UploadBtn";
 import ListBox from "../../component/main/ListBox";
+import UploadBtn from "../../component/main/UploadBtn";
+import ModalFileview from "../../component/modal/ModalFileview";
+import Sidebar from "../../component/sidebar/Sidebar";
 
-import datas from '../../fakeJSON/direcFiles.json'
+import datas from '../../fakeJSON/direcFiles.json';
 
 export default function FavoritesPage() {
 
     const [isGrid, setIsGrid] = useState(true);
+    const [isFileView, setIsFileView] = useState(false);
+    const [selected, setSelected] = useState();
 
     return (
         <>
@@ -25,6 +28,10 @@ export default function FavoritesPage() {
                         {
                             datas.map((data) => {
                                 return <CustomIcon 
+                                onClick={() => {
+                                    setSelected(data);
+                                    setIsFileView(true);
+                                }}
                                 key={data.id}
                                 name={data.name}
                                 type={data.type} 
@@ -46,6 +53,14 @@ export default function FavoritesPage() {
                 }
                 <UploadBtn />
             </BodyFrame>
+            {isFileView && (
+                <>
+                    <ModalFileview
+                        file={selected}
+                        after={() => setIsFileView(false)} />
+                </>
+            )
+            }
         </>
     )
 }
