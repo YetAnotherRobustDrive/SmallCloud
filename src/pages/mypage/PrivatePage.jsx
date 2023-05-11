@@ -10,13 +10,13 @@ export default function PrivatePage() {
     const isPrivilege = useSelector(selectIsPrivileged);
     const dispatch = useDispatch();
     
-    const checkPrivilege = async () => {
+    const updatePrivilege = async () => {
         const res = await IsPrivilegedToken();
         dispatch(setPrivilege({ res }));
     }
 
     useEffect(() => {
-        checkPrivilege();
+        updatePrivilege();
     },[])
 
     return (
@@ -27,7 +27,7 @@ export default function PrivatePage() {
                 <ModalCheckPW
                 isOpen={!isPrivilege} 
                 after={() => {
-                    checkPrivilege();
+                    updatePrivilege();
                 }}/>
             }
         </>
