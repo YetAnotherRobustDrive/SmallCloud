@@ -1,16 +1,16 @@
 import React, { useState } from "react";
-import Sidebar from "../../component/sidebar/Sidebar"
-import Header from "../../component/header/Header"
-import BodyHeader from "../../component/main/BodyHeader";
 import BodyFrame from "../../component/Bodyframe";
-import NarrowBox from "../../component/main/NarrowBox";
+import Header from "../../component/header/Header";
+import BodyHeader from "../../component/main/BodyHeader";
 import CustomIcon from "../../component/main/CustomIcon";
 import GridBox from "../../component/main/GridBox";
-import UploadBtn from "../../component/main/UploadBtn";
 import ListBox from "../../component/main/ListBox";
+import NarrowBox from "../../component/main/NarrowBox";
+import UploadBtn from "../../component/main/UploadBtn";
+import Sidebar from "../../component/sidebar/Sidebar";
 
-import datas from '../../fakeJSON/direcFiles.json'
 import ModalFileview from "../../component/modal/ModalFileview";
+import datas from '../../fakeJSON/direcFiles.json';
 
 export default function MainPage() {
 
@@ -63,7 +63,12 @@ export default function MainPage() {
                     <>
                         <div className="listscroll" style={{ height: "calc(100vh - 299px)" }}>{
                             datas.map((data) => {
-                                return <ListBox key={data.id} data={data} />
+                                return <ListBox key={data.id} 
+                                onClick={() => {
+                                    setSelected(data);
+                                    setIsFileView(true);
+                                }}
+                                data={data} />
                             })
                         }
                         </div>

@@ -45,7 +45,13 @@ export default function FavoritesPage() {
                     <>
                         <div className="listscroll" style={{ height: "calc(100vh - 117px)" }}>{
                             datas.map((data) => {
-                                return <ListBox data={data} />
+                                return <ListBox  
+                                key={data.id} 
+                                onClick={() => {
+                                    setSelected(data);
+                                    setIsFileView(true);
+                                }}
+                                data={data} />
                             })
                         }
                         </div>

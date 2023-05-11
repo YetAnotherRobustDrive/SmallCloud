@@ -5,7 +5,7 @@ import { FcFolder, FcFile } from 'react-icons/fc'
 export default function ListBox(props) {
     const data = props.data;
     return (
-        <div className="listbox">
+        <div className="listbox" onClick={() => props.onClick()}>
             <div className="icon">
                 {data.type == "file" ? <FcFile /> : <FcFolder />}
             </div>
