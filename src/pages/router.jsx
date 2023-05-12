@@ -23,7 +23,8 @@ import SecurityInfoPage from './mypage/SecurityInfoPage';
 import ServiceInfoPage from './mypage/ServiceInfoPage';
 
 export default () => {
-    const isPrivileged = useSelector(state => state.user.isPrivileged);
+    const isPrivileged = useSelector(state => state.token.isPrivileged);
+    const isAdmin = useSelector(state => state.token.isAdmin);
     const isLoggedIn = useSelector(state => state.user.isLoggedIn);
 
     return (
@@ -31,7 +32,7 @@ export default () => {
             <Routes>
                 <Route exact path='/' element={isLoggedIn ? <MainPage /> : <LoginPage />} />
                 <Route path='/register' element={<RegisterPage />} />
-                
+
                 <Route path='/login' element={<LoginPage />} />
                 <Route path='/login/ask' element={<LoginQuestionPage />} />
                 <Route path='/logout' element={<LogoutUser />} />
@@ -51,7 +52,10 @@ export default () => {
                         <Route path='/cs/terms' element={<TermsPage />} />
                         <Route path='/cs/faq' element={<FaqPage />} />
                         <Route path='/cs/question' element={<QuestionPage />} />
-
+                    </>
+                }
+                {isAdmin &&
+                    <>
                         <Route path='/admin' element={<AdminConfigPage />} />
                         <Route path='/admin/rules' element={<AdminConfigPage />} />
                         <Route path='/admin/user-ctrl' element={<AdminUserCtrlPage />} />
