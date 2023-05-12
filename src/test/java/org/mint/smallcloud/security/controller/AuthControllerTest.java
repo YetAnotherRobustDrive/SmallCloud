@@ -30,6 +30,7 @@ import javax.transaction.Transactional;
 import java.util.HashMap;
 import java.util.Map;
 
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.documentationConfiguration;
@@ -55,6 +56,10 @@ class AuthControllerTest {
     @Autowired
     private JwtTokenProvider jwtTokenProvider;
 
+    private LoginDto user1;
+    private LoginDto user2;
+    private LoginDto user3;
+
     @BeforeEach
     void setUp(WebApplicationContext webApplicationContext, RestDocumentationContextProvider restDocumentation) {
         this.mockMvc = MockMvcBuilders
@@ -62,6 +67,20 @@ class AuthControllerTest {
             .addFilters(new CharacterEncodingFilter("UTF-8", true))
             .apply(documentationConfiguration(restDocumentation))
             .apply(springSecurity())
+            .build();
+
+        user1 = LoginDto.builder()
+            .id("user1")
+            .password("pw1")
+            .build();
+
+        user2 = LoginDto.builder()
+            .id("user2")
+            .password("pw2")
+            .build();
+        user3 = LoginDto.builder()
+            .id("user3")
+            .password("pw3")
             .build();
     }
 
@@ -81,6 +100,7 @@ class AuthControllerTest {
 
         this.mockMvc.perform(TestSnippet.post(url, objectMapper, registerDto))
             .andExpect(status().isOk())
+            .andExpect((result) -> assertNotNull(memberRepository.findByUsername(registerDto.getId()).orElse(null)))
             .andDo(document("Register", payload));
 
         this.mockMvc.perform(TestSnippet.post(url, objectMapper, registerDto))
@@ -95,29 +115,21 @@ class AuthControllerTest {
         RequestFieldsSnippet payload = requestFields(
             fieldWithPath("id").description("user id"),
             fieldWithPath("password").description("user password"));
-        LoginDto loginDto1 = LoginDto.builder()
-            .id("user1")
-            .password("pw")
-            .build();
-        LoginDto loginDto2 = LoginDto.builder()
-            .id("user2")
-            .password("pw")
-            .build();
         LoginDto wrongPasswordLoginDto1 = LoginDto.builder()
-            .id("user1")
-            .password("pw1")
+            .id(user1.getId())
+            .password(user1.getPassword() + "abc")
             .build();
         LoginDto notValidDto = LoginDto.builder()
             .id("fjiowejfioewjoifjweoijf@@@ioewjofijewiofjewiojioewj")
             .password("fjioewjifojewiofjewiojfioewjfioewjiofjwe")
             .build();
-        memberRepository.save(Member.of(loginDto1.getId(),
-            loginDto1.getPassword(), "nickname"));
+        memberRepository.save(Member.of(user1.getId(),
+            user1.getPassword(), "nickname"));
 
-        this.mockMvc.perform(TestSnippet.post(url, objectMapper, loginDto1))
+        this.mockMvc.perform(TestSnippet.post(url, objectMapper, user1))
             .andExpect(status().isOk())
             .andDo(document("Login", payload));
-        this.mockMvc.perform(TestSnippet.post(url, objectMapper, loginDto2))
+        this.mockMvc.perform(TestSnippet.post(url, objectMapper, user2))
             .andExpect(status().isForbidden())
             .andDo(document("NotFoundUserLogin", payload));
         this.mockMvc.perform(TestSnippet.post(url, objectMapper, wrongPasswordLoginDto1))
@@ -134,18 +146,14 @@ class AuthControllerTest {
         final String url = URL_PREFIX + "/elevate";
         RequestFieldsSnippet payload = requestFields(
             fieldWithPath("password").description("user password"));
-        LoginDto loginDto1 = LoginDto.builder()
-            .id("user1")
-            .password("pw")
-            .build();
         Map<String, String> map = new HashMap<>();
-        map.put("password", "pw");
-        memberRepository.save(Member.of(loginDto1.getId(),
-            loginDto1.getPassword(), "nickname"));
+        map.put("password", user1.getPassword());
+        memberRepository.save(Member.of(user1.getId(),
+            user1.getPassword(), "nickname"));
         JwtTokenDto token = jwtTokenProvider.generateTokenDto(
             UserDetailsDto.builder()
-                .username("user1")
-                .password("pw")
+                .username(user1.getId())
+                .password(user1.getPassword())
                 .roles(Role.COMMON)
                 .disabled(false)
                 .build());
@@ -166,29 +174,21 @@ class AuthControllerTest {
     @DisplayName("/auth/deregister document")
     public void deregister() throws Exception {
         final String url = URL_PREFIX + "/deregister";
-        LoginDto loginDto1 = LoginDto.builder()
-            .id("user1")
-            .password("pw")
-            .build();
-        LoginDto loginDto2 = LoginDto.builder()
-            .id("user2")
-            .password("pw")
-            .build();
 
-        memberRepository.save(Member.of(loginDto1.getId(),
-            loginDto1.getPassword(), "nickname"));
-        memberRepository.save(Member.of(loginDto2.getId(),
-            loginDto2.getPassword(), "nickname"));
+        memberRepository.save(Member.of(user1.getId(),
+            user1.getPassword(), "nickname"));
+        memberRepository.save(Member.of(user2.getId(),
+            user2.getPassword(), "nickname"));
 
         JwtTokenDto token = jwtTokenProvider.generateTokenDto(
             UserDetailsDto.builder()
-                .username(loginDto1.getId())
-                .password(loginDto1.getPassword())
+                .username(user1.getId())
+                .password(user1.getPassword())
                 .roles(Role.COMMON)
                 .disabled(false)
                 .build());
         Map<String, String> map = new HashMap<>();
-        map.put("password", "pw");
+        map.put("password", user1.getPassword());
         JwtTokenDto privilegeToken = objectMapper.readValue(
             this.mockMvc.perform(TestSnippet.securePost(URL_PREFIX + "/elevate", token.getAccessToken(), objectMapper, map))
                 .andExpect(status().isOk())
@@ -197,15 +197,14 @@ class AuthControllerTest {
 
         this.mockMvc.perform(TestSnippet.securePost(url, privilegeToken.getAccessToken()))
             .andExpect(status().isOk())
+            .andExpect((rst) -> assertNull(memberRepository.findByUsername(user1.getId()).orElse(null)))
             .andDo(document("Deregister"));
 
-        assertNull(memberRepository
-            .findByUsername(loginDto1.getId()).orElse(null));
 
         JwtTokenDto commonToken = jwtTokenProvider.generateTokenDto(
             UserDetailsDto.builder()
-                .username(loginDto2.getId())
-                .password(loginDto2.getPassword())
+                .username(user2.getId())
+                .password(user2.getPassword())
                 .roles(Role.COMMON)
                 .disabled(false)
                 .build());
