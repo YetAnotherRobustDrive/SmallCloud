@@ -12,7 +12,15 @@ const userSlice = createSlice({
     name: 'user',
     initialState: {
         isPrivileged: false,
+        isLoggedIn: false,
+        loginID: '',
         nickname: 'Error...',
+    },
+    reducers:{
+        setIsLoggedIn: (state, action) => {
+            state.isLoggedIn = true;
+            state.loginID = action.payload;
+        }
     },
     extraReducers: (builder) => {
         builder.addCase(asyncSetPrivilege.fulfilled, (state, action) => {
@@ -23,3 +31,4 @@ const userSlice = createSlice({
 
 export default userSlice;
 export { asyncSetPrivilege }
+export const { setIsLoggedIn } = userSlice.actions;
