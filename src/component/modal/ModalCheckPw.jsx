@@ -8,6 +8,7 @@ import ElevateUser from '../../services/user/ElevateUser';
 export default function ModalCheckPW(props) {
 
     const [isError, setIsError] = useState(false);
+    const [isOpen, setIsOpen] = useState(true);
     const [count, setCount] = useState(0);
     const [message, setMessage] = useState(false);
     
@@ -53,6 +54,7 @@ export default function ModalCheckPW(props) {
                 return;
             }
             setCount(0);
+            setIsOpen(false);
             props.after(); //success
         }
     }
@@ -60,7 +62,7 @@ export default function ModalCheckPW(props) {
     Modal.setAppElement("#root");
     return (
         <>
-            <Modal isOpen={props.isOpen} style={modalStyle}>
+            <Modal isOpen={isOpen} style={modalStyle}>
                 <div className="modalOuter">
                     <img src={img}></img>
                     <span className="nick">{nickname}</span>
