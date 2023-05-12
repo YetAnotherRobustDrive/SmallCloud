@@ -6,6 +6,8 @@ import org.mint.smallcloud.exception.ServiceException;
 import org.mint.smallcloud.security.FilterExceptionManager;
 import org.mint.smallcloud.security.UserDetailsProvider;
 import org.mint.smallcloud.security.jwt.tokenprovider.JwtTokenProvider;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.security.core.Authentication;
 import org.springframework.util.StringUtils;
 import org.springframework.web.filter.OncePerRequestFilter;
@@ -26,10 +28,10 @@ public class JwtFilter extends OncePerRequestFilter {
     private final JwtTokenProvider tokenProvider;
     private final UserDetailsProvider userDetailsProvider;
     private final FilterExceptionManager filterExceptionManager;
+    private final Logger loggger = LoggerFactory.getLogger("test");
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
-        log.info("Called jwt filter");
         try {
             String jwt = tokenProvider.resolveTokenFromHeader(request);
             if (StringUtils.hasText(jwt)) {

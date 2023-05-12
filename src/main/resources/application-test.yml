@@ -14,3 +14,8 @@ spring:
     properties:
       hibernate:
         show_sql: false
+
+logging:
+  call-tracer: true
+  level:
+    org.mint.smallcloud: debug
