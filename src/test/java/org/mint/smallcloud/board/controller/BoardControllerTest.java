@@ -110,6 +110,7 @@ class BoardControllerTest {
                 .andDo(document("Register Inquiry",payload));
     }
 
+
     @Test
     @DisplayName("/inquiries/문의 전체 조회 테스트")
     public void getInquiries() throws Exception {

@@ -30,6 +30,7 @@ public class BoardService {
     }
 
     public BoardDto findById(Long boardId) throws Exception {
+
         Board board = boardThrowerService.findById(boardId);
         return BoardDto.builder()
                 .content(board.getContent())

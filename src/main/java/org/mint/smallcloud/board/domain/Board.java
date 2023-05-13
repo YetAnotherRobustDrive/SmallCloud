@@ -41,6 +41,7 @@ public class Board {
     @Column(name = "WRITER")
     private String writer;
 
+
     protected Board(String content, String contact){
         this.content = content;
         this.contact = contact;

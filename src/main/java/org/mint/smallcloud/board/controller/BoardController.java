@@ -9,8 +9,6 @@ import org.mint.smallcloud.security.UserDetailsProvider;
 import org.mint.smallcloud.user.domain.Roles;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.annotation.Secured;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 
@@ -42,12 +40,10 @@ public class BoardController {
     @PostMapping
     public ResponseEntity<?> save(@RequestBody BoardDto boardDto) {
         Optional<UserDetails> authentication = userDetailsProvider.getUserDetails();
-        authentication.get().getUsername();
-        authentication.orElseGet()
         BoardDto boardDto1 = BoardDto.builder()
                 .content(boardDto.getContent())
                 .contact(boardDto.getContact())
-                .writer()
+                .writer(authentication.map(e -> e.getUsername()).orElse(null))
                 .build();
         boardService.save(boardDto1);
         return ResponseEntity.ok().build();
