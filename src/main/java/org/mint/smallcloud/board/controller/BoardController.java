@@ -30,7 +30,7 @@ public class BoardController {
 
     @Secured({Roles.S_ADMIN})
     @GetMapping("/{queryId}")
-    public BoardDto getInquiry(@PathVariable("queryId") Long boardId) {
+    public BoardDto getInquiry(@PathVariable("queryId") Long boardId) throws Exception {
         return boardService.findById(boardId);
     }
 

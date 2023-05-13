@@ -36,9 +36,9 @@ public class BoardService {
         return boardRepository.findAll();
     }
 
-    public BoardDto findById(Long boardId) {
+    public BoardDto findById(Long boardId) throws Exception {
         Board board = boardRepository.findById(boardId)
-                .orElseThrow();
+                .orElseThrow(() -> new Exception("특정 문의를 찾을 수 없습니다."));
         return BoardDto.builder()
                 .content(board.getContent())
                 .contact(board.getContact())
