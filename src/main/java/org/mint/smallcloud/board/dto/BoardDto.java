@@ -1,4 +1,4 @@
-package org.mint.smallcloud.board;
+package org.mint.smallcloud.board.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;

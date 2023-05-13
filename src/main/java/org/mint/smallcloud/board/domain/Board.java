@@ -43,14 +43,28 @@ public class Board {
 //    @JoinColumn(name = "board")
 //    private Member writer;
 
+    @Column(name = "WRITER")
+    private String writer;
+
     private Board(String content, String contact){
         this.content = content;
         this.contact = contact;
         this.createdDate = LocalDateTime.now();
     }
 
-    public static Board of(String content, String contact) {
+    private Board(String content, String contact, String writer){
+        this.content = content;
+        this.contact = contact;
+        this.writer = writer;
+        this.createdDate = LocalDateTime.now();
+    }
+
+    public static Board board(String content, String contact) {
         return new Board(content, contact);
+    }
+
+    public static Board boardCommon(String content, String contact, String writer) {
+        return new Board(content, contact, writer);
     }
 
 }
