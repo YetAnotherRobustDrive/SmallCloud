@@ -8,14 +8,13 @@ import org.mint.smallcloud.security.jwt.dto.JwtTokenDto;
 import org.mint.smallcloud.security.service.AuthFacadeService;
 import org.mint.smallcloud.user.domain.Roles;
 import org.mint.smallcloud.user.dto.RegisterDto;
+import org.mint.smallcloud.validation.PasswordValidation;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.annotation.Secured;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
-import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.Size;
 
 @RestController
 @RequestMapping("/auth")
@@ -65,8 +64,7 @@ public class AuthController {
     }
 
     private static class PasswordDto {
-        @Size(min = 1, max = 15, message = "비밀번호는 15이하로 작성해 주세요")
-        @NotBlank(message = "비밀번호는 필수로 들어가야 합니다.")
+        @PasswordValidation
         private String password;
 
         public String getPassword() {
