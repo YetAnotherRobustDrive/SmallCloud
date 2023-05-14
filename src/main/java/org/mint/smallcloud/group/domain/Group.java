@@ -20,7 +20,7 @@ public class Group {
     @Column(name = "GROUP_ID")
     private Long id;
 
-    @Column(name = "NAME")
+    @Column(name = "NAME", nullable = false, length = 15, unique = true)
     private String name;
 
     @ManyToOne

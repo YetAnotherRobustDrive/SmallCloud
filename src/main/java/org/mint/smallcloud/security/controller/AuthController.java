@@ -4,15 +4,16 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.mint.smallcloud.ResponseDto;
 import org.mint.smallcloud.security.dto.LoginDto;
-import org.mint.smallcloud.security.dto.RegisterDto;
 import org.mint.smallcloud.security.jwt.dto.JwtTokenDto;
 import org.mint.smallcloud.security.service.AuthFacadeService;
 import org.mint.smallcloud.user.domain.Roles;
+import org.mint.smallcloud.user.dto.RegisterDto;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.annotation.Secured;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.validation.Valid;
 
 @RestController
 @RequestMapping("/auth")
@@ -22,7 +23,7 @@ public class AuthController {
     private final AuthFacadeService authFacadeService;
 
     @PostMapping("/login")
-    public JwtTokenDto login(@RequestBody LoginDto loginDto) {
+    public JwtTokenDto login(@Valid @RequestBody LoginDto loginDto) {
         return authFacadeService.login(loginDto);
     }
 
