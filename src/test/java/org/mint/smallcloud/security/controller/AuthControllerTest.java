@@ -95,17 +95,31 @@ class AuthControllerTest {
         RegisterDto registerDto =
             RegisterDto.builder()
                 .id("test1")
-                .name("testName")
+                .name("안녕")
                 .password("pw").build();
+        RegisterDto wrongFormat =
+            RegisterDto.builder()
+                .id("ifjii9fdsafdsafdsafdsf0j9")
+                .name("안녕")
+                .password("fdsafdsafdsafdsafdsafdas")
+                .build();
 
+        // register 성공
         this.mockMvc.perform(TestSnippet.post(url, objectMapper, registerDto))
             .andExpect(status().isOk())
             .andExpect((result) -> assertNotNull(memberRepository.findByUsername(registerDto.getId()).orElse(null)))
             .andDo(document("Register", payload));
 
+        // 이미 존재하는 user
         this.mockMvc.perform(TestSnippet.post(url, objectMapper, registerDto))
             .andExpect(status().isForbidden())
-            .andDo(document("RegisterFail", payload));
+            .andDo(document("RegisterFail"));
+
+        // 잘못된 포멧으로 된 dto
+        this.mockMvc.perform(TestSnippet.post(url, objectMapper, wrongFormat))
+            .andExpect(status().isBadRequest())
+            .andDo(document("RegisterWrongFormat"));
+
     }
 
     @Test
@@ -126,15 +140,22 @@ class AuthControllerTest {
         memberRepository.save(Member.of(user1.getId(),
             user1.getPassword(), "nickname"));
 
+        // 정상적 로그인
         this.mockMvc.perform(TestSnippet.post(url, objectMapper, user1))
             .andExpect(status().isOk())
             .andDo(document("Login", payload));
+
+        // 등록되지 않은 유저 로그인
         this.mockMvc.perform(TestSnippet.post(url, objectMapper, user2))
             .andExpect(status().isForbidden())
             .andDo(document("NotFoundUserLogin", payload));
+
+        // 패스워드가 틀림
         this.mockMvc.perform(TestSnippet.post(url, objectMapper, wrongPasswordLoginDto1))
             .andExpect(status().isForbidden())
             .andDo(document("WrongPassword", payload));
+
+        // 잘못된 포멧으로 된 dto
         this.mockMvc.perform(TestSnippet.post(url, objectMapper, notValidDto))
             .andExpect(status().isBadRequest())
             .andDo(document("NotValidLogin"));
@@ -157,17 +178,30 @@ class AuthControllerTest {
                 .roles(Role.COMMON)
                 .disabled(false)
                 .build());
+
+        // 정상 요청
         this.mockMvc.perform(TestSnippet.securePost(url, token.getAccessToken(), objectMapper, map))
             .andExpect(status().isOk())
             .andDo(document("Elevate", payload));
         map.clear();
         map.put("password", "123");
+
+        // 패스워드 잘못됨
         this.mockMvc.perform(TestSnippet.securePost(url, token.getAccessToken(), objectMapper, map))
             .andExpect(status().isForbidden())
             .andDo(document("ElevateWrongPassword"));
+
+        // 로그인 토큰이 잘못됨
         this.mockMvc.perform(TestSnippet.post(url, objectMapper, map))
             .andExpect(status().isForbidden())
             .andDo(document("ElevateUnauth"));
+
+        map.clear();
+        map.put("password", "123jfkldsajfkldjsaklfjdsalj");
+        // 패스워드 포멧이 잘못됨
+        this.mockMvc.perform(TestSnippet.post(url, objectMapper, map))
+            .andExpect(status().isBadRequest())
+            .andDo(document("ElevateTooLongPW"));
     }
 
     @Test
@@ -195,6 +229,7 @@ class AuthControllerTest {
                 .andReturn().getResponse().getContentAsString()
             , JwtTokenDto.class);
 
+        // 정상적 요청
         this.mockMvc.perform(TestSnippet.securePost(url, privilegeToken.getAccessToken()))
             .andExpect(status().isOk())
             .andExpect((rst) -> assertNull(memberRepository.findByUsername(user1.getId()).orElse(null)))
@@ -208,6 +243,8 @@ class AuthControllerTest {
                 .roles(Role.COMMON)
                 .disabled(false)
                 .build());
+
+        // 삭제 권한이 없음
         this.mockMvc.perform(TestSnippet.securePost(url, commonToken.getAccessToken()))
             .andExpect(status().isForbidden())
             .andDo(document("DeregisterPrivilege"));
@@ -226,6 +263,7 @@ class AuthControllerTest {
             .roles(member.getRole()).build();
         JwtTokenDto refresh = jwtTokenProvider.generateTokenDto(userDto);
 
+        // 정상 요청
         this.mockMvc.perform(TestSnippet.secureGet(url, refresh.getRefreshToken()))
             .andExpect(status().isOk())
             .andDo(document("Refresh",
@@ -235,6 +273,7 @@ class AuthControllerTest {
                         .description("refresh token")
                 )));
 
+        // 잘못된 토큰
         this.mockMvc.perform(TestSnippet.secureGet(url, "abc"))
             .andExpect(status().isBadRequest())
             .andDo(document("RefreshBadToken"));
@@ -253,6 +292,7 @@ class AuthControllerTest {
             .roles(Role.PRIVILEGE).build();
         JwtTokenDto token = jwtTokenProvider.generateTokenDto(userDto);
 
+        // 정상 요청
         this.mockMvc.perform(TestSnippet.secureGet(url, token.getAccessToken()))
             .andExpect(status().isOk())
             .andExpect(content().json("{result: true}"))
@@ -269,6 +309,8 @@ class AuthControllerTest {
             .disabled(member.isLocked())
             .roles(Role.COMMON).build();
         token = jwtTokenProvider.generateTokenDto(userDto);
+
+        // role이 common인 토큰
         this.mockMvc.perform(TestSnippet.secureGet(url, token.getAccessToken()))
             .andExpect(status().isOk())
             .andExpect(content().json("{result: false}"))
