@@ -122,3 +122,13 @@ IMPORTANT: 유저가 특권유저일 때
 operation::PrivilegedFalse[snippets='http-response']
 
 IMPORTANT: 유저가 특권유저가 아닐 때
+
+== 인증 관련 (users)
+
+=== 등록 (delete)
+
+operation::UserDelete[snippets='http-request']
+
+==== 성공
+
+operation::UserDelete[snippets='http-response']

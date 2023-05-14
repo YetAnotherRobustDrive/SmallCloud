@@ -11,6 +11,7 @@ import org.mint.smallcloud.user.dto.RegisterDto;
 import org.mint.smallcloud.validation.PasswordValidation;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.annotation.Secured;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
@@ -20,6 +21,7 @@ import javax.validation.Valid;
 @RequestMapping("/auth")
 @Slf4j
 @RequiredArgsConstructor
+@Validated
 public class AuthController {
     private final AuthFacadeService authFacadeService;
 
