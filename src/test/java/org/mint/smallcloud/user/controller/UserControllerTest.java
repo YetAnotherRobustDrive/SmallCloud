@@ -104,6 +104,9 @@ class UserControllerTest {
             .andExpect(status().isBadRequest())
             .andDo(document("UserDeleteUsernameToLong"));
 
+        member1 = Member.of("user1", "pw1", "nickname");
+        em.persist(member1);
+        em.flush();
         // 유저가 잘못된 접근
         mockMvc.perform(TestSnippet.secured(post(url, member1.getUsername()), memberToken.getAccessToken()))
             .andExpect(status().isForbidden())
