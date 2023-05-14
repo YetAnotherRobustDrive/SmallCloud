@@ -21,7 +21,8 @@ public enum ExceptionStatus {
     USERNAME_ALREADY_EXISTS(HttpStatus.FORBIDDEN, "아이디가 이미 존재합니다."),
     NO_PERMISSION(HttpStatus.FORBIDDEN, "권한이 없습니다."),
     INTERNAL_SERVER_ERROR(HttpStatus.INTERNAL_SERVER_ERROR, "internal server error."),
-    NOT_REFRESH_TOKEN(HttpStatus.FORBIDDEN, "refresh토큰이 아닙니다.");
+    NOT_REFRESH_TOKEN(HttpStatus.FORBIDDEN, "refresh토큰이 아닙니다."),
+    NOT_FOUND_INQUIRY(HttpStatus.FORBIDDEN, "문의가 존재하지 않습니다.");
 
     ExceptionStatus(HttpStatus status, String message) {
         responseDto = ErrorResponseDto.builder()

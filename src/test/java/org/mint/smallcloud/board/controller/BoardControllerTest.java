@@ -74,6 +74,16 @@ class BoardControllerTest {
     @DisplayName("/inquiries/문의 등록 테스트")
     public void save() throws Exception {
         final String url = URL_PREFIX;
+        Member member = Member.createCommon("testMemberName", "testPw", "testNickname");
+        memberRepository.save(member);
+        UserDetailsDto userDetailsDto = UserDetailsDto.builder()
+                .username(member.getUsername())
+                .password(member.getPassword())
+                .disabled(member.isLocked())
+                .roles(member.getRole())
+                .build();
+        JwtTokenDto memberToken = jwtTokenProvider.generateTokenDto(userDetailsDto);
+
         RequestFieldsSnippet payload = requestFields(
                 fieldWithPath("content").description("사용자 질문의 내용을 담고 있습니다."),
                 fieldWithPath("contact").description("사용자의 연락처를 담고 있습니다."),
@@ -85,9 +95,19 @@ class BoardControllerTest {
                         .writer("testWriter")
                         .build();
 
-        this.mockMvc.perform(TestSnippet.post(url, objectMapper, boardDto))
+        BoardDto boardDto1 =
+                BoardDto.builder()
+                        .content("testContent1")
+                        .contact("testContact1")
+                        .build();
+
+        this.mockMvc.perform(TestSnippet.securePost(url, memberToken.getAccessToken(), objectMapper, boardDto))
                 .andExpect(status().isOk())
-                .andDo(document("Save",payload));
+                .andDo(document("Register Inquiry",payload));
+
+        this.mockMvc.perform(TestSnippet.post(url, objectMapper, boardDto1))
+                .andExpect(status().isOk())
+                .andDo(document("Register Inquiry",payload));
     }
 
     @Test

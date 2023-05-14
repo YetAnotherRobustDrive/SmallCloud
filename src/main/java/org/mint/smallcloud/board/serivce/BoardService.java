@@ -15,6 +15,7 @@ import java.util.List;
 public class BoardService {
 
     private final  BoardRepository boardRepository;
+    private final BoardThrowerService boardThrowerService;
 
     public void save(BoardDto boardDto) {
         Board board = Board.board(
@@ -29,11 +30,11 @@ public class BoardService {
     }
 
     public BoardDto findById(Long boardId) throws Exception {
-        Board board = boardRepository.findById(boardId)
-                .orElseThrow(() -> new Exception("특정 문의를 찾을 수 없습니다."));
+        Board board = boardThrowerService.findById(boardId);
         return BoardDto.builder()
                 .content(board.getContent())
                 .contact(board.getContact())
+                .writer(board.getWriter())
                 .build();
     }
 

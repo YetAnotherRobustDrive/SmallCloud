@@ -41,13 +41,13 @@ public class Board {
     @Column(name = "WRITER")
     private String writer;
 
-    private Board(String content, String contact){
+    protected Board(String content, String contact){
         this.content = content;
         this.contact = contact;
         this.createdDate = LocalDateTime.now();
     }
 
-    private Board(String content, String contact, String writer){
+    protected Board(String content, String contact, String writer){
         this.content = content;
         this.contact = contact;
         this.writer = writer;
