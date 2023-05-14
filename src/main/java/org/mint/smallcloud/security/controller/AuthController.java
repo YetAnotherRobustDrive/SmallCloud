@@ -14,6 +14,8 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.Size;
 
 @RestController
 @RequestMapping("/auth")
@@ -28,7 +30,7 @@ public class AuthController {
     }
 
     @PostMapping("/register")
-    public ResponseEntity<?> signup(@RequestBody RegisterDto registerDto) {
+    public ResponseEntity<?> signup(@Valid @RequestBody RegisterDto registerDto) {
         authFacadeService.signup(registerDto);
         return ResponseEntity.ok().build();
     }
@@ -41,7 +43,7 @@ public class AuthController {
 
     @Secured({Roles.S_COMMON, Roles.S_PRIVILEGE})
     @PostMapping("/elevate")
-    public JwtTokenDto elevate(@RequestBody PasswordDto passwordDto) {
+    public JwtTokenDto elevate(@Valid @RequestBody PasswordDto passwordDto) {
         return authFacadeService.elevate(passwordDto.getPassword());
     }
 
@@ -63,6 +65,8 @@ public class AuthController {
     }
 
     private static class PasswordDto {
+        @Size(min = 1, max = 15, message = "비밀번호는 15이하로 작성해 주세요")
+        @NotBlank(message = "비밀번호는 필수로 들어가야 합니다.")
         private String password;
 
         public String getPassword() {
