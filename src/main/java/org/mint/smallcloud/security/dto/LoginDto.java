@@ -3,21 +3,16 @@ package org.mint.smallcloud.security.dto;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
-
-import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.Pattern;
-import javax.validation.constraints.Size;
+import org.mint.smallcloud.validation.PasswordValidation;
+import org.mint.smallcloud.validation.UserNameValidation;
 
 @AllArgsConstructor
 @Builder
 @Getter
 public class LoginDto {
-    @Size(min = 1, max = 15, message = "아이디는 15자 이하로 작성해 주세요")
-    @NotBlank(message = "아이디는 필수로 들어가야 합니다.")
-    @Pattern(regexp = "^[a-zA-Z0-9]+", message = "아이디는 영어나 숫자만 가능합니다.")
+    @UserNameValidation
     private final String id;
 
-    @Size(min = 1, max = 15, message = "비밀번호는 15이하로 작성해 주세요")
-    @NotBlank(message = "비밀번호는 필수로 들어가야 합니다.")
+    @PasswordValidation
     private final String password;
 }
