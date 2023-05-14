@@ -2,7 +2,6 @@ package org.mint.smallcloud.board.serivce;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.mint.smallcloud.board.dto.BoardCommonDto;
 import org.mint.smallcloud.board.dto.BoardDto;
 import org.mint.smallcloud.board.domain.Board;
 import org.mint.smallcloud.board.repository.BoardRepository;
@@ -20,16 +19,9 @@ public class BoardService {
     public void save(BoardDto boardDto) {
         Board board = Board.board(
                 boardDto.getContent(),
-                boardDto.getContact());
+                boardDto.getContact(),
+                boardDto.getWriter());
         boardRepository.save(board);
-    }
-
-    public void saveCommon(BoardCommonDto boardCommonDto) {
-        Board boardCommon = Board.boardCommon(
-                boardCommonDto.getContent(),
-                boardCommonDto.getContact(),
-                boardCommonDto.getWriter());
-        boardRepository.save(boardCommon);
     }
 
     public List<Board> findAll() {

@@ -1,10 +1,8 @@
 package org.mint.smallcloud.board.domain;
 
-import com.sun.istack.NotNull;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import org.mint.smallcloud.user.domain.Member;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
@@ -19,18 +17,15 @@ public class Board {
     @Column(name = "BOARD_ID")
     private Long id;
 
-    @NotNull
     @Column(name = "CONTENT")
     private String content;
 
-    @NotNull
     @Column(name = "CONTACT")
     private String contact;
 
     @Column(name = "CREATED_DATE")
     private LocalDateTime createdDate;
 
-    @NotNull
     @OneToOne
     @JoinColumn(name = "id")
     private BoardType boardType;
@@ -63,7 +58,7 @@ public class Board {
         return new Board(content, contact);
     }
 
-    public static Board boardCommon(String content, String contact, String writer) {
+    public static Board board(String content, String contact, String writer) {
         return new Board(content, contact, writer);
     }
 

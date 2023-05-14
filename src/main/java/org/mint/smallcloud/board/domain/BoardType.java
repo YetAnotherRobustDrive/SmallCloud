@@ -24,7 +24,8 @@ public class BoardType {
      * terms - 약관(가장 최근꺼 2개 가져와서 변경내역 보여줘야함)
      * privacy - 개인정보처리방침(얘도 2개 가져와야 함)
      */
-    @Column(name = "BOARDTYPE")
-    private String type;
+    private enum type {
+        question, answer, faq, announcement, terms, privacy
+    };
 
 }

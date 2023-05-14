@@ -6,7 +6,6 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mint.smallcloud.TestSnippet;
-import org.mint.smallcloud.board.dto.BoardCommonDto;
 import org.mint.smallcloud.board.dto.BoardDto;
 import org.mint.smallcloud.board.domain.Board;
 import org.mint.smallcloud.board.repository.BoardRepository;
@@ -77,46 +76,18 @@ class BoardControllerTest {
         final String url = URL_PREFIX;
         RequestFieldsSnippet payload = requestFields(
                 fieldWithPath("content").description("사용자 질문의 내용을 담고 있습니다."),
-                fieldWithPath("contact").description("사용자의 연락처를 담고 있습니다."));
+                fieldWithPath("contact").description("사용자의 연락처를 담고 있습니다."),
+                fieldWithPath("writer").description("글의 작성자를 담고 있습니다."));
         BoardDto boardDto =
                 BoardDto.builder()
-                        .content("testContent")
-                        .contact("testContact")
-                        .build();
-
-        this.mockMvc.perform(TestSnippet.post(url, objectMapper, boardDto))
-                .andExpect(status().isOk())
-                .andDo(document("Save",payload));
-    }
-
-    @Test
-    @DisplayName("inquiries/1:1 문의 등록 테스트")
-    public void saveCommon() throws Exception {
-        final String url = URL_PREFIX + "/common";
-        Member member = Member.createCommon("testUserName","testPw","testNickname");
-        memberRepository.save(member);
-        UserDetailsDto memberDto = UserDetailsDto.builder()
-                .username(member.getUsername())
-                .password(member.getPassword())
-                .disabled(member.isLocked())
-                .roles(member.getRole())
-                .build();
-        JwtTokenDto memberToken = jwtTokenProvider.generateTokenDto(memberDto);
-
-        RequestFieldsSnippet payload = requestFields(
-                fieldWithPath("content").description("사용자 질문의 내용을 담고 있습니다."),
-                fieldWithPath("contact").description("사용자의 연락처를 담고 있습니다."),
-                fieldWithPath("writer").description("사용자 정보를 담고 있습니다."));
-        BoardCommonDto boardCommonDto =
-                BoardCommonDto.builder()
                         .content("testContent")
                         .contact("testContact")
                         .writer("testWriter")
                         .build();
 
-        this.mockMvc.perform(TestSnippet.securePost(url, memberToken.getAccessToken(), objectMapper, boardCommonDto))
+        this.mockMvc.perform(TestSnippet.post(url, objectMapper, boardDto))
                 .andExpect(status().isOk())
-                .andDo(document("SaveCommon",payload));
+                .andDo(document("Save",payload));
     }
 
     @Test

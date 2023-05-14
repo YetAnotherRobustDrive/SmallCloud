@@ -2,13 +2,15 @@ package org.mint.smallcloud.board.controller;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.mint.smallcloud.board.dto.BoardCommonDto;
 import org.mint.smallcloud.board.dto.BoardDto;
 import org.mint.smallcloud.board.domain.Board;
 import org.mint.smallcloud.board.serivce.BoardService;
 import org.mint.smallcloud.user.domain.Roles;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.annotation.Secured;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -36,21 +38,14 @@ public class BoardController {
 
     @PostMapping
     public ResponseEntity<?> save(@RequestBody BoardDto boardDto) {
-        boardService.save(boardDto);
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        UserDetails userDetails = (UserDetails) authentication.getDetails();
+        BoardDto boardDto1 = BoardDto.builder()
+                .content(boardDto.getContent())
+                .contact(boardDto.getContact())
+                .writer(userDetails.getUsername())
+                .build();
+        boardService.save(boardDto1);
         return ResponseEntity.ok().build();
     }
-
-    /**
-     * @Secured 를 어떻게 처리해야 할지 모르겠음
-     * 1:1 문의는 role 이 붙어야 하는데,
-     * 비로그인 문의는 role이 안붙으니까
-     * 일단은 따로 만들었음
-     */
-    @Secured({Roles.S_COMMON})
-    @PostMapping("/common")
-    public ResponseEntity<?> saveCommon(@RequestBody BoardCommonDto boardCommonDto) {
-        boardService.saveCommon(boardCommonDto);
-        return ResponseEntity.ok().build();
-    }
-
 }
