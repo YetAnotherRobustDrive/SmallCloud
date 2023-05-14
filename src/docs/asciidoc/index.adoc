@@ -123,9 +123,9 @@ operation::PrivilegedFalse[snippets='http-response']
 
 IMPORTANT: 유저가 특권유저가 아닐 때
 
-== 인증 관련 (users)
+== 유저 관련 (users)
 
-=== 등록 (delete)
+=== 삭제 (delete)
 
 operation::UserDelete[snippets='http-request,path-parameters']
 
