@@ -8,6 +8,7 @@ import org.mint.smallcloud.security.jwt.dto.JwtTokenDto;
 import org.mint.smallcloud.security.service.AuthFacadeService;
 import org.mint.smallcloud.user.domain.Roles;
 import org.mint.smallcloud.user.dto.RegisterDto;
+import org.mint.smallcloud.validation.PasswordValidation;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.annotation.Secured;
 import org.springframework.web.bind.annotation.*;
@@ -28,7 +29,7 @@ public class AuthController {
     }
 
     @PostMapping("/register")
-    public ResponseEntity<?> signup(@RequestBody RegisterDto registerDto) {
+    public ResponseEntity<?> signup(@Valid @RequestBody RegisterDto registerDto) {
         authFacadeService.signup(registerDto);
         return ResponseEntity.ok().build();
     }
@@ -41,7 +42,7 @@ public class AuthController {
 
     @Secured({Roles.S_COMMON, Roles.S_PRIVILEGE})
     @PostMapping("/elevate")
-    public JwtTokenDto elevate(@RequestBody PasswordDto passwordDto) {
+    public JwtTokenDto elevate(@Valid @RequestBody PasswordDto passwordDto) {
         return authFacadeService.elevate(passwordDto.getPassword());
     }
 
@@ -63,6 +64,7 @@ public class AuthController {
     }
 
     private static class PasswordDto {
+        @PasswordValidation
         private String password;
 
         public String getPassword() {
