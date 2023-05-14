@@ -52,16 +52,16 @@ export default () => {
                         <Route path='/cs/terms' element={<TermsPage />} />
                         <Route path='/cs/faq' element={<FaqPage />} />
                         <Route path='/cs/question' element={<QuestionPage />} />
-                    </>
-                }
-                {isAdmin &&
-                    <>
-                        <Route path='/admin' element={<AdminConfigPage />} />
-                        <Route path='/admin/rules' element={<AdminConfigPage />} />
-                        <Route path='/admin/user-ctrl' element={<AdminUserCtrlPage />} />
-                    </>
-                }
+                        {isAdmin &&
+                            <>
+                                <Route path='/admin' element={<AdminConfigPage />} />
+                                <Route path='/admin/rules' element={<AdminConfigPage />} />
+                                <Route path='/admin/user-ctrl' element={<AdminUserCtrlPage />} />
+                            </>
+                        }
 
+                    </>
+                }
                 <Route path='/error' element={<ErrorPage />} />
                 <Route path="*" element={<Navigate to="/error" />} />
             </Routes>
