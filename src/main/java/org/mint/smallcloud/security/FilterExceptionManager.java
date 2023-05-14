@@ -24,6 +24,8 @@ public class FilterExceptionManager {
     private final ObjectMapper objectMapper;
 
     public void addException(HttpServletRequest request, Exception exception) {
+        if (request.getAttribute(ATTRIBUTE_NAME) != null)
+            return;
         request.setAttribute(ATTRIBUTE_NAME, exception);
     }
 
