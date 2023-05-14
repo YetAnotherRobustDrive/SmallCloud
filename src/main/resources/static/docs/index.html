@@ -472,12 +472,12 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code data-lang="http" class="language-http hljs">POST /auth/register HTTP/1.1
-Content-Type: application/json
+Content-Type: application/json;charset=UTF-8
 Accept: application/json
-Content-Length: 48
+Content-Length: 46
 Host: localhost:8080
 
-{"name":"testName","id":"test1","password":"pw"}</code></pre>
+{"name":"안녕","id":"test1","password":"pw"}</code></pre>
 </div>
 </div>
 </div>
@@ -546,7 +546,7 @@ X-Frame-Options: DENY</code></pre>
 Vary: Origin
 Vary: Access-Control-Request-Method
 Vary: Access-Control-Request-Headers
-Content-Type: application/json
+Content-Type: application/json;charset=UTF-8
 X-Content-Type-Options: nosniff
 X-XSS-Protection: 1; mode=block
 Cache-Control: no-cache, no-store, max-age=0, must-revalidate
@@ -571,6 +571,39 @@ Content-Length: 87
 </tr>
 </table>
 </div>
+<div class="sect4">
+<h5 id="_실패_http_response"><a class="link" href="#_실패_http_response">HTTP response</a></h5>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight nowrap"><code data-lang="http" class="language-http hljs">HTTP/1.1 400 Bad Request
+Vary: Origin
+Vary: Access-Control-Request-Method
+Vary: Access-Control-Request-Headers
+Content-Type: application/json;charset=UTF-8
+X-Content-Type-Options: nosniff
+X-XSS-Protection: 1; mode=block
+Cache-Control: no-cache, no-store, max-age=0, must-revalidate
+Pragma: no-cache
+Expires: 0
+X-Frame-Options: DENY
+Content-Length: 118
+
+{"password":"비밀번호는 15이하로 작성해 주세요","id":"아이디는 15자 이하로 작성해 주세요"}</code></pre>
+</div>
+</div>
+</div>
+<div class="admonitionblock important">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-important" title="Important"></i>
+</td>
+<td class="content">
+Payload값이 적절하지 않음
+</td>
+</tr>
+</table>
+</div>
 </div>
 </div>
 <div class="sect2">
@@ -582,12 +615,12 @@ Content-Length: 87
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code data-lang="http" class="language-http hljs">POST /auth/login HTTP/1.1
-Content-Type: application/json
+Content-Type: application/json;charset=UTF-8
 Accept: application/json
-Content-Length: 30
+Content-Length: 31
 Host: localhost:8080
 
-{"id":"user1","password":"pw"}</code></pre>
+{"id":"user1","password":"pw1"}</code></pre>
 </div>
 </div>
 </div>
@@ -631,7 +664,7 @@ Host: localhost:8080
 Vary: Origin
 Vary: Access-Control-Request-Method
 Vary: Access-Control-Request-Headers
-Content-Type: application/json
+Content-Type: application/json;charset=UTF-8
 X-Content-Type-Options: nosniff
 X-XSS-Protection: 1; mode=block
 Cache-Control: no-cache, no-store, max-age=0, must-revalidate
@@ -640,7 +673,7 @@ Expires: 0
 X-Frame-Options: DENY
 Content-Length: 373
 
-{"grantType":"Bearer","accessToken":"eyJ0b2tlblR5cGUiOiJBQ0NFU1MiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ1c2VyMSIsInJvbGUiOiJDT01NT04iLCJleHAiOjE2ODM2OTM3NDd9.NKvO67Vlz0_aj1y93muQ-si-IlQrOaObJrZVQxXzicA","refreshToken":"eyJ0b2tlblR5cGUiOiJSRUZSRVNIIiwiYWxnIjoiSFMyNTYifQ.eyJzdWIiOiJ1c2VyMSIsInJvbGUiOiJDT01NT04iLCJleHAiOjE2ODM5NTExNDd9.DavODzh14gupvMrZz72DifB2wTdF-BGLaDgE7pP62ik"}</code></pre>
+{"grantType":"Bearer","accessToken":"eyJ0b2tlblR5cGUiOiJBQ0NFU1MiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ1c2VyMSIsInJvbGUiOiJDT01NT04iLCJleHAiOjE2ODQwNzIxMDV9.cbMME9z9Hg08Ew4ese3RK56CtG_lzmXSVTY4pH0qHCY","refreshToken":"eyJ0b2tlblR5cGUiOiJSRUZSRVNIIiwiYWxnIjoiSFMyNTYifQ.eyJzdWIiOiJ1c2VyMSIsInJvbGUiOiJDT01NT04iLCJleHAiOjE2ODQzMjk1MDV9.3xwMxLHtY3HTiGO5hpSe6iumqilNdHCsbhBcUwt-D0Y"}</code></pre>
 </div>
 </div>
 </div>
@@ -654,7 +687,7 @@ Content-Length: 373
 Vary: Origin
 Vary: Access-Control-Request-Method
 Vary: Access-Control-Request-Headers
-Content-Type: application/json
+Content-Type: application/json;charset=UTF-8
 X-Content-Type-Options: nosniff
 X-XSS-Protection: 1; mode=block
 Cache-Control: no-cache, no-store, max-age=0, must-revalidate
@@ -687,7 +720,7 @@ Content-Length: 80
 Vary: Origin
 Vary: Access-Control-Request-Method
 Vary: Access-Control-Request-Headers
-Content-Type: application/json
+Content-Type: application/json;charset=UTF-8
 X-Content-Type-Options: nosniff
 X-XSS-Protection: 1; mode=block
 Cache-Control: no-cache, no-store, max-age=0, must-revalidate
@@ -712,6 +745,39 @@ Content-Length: 88
 </tr>
 </table>
 </div>
+<div class="sect5">
+<h6 id="_실패_2_http_response"><a class="link" href="#_실패_2_http_response">HTTP response</a></h6>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight nowrap"><code data-lang="http" class="language-http hljs">HTTP/1.1 400 Bad Request
+Vary: Origin
+Vary: Access-Control-Request-Method
+Vary: Access-Control-Request-Headers
+Content-Type: application/json;charset=UTF-8
+X-Content-Type-Options: nosniff
+X-XSS-Protection: 1; mode=block
+Cache-Control: no-cache, no-store, max-age=0, must-revalidate
+Pragma: no-cache
+Expires: 0
+X-Frame-Options: DENY
+Content-Length: 119
+
+{"password":"비밀번호는 15이하로 작성해 주세요","id":"아이디는 영어나 숫자만 가능합니다."}</code></pre>
+</div>
+</div>
+</div>
+<div class="admonitionblock important">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-important" title="Important"></i>
+</td>
+<td class="content">
+Payload 값이 적절하지 않음
+</td>
+</tr>
+</table>
+</div>
 </div>
 </div>
 </div>
@@ -724,7 +790,7 @@ Content-Length: 88
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code data-lang="http" class="language-http hljs">GET /auth/refresh HTTP/1.1
-Authorization: Bearer eyJ0b2tlblR5cGUiOiJSRUZSRVNIIiwiYWxnIjoiSFMyNTYifQ.eyJzdWIiOiJ0ZXN0MSIsInJvbGUiOiJDT01NT04iLCJleHAiOjE2ODM5NTExNDd9.5a1QOLCq9ipM-KzVIktjOGJWt9rGP9WYkIPAjXyARH4
+Authorization: Bearer eyJ0b2tlblR5cGUiOiJSRUZSRVNIIiwiYWxnIjoiSFMyNTYifQ.eyJzdWIiOiJ0ZXN0MSIsInJvbGUiOiJDT01NT04iLCJleHAiOjE2ODQzMjk1MDV9.NQXWroaFWg-mRW_sfmXToaFlC0hhD9skojbijfMEAlU
 Host: localhost:8080</code></pre>
 </div>
 </div>
@@ -740,7 +806,7 @@ Host: localhost:8080</code></pre>
 Vary: Origin
 Vary: Access-Control-Request-Method
 Vary: Access-Control-Request-Headers
-Content-Type: application/json
+Content-Type: application/json;charset=UTF-8
 X-Content-Type-Options: nosniff
 X-XSS-Protection: 1; mode=block
 Cache-Control: no-cache, no-store, max-age=0, must-revalidate
@@ -749,7 +815,7 @@ Expires: 0
 X-Frame-Options: DENY
 Content-Length: 170
 
-{"result":"eyJ0b2tlblR5cGUiOiJBQ0NFU1MiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ0ZXN0MSIsInJvbGUiOiJDT01NT04iLCJleHAiOjE2ODM2OTM3NDd9.lJxuYka46P7YFG1d61t8xhyqtbB6DCI9FU3FwJEBuLQ"}</code></pre>
+{"result":"eyJ0b2tlblR5cGUiOiJBQ0NFU1MiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ0ZXN0MSIsInJvbGUiOiJDT01NT04iLCJleHAiOjE2ODQwNzIxMDV9.20UhmVb4p-vAp4O7ftHzUTT7pmjdN2SpULTML-HDm8I"}</code></pre>
 </div>
 </div>
 </div>
@@ -764,7 +830,7 @@ Content-Length: 170
 Vary: Origin
 Vary: Access-Control-Request-Method
 Vary: Access-Control-Request-Headers
-Content-Type: application/json
+Content-Type: application/json;charset=UTF-8
 X-Content-Type-Options: nosniff
 X-XSS-Protection: 1; mode=block
 Cache-Control: no-cache, no-store, max-age=0, must-revalidate
@@ -800,13 +866,13 @@ refresh 토큰이 잘못되었을 때
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code data-lang="http" class="language-http hljs">POST /auth/elevate HTTP/1.1
-Content-Type: application/json
-Authorization: Bearer eyJ0b2tlblR5cGUiOiJBQ0NFU1MiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ1c2VyMSIsInJvbGUiOiJDT01NT04iLCJleHAiOjE2ODM2OTM3NDd9.NKvO67Vlz0_aj1y93muQ-si-IlQrOaObJrZVQxXzicA
+Content-Type: application/json;charset=UTF-8
+Authorization: Bearer eyJ0b2tlblR5cGUiOiJBQ0NFU1MiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ1c2VyMSIsInJvbGUiOiJDT01NT04iLCJleHAiOjE2ODQwNzIxMDR9.2rjM7OEao4M1n88fniOD0oKWHnwoJwhgQY2Q1mN8Ncw
 Accept: application/json
-Content-Length: 17
+Content-Length: 18
 Host: localhost:8080
 
-{"password":"pw"}</code></pre>
+{"password":"pw1"}</code></pre>
 </div>
 </div>
 </div>
@@ -821,7 +887,7 @@ Host: localhost:8080
 Vary: Origin
 Vary: Access-Control-Request-Method
 Vary: Access-Control-Request-Headers
-Content-Type: application/json
+Content-Type: application/json;charset=UTF-8
 X-Content-Type-Options: nosniff
 X-XSS-Protection: 1; mode=block
 Cache-Control: no-cache, no-store, max-age=0, must-revalidate
@@ -830,7 +896,7 @@ Expires: 0
 X-Frame-Options: DENY
 Content-Length: 381
 
-{"grantType":"Bearer","accessToken":"eyJ0b2tlblR5cGUiOiJBQ0NFU1MiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ1c2VyMSIsInJvbGUiOiJQUklWSUxFR0UiLCJleHAiOjE2ODM2OTM3NDd9.oRyIHep_qtAO0Eoi1Fl6nGAAbhhMFPGGTBxiBwuS2VM","refreshToken":"eyJ0b2tlblR5cGUiOiJSRUZSRVNIIiwiYWxnIjoiSFMyNTYifQ.eyJzdWIiOiJ1c2VyMSIsInJvbGUiOiJQUklWSUxFR0UiLCJleHAiOjE2ODM3MDI3NDd9.DXnejD0r-6C_lz8kicKRYSD5nBHzsBRfYeqLaYxFRBM"}</code></pre>
+{"grantType":"Bearer","accessToken":"eyJ0b2tlblR5cGUiOiJBQ0NFU1MiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ1c2VyMSIsInJvbGUiOiJQUklWSUxFR0UiLCJleHAiOjE2ODQwNzIxMDR9.FdyFwW8bx-8LnfdtVhcPVBE1t5m7WEilFvY98Yba_mk","refreshToken":"eyJ0b2tlblR5cGUiOiJSRUZSRVNIIiwiYWxnIjoiSFMyNTYifQ.eyJzdWIiOiJ1c2VyMSIsInJvbGUiOiJQUklWSUxFR0UiLCJleHAiOjE2ODQwODExMDR9.-SVJJ4mhE1JrxVxPRwaOGCKnvd9w1TL8eAWI0OcUsPE"}</code></pre>
 </div>
 </div>
 </div>
@@ -845,7 +911,7 @@ Content-Length: 381
 Vary: Origin
 Vary: Access-Control-Request-Method
 Vary: Access-Control-Request-Headers
-Content-Type: application/json
+Content-Type: application/json;charset=UTF-8
 X-Content-Type-Options: nosniff
 X-XSS-Protection: 1; mode=block
 Cache-Control: no-cache, no-store, max-age=0, must-revalidate
@@ -878,7 +944,7 @@ Content-Length: 80
 Vary: Origin
 Vary: Access-Control-Request-Method
 Vary: Access-Control-Request-Headers
-Content-Type: application/json;charset=utf-8
+Content-Type: application/json;charset=UTF-8
 X-Content-Type-Options: nosniff
 X-XSS-Protection: 1; mode=block
 Cache-Control: no-cache, no-store, max-age=0, must-revalidate
@@ -914,7 +980,7 @@ Content-Length: 88
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code data-lang="http" class="language-http hljs">POST /auth/deregister HTTP/1.1
-Authorization: Bearer eyJ0b2tlblR5cGUiOiJBQ0NFU1MiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ1c2VyMSIsInJvbGUiOiJQUklWSUxFR0UiLCJleHAiOjE2ODM2OTM3NDd9.oRyIHep_qtAO0Eoi1Fl6nGAAbhhMFPGGTBxiBwuS2VM
+Authorization: Bearer eyJ0b2tlblR5cGUiOiJBQ0NFU1MiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ1c2VyMSIsInJvbGUiOiJQUklWSUxFR0UiLCJleHAiOjE2ODQwNzIxMDV9.DtyoDoe6iolbl5h9i4iymYd5g2htipcrV7NpF6NI6xM
 Accept: application/json
 Host: localhost:8080</code></pre>
 </div>
@@ -951,7 +1017,7 @@ X-Frame-Options: DENY</code></pre>
 Vary: Origin
 Vary: Access-Control-Request-Method
 Vary: Access-Control-Request-Headers
-Content-Type: application/json;charset=utf-8
+Content-Type: application/json;charset=UTF-8
 X-Content-Type-Options: nosniff
 X-XSS-Protection: 1; mode=block
 Cache-Control: no-cache, no-store, max-age=0, must-revalidate
@@ -987,7 +1053,7 @@ Content-Length: 74
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code data-lang="http" class="language-http hljs">GET /auth/privileged HTTP/1.1
-Authorization: Bearer eyJ0b2tlblR5cGUiOiJBQ0NFU1MiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ0ZXN0MSIsInJvbGUiOiJQUklWSUxFR0UiLCJleHAiOjE2ODM2OTM3NDd9.WPkQpMSxmX1sbxs2YJR4ul45KvGZ-e8d6ULB60YQu8Q
+Authorization: Bearer eyJ0b2tlblR5cGUiOiJBQ0NFU1MiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ0ZXN0MSIsInJvbGUiOiJQUklWSUxFR0UiLCJleHAiOjE2ODQwNzIxMDR9.XHNgKjtQrqs8qv5xKi47Dg1s4rZ_fbx2pmWUwz4kWdY
 Host: localhost:8080</code></pre>
 </div>
 </div>
@@ -1003,7 +1069,7 @@ Host: localhost:8080</code></pre>
 Vary: Origin
 Vary: Access-Control-Request-Method
 Vary: Access-Control-Request-Headers
-Content-Type: application/json
+Content-Type: application/json;charset=UTF-8
 X-Content-Type-Options: nosniff
 X-XSS-Protection: 1; mode=block
 Cache-Control: no-cache, no-store, max-age=0, must-revalidate
@@ -1036,7 +1102,7 @@ Content-Length: 15
 Vary: Origin
 Vary: Access-Control-Request-Method
 Vary: Access-Control-Request-Headers
-Content-Type: application/json
+Content-Type: application/json;charset=UTF-8
 X-Content-Type-Options: nosniff
 X-XSS-Protection: 1; mode=block
 Cache-Control: no-cache, no-store, max-age=0, must-revalidate
@@ -1069,7 +1135,7 @@ Content-Length: 16
 <div id="footer">
 <div id="footer-text">
 Version 0.0.1-SNAPSHOT<br>
-Last updated 2023-05-10 12:06:14 +0900
+Last updated 2023-05-14 20:24:43 +0900
 </div>
 </div>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.15.6/styles/github.min.css">
