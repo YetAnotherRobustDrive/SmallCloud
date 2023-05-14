@@ -8,6 +8,7 @@ import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
+import javax.validation.ConstraintViolationException;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -23,10 +24,9 @@ public class ExceptionController {
             .body(e.getStatus());
     }
 
-    @ExceptionHandler(MethodArgumentNotValidException.class)
+    @ExceptionHandler({MethodArgumentNotValidException.class})
     public ResponseEntity<Map<String, String>> handleValidationExceptions(
         MethodArgumentNotValidException ex) {
-        log.debug("called handleValidationExceptions");
         Map<String, String> errors = new HashMap<>();
         ex.getBindingResult().getAllErrors().forEach((error) -> {
             String fieldName = ((FieldError) error).getField();
@@ -37,4 +37,21 @@ public class ExceptionController {
             .status(HttpStatus.BAD_REQUEST)
             .body(errors);
     }
+
+    @ExceptionHandler({ConstraintViolationException.class})
+    public ResponseEntity<Map<String, String>> handleValidationExceptions(
+        ConstraintViolationException ex) {
+        Map<String, String> errors = new HashMap<>();
+        ex.getConstraintViolations()
+            .forEach(e -> {
+                String fullFieldName = e.getPropertyPath().toString();
+                String fieldName = fullFieldName.substring(fullFieldName.lastIndexOf('.') + 1);
+                String errorMessage = e.getMessage();
+                errors.put(fieldName, errorMessage);
+            });
+        return ResponseEntity
+            .status(HttpStatus.BAD_REQUEST)
+            .body(errors);
+    }
+
 }
