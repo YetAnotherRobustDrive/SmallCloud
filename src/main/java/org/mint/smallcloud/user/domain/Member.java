@@ -36,8 +36,8 @@ public class Member {
     @Column(name = "CHANGED_PASSWORD_DATE")
     private LocalDateTime changedPasswordDate;
 
-    @Column(name = "IS_LOCKED")
-    private boolean isLocked = false;
+    @Column(name = "lOCKED")
+    private boolean locked = false;
 
     @Column(name = "PROFILE_IMAGE_LOCATION")
     private FileLocation profileImageLocation = null;
@@ -104,11 +104,11 @@ public class Member {
     }
 
     public void unlock() {
-        isLocked = false;
+        locked = false;
     }
 
     public void lock() {
-        isLocked = true;
+        locked = true;
     }
 
     public void setUsername(String username) {
