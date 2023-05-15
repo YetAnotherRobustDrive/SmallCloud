@@ -36,7 +36,7 @@ public class UserController {
     }
 
     @Secured({Roles.S_ADMIN, Roles.S_PRIVILEGE})
-    @PostMapping("/users/{username}/update")
+    @PostMapping("/{username}/update")
     public void update(
         @UserNameValidation @PathVariable("username") String username,
         @Valid @RequestBody UserProfileRequestDto userProfileDto) {

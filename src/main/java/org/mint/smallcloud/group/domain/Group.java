@@ -61,6 +61,10 @@ public class Group {
         return new Group(name, member, parent);
     }
 
+    public static Group of(String name) {
+        return new Group(name, null, null);
+    }
+
     @Override
     public boolean equals(Object obj) {
         if (obj == this) return true;
