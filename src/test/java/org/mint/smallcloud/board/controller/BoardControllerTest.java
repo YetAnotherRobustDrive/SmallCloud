@@ -88,26 +88,43 @@ class BoardControllerTest {
                 fieldWithPath("content").description("사용자 질문의 내용을 담고 있습니다."),
                 fieldWithPath("contact").description("사용자의 연락처를 담고 있습니다."),
                 fieldWithPath("writer").description("글의 작성자를 담고 있습니다."));
-        BoardDto boardDto =
+        BoardDto securedBoardDto =
                 BoardDto.builder()
                         .content("testContent")
                         .contact("testContact")
                         .writer("testWriter")
                         .build();
 
-        BoardDto boardDto1 =
+        BoardDto boardDto =
                 BoardDto.builder()
                         .content("testContent1")
                         .contact("testContact1")
                         .build();
 
-        this.mockMvc.perform(TestSnippet.securePost(url, memberToken.getAccessToken(), objectMapper, boardDto))
-                .andExpect(status().isOk())
-                .andDo(document("Register Inquiry",payload));
+        BoardDto notContactBoardDto =
+                BoardDto.builder()
+                        .contact("testContact1")
+                        .build();
 
-        this.mockMvc.perform(TestSnippet.post(url, objectMapper, boardDto1))
+        // 정상적 1:1 문의 등록
+        this.mockMvc.perform(TestSnippet.securePost(url, memberToken.getAccessToken(), objectMapper, securedBoardDto))
                 .andExpect(status().isOk())
-                .andDo(document("Register Inquiry",payload));
+                .andDo(document("OneToOneRegisterInquiry",payload));
+
+        // 정상적 로그인 문의 등록
+        this.mockMvc.perform(TestSnippet.post(url, objectMapper, boardDto))
+                .andExpect(status().isOk())
+                .andDo(document("LoginRegisterInquiry",payload));
+
+        // 연락처가 없음 - 로그인 문의 등록
+        this.mockMvc.perform(TestSnippet.post(url, objectMapper, notContactBoardDto))
+                .andExpect(status().isNoContent())
+                .andDo(document("NoContactInquiry",payload));
+
+        // 잘못된 토큰 - 1:1 문의 등록
+        this.mockMvc.perform(TestSnippet.securePost(url, "testWrongToken", objectMapper, securedBoardDto))
+                .andExpect(status().isBadRequest())
+                .andDo(document("WrongTokenSaveInquiry",payload));
     }
 
 
@@ -139,6 +156,10 @@ class BoardControllerTest {
                 .andExpect(jsonPath("$.[1].content").value(findBoard.get(1).getContent()))
                 .andExpect(jsonPath("$.[1].contact").value(findBoard.get(1).getContact()))
                 .andDo(document("GetAllInquiries"));
+
+        this.mockMvc.perform(TestSnippet.secureGet(url, adminToken.getAccessToken()))
+                .andExpect(status().isOk())
+                .andDo(document("CannotFindAllBoardContent"));
     }
 
     @Test
@@ -169,7 +190,18 @@ class BoardControllerTest {
                 .andExpect(status().isOk())
                 .andExpect(jsonPath(expectByContent, 0).value(findBoard.get().getContent()))
                 .andExpect(jsonPath(expectByContact, 0).value(findBoard.get().getContact()))
-                .andDo(print())
                 .andDo(document("GetInquiry"));
+
+        this.mockMvc.perform(TestSnippet.secureGet(url,adminToken.getAccessToken()))
+                .andExpect(status().isBadRequest())
+                .andExpect(jsonPath(expectByContent, 2).value(findBoard.get().getContent()))
+                .andExpect(jsonPath(expectByContact, 2).value(findBoard.get().getContact()))
+                .andDo(document("CannotFindInquiry"));
+
+        this.mockMvc.perform(TestSnippet.secureGet(url, "testWrongToken"))
+                .andExpect(status().isBadRequest())
+                .andExpect(jsonPath(expectByContent, 0).value(findBoard.get().getContent()))
+                .andExpect(jsonPath(expectByContact, 0).value(findBoard.get().getContact()))
+                .andDo(document("WrongTokenGetInquiry"));
     }
 }
