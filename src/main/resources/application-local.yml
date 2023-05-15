@@ -9,7 +9,7 @@ spring:
     password: mypassword
   jpa:
     hibernate:
-      ddl-auto: create
+      ddl-auto: create-drop
     database-platform: org.hibernate.dialect.MariaDB103Dialect
 
 jwt:
