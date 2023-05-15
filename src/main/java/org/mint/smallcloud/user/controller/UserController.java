@@ -11,6 +11,8 @@ import org.springframework.security.access.annotation.Secured;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
+
 @RestController
 @RequestMapping("/users")
 @RequiredArgsConstructor
@@ -29,7 +31,7 @@ public class UserController {
 
     @Secured({Roles.S_ADMIN})
     @PostMapping
-    public void register(@RequestBody RegisterDto registerDto) {
+    public void register(@Valid @RequestBody RegisterDto registerDto) {
         memberFacadeService.register(registerDto);
     }
 
@@ -37,7 +39,7 @@ public class UserController {
     @PostMapping("/users/{username}/update")
     public void update(
         @UserNameValidation @PathVariable("username") String username,
-        @RequestBody UserProfileRequestDto userProfileDto) {
+        @Valid @RequestBody UserProfileRequestDto userProfileDto) {
         memberFacadeService.update(username, userProfileDto);
     }
 
