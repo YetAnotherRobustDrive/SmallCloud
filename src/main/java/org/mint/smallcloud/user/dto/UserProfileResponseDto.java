@@ -17,7 +17,7 @@ public class UserProfileResponseDto {
     private String nickname;
     private LocalDateTime joinedDate;
     private LocalDateTime changedPasswordDate;
-    private boolean isLocked;
+    private boolean locked;
     @JsonUnwrapped
     private FileLocation profileImageLocation;
     private Role role;

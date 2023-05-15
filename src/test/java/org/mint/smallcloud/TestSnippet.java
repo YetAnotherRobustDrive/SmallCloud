@@ -37,6 +37,12 @@ public class TestSnippet {
             .header(AUTH_NAME, AUTH_VALUE_PREFIX + token);
     }
 
+    public static MockHttpServletRequestBuilder secured(MockHttpServletRequestBuilder request, String token) {
+        return request
+            .header(AUTH_NAME, AUTH_VALUE_PREFIX + token)
+            .accept(MediaType.APPLICATION_JSON);
+    }
+
     public static MockHttpServletRequestBuilder withSecurePost(String url, String userId, ObjectMapper objectMapper, Object dto, String... roles) throws JsonProcessingException {
         return RestDocumentationRequestBuilders.post(url)
             .content(objectMapper.writeValueAsString(dto))

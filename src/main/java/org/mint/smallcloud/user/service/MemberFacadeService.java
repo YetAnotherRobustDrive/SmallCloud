@@ -38,12 +38,12 @@ public class MemberFacadeService {
     }
 
     public UserProfileResponseDto profile(String username) {
-        Member member = memberThrowerService.getMemberByUsername(username);
+        UserProfileResponseDto rst = memberService.getProfile(username);
         try {
             authThrowerService.checkLoginMember(username);
         } catch (ServiceException e) {
             authThrowerService.checkLoginAdmin();
         }
-        return memberService.getProfile(username);
+        return rst;
     }
 }
