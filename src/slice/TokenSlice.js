@@ -1,4 +1,5 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
+import { PURGE } from "redux-persist";
 import IsAdminToken from "../services/token/IsAdminToken";
 import IsPrivilegedToken from "../services/token/IsPrivilegedToken";
 
@@ -16,19 +17,22 @@ const asyncCheckAdmin = createAsyncThunk(
     }
 )
 
+const initialState = {
+    isPrivileged: false,
+    isAdmin: false,
+}
+
 const tokenSlice = createSlice({
     name: 'token',
-    initialState: {
-        isPrivileged: false,
-        isAdmin: false,
-    },
+    initialState,
     extraReducers: (builder) => {
         builder.addCase(asyncCheckPrivilege.fulfilled, (state, action) => {
             state.isPrivileged = action.payload;
-        })
+        });
         builder.addCase(asyncCheckAdmin.fulfilled, (state, action) => {
             state.isAdmin = action.payload;
-        })
+        });
+        builder.addCase(PURGE, () => initialState);
     }
 })
 

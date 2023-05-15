@@ -1,4 +1,5 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
+import { PURGE } from "redux-persist";
 import GetUserInfo from "../services/user/GetUserInfo";
 
 const asyncGetUserInfo = createAsyncThunk(
@@ -8,11 +9,13 @@ const asyncGetUserInfo = createAsyncThunk(
     }
 )
 
+const initialState = {
+    isLoggedIn: false,
+}
+
 const userSlice = createSlice({
     name: 'user',
-    initialState: {
-        isLoggedIn: false,
-    },
+    initialState,
     reducers:{
         setIsLoggedIn: (state, action) => {
             state.isLoggedIn = true;
@@ -22,7 +25,8 @@ const userSlice = createSlice({
     extraReducers: (builder) => {
         builder.addCase(asyncGetUserInfo.fulfilled, (state, action) => {
             state.nickname = action.payload;
-        })
+        });
+        builder.addCase(PURGE, () => initialState);
     }
 })
 
