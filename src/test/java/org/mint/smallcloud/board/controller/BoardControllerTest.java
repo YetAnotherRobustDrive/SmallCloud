@@ -103,7 +103,7 @@ class BoardControllerTest {
 
         BoardDto notContactBoardDto =
                 BoardDto.builder()
-                        .contact("testContact1")
+                        .content("testContent1")
                         .build();
 
         // 정상적 1:1 문의 등록
@@ -118,7 +118,7 @@ class BoardControllerTest {
 
         // 연락처가 없음 - 로그인 문의 등록
         this.mockMvc.perform(TestSnippet.post(url, objectMapper, notContactBoardDto))
-                .andExpect(status().isNoContent())
+                .andExpect(status().isNotFound())
                 .andDo(document("NoContactInquiry",payload));
 
         // 잘못된 토큰 - 1:1 문의 등록
