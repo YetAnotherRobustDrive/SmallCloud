@@ -193,7 +193,7 @@ class UserControllerTest {
                 .andDo(document("UserRegisterDuplicated"));
         }
     }
-   
+
     /* TODO: update, profile */
 
 

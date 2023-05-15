@@ -1,4 +1,4 @@
-FROM gradle:jdk18
+FROM openjdk:11
 
 WORKDIR /app
 
