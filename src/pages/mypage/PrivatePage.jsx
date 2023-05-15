@@ -25,7 +25,7 @@ export default function PrivatePage() {
                 <EditableColumn
                     title="ID"
                     value="TEST"
-                    onSubmit={(e) => { console.log(e) }}
+                    onSubmit={(e) => { console.log(e) }}//todo
                 />
                 <EditableColumn
                     title="NAME"

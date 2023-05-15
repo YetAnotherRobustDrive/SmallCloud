@@ -40,8 +40,8 @@ export default function QuestionPage() {
             return;
         }
 
-        try {
-            const res = await fetch(configData.API_SERVER + 'auth/login', model);//todo
+        try {//todo
+            const res = await fetch(configData.API_SERVER + 'auth/login', model);
             const data = await res.json();
             if (!res.ok) {
                 throw data;

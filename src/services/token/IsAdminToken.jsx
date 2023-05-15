@@ -1,7 +1,8 @@
 import configData from "../../config/config.json"
 import RefreshToken from "./RefreshToken";
 
-export default async function IsAdminToken() {//stub
+//todo
+export default async function IsAdminToken() {
     await RefreshToken();
 
     try {

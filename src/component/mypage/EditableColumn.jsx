@@ -3,7 +3,7 @@ import '../../css/mypage.css'
 
 export default function EditableColumn(props) {
 
-    const handleSubmit = (e) => {
+    const handleSubmit = (e) => {//todo
         e.preventDefault();
         const inputData = new FormData(e.target);
         const value = Object.fromEntries(inputData.entries());
