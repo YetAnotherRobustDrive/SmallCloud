@@ -66,7 +66,7 @@ public class MinioStorageService implements StorageService {
             .bucket(minioProperties.getBucketName())
             .object(objectId)
             .build();
-        GetObjectResponse res = null;
+        GetObjectResponse res;
         try {
             res = minioClient.getObject(arg);
         } catch (ErrorResponseException e) {

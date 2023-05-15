@@ -198,8 +198,6 @@ class UserControllerTest {
         }
     }
 
-    /* TODO: update, profile */
-
     @Nested
     @DisplayName("/users/{username}/update docs")
     class update {
@@ -216,7 +214,7 @@ class UserControllerTest {
                 .username("abc")
                 .nickname("def")
                 .groupName("group1")
-                .profileImageLocation(FileLocation.of("abc"))
+                .profileImageLocation(FileLocation.of("testLocation"))
                 .build();
         }
 
@@ -246,26 +244,64 @@ class UserControllerTest {
 
         @DisplayName("권한 없는 요청")
         @Test
-        void unauthorized() {
-
+        void unauthorized() throws Exception {
+            mockMvc.perform(TestSnippet.secured(post(url, member1.getUsername()), memberToken.getAccessToken(), objectMapper, userProfileRequestDto))
+                .andExpect(status().isForbidden())
+                .andDo(document("UserUpdateUnauthorized"));
         }
 
         @DisplayName("잘못된 포멧의 요청")
         @Test
-        void wrongFormat() {
-
+        void wrongFormat() throws Exception {
+            userProfileRequestDto = UserProfileRequestDto.builder()
+                .username("wfoijfijefwijifzzzeijfejfeiwfwj")
+                .groupName("feiweaaafjiowefiewfiowefiwefiwefi")
+                .profileImageLocation(null)
+                .build();
+            mockMvc.perform(TestSnippet.secured(post(url, member1.getUsername()), adminToken.getAccessToken(), objectMapper, userProfileRequestDto))
+                .andExpect(status().isBadRequest())
+                .andDo(document("UserUpdateWrongFormat"));
         }
 
         @DisplayName("없는 유저")
         @Test
-        void notFoundUser() {
+        void notFoundUser() throws Exception {
+            userProfileRequestDto = UserProfileRequestDto.builder()
+                .username("abc")
+                .groupName("abc")
+                .profileImageLocation(null)
+                .build();
+            mockMvc.perform(TestSnippet.secured(post(url, "abc"), adminToken.getAccessToken(), objectMapper, userProfileRequestDto))
+                .andExpect(status().isForbidden())
+                .andDo(document("UserUpdateNotFoundUser"));
+        }
 
+        @DisplayName("중복된 username")
+        @Test
+        void duplicatedName() throws Exception {
+            Member member = Member.of("abc", "pw", "nick");
+            em.persist(member);
+            em.flush();
+            userProfileRequestDto = UserProfileRequestDto.builder()
+                .username("abc")
+                .groupName("group1")
+                .profileImageLocation(null)
+                .build();
+            mockMvc.perform(TestSnippet.secured(post(url, member1.getUsername()), adminToken.getAccessToken(), objectMapper, userProfileRequestDto))
+                .andExpect(status().isForbidden())
+                .andDo(document("UserUpdateDuplicated"));
         }
 
         @DisplayName("없는 그룹")
         @Test
-        void notFoundGroup() {
-
+        void notFoundGroup() throws Exception {
+            userProfileRequestDto = UserProfileRequestDto.builder()
+                .username(member1.getUsername())
+                .groupName("abc")
+                .build();
+            mockMvc.perform(TestSnippet.secured(post(url, member1.getUsername()), adminToken.getAccessToken(), objectMapper, userProfileRequestDto))
+                .andExpect(status().isForbidden())
+                .andDo(document("UserUpdateNotFound"));
         }
     }
 

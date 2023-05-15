@@ -59,18 +59,18 @@ public class MemberService {
     }
 
     public void updateProfile(Member member, UserProfileRequestDto userProfileDto) {
-        if (!userProfileDto.getUsername().equals(member.getUsername())) {
+        if (userProfileDto.getUsername() != null && !userProfileDto.getUsername().equals(member.getUsername())) {
             if (memberRepository.existsByUsername(userProfileDto.getUsername()))
                 throw new ServiceException(ExceptionStatus.USERNAME_ALREADY_EXISTS);
             member.setUsername(userProfileDto.getUsername());
         }
-        if (!userProfileDto.getNickname().equals(member.getUsername())) {
+        if (userProfileDto.getNickname() != null && !userProfileDto.getNickname().equals(member.getUsername())) {
             member.setNickname(userProfileDto.getNickname());
         }
-        if (!member.hasGroup() || !userProfileDto.getGroupName().equals(member.getGroupName())) {
+        if (userProfileDto.getGroupName() != null && (!member.hasGroup() || !userProfileDto.getGroupName().equals(member.getGroupName()))) {
             member.setGroup(groupThrowerService.getGroupByName(userProfileDto.getGroupName()));
         }
-        if (!userProfileDto.getProfileImageLocation().equals(member.getProfileImageLocation())) {
+        if (userProfileDto.getProfileImageLocation() != null && !userProfileDto.getProfileImageLocation().equals(member.getProfileImageLocation())) {
             /* TODO: location이 존재하는 location인지 확인하는 로직 추가 */
             member.setProfileImageLocation(member.getProfileImageLocation());
         }

@@ -680,7 +680,7 @@ Expires: 0
 X-Frame-Options: DENY
 Content-Length: 373
 
-{"grantType":"Bearer","accessToken":"eyJ0b2tlblR5cGUiOiJBQ0NFU1MiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ1c2VyMSIsInJvbGUiOiJDT01NT04iLCJleHAiOjE2ODQxMzgwOTZ9.8MlphifkZhAMsf6Yvt0AOTpEc3fVGqTGgpaF-MnkwtQ","refreshToken":"eyJ0b2tlblR5cGUiOiJSRUZSRVNIIiwiYWxnIjoiSFMyNTYifQ.eyJzdWIiOiJ1c2VyMSIsInJvbGUiOiJDT01NT04iLCJleHAiOjE2ODQzOTU0OTZ9.9KbRy4OLxSrgTxcZQjHMwQ-JPoFY9U_suBImHj3fPX4"}</code></pre>
+{"grantType":"Bearer","accessToken":"eyJ0b2tlblR5cGUiOiJBQ0NFU1MiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ1c2VyMSIsInJvbGUiOiJDT01NT04iLCJleHAiOjE2ODQxNjUxMDV9.R3elOU__QmJ7eUFD-5GYYoePlxUxhM2XUqzn-oUFJjY","refreshToken":"eyJ0b2tlblR5cGUiOiJSRUZSRVNIIiwiYWxnIjoiSFMyNTYifQ.eyJzdWIiOiJ1c2VyMSIsInJvbGUiOiJDT01NT04iLCJleHAiOjE2ODQ0MjI1MDV9.FrhRL2D6IgZkOIcGKlvh6WdBKAtDxUjQtzD7nX-J7mM"}</code></pre>
 </div>
 </div>
 </div>
@@ -767,9 +767,9 @@ Cache-Control: no-cache, no-store, max-age=0, must-revalidate
 Pragma: no-cache
 Expires: 0
 X-Frame-Options: DENY
-Content-Length: 118
+Content-Length: 119
 
-{"password":"비밀번호는 15이하로 작성해 주세요","id":"아이디는 15자 이하로 작성해 주세요"}</code></pre>
+{"password":"비밀번호는 15이하로 작성해 주세요","id":"아이디는 영어나 숫자만 가능합니다."}</code></pre>
 </div>
 </div>
 </div>
@@ -797,7 +797,7 @@ Payload 값이 적절하지 않음
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code data-lang="http" class="language-http hljs">GET /auth/refresh HTTP/1.1
-Authorization: Bearer eyJ0b2tlblR5cGUiOiJSRUZSRVNIIiwiYWxnIjoiSFMyNTYifQ.eyJzdWIiOiJ0ZXN0MSIsInJvbGUiOiJDT01NT04iLCJleHAiOjE2ODQzOTU0OTZ9.1AAWuRRVAK6aBTrhumRK-8FGM0F0CRgoL-FJAgkiRw8
+Authorization: Bearer eyJ0b2tlblR5cGUiOiJSRUZSRVNIIiwiYWxnIjoiSFMyNTYifQ.eyJzdWIiOiJ0ZXN0MSIsInJvbGUiOiJDT01NT04iLCJleHAiOjE2ODQ0MjI1MDV9.4Jake45tRT_tbJyoRc-AvJ53mYZqmg2nihi8uH8IhcM
 Host: localhost:8080</code></pre>
 </div>
 </div>
@@ -822,7 +822,7 @@ Expires: 0
 X-Frame-Options: DENY
 Content-Length: 170
 
-{"result":"eyJ0b2tlblR5cGUiOiJBQ0NFU1MiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ0ZXN0MSIsInJvbGUiOiJDT01NT04iLCJleHAiOjE2ODQxMzgwOTZ9.ZPLMTlfcSvkFMVtaQmeG9wufcyf2eyhEe7vP81h-Wx4"}</code></pre>
+{"result":"eyJ0b2tlblR5cGUiOiJBQ0NFU1MiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ0ZXN0MSIsInJvbGUiOiJDT01NT04iLCJleHAiOjE2ODQxNjUxMDV9.-BqcBoy-IWjXUNOOqONudJ9pqU18-AGtimdLXtXuEZI"}</code></pre>
 </div>
 </div>
 </div>
@@ -874,7 +874,7 @@ refresh 토큰이 잘못되었을 때
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code data-lang="http" class="language-http hljs">POST /auth/elevate HTTP/1.1
 Content-Type: application/json;charset=UTF-8
-Authorization: Bearer eyJ0b2tlblR5cGUiOiJBQ0NFU1MiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ1c2VyMSIsInJvbGUiOiJDT01NT04iLCJleHAiOjE2ODQxMzgwOTV9.t1W4sitkQ-zzQNxdduGRFeXKeb7tjiQkoZRYkcWJLms
+Authorization: Bearer eyJ0b2tlblR5cGUiOiJBQ0NFU1MiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ1c2VyMSIsInJvbGUiOiJDT01NT04iLCJleHAiOjE2ODQxNjUxMDR9.viWHkQD3SHT48xdXvTkLSjJASLySuLq3Q6BJ7GUkTN4
 Accept: application/json
 Content-Length: 18
 Host: localhost:8080
@@ -903,7 +903,7 @@ Expires: 0
 X-Frame-Options: DENY
 Content-Length: 381
 
-{"grantType":"Bearer","accessToken":"eyJ0b2tlblR5cGUiOiJBQ0NFU1MiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ1c2VyMSIsInJvbGUiOiJQUklWSUxFR0UiLCJleHAiOjE2ODQxMzgwOTV9.DbDmePq4tHIrojhWgG85AeAcjzkR2Qe97acyrd1GKG4","refreshToken":"eyJ0b2tlblR5cGUiOiJSRUZSRVNIIiwiYWxnIjoiSFMyNTYifQ.eyJzdWIiOiJ1c2VyMSIsInJvbGUiOiJQUklWSUxFR0UiLCJleHAiOjE2ODQxNDcwOTV9.gKeUWP7tt_NNLGDRF6342EklotNCKfGTojTGCG4rHSE"}</code></pre>
+{"grantType":"Bearer","accessToken":"eyJ0b2tlblR5cGUiOiJBQ0NFU1MiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ1c2VyMSIsInJvbGUiOiJQUklWSUxFR0UiLCJleHAiOjE2ODQxNjUxMDR9.HL_jTbtS-isHikvEpLJy1wzdPuQBVt5xV0lDXUpo0uQ","refreshToken":"eyJ0b2tlblR5cGUiOiJSRUZSRVNIIiwiYWxnIjoiSFMyNTYifQ.eyJzdWIiOiJ1c2VyMSIsInJvbGUiOiJQUklWSUxFR0UiLCJleHAiOjE2ODQxNzQxMDR9.lJXuv_UtWhLs_f6AyrFhtoVvDK06afcO9s-Rv1nJcII"}</code></pre>
 </div>
 </div>
 </div>
@@ -987,7 +987,7 @@ Content-Length: 88
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code data-lang="http" class="language-http hljs">POST /auth/deregister HTTP/1.1
-Authorization: Bearer eyJ0b2tlblR5cGUiOiJBQ0NFU1MiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ1c2VyMSIsInJvbGUiOiJQUklWSUxFR0UiLCJleHAiOjE2ODQxMzgwOTV9.DbDmePq4tHIrojhWgG85AeAcjzkR2Qe97acyrd1GKG4
+Authorization: Bearer eyJ0b2tlblR5cGUiOiJBQ0NFU1MiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ1c2VyMSIsInJvbGUiOiJQUklWSUxFR0UiLCJleHAiOjE2ODQxNjUxMDR9.HL_jTbtS-isHikvEpLJy1wzdPuQBVt5xV0lDXUpo0uQ
 Accept: application/json
 Host: localhost:8080</code></pre>
 </div>
@@ -1060,7 +1060,7 @@ Content-Length: 74
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code data-lang="http" class="language-http hljs">GET /auth/privileged HTTP/1.1
-Authorization: Bearer eyJ0b2tlblR5cGUiOiJBQ0NFU1MiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ0ZXN0MSIsInJvbGUiOiJQUklWSUxFR0UiLCJleHAiOjE2ODQxMzgwOTV9.LucNNjIdztTUGvhe1RY4tyfMtq26ScE-r87XmgLTAvo
+Authorization: Bearer eyJ0b2tlblR5cGUiOiJBQ0NFU1MiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ0ZXN0MSIsInJvbGUiOiJQUklWSUxFR0UiLCJleHAiOjE2ODQxNjUxMDR9.hrhuW4stO-ChqX0D7TmdZxLvG5l8Eb_akCT9X8iib3Y
 Host: localhost:8080</code></pre>
 </div>
 </div>
@@ -1148,7 +1148,7 @@ Content-Length: 16
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code data-lang="http" class="language-http hljs">POST /users/user1/delete HTTP/1.1
-Authorization: Bearer eyJ0b2tlblR5cGUiOiJBQ0NFU1MiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhZG1pbiIsInJvbGUiOiJBRE1JTiIsImV4cCI6MTY4NDEzODA5Nn0.UeTIgyPQCpZAuodWp0qcNnVbEQTLmUo7tBYYWooznxg
+Authorization: Bearer eyJ0b2tlblR5cGUiOiJBQ0NFU1MiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhZG1pbiIsInJvbGUiOiJBRE1JTiIsImV4cCI6MTY4NDE2NTEwNn0.89woxlhsdf-_xgz6BF-ZFRtdH-lQArUi0QeTgox1cOQ
 Accept: application/json
 Host: localhost:8080</code></pre>
 </div>
@@ -1307,7 +1307,7 @@ Content-Length: 74
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code data-lang="http" class="language-http hljs">POST /users HTTP/1.1
 Content-Type: application/json;charset=UTF-8
-Authorization: Bearer eyJ0b2tlblR5cGUiOiJBQ0NFU1MiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhZG1pbiIsInJvbGUiOiJBRE1JTiIsImV4cCI6MTY4NDEzODA5Nn0.UeTIgyPQCpZAuodWp0qcNnVbEQTLmUo7tBYYWooznxg
+Authorization: Bearer eyJ0b2tlblR5cGUiOiJBQ0NFU1MiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhZG1pbiIsInJvbGUiOiJBRE1JTiIsImV4cCI6MTY4NDE2NTEwNn0.89woxlhsdf-_xgz6BF-ZFRtdH-lQArUi0QeTgox1cOQ
 Accept: application/json
 Content-Length: 45
 Host: localhost:8080
@@ -1481,12 +1481,12 @@ Content-Length: 87
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code data-lang="http" class="language-http hljs">POST /users/user1/update HTTP/1.1
 Content-Type: application/json;charset=UTF-8
-Authorization: Bearer eyJ0b2tlblR5cGUiOiJBQ0NFU1MiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhZG1pbiIsInJvbGUiOiJBRE1JTiIsImV4cCI6MTY4NDEzODA5Nn0.UeTIgyPQCpZAuodWp0qcNnVbEQTLmUo7tBYYWooznxg
+Authorization: Bearer eyJ0b2tlblR5cGUiOiJBQ0NFU1MiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhZG1pbiIsInJvbGUiOiJBRE1JTiIsImV4cCI6MTY4NDE2NTEwNX0.j9E4gUk1VkDD1PpWhJlC4tEG6LoEpUJsSHJO0nLtouQ
 Accept: application/json
-Content-Length: 73
+Content-Length: 82
 Host: localhost:8080
 
-{"username":"abc","nickname":"def","location":"abc","groupName":"group1"}</code></pre>
+{"username":"abc","nickname":"def","location":"testLocation","groupName":"group1"}</code></pre>
 </div>
 </div>
 </div>
@@ -1571,6 +1571,174 @@ X-Frame-Options: DENY</code></pre>
 </div>
 </div>
 </div>
+<div class="sect3">
+<h4 id="_실패_8"><a class="link" href="#_실패_8">실패</a></h4>
+<div class="sect4">
+<h5 id="_실패_8_http_response"><a class="link" href="#_실패_8_http_response">HTTP response</a></h5>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight nowrap"><code data-lang="http" class="language-http hljs">HTTP/1.1 403 Forbidden
+Vary: Origin
+Vary: Access-Control-Request-Method
+Vary: Access-Control-Request-Headers
+Content-Type: application/json;charset=UTF-8
+X-Content-Type-Options: nosniff
+X-XSS-Protection: 1; mode=block
+Cache-Control: no-cache, no-store, max-age=0, must-revalidate
+Pragma: no-cache
+Expires: 0
+X-Frame-Options: DENY
+Content-Length: 74
+
+{"statusCode":403,"message":"권한이 없습니다.","error":"Forbidden"}</code></pre>
+</div>
+</div>
+</div>
+<div class="admonitionblock important">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-important" title="Important"></i>
+</td>
+<td class="content">
+권한이 없을 때
+</td>
+</tr>
+</table>
+</div>
+<div class="sect4">
+<h5 id="_실패_8_http_response"><a class="link" href="#_실패_8_http_response">HTTP response</a></h5>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight nowrap"><code data-lang="http" class="language-http hljs">HTTP/1.1 400 Bad Request
+Vary: Origin
+Vary: Access-Control-Request-Method
+Vary: Access-Control-Request-Headers
+Content-Type: application/json;charset=UTF-8
+X-Content-Type-Options: nosniff
+X-XSS-Protection: 1; mode=block
+Cache-Control: no-cache, no-store, max-age=0, must-revalidate
+Pragma: no-cache
+Expires: 0
+X-Frame-Options: DENY
+Content-Length: 120
+
+{"groupName":"이름 15자 이하로 작성해 주세요","username":"아이디는 15자 이하로 작성해 주세요"}</code></pre>
+</div>
+</div>
+</div>
+<div class="admonitionblock important">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-important" title="Important"></i>
+</td>
+<td class="content">
+payload가 올바르지 않을 때
+</td>
+</tr>
+</table>
+</div>
+<div class="sect4">
+<h5 id="_실패_8_http_response"><a class="link" href="#_실패_8_http_response">HTTP response</a></h5>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight nowrap"><code data-lang="http" class="language-http hljs">HTTP/1.1 403 Forbidden
+Vary: Origin
+Vary: Access-Control-Request-Method
+Vary: Access-Control-Request-Headers
+Content-Type: application/json;charset=UTF-8
+X-Content-Type-Options: nosniff
+X-XSS-Protection: 1; mode=block
+Cache-Control: no-cache, no-store, max-age=0, must-revalidate
+Pragma: no-cache
+Expires: 0
+X-Frame-Options: DENY
+Content-Length: 88
+
+{"statusCode":403,"message":"아이디를 찾을 수 없습니다.","error":"Forbidden"}</code></pre>
+</div>
+</div>
+</div>
+<div class="admonitionblock important">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-important" title="Important"></i>
+</td>
+<td class="content">
+유저를 찾을 수 없을 때
+</td>
+</tr>
+</table>
+</div>
+<div class="sect4">
+<h5 id="_실패_8_http_response"><a class="link" href="#_실패_8_http_response">HTTP response</a></h5>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight nowrap"><code data-lang="http" class="language-http hljs">HTTP/1.1 403 Forbidden
+Vary: Origin
+Vary: Access-Control-Request-Method
+Vary: Access-Control-Request-Headers
+Content-Type: application/json;charset=UTF-8
+X-Content-Type-Options: nosniff
+X-XSS-Protection: 1; mode=block
+Cache-Control: no-cache, no-store, max-age=0, must-revalidate
+Pragma: no-cache
+Expires: 0
+X-Frame-Options: DENY
+Content-Length: 87
+
+{"statusCode":403,"message":"아이디가 이미 존재합니다.","error":"Forbidden"}</code></pre>
+</div>
+</div>
+</div>
+<div class="admonitionblock important">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-important" title="Important"></i>
+</td>
+<td class="content">
+중복된 유저 등록
+</td>
+</tr>
+</table>
+</div>
+<div class="sect4">
+<h5 id="_실패_8_http_response"><a class="link" href="#_실패_8_http_response">HTTP response</a></h5>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight nowrap"><code data-lang="http" class="language-http hljs">HTTP/1.1 403 Forbidden
+Vary: Origin
+Vary: Access-Control-Request-Method
+Vary: Access-Control-Request-Headers
+Content-Type: application/json;charset=UTF-8
+X-Content-Type-Options: nosniff
+X-XSS-Protection: 1; mode=block
+Cache-Control: no-cache, no-store, max-age=0, must-revalidate
+Pragma: no-cache
+Expires: 0
+X-Frame-Options: DENY
+Content-Length: 109
+
+{"statusCode":403,"message":"해당 이름을 가진 그룹을 찾을 수 없습니다.","error":"Forbidden"}</code></pre>
+</div>
+</div>
+</div>
+<div class="admonitionblock important">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-important" title="Important"></i>
+</td>
+<td class="content">
+그룹을 찾을 수 없을 때
+</td>
+</tr>
+</table>
+</div>
+</div>
 </div>
 </div>
 </div>
@@ -1578,7 +1746,7 @@ X-Frame-Options: DENY</code></pre>
 <div id="footer">
 <div id="footer-text">
 Version 0.0.1-SNAPSHOT<br>
-Last updated 2023-05-15 13:33:28 +0900
+Last updated 2023-05-16 00:07:55 +0900
 </div>
 </div>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.15.6/styles/github.min.css">
