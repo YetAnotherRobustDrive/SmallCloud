@@ -111,6 +111,14 @@ public class Member {
         locked = true;
     }
 
+    public boolean hasGroup() {
+        return group != null;
+    }
+
+    public String getGroupName() {
+        return group == null ? null : group.getName();
+    }
+
     public void setUsername(String username) {
         this.username = username;
     }

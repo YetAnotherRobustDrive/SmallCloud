@@ -1,5 +1,6 @@
 package org.mint.smallcloud.validation;
 
+
 import javax.validation.Constraint;
 import javax.validation.Payload;
 import javax.validation.constraints.Pattern;
@@ -14,8 +15,8 @@ import java.lang.annotation.Target;
 @Pattern(regexp = "^[ㄱ-ㅎㅏ-ㅣ가-힣a-zA-Z0-9]+", message = "이름은 영어나 숫자나 한글만 가능합니다.")
 @Target({ElementType.FIELD, ElementType.PARAMETER})
 @Retention(RetentionPolicy.RUNTIME)
-public @interface NicknameValidation {
-    String message() default "닉네임이 올바르지 않습니다.";
+public @interface GroupNameValidation {
+    String message() default "그룹이름이 올바르지 않습니다.";
 
     Class<?>[] groups() default {};
 
