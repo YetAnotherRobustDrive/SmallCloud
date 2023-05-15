@@ -131,20 +131,26 @@ class UserControllerTest {
                 .andDo(document("UserDeleteNotUser"));
         }
     }
-    
+
     @Nested
     @DisplayName("/users docs")
     class register {
-        private String url = URL_PREFIX;
+        private final String url = URL_PREFIX;
+        private RegisterDto registerDto;
 
-        @DisplayName("정상 요청")
-        @Test
-        public void find() throws Exception {
-            RegisterDto registerDto = RegisterDto.builder()
+        @BeforeEach
+        public void boot() {
+            registerDto = RegisterDto.builder()
                 .id("user2")
                 .password("pw2")
                 .name("name")
                 .build();
+        }
+
+        @DisplayName("정상 요청")
+        @Test
+        public void find() throws Exception {
+
             mockMvc.perform(TestSnippet.securePost(url, adminToken.getAccessToken(), objectMapper, registerDto))
                 .andExpect(status().isOk())
                 .andDo(document("UserRegister", requestFields(
@@ -152,6 +158,43 @@ class UserControllerTest {
                     fieldWithPath("name").description("user nickname"),
                     fieldWithPath("password").description("user password"))));
         }
+
+        @DisplayName("유저가 잘못된 접근")
+        @Test
+        public void unauthorized() throws Exception {
+            mockMvc.perform(TestSnippet.securePost(url, memberToken.getAccessToken(), objectMapper, registerDto))
+                .andExpect(status().isForbidden())
+                .andDo(document("UserRegisterUnauthorized"));
+        }
+
+        @DisplayName("잘못된 요청 포멧")
+        @Test
+        public void wrongFormat() throws Exception {
+            registerDto = RegisterDto.builder()
+                .name("fdsajklfjkldsajklfjslkdjfaklj")
+                .password("fldajsklfjdsklajflkdsajflkdsajfldsj")
+                .id("아아아아아아")
+                .build();
+            mockMvc.perform(TestSnippet.securePost(url, adminToken.getAccessToken(), objectMapper, registerDto))
+                .andExpect(status().isBadRequest())
+                .andDo(document("UserRegisterWrongFormat"));
+        }
+
+        @DisplayName("존재하는 유저 등록 요청")
+        @Test
+        public void duplicate() throws Exception {
+            registerDto = RegisterDto.builder()
+                .name(member1.getNickname())
+                .id(member1.getUsername())
+                .password(member1.getPassword())
+                .build();
+            mockMvc.perform(TestSnippet.securePost(url, adminToken.getAccessToken(), objectMapper, registerDto))
+                .andExpect(status().isForbidden())
+                .andDo(document("UserRegisterDuplicated"));
+        }
     }
+   
+    /* TODO: update, profile */
+
 
 }
