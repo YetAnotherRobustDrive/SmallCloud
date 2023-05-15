@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.mint.smallcloud.exception.ExceptionStatus;
 import org.mint.smallcloud.exception.ServiceException;
+import org.mint.smallcloud.group.service.GroupThrowerService;
 import org.mint.smallcloud.security.dto.LoginDto;
 import org.mint.smallcloud.security.dto.UserDetailsDto;
 import org.mint.smallcloud.user.domain.Member;
@@ -21,6 +22,7 @@ public class MemberService {
 
     private final MemberThrowerService memberThrowerService;
     private final MemberRepository memberRepository;
+    private final GroupThrowerService groupThrowerService;
     private final UserMapper userMapper;
 
     public UserDetailsDto getUserDetails(String username) {
@@ -65,10 +67,8 @@ public class MemberService {
         if (!userProfileDto.getNickname().equals(member.getUsername())) {
             member.setNickname(userProfileDto.getNickname());
         }
-        if (!userProfileDto.getGroupName().equals(member.getGroup().getName())) {
-            /* TODO: group이 존재하는 group인지 확인하는 로직 추가 */
-            /* TODO: group 변경 추가 */
-            member.setGroup(null);
+        if (!member.hasGroup() || !userProfileDto.getGroupName().equals(member.getGroupName())) {
+            member.setGroup(groupThrowerService.getGroupByName(userProfileDto.getGroupName()));
         }
         if (!userProfileDto.getProfileImageLocation().equals(member.getProfileImageLocation())) {
             /* TODO: location이 존재하는 location인지 확인하는 로직 추가 */
