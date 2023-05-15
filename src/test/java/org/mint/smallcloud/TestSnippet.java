@@ -37,8 +37,16 @@ public class TestSnippet {
             .header(AUTH_NAME, AUTH_VALUE_PREFIX + token);
     }
 
-    public static MockHttpServletRequestBuilder secured(MockHttpServletRequestBuilder request, String token) {
+    public static MockHttpServletRequestBuilder secured(MockHttpServletRequestBuilder request, String token) throws JsonProcessingException {
         return request
+            .header(AUTH_NAME, AUTH_VALUE_PREFIX + token)
+            .accept(MediaType.APPLICATION_JSON);
+    }
+
+    public static MockHttpServletRequestBuilder secured(MockHttpServletRequestBuilder request, String token, ObjectMapper objectMapper, Object dto) throws JsonProcessingException {
+        return request
+            .content(objectMapper.writeValueAsString(dto))
+            .contentType(MediaType.APPLICATION_JSON)
             .header(AUTH_NAME, AUTH_VALUE_PREFIX + token)
             .accept(MediaType.APPLICATION_JSON);
     }

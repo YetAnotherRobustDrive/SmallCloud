@@ -7,11 +7,14 @@ import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mint.smallcloud.TestSnippet;
+import org.mint.smallcloud.file.domain.FileLocation;
+import org.mint.smallcloud.group.domain.Group;
 import org.mint.smallcloud.security.dto.UserDetailsDto;
 import org.mint.smallcloud.security.jwt.dto.JwtTokenDto;
 import org.mint.smallcloud.security.jwt.tokenprovider.JwtTokenProvider;
 import org.mint.smallcloud.user.domain.Member;
 import org.mint.smallcloud.user.dto.RegisterDto;
+import org.mint.smallcloud.user.dto.UserProfileRequestDto;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -26,6 +29,7 @@ import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.transaction.Transactional;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.documentationConfiguration;
@@ -196,5 +200,48 @@ class UserControllerTest {
 
     /* TODO: update, profile */
 
+    @Nested
+    @DisplayName("/users/{username}/update docs")
+    class update {
+        private final String url = URL_PREFIX + "/{username}/update";
+        private UserProfileRequestDto userProfileRequestDto;
+        private Group group1;
 
+        @BeforeEach
+        public void boot() {
+            group1 = Group.of("group1");
+            em.persist(group1);
+            em.flush();
+            userProfileRequestDto = UserProfileRequestDto.builder()
+                .username("abc")
+                .nickname("def")
+                .groupName("group1")
+                .profileImageLocation(FileLocation.of("abc"))
+                .build();
+        }
+
+
+        @DisplayName("정상 요청")
+        @Test
+        public void fine() throws Exception {
+            mockMvc.perform(TestSnippet.secured(post(url, member1.getUsername()), adminToken.getAccessToken(), objectMapper, userProfileRequestDto))
+                .andExpect(status().isOk())
+                .andExpect((rst) -> {
+                    Member member = em.find(Member.class, member1.getId());
+                    assertEquals(member.getUsername(), userProfileRequestDto.getUsername());
+                    assertEquals(member.getNickname(), userProfileRequestDto.getNickname());
+                    assertEquals(member.getGroupName(), userProfileRequestDto.getGroupName());
+                })
+                .andDo(document("UserUpdate",
+                    requestFields(
+                        fieldWithPath("username").description("바꾸려는 id"),
+                        fieldWithPath("nickname").description("바꾸려는 nickname"),
+                        fieldWithPath("groupName").description("바꾸려는 group의 이름"),
+                        fieldWithPath("location").description("프로필 이미지 위치")
+                    ),
+                    pathParameters(
+                        parameterWithName("username").description("바꾸려고 하는 유저의 id")
+                    )));
+        }
+    }
 }

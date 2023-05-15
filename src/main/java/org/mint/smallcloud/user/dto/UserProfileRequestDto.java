@@ -5,6 +5,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import org.mint.smallcloud.file.domain.FileLocation;
+import org.mint.smallcloud.validation.GroupNameValidation;
 import org.mint.smallcloud.validation.NicknameValidation;
 import org.mint.smallcloud.validation.UserNameValidation;
 
@@ -18,5 +19,6 @@ public class UserProfileRequestDto {
     private String nickname;
     @JsonUnwrapped
     private FileLocation profileImageLocation;
+    @GroupNameValidation
     private String groupName;
 }
