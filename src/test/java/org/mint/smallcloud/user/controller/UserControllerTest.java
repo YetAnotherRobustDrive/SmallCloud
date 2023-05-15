@@ -295,6 +295,5 @@ class UserControllerTest {
         void notValidUser() {
 
         }
-        
     }
 }
