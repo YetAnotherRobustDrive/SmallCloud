@@ -243,5 +243,58 @@ class UserControllerTest {
                         parameterWithName("username").description("바꾸려고 하는 유저의 id")
                     )));
         }
+
+        @DisplayName("권한 없는 요청")
+        @Test
+        void unauthorized() {
+
+        }
+
+        @DisplayName("잘못된 포멧의 요청")
+        @Test
+        void wrongFormat() {
+
+        }
+
+        @DisplayName("없는 유저")
+        @Test
+        void notFoundUser() {
+
+        }
+
+        @DisplayName("없는 그룹")
+        @Test
+        void notFoundGroup() {
+
+        }
+    }
+
+    @Nested
+    @DisplayName("/{username} docs")
+    class Profile {
+        @DisplayName("정상 요청")
+        @Test
+        void fine() {
+
+        }
+
+        @DisplayName("권한없는 요청")
+        @Test
+        void unauthorized() {
+
+        }
+
+        @DisplayName("존재하지 않는 유저")
+        @Test
+        void notFoundUser() {
+
+        }
+
+        @DisplayName("잘못된 유저 포멧")
+        @Test
+        void notValidUser() {
+
+        }
+        
     }
 }
