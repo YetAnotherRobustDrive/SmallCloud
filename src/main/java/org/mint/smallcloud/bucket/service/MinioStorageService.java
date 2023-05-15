@@ -9,6 +9,7 @@ import org.mint.smallcloud.bucket.exception.DownloadException;
 import org.mint.smallcloud.bucket.exception.RemoveException;
 import org.mint.smallcloud.bucket.exception.StorageSettingException;
 import org.mint.smallcloud.bucket.exception.UploadException;
+import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Service;
 
 import java.io.InputStream;
@@ -16,6 +17,7 @@ import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor
+@Profile("local")
 public class MinioStorageService implements StorageService {
 
     private final MinioClient minioClient;

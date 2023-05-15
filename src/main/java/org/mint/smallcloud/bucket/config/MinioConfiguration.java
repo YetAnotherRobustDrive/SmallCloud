@@ -8,9 +8,11 @@ import org.mint.smallcloud.bucket.service.CustomMinioProperties;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Profile;
 
 @Configuration
 @RequiredArgsConstructor
+@Profile("local")
 public class MinioConfiguration {
     private final CustomMinioProperties minioProperties;
 
