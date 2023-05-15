@@ -5,23 +5,27 @@ import configData from "../../config/config.json"
 import "../../css/login.css"
 import "../../css/modal.css"
 import ModalOk from "../../component/modal/ModalOk";
+import { useDispatch } from "react-redux";
+import { setIsLoggedIn } from "../../slice/UserSlice";
 
 export default function LoginPage() {
 
     const [name, setName] = useState();
-
     const [isEmpty, setIsEmpty] = useState(false);
     const [isFail, setIsFail] = useState(false);
-    const [isSuccess, setIsSuccess] = useState(false);
+    const [loginInfo, setLoginInfo] = useState({isSuccess: false, id: ''});
     const [message, setMessage] = useState("로그인 에러");
     const navigate = useNavigate();
+
+    const dispath = useDispatch();
 
     function getName() {
         setName(configData.NAME);
     }
 
     const afterSuccess = () => {
-        setIsSuccess(false);
+        dispath(setIsLoggedIn(loginInfo.id));
+        setLoginInfo({isSuccess: false, id: ''});
         navigate('/');
     }
 
@@ -51,7 +55,8 @@ export default function LoginPage() {
             }
             localStorage.setItem("accessToken", data.accessToken); //성공
             localStorage.setItem("refreshToken", data.refreshToken);
-            setIsSuccess(true);
+            
+            setLoginInfo({isSuccess: true, id: inputData.get("id")});
             return;
         } catch (e) {
             if (e.message != undefined) setMessage(e.message)
@@ -72,7 +77,7 @@ export default function LoginPage() {
 
             {isFail && <ModalOk close={() => setIsFail(false)}>{message}</ModalOk>}
             {isEmpty && <ModalOk close={() => setIsEmpty(false)}>{"입력하지 않은 값이 있습니다."}</ModalOk>}
-            {isSuccess && <ModalOk close={afterSuccess}>{"로그인 성공"}</ModalOk>}
+            {loginInfo.isSuccess && <ModalOk close={afterSuccess}>{"로그인 성공"}</ModalOk>}
         </form>
     )
 }

@@ -13,7 +13,7 @@ export default function ModalOk(props) {
 
     const modalStyle = {
         content: {
-            top: '10%',
+            top: '20%',
             left: '50%',
             right: 'auto',
             bottom: 'auto',

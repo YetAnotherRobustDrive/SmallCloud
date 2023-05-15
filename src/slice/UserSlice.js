@@ -1,25 +1,35 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
-import IsPrivilegedToken from "../services/token/IsPrivilegedToken";
+import { PURGE } from "redux-persist";
+import GetUserInfo from "../services/user/GetUserInfo";
 
-const asyncSetPrivilege = createAsyncThunk(
-    'userSlice/asyncSetPrivilege',
+const asyncGetUserInfo = createAsyncThunk(
+    'tokenSlice/asyncGetUserInfo',
     async () => {
-        return await IsPrivilegedToken();
+        return await GetUserInfo();
     }
 )
 
+const initialState = {
+    isLoggedIn: false,
+}
+
 const userSlice = createSlice({
     name: 'user',
-    initialState: {
-        isPrivileged: false,
-        nickname: 'Error...',
+    initialState,
+    reducers:{
+        setIsLoggedIn: (state, action) => {
+            state.isLoggedIn = true;
+            state.loginID = action.payload;
+        }
     },
     extraReducers: (builder) => {
-        builder.addCase(asyncSetPrivilege.fulfilled, (state, action) => {
-            state.isPrivileged = action.payload;
-        })
+        builder.addCase(asyncGetUserInfo.fulfilled, (state, action) => {
+            state.nickname = action.payload;
+        });
+        builder.addCase(PURGE, () => initialState);
     }
 })
 
 export default userSlice;
-export { asyncSetPrivilege }
+export const { setIsLoggedIn } = userSlice.actions;
+export {asyncGetUserInfo}

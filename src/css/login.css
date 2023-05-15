@@ -67,6 +67,7 @@
     width: 100%;
     font-size: large;
     padding: 10px;
+    resize: none;
 }
 
 .askAdditional {
