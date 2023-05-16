@@ -22,7 +22,8 @@ public enum ExceptionStatus {
     NO_PERMISSION(HttpStatus.FORBIDDEN, "권한이 없습니다."),
     INTERNAL_SERVER_ERROR(HttpStatus.INTERNAL_SERVER_ERROR, "internal server error."),
     NOT_REFRESH_TOKEN(HttpStatus.FORBIDDEN, "refresh토큰이 아닙니다."),
-    NOT_FOUND_INQUIRY(HttpStatus.FORBIDDEN, "문의가 존재하지 않습니다.");
+    NOT_FOUND_GROUP_NAME(HttpStatus.FORBIDDEN, "해당 이름을 가진 그룹을 찾을 수 없습니다."),
+    FILE_NOT_FOUND(HttpStatus.FORBIDDEN, "해당 경로에 파일이 없습니다.");
 
     ExceptionStatus(HttpStatus status, String message) {
         responseDto = ErrorResponseDto.builder()
