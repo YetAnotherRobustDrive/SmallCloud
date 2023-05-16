@@ -10,8 +10,10 @@ import org.mint.smallcloud.user.domain.Roles;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.annotation.Secured;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.util.List;
 import java.util.Optional;
 
@@ -20,6 +22,7 @@ import java.util.Optional;
 @RequestMapping("/inquiries")
 @Slf4j
 @RequiredArgsConstructor
+@Validated
 public class BoardController {
 
     private final BoardService boardService;
@@ -38,7 +41,7 @@ public class BoardController {
     }
 
     @PostMapping
-    public ResponseEntity<?> save(@RequestBody BoardDto boardDto) {
+    public ResponseEntity<?> save(@Valid @RequestBody BoardDto boardDto) {
 
         Optional<UserDetails> authentication = userDetailsProvider.getUserDetails();
         BoardDto boardDto1 = BoardDto.builder()

@@ -34,8 +34,8 @@ public class Board {
      * boardType == question,
      * writer != null -> 1:1문의
      */
-//    @ManyToOne
-//    @JoinColumn(name = "board")
+//    @ManyToOne(targetEntity = Member.class)
+//    @JoinColumn(name = "id")
 //    private Member writer;
 
     @Column(name = "WRITER")

@@ -118,7 +118,7 @@ class BoardControllerTest {
 
         // 연락처가 없음 - 로그인 문의 등록
         this.mockMvc.perform(TestSnippet.post(url, objectMapper, notContactBoardDto))
-                .andExpect(status().isNotFound())
+                .andExpect(status().isBadRequest())
                 .andDo(document("NoContactInquiry",payload));
 
         // 잘못된 토큰 - 1:1 문의 등록
@@ -193,7 +193,7 @@ class BoardControllerTest {
                 .andDo(document("GetInquiry"));
 
         this.mockMvc.perform(TestSnippet.secureGet(url,adminToken.getAccessToken()))
-                .andExpect(status().isBadRequest())
+                .andExpect(status().isForbidden())
                 .andExpect(jsonPath(expectByContent, 2).value(findBoard.get().getContent()))
                 .andExpect(jsonPath(expectByContact, 2).value(findBoard.get().getContact()))
                 .andDo(document("CannotFindInquiry"));
@@ -202,6 +202,7 @@ class BoardControllerTest {
                 .andExpect(status().isBadRequest())
                 .andExpect(jsonPath(expectByContent, 0).value(findBoard.get().getContent()))
                 .andExpect(jsonPath(expectByContact, 0).value(findBoard.get().getContact()))
+
                 .andDo(document("WrongTokenGetInquiry"));
     }
 }
