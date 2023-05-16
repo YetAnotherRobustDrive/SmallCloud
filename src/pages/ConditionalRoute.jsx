@@ -22,6 +22,7 @@ import MyPage from './mypage/MyPage';
 import PrivatePage from './mypage/PrivatePage';
 import SecurityInfoPage from './mypage/SecurityInfoPage';
 import ServiceInfoPage from './mypage/ServiceInfoPage';
+import AdminPage from './admin/AdminPage';
 
 export default () => {
     const isPrivileged = useSelector(state => state.token.isPrivileged);
@@ -53,7 +54,10 @@ export default () => {
                         <Route path='/cs/terms' element={<TermsPage />} />
                         <Route path='/cs/faq' element={<FaqPage />} />
                         <Route path='/cs/question' element={<QuestionPage />} />
-                        {true &&//todo
+                        {!isAdmin &&
+                            <Route path='/admin' element={<AdminPage />} />
+                        }
+                        {isAdmin &&
                             <>
                                 <Route path='/admin' element={<AdminConfigPage />} />
                                 <Route path='/admin/rules' element={<AdminConfigPage />} />
