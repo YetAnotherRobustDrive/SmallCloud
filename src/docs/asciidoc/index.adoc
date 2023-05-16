@@ -198,3 +198,25 @@ IMPORTANT: 중복된 유저 등록
 operation::UserUpdateNotFound[snippets='http-response']
 
 IMPORTANT: 그룹을 찾을 수 없을 때
+
+=== 프로필 조회 (profile)
+
+operation::UserProfile[snippets='http-request,path-parameters']
+
+==== 성공
+
+operation::UserProfile[snippets='http-response']
+
+==== 실패
+
+operation::UserProfileUnauthorized[snippets='http-response']
+
+IMPORTANT: 권한이 없을 때
+
+operation::UserProfileNotFoundUser[snippets='http-response']
+
+IMPORTANT: 유저를 찾을 수 없을 때
+
+operation::UserProfileNotValidUser[snippets='http-response']
+
+IMPORTANT: 유저 아이디가 유효하지 않을 때
