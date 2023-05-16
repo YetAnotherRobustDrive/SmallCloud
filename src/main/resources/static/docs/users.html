@@ -447,7 +447,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <div class="listingblock">
 <div class="content">
 <pre class="highlight nowrap"><code class="language-http" data-lang="http">POST /users/user1/delete HTTP/1.1
-Authorization: Bearer eyJ0b2tlblR5cGUiOiJBQ0NFU1MiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhZG1pbiIsInJvbGUiOiJBRE1JTiIsImV4cCI6MTY4NDIzNDgxNX0.2xtYiKYYchcuzWJ0hDQZiemTNGr6iYYTgln0BvEMOZI
+Authorization: Bearer eyJ0b2tlblR5cGUiOiJBQ0NFU1MiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhZG1pbiIsInJvbGUiOiJBRE1JTiIsImV4cCI6MTY4NDIwNjA2Mn0.zhPvp94BFkPAkePgknVz4-Zwim4XBqZAj1dkHr84_Qk
 Accept: application/json
 Host: localhost:8080</code></pre>
 </div>
@@ -606,7 +606,7 @@ Content-Length: 74
 <div class="content">
 <pre class="highlight nowrap"><code class="language-http" data-lang="http">POST /users HTTP/1.1
 Content-Type: application/json;charset=UTF-8
-Authorization: Bearer eyJ0b2tlblR5cGUiOiJBQ0NFU1MiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhZG1pbiIsInJvbGUiOiJBRE1JTiIsImV4cCI6MTY4NDIzNDgxNX0.2xtYiKYYchcuzWJ0hDQZiemTNGr6iYYTgln0BvEMOZI
+Authorization: Bearer eyJ0b2tlblR5cGUiOiJBQ0NFU1MiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhZG1pbiIsInJvbGUiOiJBRE1JTiIsImV4cCI6MTY4NDIwNjA2MX0.wZhbpfcL7ziT2xI8wz2Py73xcXZZrKD0p9_dVzBG5gc
 Accept: application/json
 Content-Length: 45
 Host: localhost:8080
@@ -780,12 +780,12 @@ Content-Length: 87
 <div class="content">
 <pre class="highlight nowrap"><code class="language-http" data-lang="http">POST /users/user1/update HTTP/1.1
 Content-Type: application/json;charset=UTF-8
-Authorization: Bearer eyJ0b2tlblR5cGUiOiJBQ0NFU1MiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhZG1pbiIsInJvbGUiOiJBRE1JTiIsImV4cCI6MTY4NDIzNDgxNX0.2xtYiKYYchcuzWJ0hDQZiemTNGr6iYYTgln0BvEMOZI
+Authorization: Bearer eyJ0b2tlblR5cGUiOiJBQ0NFU1MiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhZG1pbiIsInJvbGUiOiJBRE1JTiIsImV4cCI6MTY4NDIwNjA2MX0.wZhbpfcL7ziT2xI8wz2Py73xcXZZrKD0p9_dVzBG5gc
 Accept: application/json
-Content-Length: 61
+Content-Length: 82
 Host: localhost:8080
 
-{"username":"abc","nickname":"def","location":"testLocation"}</code></pre>
+{"username":"abc","nickname":"def","location":"testLocation","groupName":"group1"}</code></pre>
 </div>
 </div>
 </div>
@@ -814,6 +814,11 @@ Host: localhost:8080
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>nickname</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">바꾸려는 nickname</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>groupName</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">바꾸려는 group의 이름</p></td>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>location</code></p></td>
@@ -915,9 +920,9 @@ Cache-Control: no-cache, no-store, max-age=0, must-revalidate
 Pragma: no-cache
 Expires: 0
 X-Frame-Options: DENY
-Content-Length: 63
+Content-Length: 120
 
-{"username":"아이디는 15자 이하로 작성해 주세요"}</code></pre>
+{"groupName":"이름 15자 이하로 작성해 주세요","username":"아이디는 15자 이하로 작성해 주세요"}</code></pre>
 </div>
 </div>
 </div>
@@ -1041,7 +1046,7 @@ Content-Length: 109
 <div class="listingblock">
 <div class="content">
 <pre class="highlight nowrap"><code class="language-http" data-lang="http">GET /users/user1 HTTP/1.1
-Authorization: Bearer eyJ0b2tlblR5cGUiOiJBQ0NFU1MiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhZG1pbiIsInJvbGUiOiJBRE1JTiIsImV4cCI6MTY4NDIzNDgxNX0.2xtYiKYYchcuzWJ0hDQZiemTNGr6iYYTgln0BvEMOZI
+Authorization: Bearer eyJ0b2tlblR5cGUiOiJBQ0NFU1MiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhZG1pbiIsInJvbGUiOiJBRE1JTiIsImV4cCI6MTY4NDIwNjA2MX0.wZhbpfcL7ziT2xI8wz2Py73xcXZZrKD0p9_dVzBG5gc
 Accept: application/json
 Host: localhost:8080</code></pre>
 </div>
@@ -1086,9 +1091,9 @@ Cache-Control: no-cache, no-store, max-age=0, must-revalidate
 Pragma: no-cache
 Expires: 0
 X-Frame-Options: DENY
-Content-Length: 182
+Content-Length: 183
 
-{"username":"user1","nickname":"nickname","joinedDate":"2023-05-16T19:30:15.08258","changedPasswordDate":"2023-05-16T19:30:15.082597","locked":false,"role":"COMMON","groupName":null}</code></pre>
+{"username":"user1","nickname":"nickname","joinedDate":"2023-05-16T11:31:01.293827","changedPasswordDate":"2023-05-16T11:31:01.293841","locked":false,"role":"COMMON","groupName":null}</code></pre>
 </div>
 </div>
 </div>
@@ -1200,7 +1205,7 @@ Content-Length: 63
 <div id="footer">
 <div id="footer-text">
 Version 0.0.1-SNAPSHOT<br>
-Last updated 2023-05-16 19:14:17 +0900
+Last updated 2023-05-16 10:43:01 +0900
 </div>
 </div>
 </body>
