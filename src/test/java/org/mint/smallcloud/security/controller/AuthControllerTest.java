@@ -3,6 +3,7 @@ package org.mint.smallcloud.security.controller;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mint.smallcloud.TestSnippet;
@@ -26,6 +27,7 @@ import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
 import org.springframework.web.filter.CharacterEncodingFilter;
 
+import javax.persistence.EntityManager;
 import javax.transaction.Transactional;
 import java.util.HashMap;
 import java.util.Map;
@@ -51,6 +53,9 @@ class AuthControllerTest {
     private ObjectMapper objectMapper;
 
     @Autowired
+    private EntityManager em;
+
+    @Autowired
     private MemberRepository memberRepository;
 
     @Autowired
@@ -58,7 +63,6 @@ class AuthControllerTest {
 
     private LoginDto user1;
     private LoginDto user2;
-    private LoginDto user3;
 
     @BeforeEach
     void setUp(WebApplicationContext webApplicationContext, RestDocumentationContextProvider restDocumentation) {
@@ -78,242 +82,370 @@ class AuthControllerTest {
             .id("user2")
             .password("pw2")
             .build();
-        user3 = LoginDto.builder()
-            .id("user3")
-            .password("pw3")
-            .build();
     }
 
-    @Test
+    @Nested
     @DisplayName("/auth/register document")
-    public void register() throws Exception {
-        final String url = URL_PREFIX + "/register";
-        RequestFieldsSnippet payload = requestFields(
-            fieldWithPath("id").description("user id"),
-            fieldWithPath("name").description("user nickname"),
-            fieldWithPath("password").description("user password"));
-        RegisterDto registerDto =
+    class Register {
+        private final String url = URL_PREFIX + "/register";
+        private final RegisterDto registerDto =
             RegisterDto.builder()
                 .id("test1")
                 .name("안녕")
                 .password("pw").build();
-        RegisterDto wrongFormat =
-            RegisterDto.builder()
-                .id("ifjii9fdsafdsafdsafdsf0j9")
-                .name("안녕")
-                .password("fdsafdsafdsafdsafdsafdas")
+
+        @Test
+        @DisplayName("정상 요청")
+        public void register() throws Exception {
+            RequestFieldsSnippet payload = requestFields(
+                fieldWithPath("id").description("user id"),
+                fieldWithPath("name").description("user nickname"),
+                fieldWithPath("password").description("user password"));
+
+            mockMvc.perform(TestSnippet.post(url, objectMapper, registerDto))
+                .andExpect(status().isOk())
+                .andExpect((result) -> assertNotNull(memberRepository.findByUsername(registerDto.getId()).orElse(null)))
+                .andDo(document("Register", payload));
+        }
+
+        @DisplayName("이미 존재하는 유저")
+        @Test
+        void duplicatedUser() throws Exception {
+            em.persist(Member.of(registerDto.getId(), registerDto.getPassword(), registerDto.getName()));
+            mockMvc.perform(TestSnippet.post(url, objectMapper, registerDto))
+                .andExpect(status().isForbidden())
+                .andDo(document("RegisterFail"));
+        }
+
+        @DisplayName("잘못된 포멧으로 된 dto")
+        @Test
+        void wrongFormatDto() throws Exception {
+            RegisterDto wrongFormat =
+                RegisterDto.builder()
+                    .id("ifjii9fdsafdsafdsafdsf0j9")
+                    .name("안녕")
+                    .password("fdsafdsafdsafdsafdsafdas")
+                    .build();
+
+            mockMvc.perform(TestSnippet.post(url, objectMapper, wrongFormat))
+                .andExpect(status().isBadRequest())
+                .andDo(document("RegisterWrongFormat"));
+        }
+    }
+
+    @Nested
+    @DisplayName("/auth/login document")
+    class Login {
+        private final String url = URL_PREFIX + "/login";
+        private LoginDto wrongPasswordLoginDto1;
+
+        @BeforeEach
+        void boot() {
+            wrongPasswordLoginDto1 = LoginDto.builder()
+                .id(user1.getId())
+                .password(user1.getPassword() + "abc")
+                .build();
+            em.persist(Member.of(user1.getId(), user1.getPassword(), "nickname"));
+            em.flush();
+        }
+
+        @Test
+        @DisplayName("/auth/login document")
+        public void login() throws Exception {
+            RequestFieldsSnippet payload = requestFields(
+                fieldWithPath("id").description("user id"),
+                fieldWithPath("password").description("user password"));
+
+            mockMvc.perform(TestSnippet.post(url, objectMapper, user1))
+                .andExpect(status().isOk())
+                .andDo(document("Login", payload));
+        }
+
+        @DisplayName("등록되지 않은 유저 로그인")
+        @Test
+        void notRegistered() throws Exception {
+            mockMvc.perform(TestSnippet.post(url, objectMapper, user2))
+                .andExpect(status().isForbidden())
+                .andDo(document("NotFoundUserLogin"));
+        }
+
+        @DisplayName("패스워드가 틀림")
+        @Test
+        void wrongPassword() throws Exception {
+            mockMvc.perform(TestSnippet.post(url, objectMapper, wrongPasswordLoginDto1))
+                .andExpect(status().isForbidden())
+                .andDo(document("WrongPassword"));
+        }
+
+        @DisplayName("잘못된 포멧으로 된 dto")
+        @Test
+        void wrongFormatDto() throws Exception {
+            LoginDto notValidDto = LoginDto.builder()
+                .id("fjiowejfioewjoifjweoijf@@@ioewjofijewiofjewiojioewj")
+                .password("fjioewjifojewiofjewiojfioewjfioewjiofjwe")
                 .build();
 
-        // register 성공
-        this.mockMvc.perform(TestSnippet.post(url, objectMapper, registerDto))
-            .andExpect(status().isOk())
-            .andExpect((result) -> assertNotNull(memberRepository.findByUsername(registerDto.getId()).orElse(null)))
-            .andDo(document("Register", payload));
-
-        // 이미 존재하는 user
-        this.mockMvc.perform(TestSnippet.post(url, objectMapper, registerDto))
-            .andExpect(status().isForbidden())
-            .andDo(document("RegisterFail"));
-
-        // 잘못된 포멧으로 된 dto
-        this.mockMvc.perform(TestSnippet.post(url, objectMapper, wrongFormat))
-            .andExpect(status().isBadRequest())
-            .andDo(document("RegisterWrongFormat"));
+            mockMvc.perform(TestSnippet.post(url, objectMapper, notValidDto))
+                .andExpect(status().isBadRequest())
+                .andDo(document("NotValidLogin"));
+        }
 
     }
 
-    @Test
-    @DisplayName("/auth/login document")
-    public void login() throws Exception {
-        final String url = URL_PREFIX + "/login";
-        RequestFieldsSnippet payload = requestFields(
-            fieldWithPath("id").description("user id"),
-            fieldWithPath("password").description("user password"));
-        LoginDto wrongPasswordLoginDto1 = LoginDto.builder()
-            .id(user1.getId())
-            .password(user1.getPassword() + "abc")
-            .build();
-        LoginDto notValidDto = LoginDto.builder()
-            .id("fjiowejfioewjoifjweoijf@@@ioewjofijewiofjewiojioewj")
-            .password("fjioewjifojewiofjewiojfioewjfioewjiofjwe")
-            .build();
-        memberRepository.save(Member.of(user1.getId(),
-            user1.getPassword(), "nickname"));
-
-        // 정상적 로그인
-        this.mockMvc.perform(TestSnippet.post(url, objectMapper, user1))
-            .andExpect(status().isOk())
-            .andDo(document("Login", payload));
-
-        // 등록되지 않은 유저 로그인
-        this.mockMvc.perform(TestSnippet.post(url, objectMapper, user2))
-            .andExpect(status().isForbidden())
-            .andDo(document("NotFoundUserLogin", payload));
-
-        // 패스워드가 틀림
-        this.mockMvc.perform(TestSnippet.post(url, objectMapper, wrongPasswordLoginDto1))
-            .andExpect(status().isForbidden())
-            .andDo(document("WrongPassword", payload));
-
-        // 잘못된 포멧으로 된 dto
-        this.mockMvc.perform(TestSnippet.post(url, objectMapper, notValidDto))
-            .andExpect(status().isBadRequest())
-            .andDo(document("NotValidLogin"));
-    }
-
-    @Test
+    @Nested
     @DisplayName("/auth/elevate document")
-    public void elevate() throws Exception {
+    class Elevate {
         final String url = URL_PREFIX + "/elevate";
-        RequestFieldsSnippet payload = requestFields(
-            fieldWithPath("password").description("user password"));
-        Map<String, String> map = new HashMap<>();
-        map.put("password", user1.getPassword());
-        memberRepository.save(Member.of(user1.getId(),
-            user1.getPassword(), "nickname"));
-        JwtTokenDto token = jwtTokenProvider.generateTokenDto(
-            UserDetailsDto.builder()
-                .username(user1.getId())
-                .password(user1.getPassword())
-                .roles(Role.COMMON)
-                .disabled(false)
-                .build());
+        Map<String, String> map;
 
-        // 정상 요청
-        this.mockMvc.perform(TestSnippet.securePost(url, token.getAccessToken(), objectMapper, map))
-            .andExpect(status().isOk())
-            .andDo(document("Elevate", payload));
-        map.clear();
-        map.put("password", "123");
+        private JwtTokenDto token;
 
-        // 패스워드 잘못됨
-        this.mockMvc.perform(TestSnippet.securePost(url, token.getAccessToken(), objectMapper, map))
-            .andExpect(status().isForbidden())
-            .andDo(document("ElevateWrongPassword"));
+        @BeforeEach
+        void boot() {
+            map = new HashMap<>();
+            em.persist(Member.of(user1.getId(), user1.getPassword(), "nickname"));
+            em.flush();
+            token = jwtTokenProvider.generateTokenDto(
+                UserDetailsDto.builder()
+                    .username(user1.getId())
+                    .password(user1.getPassword())
+                    .roles(Role.COMMON)
+                    .disabled(false)
+                    .build());
+        }
 
-        // 로그인 토큰이 잘못됨
-        this.mockMvc.perform(TestSnippet.post(url, objectMapper, map))
-            .andExpect(status().isForbidden())
-            .andDo(document("ElevateUnauth"));
-
-        map.clear();
-        map.put("password", "123jfkldsajfkldjsaklfjdsalj");
-        // 패스워드 포멧이 잘못됨
-        this.mockMvc.perform(TestSnippet.post(url, objectMapper, map))
-            .andExpect(status().isBadRequest())
-            .andDo(document("ElevateTooLongPW"));
-    }
-
-    @Test
-    @DisplayName("/auth/deregister document")
-    public void deregister() throws Exception {
-        final String url = URL_PREFIX + "/deregister";
-
-        memberRepository.save(Member.of(user1.getId(),
-            user1.getPassword(), "nickname"));
-        memberRepository.save(Member.of(user2.getId(),
-            user2.getPassword(), "nickname"));
-
-        JwtTokenDto token = jwtTokenProvider.generateTokenDto(
-            UserDetailsDto.builder()
-                .username(user1.getId())
-                .password(user1.getPassword())
-                .roles(Role.COMMON)
-                .disabled(false)
-                .build());
-        Map<String, String> map = new HashMap<>();
-        map.put("password", user1.getPassword());
-        JwtTokenDto privilegeToken = objectMapper.readValue(
-            this.mockMvc.perform(TestSnippet.securePost(URL_PREFIX + "/elevate", token.getAccessToken(), objectMapper, map))
+        @DisplayName("정상 요청")
+        @Test
+        void fine() throws Exception {
+            RequestFieldsSnippet payload = requestFields(
+                fieldWithPath("password").description("user password"));
+            map.put("password", user1.getPassword());
+            mockMvc.perform(TestSnippet.securePost(url, token.getAccessToken(), objectMapper, map))
                 .andExpect(status().isOk())
-                .andReturn().getResponse().getContentAsString()
-            , JwtTokenDto.class);
+                .andDo(document("Elevate", payload));
+        }
 
-        // 정상적 요청
-        this.mockMvc.perform(TestSnippet.securePost(url, privilegeToken.getAccessToken()))
-            .andExpect(status().isOk())
-            .andExpect((rst) -> assertNull(memberRepository.findByUsername(user1.getId()).orElse(null)))
-            .andDo(document("Deregister"));
+        @DisplayName("패스워드가 틀림")
+        @Test
+        void wrongPassword() throws Exception {
+            map.put("password", user1.getPassword() + "abc");
+            mockMvc.perform(TestSnippet.securePost(url, token.getAccessToken(), objectMapper, map))
+                .andExpect(status().isForbidden())
+                .andDo(document("ElevateWrongPassword"));
+        }
 
+        @DisplayName("로그인 토큰이 잘못됨")
+        @Test
+        void wrongToken() throws Exception {
+            map.put("password", user1.getPassword());
+            mockMvc.perform(TestSnippet.post(url, objectMapper, map))
+                .andExpect(status().isForbidden())
+                .andDo(document("ElevateUnauth"));
+        }
 
-        JwtTokenDto commonToken = jwtTokenProvider.generateTokenDto(
-            UserDetailsDto.builder()
-                .username(user2.getId())
-                .password(user2.getPassword())
-                .roles(Role.COMMON)
-                .disabled(false)
-                .build());
-
-        // 삭제 권한이 없음
-        this.mockMvc.perform(TestSnippet.securePost(url, commonToken.getAccessToken()))
-            .andExpect(status().isForbidden())
-            .andDo(document("DeregisterPrivilege"));
+        @DisplayName("패스워드 포멧이 잘못됨")
+        @Test
+        void wrongFormatPassword() throws Exception {
+            map.put("password", "123jfkldsajfkldjsaklfjdsalj");
+            mockMvc.perform(TestSnippet.securePost(url, token.getAccessToken(), objectMapper, map))
+                .andExpect(status().isBadRequest())
+                .andDo(document("ElevateTooLongPW"));
+        }
     }
 
-    @Test
+    @Nested
+    @DisplayName("/auth/deregister document")
+    class Deregister {
+        private final String url = URL_PREFIX + "/deregister";
+
+        private JwtTokenDto token;
+        private Member member1;
+
+        @BeforeEach
+        void boot() {
+            member1 = Member.of(user1.getId(),
+                user1.getPassword(), "nickname");
+            em.persist(member1);
+            memberRepository.save(Member.of(user2.getId(),
+                user2.getPassword(), "nickname"));
+            em.flush();
+        }
+
+        @Test
+        @DisplayName("정상 요청")
+        void fine() throws Exception {
+            JwtTokenDto privilegeToken = jwtTokenProvider.generateTokenDto(
+                UserDetailsDto.builder()
+                    .username(user1.getId())
+                    .password(user1.getPassword())
+                    .roles(Role.PRIVILEGE)
+                    .disabled(false)
+                    .build());
+            mockMvc.perform(TestSnippet.securePost(url, privilegeToken.getAccessToken()))
+                .andExpect(status().isOk())
+                .andExpect((rst) -> assertNull(em.find(Member.class, member1.getId())))
+                .andDo(document("Deregister"));
+        }
+
+        @Test
+        @DisplayName("권한이 없는 유저가 요청")
+        void noPrivilege() throws Exception {
+            token = jwtTokenProvider.generateTokenDto(
+                UserDetailsDto.builder()
+                    .username(user2.getId())
+                    .password(user2.getPassword())
+                    .roles(Role.COMMON)
+                    .disabled(false)
+                    .build());
+            mockMvc.perform(TestSnippet.securePost(url, token.getAccessToken()))
+                .andExpect(status().isForbidden())
+                .andDo(document("DeregisterNoPrivilege"));
+        }
+
+    }
+
+    @Nested
     @DisplayName("/auth/refresh document")
-    public void refresh() throws Exception {
+    class Refresh {
         final String url = URL_PREFIX + "/refresh";
-        Member member = Member.of("test1", "password", "nickname");
-        memberRepository.save(member);
-        UserDetailsDto userDto = UserDetailsDto.builder()
-            .username(member.getUsername())
-            .password(member.getPassword())
-            .disabled(member.isLocked())
-            .roles(member.getRole()).build();
-        JwtTokenDto refresh = jwtTokenProvider.generateTokenDto(userDto);
+        private JwtTokenDto token;
 
-        // 정상 요청
-        this.mockMvc.perform(TestSnippet.secureGet(url, refresh.getRefreshToken()))
-            .andExpect(status().isOk())
-            .andDo(document("Refresh",
-                responseFields(
-                    fieldWithPath("result")
-                        .type(JsonFieldType.STRING)
-                        .description("refresh token")
-                )));
+        @BeforeEach
+        void boot() {
+            em.persist(Member.of(user1.getId(),
+                user1.getPassword(), "nickname"));
+            em.flush();
+            token = jwtTokenProvider.generateTokenDto(
+                UserDetailsDto.builder()
+                    .username(user1.getId())
+                    .password(user1.getPassword())
+                    .roles(Role.COMMON)
+                    .disabled(false)
+                    .build());
+        }
 
-        // 잘못된 토큰
-        this.mockMvc.perform(TestSnippet.secureGet(url, "abc"))
-            .andExpect(status().isBadRequest())
-            .andDo(document("RefreshBadToken"));
+        @DisplayName("정상 요청")
+        @Test
+        void fine() throws Exception {
+            mockMvc.perform(TestSnippet.secureGet(url, token.getRefreshToken()))
+                .andExpect(status().isOk())
+                .andDo(document("Refresh",
+                    responseFields(
+                        fieldWithPath("result")
+                            .type(JsonFieldType.STRING)
+                            .description("refresh token")
+                    )));
+        }
+
+        @DisplayName("잘못된 토큰")
+        @Test
+        void wrongToken() throws Exception {
+            mockMvc.perform(TestSnippet.secureGet(url, "abc"))
+                .andExpect(status().isBadRequest())
+                .andDo(document("RefreshBadToken"));
+        }
     }
 
-    @Test
+    @Nested
     @DisplayName("/auth/privileged document")
-    public void privileged() throws Exception {
-        final String url = URL_PREFIX + "/privileged";
-        Member member = Member.of("test1", "password", "nickname");
-        memberRepository.save(member);
-        UserDetailsDto userDto = UserDetailsDto.builder()
-            .username(member.getUsername())
-            .password(member.getPassword())
-            .disabled(member.isLocked())
-            .roles(Role.PRIVILEGE).build();
-        JwtTokenDto token = jwtTokenProvider.generateTokenDto(userDto);
+    class Privileged {
+        private final String url = URL_PREFIX + "/privileged";
 
-        // 정상 요청
-        this.mockMvc.perform(TestSnippet.secureGet(url, token.getAccessToken()))
-            .andExpect(status().isOk())
-            .andExpect(content().json("{result: true}"))
-            .andDo(document("Privileged",
-                responseFields(
-                    fieldWithPath("result")
-                        .type(JsonFieldType.BOOLEAN)
-                        .description("privileged된 유저라면 true")
-                )));
+        @BeforeEach
+        void boot() {
+            em.persist(Member.of(user1.getId(),
+                user1.getPassword(), "nickname"));
+            em.flush();
+        }
 
-        userDto = UserDetailsDto.builder()
-            .username(member.getUsername())
-            .password(member.getPassword())
-            .disabled(member.isLocked())
-            .roles(Role.COMMON).build();
-        token = jwtTokenProvider.generateTokenDto(userDto);
+        @DisplayName("정상 요청")
+        @Test
+        void fine() throws Exception {
+            JwtTokenDto token = jwtTokenProvider.generateTokenDto(
+                UserDetailsDto.builder()
+                    .username(user1.getId())
+                    .password(user1.getPassword())
+                    .roles(Role.PRIVILEGE)
+                    .disabled(false)
+                    .build());
+            mockMvc.perform(TestSnippet.secureGet(url, token.getAccessToken()))
+                .andExpect(status().isOk())
+                .andExpect(content().json("{result: true}"))
+                .andDo(document("Privileged",
+                    responseFields(
+                        fieldWithPath("result")
+                            .type(JsonFieldType.BOOLEAN)
+                            .description("privileged된 유저라면 true")
+                    )));
+        }
 
-        // role이 common인 토큰
-        this.mockMvc.perform(TestSnippet.secureGet(url, token.getAccessToken()))
-            .andExpect(status().isOk())
-            .andExpect(content().json("{result: false}"))
-            .andDo(document("PrivilegedFalse"));
+        @DisplayName("권한이 없는 유저가 요청")
+        @Test
+        void noPrivilege() throws Exception {
+            JwtTokenDto token = jwtTokenProvider.generateTokenDto(
+                UserDetailsDto.builder()
+                    .username(user1.getId())
+                    .password(user1.getPassword())
+                    .roles(Role.COMMON)
+                    .disabled(false)
+                    .build());
+            mockMvc.perform(TestSnippet.secureGet(url, token.getAccessToken()))
+                .andExpect(status().isOk())
+                .andExpect(content().json("{result: false}"))
+                .andDo(document("PrivilegedFalse"));
+        }
+    }
+
+    @Nested
+    @DisplayName("/auth/admin-check document")
+    class AdminCheck {
+        private final String url = URL_PREFIX + "/admin-check";
+        private Member admin;
+
+        @BeforeEach
+        void boot() {
+            admin = Member.createAdmin("admin1", "password", "nickname");
+            em.persist(admin);
+            em.persist(Member.of(user1.getId(),
+                user1.getPassword(), "nickname"));
+            em.flush();
+        }
+
+        @DisplayName("정상 요청")
+        @Test
+        void fine() throws Exception {
+            JwtTokenDto token = jwtTokenProvider.generateTokenDto(
+                UserDetailsDto.builder()
+                    .username(admin.getUsername())
+                    .password(admin.getPassword())
+                    .roles(Role.ADMIN)
+                    .disabled(false)
+                    .build());
+            mockMvc.perform(TestSnippet.secureGet(url, token.getAccessToken()))
+                .andExpect(status().isOk())
+                .andExpect(content().json("{result: true}"))
+                .andDo(document("AdminCheck",
+                    responseFields(
+                        fieldWithPath("result")
+                            .type(JsonFieldType.BOOLEAN)
+                            .description("admin인 유저라면 true")
+                    )));
+        }
+
+        @DisplayName("권한이 없는 유저가 요청")
+        @Test
+        void noPrivilege() throws Exception {
+            JwtTokenDto token = jwtTokenProvider.generateTokenDto(
+                UserDetailsDto.builder()
+                    .username(user1.getId())
+                    .password(user1.getPassword())
+                    .roles(Role.COMMON)
+                    .disabled(false)
+                    .build());
+            mockMvc.perform(TestSnippet.secureGet(url, token.getAccessToken()))
+                .andExpect(status().isOk())
+                .andExpect(content().json("{result: false}"))
+                .andDo(document("AdminCheckFalse"));
+        }
     }
 }

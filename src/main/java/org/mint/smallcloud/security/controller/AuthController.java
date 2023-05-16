@@ -62,6 +62,12 @@ public class AuthController {
         return ResponseDto.<Boolean>builder().result(result).build();
     }
 
+    @GetMapping("/admin-check")
+    public ResponseDto<Boolean> isAdmin() {
+        boolean result = authFacadeService.isadmin();
+        return ResponseDto.<Boolean>builder().result(result).build();
+    }
+
     @GetMapping("/logout")
     public void logout() {
         /* TODO: 추후 구현 고려 필수 사항은 아닌 거 같음 */
