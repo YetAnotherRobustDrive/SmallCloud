@@ -7,6 +7,7 @@ import '../../css/admin.css';
 import GetBoardById from "../../services/board/GetBoardById";
 import GetNoReplyBoard from "../../services/board/GetNoReplyBoard";
 import ModalOk from "../../component/modal/ModalOk";
+import ExtendBox from "../../component/cs/ExtendBox";
 
 
 export default function AdminQuestionList() {
@@ -40,13 +41,15 @@ export default function AdminQuestionList() {
                 }
                 {questions != null &&
                     questions.map((d) => {//todo
-                        <>
-                            <div>{d.id}</div>
-                            <div>{d.content}</div>
-                            <div>{d.contact}</div>
-                            <div>{d.boardType}</div>
-                            <div>{d.writer}</div>
-                        </>
+                            <ExtendBox key={d.id} title={d.title}>
+                                <>                                
+                                    <div>{d.id}</div>
+                                    <div>{d.content}</div>
+                                    <div>{d.contact}</div>
+                                    <div>{d.boardType}</div>
+                                    <div>{d.writer}</div>
+                                </>
+                            </ExtendBox>
                     })
                 }
             </BodyFrame>
