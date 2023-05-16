@@ -20,7 +20,10 @@ export default function SidebarAdmin() {
         <Link className="link">조직도 구성</Link>
       </div>
       <div className="menuBox">
-        <Link className="link" to='/admin/user-ctrl'>사용자 관리</Link>
+        <Link className="link" to='/admin/user'>사용자 관리</Link>
+      </div>
+      <div className="menuBox">
+        <Link className="link" to='/admin/user/register'>사용자 등록</Link>
       </div>
       <div className="menuBox">
         <Link className="link">시스템 로그</Link>
