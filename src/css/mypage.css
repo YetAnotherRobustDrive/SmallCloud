@@ -1,6 +1,6 @@
 .editable-column {
     width: 300px;
-    height: 30px;
+    min-height: 30px;
     padding: 5px 0px 0px 0px;
     display: flex;
 }
@@ -59,10 +59,43 @@
     padding-top: 75px;
     width: 100%;
     height: calc(100vh - 150px);
+    min-height: fit-content;
 }
 
 .private-profile img{
-    width: 25%;
-    height: fit-content;
-    padding-bottom: 25px;
+    object-fit: cover;
+    object-position: top;
+    min-width: 150px;
+    max-width: 150px;
+    min-height: 150px;
+    max-height: 150px;
+    border-radius: 50%;
+    border: 1px solid gray;
+    margin-bottom: 10px;
+}
+
+.private-profile input[type="file"] {
+    width: 0;
+    height: 0;
+    padding: 0;
+    overflow: hidden;
+    border: 0;
+}
+
+.private-profile label {
+    display: inline-block;
+    padding: 10px;
+    color: #fff;
+    vertical-align: middle;
+    background-color: #999999;
+    cursor: pointer;
+    margin: 0;
+}
+
+.private-profile .submitBtn{
+    margin-top: 20px;
+    padding: 10px;
+    border: none;
+    background-color: #ececec;
+    border-radius: 5px;
 }

@@ -4,6 +4,7 @@ import { BrowserRouter as Router, Navigate, Route, Routes } from 'react-router-d
 import LogoutUser from '../services/user/LogoutUser';
 import AdminConfigPage from './admin/AdminConfigPage';
 import AdminUserCtrlPage from './admin/AdminUserCtrlPage';
+import AdminUserRegister from './admin/AdminUserRegister';
 import ErrorPage from './common/ErrorPage';
 import MainPage from './common/MainPage';
 import FaqPage from './cs/FaqPage';
@@ -21,6 +22,7 @@ import MyPage from './mypage/MyPage';
 import PrivatePage from './mypage/PrivatePage';
 import SecurityInfoPage from './mypage/SecurityInfoPage';
 import ServiceInfoPage from './mypage/ServiceInfoPage';
+import AdminPage from './admin/AdminPage';
 
 export default () => {
     const isPrivileged = useSelector(state => state.token.isPrivileged);
@@ -35,9 +37,9 @@ export default () => {
 
                 <Route path='/login' element={<LoginPage />} />
                 <Route path='/login/ask' element={<LoginQuestionPage />} />
-                <Route path='/logout' element={<LogoutUser />} />
                 {isLoggedIn &&
                     <>
+                        <Route path='/logout' element={<LogoutUser />} />
                         <Route path='/favorites' element={<FavoritesPage />} />
                         <Route path='/trash' element={<TrashBinPage />} />
 
@@ -52,11 +54,15 @@ export default () => {
                         <Route path='/cs/terms' element={<TermsPage />} />
                         <Route path='/cs/faq' element={<FaqPage />} />
                         <Route path='/cs/question' element={<QuestionPage />} />
+                        {!isAdmin &&
+                            <Route path='/admin' element={<AdminPage />} />
+                        }
                         {isAdmin &&
                             <>
                                 <Route path='/admin' element={<AdminConfigPage />} />
                                 <Route path='/admin/rules' element={<AdminConfigPage />} />
-                                <Route path='/admin/user-ctrl' element={<AdminUserCtrlPage />} />
+                                <Route path='/admin/user' element={<AdminUserCtrlPage />} />
+                                <Route path='/admin/user/register' element={<AdminUserRegister />} />
                             </>
                         }
 

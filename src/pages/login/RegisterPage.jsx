@@ -30,14 +30,6 @@ export default function RegisterPage() {
 
         const inputData = new FormData(e.target);
         const value = Object.fromEntries(inputData.entries());
-        let model = {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json",
-            },
-            body: JSON.stringify(value),
-        };
-
         if (inputData.get("name") == "" || inputData.get("id") == "" || inputData.get("password") == "" || inputData.get("password_chk") == "") {
             setIsEmpty(true);
             return;
@@ -47,6 +39,14 @@ export default function RegisterPage() {
             return;
         }
         inputData.delete("password_chk");
+
+        let model = {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify(value),
+        };
 
         try {
             const res = await fetch(configData.API_SERVER + 'auth/register', model);
