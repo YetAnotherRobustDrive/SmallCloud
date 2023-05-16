@@ -650,7 +650,7 @@ Expires: 0
 X-Frame-Options: DENY
 Content-Length: 373
 
-{"grantType":"Bearer","accessToken":"eyJ0b2tlblR5cGUiOiJBQ0NFU1MiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ1c2VyMSIsInJvbGUiOiJDT01NT04iLCJleHAiOjE2ODQyMDMyMzB9.MOWWkavjZW_tTl27akfJsokzuJ0BTeN-1bLuF57Wqg8","refreshToken":"eyJ0b2tlblR5cGUiOiJSRUZSRVNIIiwiYWxnIjoiSFMyNTYifQ.eyJzdWIiOiJ1c2VyMSIsInJvbGUiOiJDT01NT04iLCJleHAiOjE2ODQ0NjA2MzB9.TzgA0F7dqq_-VPpmexYxzuUeGTgUy08gHoqawTw0Nco"}</code></pre>
+{"grantType":"Bearer","accessToken":"eyJ0b2tlblR5cGUiOiJBQ0NFU1MiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ1c2VyMSIsInJvbGUiOiJDT01NT04iLCJleHAiOjE2ODQyMDU2MDF9.Tym8pxhNdpnqxKIG8lXFaazMr90recxUfW_iEmNiNMQ","refreshToken":"eyJ0b2tlblR5cGUiOiJSRUZSRVNIIiwiYWxnIjoiSFMyNTYifQ.eyJzdWIiOiJ1c2VyMSIsInJvbGUiOiJDT01NT04iLCJleHAiOjE2ODQ0NjMwMDF9.qkCec4uKZUSniAGkFU_b70tM-pdaCbZHyqZZ8PuMXq8"}</code></pre>
 </div>
 </div>
 </div>
@@ -737,9 +737,9 @@ Cache-Control: no-cache, no-store, max-age=0, must-revalidate
 Pragma: no-cache
 Expires: 0
 X-Frame-Options: DENY
-Content-Length: 119
+Content-Length: 118
 
-{"password":"비밀번호는 15이하로 작성해 주세요","id":"아이디는 영어나 숫자만 가능합니다."}</code></pre>
+{"password":"비밀번호는 15이하로 작성해 주세요","id":"아이디는 15자 이하로 작성해 주세요"}</code></pre>
 </div>
 </div>
 </div>
@@ -767,7 +767,7 @@ Payload 값이 적절하지 않음
 <div class="listingblock">
 <div class="content">
 <pre class="highlight nowrap"><code class="language-http" data-lang="http">GET /auth/refresh HTTP/1.1
-Authorization: Bearer eyJ0b2tlblR5cGUiOiJSRUZSRVNIIiwiYWxnIjoiSFMyNTYifQ.eyJzdWIiOiJ1c2VyMSIsInJvbGUiOiJDT01NT04iLCJleHAiOjE2ODQ0NjA2Mjl9.4_-3S04-7oBtPskp7jXjQVcfc92GZWKbUREC0pC-vvM
+Authorization: Bearer eyJ0b2tlblR5cGUiOiJSRUZSRVNIIiwiYWxnIjoiSFMyNTYifQ.eyJzdWIiOiJ1c2VyMSIsInJvbGUiOiJDT01NT04iLCJleHAiOjE2ODQ0NjMwMDB9.wFWlR9H4lL0FO5-9hZyTp9pWIz9dekfdlnoY04wQhMM
 Host: localhost:8080</code></pre>
 </div>
 </div>
@@ -792,7 +792,7 @@ Expires: 0
 X-Frame-Options: DENY
 Content-Length: 170
 
-{"result":"eyJ0b2tlblR5cGUiOiJBQ0NFU1MiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ1c2VyMSIsInJvbGUiOiJDT01NT04iLCJleHAiOjE2ODQyMDMyMjl9.jdljLfqc4R-iDLgCezT4fGcVUWAak9nGaOOfM0pZ6xM"}</code></pre>
+{"result":"eyJ0b2tlblR5cGUiOiJBQ0NFU1MiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ1c2VyMSIsInJvbGUiOiJDT01NT04iLCJleHAiOjE2ODQyMDU2MDB9.PURWFH2ky98LOYHPZhIw0ZazWvku-6p08jJR8bwgFPk"}</code></pre>
 </div>
 </div>
 </div>
@@ -844,7 +844,7 @@ refresh 토큰이 잘못되었을 때
 <div class="content">
 <pre class="highlight nowrap"><code class="language-http" data-lang="http">POST /auth/elevate HTTP/1.1
 Content-Type: application/json;charset=UTF-8
-Authorization: Bearer eyJ0b2tlblR5cGUiOiJBQ0NFU1MiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ1c2VyMSIsInJvbGUiOiJDT01NT04iLCJleHAiOjE2ODQyMDMyMjl9.jdljLfqc4R-iDLgCezT4fGcVUWAak9nGaOOfM0pZ6xM
+Authorization: Bearer eyJ0b2tlblR5cGUiOiJBQ0NFU1MiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ1c2VyMSIsInJvbGUiOiJDT01NT04iLCJleHAiOjE2ODQyMDU2MDF9.Tym8pxhNdpnqxKIG8lXFaazMr90recxUfW_iEmNiNMQ
 Accept: application/json
 Content-Length: 18
 Host: localhost:8080
@@ -873,7 +873,7 @@ Expires: 0
 X-Frame-Options: DENY
 Content-Length: 381
 
-{"grantType":"Bearer","accessToken":"eyJ0b2tlblR5cGUiOiJBQ0NFU1MiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ1c2VyMSIsInJvbGUiOiJQUklWSUxFR0UiLCJleHAiOjE2ODQyMDMyMjl9.KUbuGYEa_IDf3mf8sg38V8KdrN8BbLjHAjx0jbqcnkA","refreshToken":"eyJ0b2tlblR5cGUiOiJSRUZSRVNIIiwiYWxnIjoiSFMyNTYifQ.eyJzdWIiOiJ1c2VyMSIsInJvbGUiOiJQUklWSUxFR0UiLCJleHAiOjE2ODQyMTIyMjl9.68xF9PmAI-sz7xB6LWQjomBgQiGjf1aksnDVlOipjDc"}</code></pre>
+{"grantType":"Bearer","accessToken":"eyJ0b2tlblR5cGUiOiJBQ0NFU1MiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ1c2VyMSIsInJvbGUiOiJQUklWSUxFR0UiLCJleHAiOjE2ODQyMDU2MDF9.I5IZPKxAdjLWi5ZXr1GoBU9_VhjqACk3oIDklNLZ3Nk","refreshToken":"eyJ0b2tlblR5cGUiOiJSRUZSRVNIIiwiYWxnIjoiSFMyNTYifQ.eyJzdWIiOiJ1c2VyMSIsInJvbGUiOiJQUklWSUxFR0UiLCJleHAiOjE2ODQyMTQ2MDF9.RIlnqYccIljY6E5eEbvC2Ikfhi8oBGHuftuu948LtWs"}</code></pre>
 </div>
 </div>
 </div>
@@ -957,7 +957,7 @@ Content-Length: 88
 <div class="listingblock">
 <div class="content">
 <pre class="highlight nowrap"><code class="language-http" data-lang="http">POST /auth/deregister HTTP/1.1
-Authorization: Bearer eyJ0b2tlblR5cGUiOiJBQ0NFU1MiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ1c2VyMSIsInJvbGUiOiJQUklWSUxFR0UiLCJleHAiOjE2ODQyMDMyMjl9.KUbuGYEa_IDf3mf8sg38V8KdrN8BbLjHAjx0jbqcnkA
+Authorization: Bearer eyJ0b2tlblR5cGUiOiJBQ0NFU1MiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ1c2VyMSIsInJvbGUiOiJQUklWSUxFR0UiLCJleHAiOjE2ODQyMDU2MDB9.ZkNyBH_Qa9j6K8oEJj_dhPWjD46mgSiLM_JYP0uW87c
 Accept: application/json
 Host: localhost:8080</code></pre>
 </div>
@@ -1030,7 +1030,7 @@ Content-Length: 74
 <div class="listingblock">
 <div class="content">
 <pre class="highlight nowrap"><code class="language-http" data-lang="http">GET /auth/privileged HTTP/1.1
-Authorization: Bearer eyJ0b2tlblR5cGUiOiJBQ0NFU1MiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ1c2VyMSIsInJvbGUiOiJQUklWSUxFR0UiLCJleHAiOjE2ODQyMDMyMjl9.KUbuGYEa_IDf3mf8sg38V8KdrN8BbLjHAjx0jbqcnkA
+Authorization: Bearer eyJ0b2tlblR5cGUiOiJBQ0NFU1MiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ1c2VyMSIsInJvbGUiOiJQUklWSUxFR0UiLCJleHAiOjE2ODQyMDU2MDB9.ZkNyBH_Qa9j6K8oEJj_dhPWjD46mgSiLM_JYP0uW87c
 Host: localhost:8080</code></pre>
 </div>
 </div>
@@ -1115,7 +1115,7 @@ Content-Length: 16
 <div class="listingblock">
 <div class="content">
 <pre class="highlight nowrap"><code class="language-http" data-lang="http">GET /auth/admin-check HTTP/1.1
-Authorization: Bearer eyJ0b2tlblR5cGUiOiJBQ0NFU1MiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhZG1pbjEiLCJyb2xlIjoiQURNSU4iLCJleHAiOjE2ODQyMDMyMjl9.Obqd6MlcGnx5UtxENtzcQ18nU76BsoJASP9lUyK5mU8
+Authorization: Bearer eyJ0b2tlblR5cGUiOiJBQ0NFU1MiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhZG1pbjEiLCJyb2xlIjoiQURNSU4iLCJleHAiOjE2ODQyMDU2MDB9.LhqB9ojX5TEIn01Slu1KGy7r3RZjaB6bBveWQ2W4m3U
 Host: localhost:8080</code></pre>
 </div>
 </div>
