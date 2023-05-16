@@ -2,6 +2,8 @@ package org.mint.smallcloud.user.service;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.mint.smallcloud.bucket.exception.StorageSettingException;
+import org.mint.smallcloud.bucket.service.StorageService;
 import org.mint.smallcloud.exception.ExceptionStatus;
 import org.mint.smallcloud.exception.ServiceException;
 import org.mint.smallcloud.group.service.GroupThrowerService;
@@ -24,6 +26,7 @@ public class MemberService {
     private final MemberRepository memberRepository;
     private final GroupThrowerService groupThrowerService;
     private final UserMapper userMapper;
+    private final StorageService storageService;
 
     public UserDetailsDto getUserDetails(String username) {
         Member member = memberThrowerService.getMemberByUsername(username);
@@ -71,7 +74,13 @@ public class MemberService {
             member.setGroup(groupThrowerService.getGroupByName(userProfileDto.getGroupName()));
         }
         if (userProfileDto.getProfileImageLocation() != null && !userProfileDto.getProfileImageLocation().equals(member.getProfileImageLocation())) {
-            /* TODO: location이 존재하는 location인지 확인하는 로직 추가 */
+            try {
+                if (!storageService.isFileExist(userProfileDto.getProfileImageLocation().getLocation()))
+                    throw new ServiceException(ExceptionStatus.FILE_NOT_FOUND);
+            } catch (StorageSettingException e) {
+                e.printStackTrace();
+                throw new ServiceException(ExceptionStatus.INTERNAL_SERVER_ERROR);
+            }
             member.setProfileImageLocation(member.getProfileImageLocation());
         }
     }
