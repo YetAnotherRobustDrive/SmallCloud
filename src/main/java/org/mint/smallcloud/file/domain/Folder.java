@@ -3,50 +3,34 @@ package org.mint.smallcloud.file.domain;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.mint.smallcloud.user.domain.Member;
 
-import javax.persistence.*;
-import java.time.LocalDateTime;
+import javax.persistence.CascadeType;
+import javax.persistence.Entity;
+import javax.persistence.OneToMany;
+import javax.persistence.Table;
 import java.util.List;
 
 @Entity
 @Table(name = "FOLDERS")
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Getter
-public class Folder {
-
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "FOLDER_ID")
-    private Long id;
-
-    @Column(name = "NAME")
-    private String name;
-
-    @Column(name = "CREATE_DATE")
-    private LocalDateTime createdDate;
-
-    @ManyToOne
-    @JoinColumn(name = "PARENT_FOLDER_ID")
-    private Folder parentFolder;
+public class Folder extends DataNode {
 
     @OneToMany(
         mappedBy = "parentFolder",
         cascade = CascadeType.ALL,
         orphanRemoval = true
     )
-    private List<Folder> subFolders;
+    private List<DataNode> subDataNodes;
 
-    @OneToMany(mappedBy = "folder")
-    private List<File> subFiles;
-
-    protected Folder(String name, Folder parentFolder) {
-        this.name = name;
-        this.parentFolder = parentFolder;
-        this.createdDate = LocalDateTime.now();
+    protected Folder(String name, Member member) {
+        super(FileType.of(name, FileType.FOLDER), member.getId());
+        subDataNodes = null;
     }
 
-    public static Folder of(String name, Folder parentFolder) {
-        return new Folder(name, parentFolder);
+    public static Folder of(String name, Member member) {
+        return new Folder(name, member);
     }
 
     @Override
@@ -55,10 +39,5 @@ public class Folder {
         if (obj == null) return false;
         return obj instanceof Folder
             && ((Folder) obj).getId().equals(this.getId());
-    }
-
-    @Override
-    public int hashCode() {
-        return getId().hashCode();
     }
 }

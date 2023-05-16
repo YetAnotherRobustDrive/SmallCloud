@@ -11,6 +11,7 @@ import javax.persistence.Embeddable;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Getter
 public class FileType {
+    public static final String FOLDER = "FOLDER";
 
     @Column(name = "NAME")
     private String name;
