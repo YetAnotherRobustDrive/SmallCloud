@@ -15,6 +15,7 @@ import org.mint.smallcloud.security.jwt.tokenprovider.JwtTokenProvider;
 import org.mint.smallcloud.user.domain.Member;
 import org.mint.smallcloud.user.dto.RegisterDto;
 import org.mint.smallcloud.user.dto.UserProfileRequestDto;
+import org.mint.smallcloud.user.dto.UserProfileResponseDto;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -33,6 +34,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.documentationConfiguration;
+import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.get;
 import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.post;
 import static org.springframework.restdocs.payload.PayloadDocumentation.fieldWithPath;
 import static org.springframework.restdocs.payload.PayloadDocumentation.requestFields;
@@ -308,28 +310,49 @@ class UserControllerTest {
     @Nested
     @DisplayName("/{username} docs")
     class Profile {
+        private final String url = URL_PREFIX + "/{username}";
+
         @DisplayName("정상 요청")
         @Test
-        void fine() {
-
+        void fine() throws Exception {
+            mockMvc.perform(TestSnippet.secured(get(url, member1.getUsername()), adminToken.getAccessToken()))
+                .andExpect(status().isOk())
+                .andExpect((rst) -> {
+                    UserProfileResponseDto dto = objectMapper.readValue(rst.getResponse().getContentAsString(), UserProfileResponseDto.class);
+                    assertEquals(dto.getUsername(), member1.getUsername());
+                    assertEquals(dto.getNickname(), member1.getNickname());
+                    assertEquals(dto.getGroupName(), member1.getGroupName());
+                })
+                .andDo(document("UserProfile",
+                    pathParameters(
+                        parameterWithName("username").description("조회하려는 유저의 id")
+                    )));
         }
 
         @DisplayName("권한없는 요청")
         @Test
-        void unauthorized() {
-
+        void unauthorized() throws Exception {
+            mockMvc.perform(TestSnippet.secured(get(url, member1.getUsername()), memberToken.getAccessToken()))
+                .andExpect(status().isForbidden())
+                .andDo(document("UserProfileUnauthorized"));
         }
 
         @DisplayName("존재하지 않는 유저")
         @Test
-        void notFoundUser() {
-
+        void notFoundUser() throws Exception {
+            mockMvc.perform(TestSnippet.secured(get(url, "abc"), adminToken.getAccessToken()))
+                .andExpect(status().isForbidden())
+                .andDo(document("UserProfileNotFoundUser"));
         }
+
 
         @DisplayName("잘못된 유저 포멧")
         @Test
-        void notValidUser() {
-
+        void notValidUser() throws Exception {
+            mockMvc.perform(TestSnippet.secured(get(url, "fdsafdsafsfasdsafdfdas"), adminToken.getAccessToken()))
+                .andExpect(status().isBadRequest())
+                .andDo(document("UserProfileNotValidUser"));
         }
+
     }
 }
