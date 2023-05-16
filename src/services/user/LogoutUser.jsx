@@ -15,7 +15,7 @@ export default function LogoutUser() {
         await persistor.purge();
     }
     useEffect(() => {
-        purge();
         render();
+        purge();
     }, [])
 }

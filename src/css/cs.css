@@ -38,14 +38,16 @@
 }
 
 .ask {
-    height: 300px;
+    display: flex;
+    flex-direction: column;
+    height: 400px;
     padding: 10px;
     position: relative;
 }
 
 .ask .inner {
     border: 1px solid black;
-    height: calc(100% - 40px); 
+    height: calc(100% - 100px); 
     width: 100%;
     resize: none;
 }
@@ -53,6 +55,7 @@
 .ask .askBtn{
     position: absolute;
     right: 0;
+    bottom: 0;
     height: 25px;
     margin: 10px;
 }

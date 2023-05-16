@@ -1,57 +1,43 @@
 import React, { useState } from "react";
-import Header from "../../component/header/Header"
 import BodyFrame from "../../component/Bodyframe";
-import SidebarCS from "../../component/sidebar/SidebarCS";
 import ExtendBox from "../../component/cs/ExtendBox";
+import Header from "../../component/header/Header";
 import BodyHeader from "../../component/main/BodyHeader";
-import configData from "../../config/config.json"
+import SidebarCS from "../../component/sidebar/SidebarCS";
 
-import datas from "../../fakeJSON/FAQ.json"
-import { useSelector } from "react-redux";
-import GetUserInfo from "../../services/user/GetUserInfo";
 import ModalOk from "../../component/modal/ModalOk";
+import datas from "../../fakeJSON/FAQ.json";
+import GetUserInfo from "../../services/user/GetUserInfo";
 
-import '../../css/cs.css'
+import '../../css/cs.css';
+import PostBoard from "../../services/board/PostBoard";
 
 export default function QuestionPage() {
     const [isEmpty, setIsEmpty] = useState(false);
     const [isFail, setIsFail] = useState(false);
     const [message, setMessage] = useState("일시적인 오류가 발생했습니다.");
-    const nickname = useSelector(state => state.user.nickname);
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-        await GetUserInfo();
+        const user = await GetUserInfo();
 
         const inputData = new FormData(e.target);
-        inputData.append("nickname", nickname);
-
+        inputData.append("writer", user.nickname);
         const value = Object.fromEntries(inputData.entries());
-        let model = {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json",
-            },
-            body: JSON.stringify(value),
-        };
 
-        if (inputData.get("context") == "") {
+        if (inputData.get("content") == "" || inputData.get("title") == "") {
             setIsEmpty(true);
             return;
         }
-
-        try {//todo
-            const res = await fetch(configData.API_SERVER + 'auth/login', model);
-            const data = await res.json();
-            if (!res.ok) {
-                throw data;
+        const res = await PostBoard(value);
+        console.log(res);
+        if (!res[0]) {
+            if (res[1] != undefined) {
+                setMessage(res[1]);                
             }
-            //성공
-            window.alert("등록 완료되었습니다!");
-            return;
-        } catch (e) {
-            if (e.message != undefined) setMessage(e.message)
+            setMessage("일시적인 오류가 발생했습니다.");      
             setIsFail(true);
+            return;
         }
     }
 
@@ -59,21 +45,26 @@ export default function QuestionPage() {
         <>
 
             {isFail && <ModalOk close={() => setIsFail(false)}>{message}</ModalOk>}
-            {isEmpty && <ModalOk close={() => setIsEmpty(false)}>{"문의 내용을 입력해주세요."}</ModalOk>}
+            {isEmpty && <ModalOk close={() => setIsEmpty(false)}>{"제목과 내용을 입력해주세요."}</ModalOk>}
             <Header />
             <SidebarCS />
             <BodyFrame>
                 <BodyHeader text="1:1 문의하기" />
                 <form className="ask" onSubmit={handleSubmit}>
-                    <textarea name="context" className="inner" type="text" placeholder="Text..." />
+                    <span>문의 제목</span>
+                    <input type="text" name="title"/>
+                    <span>문의 내용</span>
+                    <textarea name="content" className="inner" type="text" placeholder="Text..." />
                     <button type="submit" className="askBtn">제출</button>
                 </form>
                 <BodyHeader text="내 문의 내역" />
+                <div style={{overflow:"scroll", overflowX :"hidden",height:"calc(100vh - 579px)"}}>
                 {
                     datas.map((data) => {
                         return <ExtendBox key={data.id} title={data.title}>{data.content}</ExtendBox>
                     })
                 }
+                </div>
             </BodyFrame>
         </>
     )

@@ -23,6 +23,7 @@ import PrivatePage from './mypage/PrivatePage';
 import SecurityInfoPage from './mypage/SecurityInfoPage';
 import ServiceInfoPage from './mypage/ServiceInfoPage';
 import AdminPage from './admin/AdminPage';
+import AdminQuestionList from './admin/AdminQuestionList';
 
 export default () => {
     const isPrivileged = useSelector(state => state.token.isPrivileged);
@@ -63,6 +64,7 @@ export default () => {
                                 <Route path='/admin/rules' element={<AdminConfigPage />} />
                                 <Route path='/admin/user' element={<AdminUserCtrlPage />} />
                                 <Route path='/admin/user/register' element={<AdminUserRegister />} />
+                                <Route path='/admin/questions' element={<AdminQuestionList />} />
                             </>
                         }
 

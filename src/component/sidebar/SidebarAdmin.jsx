@@ -26,12 +26,15 @@ export default function SidebarAdmin() {
         <Link className="link" to='/admin/user/register'>사용자 등록</Link>
       </div>
       <div className="menuBox">
+        <Link className="link" to='/admin/questions'>문의 답변하기</Link>
+      </div>
+      <div className="menuBox">
         <Link className="link">시스템 로그</Link>
       </div>
       <div className="menuBox">
         <Link className="link">보안 관리</Link>
       </div>
-      <div className="filetree" />
+      <div className="filetreeStub" />
       <Footer />
     </div>
   )
