@@ -8,7 +8,6 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mint.smallcloud.TestSnippet;
 import org.mint.smallcloud.file.domain.FileLocation;
-import org.mint.smallcloud.group.domain.Group;
 import org.mint.smallcloud.security.dto.UserDetailsDto;
 import org.mint.smallcloud.security.jwt.dto.JwtTokenDto;
 import org.mint.smallcloud.security.jwt.tokenprovider.JwtTokenProvider;
@@ -205,17 +204,12 @@ class UserControllerTest {
     class update {
         private final String url = URL_PREFIX + "/{username}/update";
         private UserProfileRequestDto userProfileRequestDto;
-        private Group group1;
 
         @BeforeEach
         public void boot() {
-            group1 = Group.of("group1");
-            em.persist(group1);
-            em.flush();
             userProfileRequestDto = UserProfileRequestDto.builder()
                 .username("abc")
                 .nickname("def")
-                .groupName("group1")
                 .profileImageLocation(FileLocation.of("testLocation"))
                 .build();
         }
@@ -230,13 +224,11 @@ class UserControllerTest {
                     Member member = em.find(Member.class, member1.getId());
                     assertEquals(member.getUsername(), userProfileRequestDto.getUsername());
                     assertEquals(member.getNickname(), userProfileRequestDto.getNickname());
-                    assertEquals(member.getGroupName(), userProfileRequestDto.getGroupName());
                 })
                 .andDo(document("UserUpdate",
                     requestFields(
                         fieldWithPath("username").description("바꾸려는 id"),
                         fieldWithPath("nickname").description("바꾸려는 nickname"),
-                        fieldWithPath("groupName").description("바꾸려는 group의 이름"),
                         fieldWithPath("location").description("프로필 이미지 위치")
                     ),
                     pathParameters(
@@ -257,7 +249,6 @@ class UserControllerTest {
         void wrongFormat() throws Exception {
             userProfileRequestDto = UserProfileRequestDto.builder()
                 .username("wfoijfijefwijifzzzeijfejfeiwfwj")
-                .groupName("feiweaaafjiowefiewfiowefiwefiwefi")
                 .profileImageLocation(null)
                 .build();
             mockMvc.perform(TestSnippet.secured(post(url, member1.getUsername()), adminToken.getAccessToken(), objectMapper, userProfileRequestDto))
@@ -270,7 +261,6 @@ class UserControllerTest {
         void notFoundUser() throws Exception {
             userProfileRequestDto = UserProfileRequestDto.builder()
                 .username("abc")
-                .groupName("abc")
                 .profileImageLocation(null)
                 .build();
             mockMvc.perform(TestSnippet.secured(post(url, "abc"), adminToken.getAccessToken(), objectMapper, userProfileRequestDto))
@@ -286,24 +276,11 @@ class UserControllerTest {
             em.flush();
             userProfileRequestDto = UserProfileRequestDto.builder()
                 .username("abc")
-                .groupName("group1")
                 .profileImageLocation(null)
                 .build();
             mockMvc.perform(TestSnippet.secured(post(url, member1.getUsername()), adminToken.getAccessToken(), objectMapper, userProfileRequestDto))
                 .andExpect(status().isForbidden())
                 .andDo(document("UserUpdateDuplicated"));
-        }
-
-        @DisplayName("없는 그룹")
-        @Test
-        void notFoundGroup() throws Exception {
-            userProfileRequestDto = UserProfileRequestDto.builder()
-                .username(member1.getUsername())
-                .groupName("abc")
-                .build();
-            mockMvc.perform(TestSnippet.secured(post(url, member1.getUsername()), adminToken.getAccessToken(), objectMapper, userProfileRequestDto))
-                .andExpect(status().isForbidden())
-                .andDo(document("UserUpdateNotFound"));
         }
     }
 
