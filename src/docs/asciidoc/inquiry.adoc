@@ -1,0 +1,49 @@
+=== 문의 등록
+
+operation::OneToOneRegisterInquiry[snippets='http-request,request-fields']
+
+==== 성공
+
+operation::OneToOneRegisterInquiry[snippets='http-response']
+
+IMPORTANT: 로그인 하고 요청
+
+operation::LoginRegisterInquiry[snippets='http-response']
+
+IMPORTANT: 로그인 안하고 요청
+
+==== 실패
+
+operation::NoContactInquiry[snippets='http-response']
+
+IMPORTANT: 연락처가 없을 때
+
+operation::WrongTokenSaveInquiry[snippets='http-response']
+
+IMPORTANT: 토큰이 잘못되었을 때
+
+=== 문의 전체 조회
+
+operation::GetAllInquiries[snippets='http-request']
+
+==== 성공
+
+operation::GetAllInquiries[snippets='http-response']
+
+=== 선택
+
+operation::GetOneInquiry[snippets='http-request,path-parameters']
+
+==== 성공
+
+operation::GetOneInquiry[snippets='http-response']
+
+==== 실패
+
+operation::CannotFindInquiry[snippets='http-response']
+
+IMPORTANT: 잘못된 문의 선택 조회
+
+operation::WrongTokenGetInquiry[snippets='http-response']
+
+IMPORTANT: 토큰이 잘못됨

@@ -14,3 +14,7 @@ include::auth.adoc[]
 == 유저 관련 (users)
 
 include::users.adoc[]
+
+== 문의 관련 (inquiries)
+
+include::inquiry.adoc[]
