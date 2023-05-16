@@ -6,7 +6,6 @@ import org.mint.smallcloud.bucket.exception.StorageSettingException;
 import org.mint.smallcloud.bucket.service.StorageService;
 import org.mint.smallcloud.exception.ExceptionStatus;
 import org.mint.smallcloud.exception.ServiceException;
-import org.mint.smallcloud.group.service.GroupThrowerService;
 import org.mint.smallcloud.security.dto.LoginDto;
 import org.mint.smallcloud.security.dto.UserDetailsDto;
 import org.mint.smallcloud.user.domain.Member;
@@ -24,7 +23,6 @@ public class MemberService {
 
     private final MemberThrowerService memberThrowerService;
     private final MemberRepository memberRepository;
-    private final GroupThrowerService groupThrowerService;
     private final UserMapper userMapper;
     private final StorageService storageService;
 
@@ -69,9 +67,6 @@ public class MemberService {
         }
         if (userProfileDto.getNickname() != null && !userProfileDto.getNickname().equals(member.getUsername())) {
             member.setNickname(userProfileDto.getNickname());
-        }
-        if (userProfileDto.getGroupName() != null && (!member.hasGroup() || !userProfileDto.getGroupName().equals(member.getGroupName()))) {
-            member.setGroup(groupThrowerService.getGroupByName(userProfileDto.getGroupName()));
         }
         if (userProfileDto.getProfileImageLocation() != null && !userProfileDto.getProfileImageLocation().equals(member.getProfileImageLocation())) {
             try {
