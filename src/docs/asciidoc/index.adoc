@@ -5,8 +5,6 @@
 :source-highlighter: highlightjs
 :toclevels: 2
 :sectlinks:
-// :sectnums: // 분류별 자동으로 숫자를 달아줌
-// :docinfo: shared-head
 
 [[overview]]
 == 인증 관련 (auth)
@@ -122,6 +120,22 @@ IMPORTANT: 유저가 특권유저일 때
 operation::PrivilegedFalse[snippets='http-response']
 
 IMPORTANT: 유저가 특권유저가 아닐 때
+
+=== 관리자 유저 확인 (admin-check)
+
+==== 명세
+
+operation::AdminCheck[snippets='http-request']
+
+==== 성공
+
+operation::AdminCheck[snippets='http-response']
+
+IMPORTANT: 유저가 관리자일 때
+
+operation::AdminCheckFalse[snippets='http-response']
+
+IMPORTANT: 유저가 관리자가 아닐 때
 
 == 유저 관련 (users)
 
