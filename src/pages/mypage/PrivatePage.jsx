@@ -92,32 +92,6 @@ export default function PrivatePage() {
             <Header />
             <SidebarMypage />
             <BodyFrame>
-<<<<<<< HEAD
-                <div className="private-profile">
-                <img src={img}/>
-                <EditableColumn
-                    title="ID"
-                    value="TEST"
-                    onSubmit={(e) => { console.log(e) }}//todo
-                />
-                <EditableColumn
-                    title="NAME"
-                    value="TEST"
-                    onSubmit={(e) => { console.log(e) }}
-                />
-                <EditableColumn
-                    title="PW"
-                    value="****"
-                    onSubmit={(e) => { console.log(e) }}
-                />
-                <EditableColumn
-                    title="GROUP"
-                    value="TEST"
-                    editable="false"
-                    onSubmit={(e) => { console.log(e) }}
-                />
-                </div>
-=======
                 <form className="private-profile" onSubmit={handleSubmit}>
                     <img src={img}/>
                     <label htmlFor="file">프로필 변경하기</label>
@@ -157,7 +131,6 @@ export default function PrivatePage() {
                     />
                     <button className="submitBtn" >저장하기</button>
                 </form>
->>>>>>> 1f55c100adcd46e865d9aa9d905f05b60b61bc57
             </BodyFrame>
         </>
     )
