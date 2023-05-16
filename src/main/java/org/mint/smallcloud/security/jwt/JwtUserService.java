@@ -43,4 +43,8 @@ public class JwtUserService {
     public boolean isElevated(UserDetails user) {
         return userdetailsResolver.isRole(user, Role.PRIVILEGE);
     }
+
+    public boolean isAdmin(UserDetails user) {
+        return userdetailsResolver.isRole(user, Role.ADMIN);
+    }
 }

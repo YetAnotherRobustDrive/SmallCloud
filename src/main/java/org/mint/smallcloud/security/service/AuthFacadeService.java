@@ -49,4 +49,9 @@ public class AuthFacadeService {
         return jwtUserService.isElevated(
             authThrowerService.getLoginUserDetails());
     }
+
+    public boolean isadmin() {
+        return jwtUserService.isAdmin(
+            authThrowerService.getLoginUserDetails());
+    }
 }
