@@ -16,7 +16,7 @@ export default function ErrorPage() {
         <div className="error" onLoad={getName}>
             <img src={logo_img} alt="LOGO" />
             <span className="namespan">{name}</span>
-            <span className="errorspan">존재하지 않는 페이지입니다.</span>
+            <span className="errorspan">접근할 수 없는 페이지입니다.</span>
             <Link className="backhome" to="/">홈으로</Link>
         </div>
     )
