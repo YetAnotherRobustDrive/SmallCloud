@@ -1,34 +1,20 @@
 import React from "react";
-import '../../css/bodyframe.css'
-import { FcFolder, FcFile } from 'react-icons/fc'
+import { FcFile, FcFolder } from 'react-icons/fc';
 import { useNavigate } from 'react-router-dom';
-import { useLocation } from 'react-router-dom';
+import '../../css/bodyframe.css';
 
 export default function ListBox(props) {
     const data = props.data;
     const navigate = useNavigate();
-    const location = useLocation();
 
     const handleOnClick = () => {
-        if(data.type == "file"){
+        console.log(data);
+        if (data.type == "file") {
             props.onClick();
             return;
         }
         else {
-            const curr = location.pathname;
-            if(curr == "/"){
-               navigate(curr + "files/" + data.name);
-               return;
-            } 
-            else {
-                if (curr.endsWith('/')) {
-                    navigate(curr + data.name);                    
-                }
-                else {
-                    navigate(curr + "/" + data.name);
-                }
-               return;
-            }
+            navigate("files/" + data.id);
         }
     }
     return (

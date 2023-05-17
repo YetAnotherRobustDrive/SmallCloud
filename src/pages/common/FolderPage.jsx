@@ -18,13 +18,13 @@ export default function FolderPage() {
     const [isFileView, setIsFileView] = useState(false);
     const [selected, setSelected] = useState();
     const location = useLocation();
-
+//todo
     return (
         <>
             <Header />
             <Sidebar />
             <BodyFrame>
-                <BodyHeader text={location.pathname.slice(7)} addon={setIsGrid} view={isGrid} />
+                <BodyHeader text={"STUB"} addon={setIsGrid} view={isGrid} />
                 {isGrid &&
                     <GridBox height="calc(100vh - 117px)">
                         {
@@ -35,6 +35,7 @@ export default function FolderPage() {
                                         setIsFileView(true);
                                     }}
                                     key={data.id}
+                                    id={data.id}
                                     name={data.name}
                                     type={data.type}
                                     stage={data.writingStage}

@@ -33,6 +33,7 @@ export default function TrashBinPage() {
                                         setIsFileView(true);
                                     }}
                                     key={data.id}
+                                    id={data.id}
                                     name={data.name}
                                     type={data.type}
                                     stage={data.writingStage}
