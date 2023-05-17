@@ -8,7 +8,6 @@ export default function ListBox(props) {
     const navigate = useNavigate();
 
     const handleOnClick = () => {
-        console.log(data);
         if (data.type == "file") {
             props.onClick();
             return;
