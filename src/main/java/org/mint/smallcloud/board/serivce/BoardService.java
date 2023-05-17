@@ -2,6 +2,8 @@ package org.mint.smallcloud.board.serivce;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.mint.smallcloud.board.domain.BoardType;
+import org.mint.smallcloud.board.dto.RequestDto;
 import org.mint.smallcloud.board.dto.BoardDto;
 import org.mint.smallcloud.board.domain.Board;
 import org.mint.smallcloud.board.repository.BoardRepository;
@@ -19,9 +21,11 @@ public class BoardService {
 
     public void save(BoardDto boardDto) {
         Board board = Board.board(
+                boardDto.getTitle(),
                 boardDto.getContent(),
                 boardDto.getContact(),
-                boardDto.getWriter());
+                boardDto.getWriter(),
+                BoardType.question);
         boardRepository.save(board);
     }
 
@@ -33,14 +37,20 @@ public class BoardService {
 
         Board board = boardThrowerService.findById(boardId);
         return BoardDto.builder()
+                .title(board.getTitle())
                 .content(board.getContent())
                 .contact(board.getContact())
                 .writer(board.getWriter())
                 .build();
     }
 
+    public boolean registerAnswer(RequestDto requestDto) {
+        Board board = Board.board(
+                requestDto.getTitle(),
+                requestDto.getContent(),
+                BoardType.answer);
+        boardRepository.save(board);
+        return true;
+    }
 
 }
-
-// 1:1 문의는 유저정보 필요
-// terms 는 날짜순으로 정렬해서 최신 2개 필요

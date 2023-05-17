@@ -8,6 +8,8 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mint.smallcloud.TestSnippet;
 import org.mint.smallcloud.board.domain.Board;
+import org.mint.smallcloud.board.domain.BoardType;
+import org.mint.smallcloud.board.dto.RequestDto;
 import org.mint.smallcloud.board.dto.BoardDto;
 import org.mint.smallcloud.board.repository.BoardRepository;
 import org.mint.smallcloud.security.dto.UserDetailsDto;
@@ -40,8 +42,7 @@ import static org.springframework.restdocs.payload.PayloadDocumentation.requestF
 import static org.springframework.restdocs.request.RequestDocumentation.parameterWithName;
 import static org.springframework.restdocs.request.RequestDocumentation.pathParameters;
 import static org.springframework.security.test.web.servlet.setup.SecurityMockMvcConfigurers.springSecurity;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 
 @ExtendWith(RestDocumentationExtension.class)
@@ -113,16 +114,19 @@ class BoardControllerTest {
         @BeforeEach
         void boot() {
             securedBoardDto = BoardDto.builder()
+                    .title("testTitle")
                 .content("testContent")
                 .contact("010-1234-5678")
                 .writer("testWriter")
                 .build();
             boardDto = BoardDto.builder()
+                    .title("testTitle")
                 .content("testContent")
                 .contact("010-1234-5678")
                 .writer("testWriter")
                 .build();
             notContactBoardDto = BoardDto.builder()
+                    .title("testTitle")
                 .content("testContent")
                 .writer("testWriter")
                 .build();
@@ -133,6 +137,7 @@ class BoardControllerTest {
         @Test
         void fineOne() throws Exception {
             RequestFieldsSnippet payload = requestFields(
+                    fieldWithPath("title").description("글의 제목을 담고 있습니다."),
                 fieldWithPath("content").description("사용자 질문의 내용을 담고 있습니다."),
                 fieldWithPath("contact").description("사용자의 연락처를 담고 있습니다."),
                 fieldWithPath("writer").description("글의 작성자를 담고 있습니다."));
@@ -182,8 +187,8 @@ class BoardControllerTest {
 
         @BeforeEach
         void boot() {
-            board = Board.board("testContent", "testContact");
-            board1 = Board.board("testContent1", "testContact1");
+            board = Board.board("testTitle", "testContent", "testContact");
+            board1 = Board.board("testTitle", "testContent1", "testContact1");
             boardRepository.save(board);
             boardRepository.save(board1);
             findBoard = boardRepository.findAll();
@@ -194,8 +199,10 @@ class BoardControllerTest {
         void fine() throws Exception {
             mockMvc.perform(TestSnippet.secureGet(url, adminToken.getAccessToken()))
                 .andExpect(status().isOk())
+                    .andExpect(jsonPath("$.[0].title").value(findBoard.get(0).getTitle()))
                 .andExpect(jsonPath("$.[0].content").value(findBoard.get(0).getContent()))
                 .andExpect(jsonPath("$.[0].contact").value(findBoard.get(0).getContact()))
+                    .andExpect(jsonPath("$.[1].title").value(findBoard.get(1).getTitle()))
                 .andExpect(jsonPath("$.[1].content").value(findBoard.get(1).getContent()))
                 .andExpect(jsonPath("$.[1].contact").value(findBoard.get(1).getContact()))
                 .andDo(document("GetAllInquiries"));
@@ -210,10 +217,11 @@ class BoardControllerTest {
         @DisplayName("정상적인 문의 선택 조회")
         @Test
         void fine() throws Exception {
-            Board board = Board.board("testContent", "testContact");
+            Board board = Board.board("testTitle", "testContent", "testContact");
             boardRepository.save(board);
             mockMvc.perform(TestSnippet.secured(get(url, board.getId()), adminToken.getAccessToken()))
                 .andExpect(status().isOk())
+                    .andExpect(jsonPath("$.title").value(board.getTitle()))
                 .andExpect(jsonPath("$.content").value(board.getContent()))
                 .andExpect(jsonPath("$.contact").value(board.getContact()))
                 .andDo(document("GetOneInquiry",
@@ -224,7 +232,7 @@ class BoardControllerTest {
 
         @DisplayName("잘못된 문의 선택 조회")
         @Test
-        void wrongselect() throws Exception {
+        void wrongSelect() throws Exception {
             mockMvc.perform(TestSnippet.secured(get(url, 1000), adminToken.getAccessToken()))
                 .andExpect(status().isNotFound())
                 .andDo(document("CannotFindInquiry"));
@@ -233,12 +241,54 @@ class BoardControllerTest {
         @DisplayName("잘못된 토큰 - 문의 선택 조회")
         @Test
         void wrongToken() throws Exception {
-            Board board = Board.board("testContent", "testContact");
+            Board board = Board.board("testTitle", "testContent", "testContact");
             boardRepository.save(board);
             mockMvc.perform(TestSnippet.secured(get(url, board.getId()), "testWrongToken"))
                 .andExpect(status().isBadRequest())
                 .andDo(document("WrongTokenGetInquiry"));
         }
 
+    }
+
+    @Nested
+    @DisplayName("/inquiries/ 문의 답변 테스트")
+    class answer {
+        private RequestDto answerDto;
+
+        @BeforeEach
+        void boot() {
+            answerDto = RequestDto.builder()
+                    .title("testTitle")
+                    .content("testContent")
+                    .build();
+        }
+
+        final String url = URL_PREFIX + "/answer";
+
+        @DisplayName("정상적 답변 저장")
+        @Test
+        void fine() throws Exception {
+            Board board = Board.board("testTitle", "testContent", BoardType.answer);
+            boardRepository.save(board);
+            mockMvc.perform(TestSnippet.securePost(url, adminToken.getAccessToken(), objectMapper, answerDto))
+                    .andExpect(status().isOk())
+                    .andExpect(content().json("{result: true}"))
+//                    .andExpect(jsonPath("$.title").value(board.getTitle()))
+//                    .andExpect(jsonPath("$.content").value(board.getContent()))
+                    .andDo(document("SaveAnswer"));
+        }
+
+        @DisplayName("잘못된 관리자 토큰")
+        @Test
+        void wrongToken() throws Exception {
+            Board board = Board.board("testTitle", "testContent", BoardType.answer);
+            boardRepository.save(board);
+            mockMvc.perform(TestSnippet.securePost(url, "testToken", objectMapper, answerDto))
+                    .andExpect(status().isOk())
+                    .andExpect(content().json("{result: false}"))
+//                    .andExpect(jsonPath("$.title").value(board.getTitle()))
+//                    .andExpect(jsonPath("$.content").value(board.getContent()))
+                    .andDo(document("WrongTokenSaveAnswer"));
+        }
     }
 }

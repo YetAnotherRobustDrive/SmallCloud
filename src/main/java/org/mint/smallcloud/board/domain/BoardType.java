@@ -1,20 +1,7 @@
 package org.mint.smallcloud.board.domain;
 
-import lombok.AccessLevel;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
 
-import javax.persistence.*;
-
-@Table(name = "BOARDTYPES")
-@Entity
-@NoArgsConstructor(access = AccessLevel.PROTECTED)
-@Getter
-public class BoardType {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "BOARDTYPE_ID")
-    private Long id;
+public enum BoardType {
 
     /**
      * question - 질문내용(user 정보있으면 1:1문의 없으면 그냥 문의)
@@ -24,8 +11,8 @@ public class BoardType {
      * terms - 약관(가장 최근꺼 2개 가져와서 변경내역 보여줘야함)
      * privacy - 개인정보처리방침(얘도 2개 가져와야 함)
      */
-    private enum type {
+
         question, answer, faq, announcement, terms, privacy
-    };
+
 
 }

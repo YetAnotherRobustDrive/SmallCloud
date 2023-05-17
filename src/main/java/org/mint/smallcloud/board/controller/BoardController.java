@@ -2,7 +2,9 @@ package org.mint.smallcloud.board.controller;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.mint.smallcloud.ResponseDto;
 import org.mint.smallcloud.board.domain.Board;
+import org.mint.smallcloud.board.dto.RequestDto;
 import org.mint.smallcloud.board.dto.BoardDto;
 import org.mint.smallcloud.board.serivce.BoardService;
 import org.mint.smallcloud.exception.ExceptionStatus;
@@ -53,11 +55,19 @@ public class BoardController {
         }
         Optional<UserDetails> authentication = userDetailsProvider.getUserDetails();
         BoardDto boardDto1 = BoardDto.builder()
+                .title(boardDto.getTitle())
             .content(boardDto.getContent())
             .contact(boardDto.getContact())
             .writer(authentication.map(UserDetails::getUsername).orElse(null))
             .build();
         boardService.save(boardDto1);
         return ResponseEntity.ok().build();
+    }
+
+    @Secured({Roles.S_ADMIN})
+    @PostMapping("/answer")
+    public ResponseDto<Boolean> registerAnswer(@Valid @RequestBody RequestDto requestDto) {
+        boolean result = boardService.registerAnswer(requestDto);
+        return ResponseDto.<Boolean>builder().result(result).build();
     }
 }

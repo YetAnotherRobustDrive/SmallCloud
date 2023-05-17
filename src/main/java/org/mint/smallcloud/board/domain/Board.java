@@ -17,6 +17,9 @@ public class Board {
     @Column(name = "BOARD_ID")
     private Long id;
 
+    @Column(name = "TITLE")
+    private String title;
+
     @Column(name = "CONTENT")
     private String content;
 
@@ -41,26 +44,61 @@ public class Board {
     @Column(name = "WRITER")
     private String writer;
 
+    protected Board(String title, String content){
+        this.title = title;
+        this.content = content;
+        this.createdDate = LocalDateTime.now();
+    }
 
-    protected Board(String content, String contact){
+    protected Board(String title, String content, String contact){
+        this.title = title;
         this.content = content;
         this.contact = contact;
         this.createdDate = LocalDateTime.now();
     }
 
-    protected Board(String content, String contact, String writer){
+    protected Board(String title, String content, BoardType boardType){
+        this.title = title;
+        this.content = content;
+        this.boardType = boardType;
+        this.createdDate = LocalDateTime.now();
+    }
+
+    protected Board(String title, String content, String contact, String writer){
+        this.title = title;
         this.content = content;
         this.contact = contact;
         this.writer = writer;
         this.createdDate = LocalDateTime.now();
     }
 
-    public static Board board(String content, String contact) {
-        return new Board(content, contact);
+    protected Board(String title, String content, String contact, String writer, BoardType boardType){
+        this.title = title;
+        this.content = content;
+        this.contact = contact;
+        this.writer = writer;
+        this.boardType = boardType;
+        this.createdDate = LocalDateTime.now();
     }
 
-    public static Board board(String content, String contact, String writer) {
-        return new Board(content, contact, writer);
+
+    public static Board board(String title, String content) {
+        return new Board(title, content);
     }
 
+    public static Board board(String title, String content, String contact) {
+        return new Board(title, content, contact);
+    }
+
+    public static Board board(String title, String content, BoardType boardType) {
+        return new Board(title, content, boardType);
+    }
+
+    public static Board board(String title, String content, String contact, String writer) {
+        return new Board(title, content, contact, writer);
+    }
+
+    public static Board board(String title, String content, String contact, String writer, BoardType boardType) {
+        return new Board(title, content, contact, writer, boardType);
+    }
 }
