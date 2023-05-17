@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import BodyFrame from "../../component/Bodyframe";
 import Header from "../../component/header/Header";
 import BodyHeader from "../../component/main/BodyHeader";
@@ -10,14 +10,12 @@ import ModalFileview from "../../component/modal/ModalFileview";
 import Sidebar from "../../component/sidebar/Sidebar";
 
 import datas from '../../fakeJSON/direcFiles.json';
-import { useLocation, useParams } from 'react-router-dom';
 
 export default function FolderPage() {
 
     const [isGrid, setIsGrid] = useState(true);
     const [isFileView, setIsFileView] = useState(false);
     const [selected, setSelected] = useState();
-    const location = useLocation();
 //todo
     return (
         <>

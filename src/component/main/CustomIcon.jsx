@@ -16,7 +16,7 @@ export default function CustomIcon(props) {
             return;
         }
         else {
-            navigate("files/" + props.id);
+            navigate("/files/" + props.id);
             return;
         }
     }
