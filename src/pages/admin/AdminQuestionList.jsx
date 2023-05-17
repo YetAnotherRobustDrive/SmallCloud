@@ -1,14 +1,12 @@
 import React, { useEffect, useState } from "react";
 import BodyFrame from "../../component/Bodyframe";
+import ExtendBox from "../../component/cs/ExtendBox";
 import Header from "../../component/header/Header";
 import BodyHeader from "../../component/main/BodyHeader";
+import ModalOk from "../../component/modal/ModalOk";
 import SidebarAdmin from "../../component/sidebar/SidebarAdmin";
 import '../../css/admin.css';
-import GetBoardById from "../../services/board/GetBoardById";
-import GetNoReplyBoard from "../../services/board/GetNoReplyBoard";
-import ModalOk from "../../component/modal/ModalOk";
-import ExtendBox from "../../component/cs/ExtendBox";
-
+import GetBoardListFrom from "../../services/board/GetBoardListFrom";
 
 export default function AdminQuestionList() {
     const [questions, setQuestions] = useState();
@@ -17,7 +15,7 @@ export default function AdminQuestionList() {
 
     useEffect(() => {
         const render = async () => {
-            const res = await GetNoReplyBoard();
+            const res = await GetBoardListFrom('inquiries');
             if (!res[0]) {
                 setIsFail(true);
                 setMessage(res[1]);
