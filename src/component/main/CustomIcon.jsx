@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { FcFolder, FcFile } from 'react-icons/fc'
+import { useLocation, useNavigate } from "react-router-dom";
 import '../../css/customIcon.css'
 
 export default function CustomIcon(props) {
@@ -7,6 +8,31 @@ export default function CustomIcon(props) {
     const [icon, setIcon] = useState(null);
     const [left, setLeft] = useState(null);
     const [right, setRight] = useState(null);
+    const location = useLocation();
+    const navigate = useNavigate();
+
+    const handleOnClick = () => {
+        if(props.type == "file"){
+            props.onClick();
+            return;
+        }
+        else {
+            const curr = location.pathname;
+            if(curr == "/"){
+               navigate(curr + "files/" + props.name);
+               return;
+            } 
+            else {
+                if (curr.endsWith('/')) {
+                    navigate(curr + props.name);                    
+                }
+                else {
+                    navigate(curr + "/" + props.name);
+                }
+               return;
+            }
+        }
+    }
 
     useEffect(() => {
         setIcon(
@@ -38,7 +64,7 @@ export default function CustomIcon(props) {
         })
     }, [])
     return (
-        <div className="CustomIcon" onClick={() => props.onClick()}>
+        <div className="CustomIcon" onClick={handleOnClick}>
             <div className="icon">
                 {icon}
                 <div className="labels">

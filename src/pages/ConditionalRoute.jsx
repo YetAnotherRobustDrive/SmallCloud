@@ -1,11 +1,14 @@
 import React from 'react';
 import { useSelector } from 'react-redux';
-import { BrowserRouter as Router, Navigate, Route, Routes } from 'react-router-dom';
+import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import LogoutUser from '../services/user/LogoutUser';
 import AdminConfigPage from './admin/AdminConfigPage';
+import AdminPage from './admin/AdminPage';
+import AdminQuestionList from './admin/AdminQuestionList';
 import AdminUserCtrlPage from './admin/AdminUserCtrlPage';
 import AdminUserRegister from './admin/AdminUserRegister';
 import ErrorPage from './common/ErrorPage';
+import FolderPage from './common/FolderPage';
 import MainPage from './common/MainPage';
 import FaqPage from './cs/FaqPage';
 import NoticePage from './cs/NoticePage';
@@ -22,8 +25,6 @@ import MyPage from './mypage/MyPage';
 import PrivatePage from './mypage/PrivatePage';
 import SecurityInfoPage from './mypage/SecurityInfoPage';
 import ServiceInfoPage from './mypage/ServiceInfoPage';
-import AdminPage from './admin/AdminPage';
-import AdminQuestionList from './admin/AdminQuestionList';
 
 export default () => {
     const isPrivileged = useSelector(state => state.token.isPrivileged);
@@ -43,6 +44,8 @@ export default () => {
                         <Route path='/logout' element={<LogoutUser />} />
                         <Route path='/favorites' element={<FavoritesPage />} />
                         <Route path='/trash' element={<TrashBinPage />} />
+
+                        <Route path='/files/:file/*' element={<FolderPage />} />
 
                         <Route path='/mypage' element={isPrivileged ? <PrivatePage /> : <MyPage />} />
                         <Route path='/mypage/service' element={isPrivileged ? <ServiceInfoPage /> : <MyPage />} />

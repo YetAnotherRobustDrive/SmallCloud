@@ -52,11 +52,11 @@
     width: fit-content;
     max-width: 150px;
     height: 50px;
-    align-items: center;
-    display: flex;
+    display: inline-block;
     overflow: hidden;
-    text-overflow: ellipsis;  
-    white-space: nowrap; 
+    text-overflow: ellipsis;
+    line-height: 50px;
+    text-align: start;
 }
 
 .listbox .size{
