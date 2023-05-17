@@ -10,15 +10,18 @@ export default function LoginQuestionPage() {
             <img src={logo_img} alt="LOGO" />
             <div className="ask">
                 <span className="askSpan">관리자에게 문의하기</span>
+                <span>{">> 문의 제목"}</span>
+                <input type="text" name="title" className="titles" />
+                <span>{">> 문의 내용"}</span>
                 <textarea className="askText" type="text" placeholder="Text..." />
                 <div className="askAdditional">
                     <div>
                         <span>연락처</span>
-                        <input type="text" placeholder="phone or e-mail"/>
+                        <input className="contact" type="text" placeholder="phone or e-mail" />
                     </div>
                     <div>
                         <span>개인정보 수집 동의</span>
-                        <input type="checkbox" className="checkBox"/>
+                        <input type="checkbox" className="checkBox" />
                     </div>
                     <div className="buttons">
                         <button>문의 등록</button>

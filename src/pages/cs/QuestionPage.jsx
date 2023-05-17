@@ -51,9 +51,9 @@ export default function QuestionPage() {
             <BodyFrame>
                 <BodyHeader text="1:1 문의하기" />
                 <form className="ask" onSubmit={handleSubmit}>
-                    <span>문의 제목</span>
-                    <input type="text" name="title"/>
-                    <span>문의 내용</span>
+                    <span>{">> 문의 제목"}</span>
+                    <input type="text" name="title" className="title"/>
+                    <span>{">> 문의 내용"}</span>
                     <textarea name="content" className="inner" type="text" placeholder="Text..." />
                     <button type="submit" className="askBtn">제출</button>
                 </form>

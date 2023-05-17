@@ -46,10 +46,12 @@
 }
 
 .ask .inner {
-    border: 1px solid black;
-    height: calc(100% - 100px); 
-    width: 100%;
+    border: 2px solid #666666;
+    height: calc(100% - 160px); 
+    width: calc(100% - 20px);
     resize: none;
+    padding: 10px;
+    border-radius: 3px;
 }
 
 .ask .askBtn{
@@ -58,4 +60,13 @@
     bottom: 0;
     height: 25px;
     margin: 10px;
+}
+
+.ask .title{
+    margin: 0;
+    border: 2px solid #666666;
+    border-radius: 3px;
+    font-size: 20px;
+    width: calc(100% - 20px);
+    padding: 10px;
 }
