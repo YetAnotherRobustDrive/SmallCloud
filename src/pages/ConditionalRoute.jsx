@@ -70,8 +70,7 @@ export default () => {
 
                     </>
                 }
-                <Route path='/error' element={<ErrorPage />} />
-                <Route path="*" element={<Navigate to="/error" />} />
+                <Route path="*" element={<ErrorPage/>} />
             </Routes>
         </Router>
     )
