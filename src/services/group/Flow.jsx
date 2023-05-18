@@ -1,28 +1,74 @@
-import React, { useCallback, useRef, useState } from 'react';
+import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { BiAddToQueue, BiSave } from 'react-icons/bi';
 import ReactFlow, {
-    addEdge, applyNodeChanges, ControlButton, Controls, getConnectedEdges, getIncomers, getOutgoers, updateEdge
+    addEdge, applyNodeChanges, ControlButton, Controls, getConnectedEdges, getIncomers, getOutgoers, getRectOfNodes, updateEdge
 } from 'reactflow';
 
 import 'reactflow/dist/style.css';
 import PostGroup from './PostGroup';
+import GetGroup from './GetGroup';
 
 export default function Flow(props) {
     const [nodes, setNodes] = useState([]);
     const [edges, setEdges] = useState([]);
+
     const [isRootExist, setIsRootExist] = useState(false);
 
     const edgeUpdateSuccessful = useRef(true);
-    const currEdge = useRef();
-    const currNode = useRef();
+    const edgeRef = useRef();
+    const nodeRef = useRef();
     const isRootExistRef = useRef();
 
     isRootExistRef.current = isRootExist;
-    currEdge.current = edges;
-    currNode.current = nodes;
+    edgeRef.current = edges;
+    nodeRef.current = nodes;
+
+    useEffect(() => {
+        const init = async () => {
+            const res = await GetGroup();
+            const tmpRes = JSON.parse(JSON.stringify(res));
+            tmpRes.forEach(e => {
+                e.type = "step";
+                e.id = "reactflow__edge-" + e.source + '-' + e.target;
+                delete e.x;
+                delete e.y;
+            });
+            setEdges(tmpRes);
+            let tmp = [];
+            for (let index = 0; index < res.length; index++) {
+                const elem = res[index];
+                tmp = tmp.concat({
+                    id: elem.target,
+                    type: 'customNode',
+                    position: { x: elem.x, y: elem.y },
+                    data: {
+                        label: elem.target,
+                    }
+                })
+            }
+
+            res.map((elem) => {
+                const exist = tmp.find((e) => e.id === elem.source);
+                if (exist === undefined) {
+                    tmp = tmp.concat({
+                        id: elem.source,
+                        type: 'customRootNode',
+                        position: { x: 250, y: 0 },
+                        data: {
+                            label: elem.source,
+                        },
+                        dragHandle: "none"
+                    })
+                    return;
+                }
+            })
+            setNodes(tmp);
+        };
+        init();
+    }, [])
 
     const onConnect = useCallback((params) => {
-        const exist = currEdge.current.find((e) => e.target === params.target);
+        const exist = edgeRef.current.find((e) => e.target === params.target);
         if (exist != undefined) {
             return false;
         }
@@ -69,7 +115,7 @@ export default function Flow(props) {
 
     const handleClickAdd = () => {
         const name = window.prompt("새 그룹의 이름을 입력해주세요.");
-        const exist = currNode.current.find((e) => e.id === name);
+        const exist = nodeRef.current.find((e) => e.id === name);
         if (exist != undefined) {
             return;
         }
@@ -90,10 +136,11 @@ export default function Flow(props) {
             const newNode = nodes.concat({
                 id: name,
                 type: 'customRootNode',
-                position: { x: 0, y: 0 },
+                position: { x: 250, y: 0 },
                 data: {
                     label: name,
-                }
+                },
+                dragHandle: "none"
             })
             setIsRootExist(true);
             setNodes(newNode);
@@ -102,8 +149,18 @@ export default function Flow(props) {
     }
 
     const handleClickSave = async () => {
-        await PostGroup(currEdge.current);
-        console.log(currEdge.current)
+        const tmpEdge = JSON.parse(JSON.stringify(edgeRef.current));
+        const tmpNode = JSON.parse(JSON.stringify(nodeRef.current));
+        const position = tmpNode.map((a) => [a.id, a.position.x, a.position.y]);
+        
+        tmpEdge.forEach(e => {
+            const pos = position.find((elem) => elem[0] === e.target);
+            e.x = pos[1];
+            e.y = pos[2];
+            delete e.type;
+            delete e.id;
+        })
+        await PostGroup(tmpEdge);//XY mapping
     }
 
     return (

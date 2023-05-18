@@ -12,8 +12,6 @@ export default async function PostGroup(value) {
         },
         body: JSON.stringify(value)
     };
-    console.log(model);
-
     // try {
     //     const res = await fetch(configData.API_SERVER + 'auth/elevate', model);
     //     const data = await res.json();
