@@ -1,21 +1,20 @@
-
 === 등록 (register)
 
 ==== 명세
 
-operation::Register[snippets='http-request,request-fields']
+operation::Auth/Register/ok[snippets='http-request,request-fields']
 
 ==== 성공
 
-operation::Register[snippets='http-response']
+operation::Auth/Register/ok[snippets='http-response']
 
 ==== 실패
 
-operation::RegisterFail[snippets='http-response']
+operation::Auth/Register/duplicated[snippets='http-response']
 
 IMPORTANT: 유저가 이미 존재할 때
 
-operation::RegisterWrongFormat[snippets='http-response']
+operation::Auth/Register/wrongFormatDto[snippets='http-response']
 
 IMPORTANT: Payload값이 적절하지 않음
 
@@ -23,23 +22,23 @@ IMPORTANT: Payload값이 적절하지 않음
 
 ==== 명세
 
-operation::Login[snippets='http-request,request-fields']
+operation::Auth/Login/ok[snippets='http-request,request-fields']
 
 ==== 성공
 
-operation::Login[snippets='http-response']
+operation::Auth/Login/ok[snippets='http-response']
 
 ===== 실패
 
-operation::WrongPassword[snippets='http-response']
+operation::Auth/Login/wrongPassword[snippets='http-response']
 
 IMPORTANT: 비밀번호가 잘못되었을 때
 
-operation::NotFoundUserLogin[snippets='http-response']
+operation::Auth/Login/notRegistered[snippets='http-response']
 
 IMPORTANT: 유저를 찾을 수 없을 때
 
-operation::NotValidLogin[snippets='http-response']
+operation::Auth/Login/wrongFormat[snippets='http-response']
 
 IMPORTANT: Payload 값이 적절하지 않음
 
@@ -47,15 +46,15 @@ IMPORTANT: Payload 값이 적절하지 않음
 
 ==== 명세
 
-operation::Refresh[snippets='http-request']
+operation::Auth/Refresh/ok[snippets='http-request']
 
 ==== 성공
 
-operation::Refresh[snippets='http-response']
+operation::Auth/Refresh/ok[snippets='http-response']
 
 ==== 실패
 
-operation::RefreshBadToken[snippets='http-response']
+operation::Auth/Refresh/wrongToken[snippets='http-response']
 
 IMPORTANT: refresh 토큰이 잘못되었을 때
 
@@ -63,19 +62,19 @@ IMPORTANT: refresh 토큰이 잘못되었을 때
 
 ==== 명세
 
-operation::Elevate[snippets='http-request']
+operation::Auth/Elevate/ok[snippets='http-request']
 
 ==== 성공
 
-operation::Elevate[snippets='http-response']
+operation::Auth/Elevate/ok[snippets='http-response']
 
 ==== 실패
 
-operation::ElevateWrongPassword[snippets='http-response']
+operation::Auth/Elevate/wrongPassword[snippets='http-response']
 
 IMPORTANT: 잘못된 pssword를 보냈을 때
 
-operation::ElevateUnauth[snippets='http-response']
+operation::Auth/Elevate/wrongToken[snippets='http-response']
 
 IMPORTANT: 로그인토큰이 잘못되었을 때
 
@@ -83,15 +82,15 @@ IMPORTANT: 로그인토큰이 잘못되었을 때
 
 ==== 명세
 
-operation::Deregister[snippets='http-request']
+operation::Auth/Deregister/ok[snippets='http-request']
 
 ==== 성공
 
-operation::Deregister[snippets='http-response']
+operation::Auth/Deregister/ok[snippets='http-response']
 
 ==== 실패
 
-operation::DeregisterPrivilege[snippets='http-response']
+operation::Auth/Deregister/notPrivilege[snippets='http-response']
 
 IMPORTANT: 권한이 없을 때
 
@@ -99,15 +98,15 @@ IMPORTANT: 권한이 없을 때
 
 ==== 명세
 
-operation::Privileged[snippets='http-request']
+operation::Auth/Privileged/ok[snippets='http-request']
 
 ==== 성공
 
-operation::Privileged[snippets='http-response']
+operation::Auth/Privileged/ok[snippets='http-response']
 
 IMPORTANT: 유저가 특권유저일 때
 
-operation::PrivilegedFalse[snippets='http-response']
+operation::Auth/Privileged/notPrivilege[snippets='http-response']
 
 IMPORTANT: 유저가 특권유저가 아닐 때
 
@@ -115,14 +114,14 @@ IMPORTANT: 유저가 특권유저가 아닐 때
 
 ==== 명세
 
-operation::AdminCheck[snippets='http-request']
+operation::Auth/AdminCheck/ok[snippets='http-request']
 
 ==== 성공
 
-operation::AdminCheck[snippets='http-response']
+operation::Auth/AdminCheck/ok[snippets='http-response']
 
 IMPORTANT: 유저가 관리자일 때
 
-operation::AdminCheckFalse[snippets='http-response']
+operation::Auth/AdminCheck/notPrivilege[snippets='http-response']
 
 IMPORTANT: 유저가 관리자가 아닐 때
