@@ -48,6 +48,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 class AuthControllerTest {
     private MockMvc mockMvc;
     private final String URL_PREFIX = "/auth";
+    private final String DOCUMENT_NAME = "Auth/{ClassName}/{methodName}";
 
     @Autowired
     private ObjectMapper objectMapper;
@@ -96,7 +97,7 @@ class AuthControllerTest {
 
         @Test
         @DisplayName("정상 요청")
-        public void register() throws Exception {
+        public void ok() throws Exception {
             RequestFieldsSnippet payload = requestFields(
                 fieldWithPath("id").description("user id"),
                 fieldWithPath("name").description("user nickname"),
@@ -105,16 +106,16 @@ class AuthControllerTest {
             mockMvc.perform(TestSnippet.post(url, objectMapper, registerDto))
                 .andExpect(status().isOk())
                 .andExpect((result) -> assertNotNull(memberRepository.findByUsername(registerDto.getId()).orElse(null)))
-                .andDo(document("Register", payload));
+                .andDo(document(DOCUMENT_NAME, payload));
         }
 
         @DisplayName("이미 존재하는 유저")
         @Test
-        void duplicatedUser() throws Exception {
+        void duplicated() throws Exception {
             em.persist(Member.of(registerDto.getId(), registerDto.getPassword(), registerDto.getName()));
             mockMvc.perform(TestSnippet.post(url, objectMapper, registerDto))
                 .andExpect(status().isForbidden())
-                .andDo(document("RegisterFail"));
+                .andDo(document(DOCUMENT_NAME));
         }
 
         @DisplayName("잘못된 포멧으로 된 dto")
@@ -129,7 +130,7 @@ class AuthControllerTest {
 
             mockMvc.perform(TestSnippet.post(url, objectMapper, wrongFormat))
                 .andExpect(status().isBadRequest())
-                .andDo(document("RegisterWrongFormat"));
+                .andDo(document(DOCUMENT_NAME));
         }
     }
 
@@ -151,14 +152,14 @@ class AuthControllerTest {
 
         @Test
         @DisplayName("/auth/login document")
-        public void login() throws Exception {
+        public void ok() throws Exception {
             RequestFieldsSnippet payload = requestFields(
                 fieldWithPath("id").description("user id"),
                 fieldWithPath("password").description("user password"));
 
             mockMvc.perform(TestSnippet.post(url, objectMapper, user1))
                 .andExpect(status().isOk())
-                .andDo(document("Login", payload));
+                .andDo(document(DOCUMENT_NAME, payload));
         }
 
         @DisplayName("등록되지 않은 유저 로그인")
@@ -166,7 +167,7 @@ class AuthControllerTest {
         void notRegistered() throws Exception {
             mockMvc.perform(TestSnippet.post(url, objectMapper, user2))
                 .andExpect(status().isForbidden())
-                .andDo(document("NotFoundUserLogin"));
+                .andDo(document(DOCUMENT_NAME));
         }
 
         @DisplayName("패스워드가 틀림")
@@ -174,12 +175,12 @@ class AuthControllerTest {
         void wrongPassword() throws Exception {
             mockMvc.perform(TestSnippet.post(url, objectMapper, wrongPasswordLoginDto1))
                 .andExpect(status().isForbidden())
-                .andDo(document("WrongPassword"));
+                .andDo(document(DOCUMENT_NAME));
         }
 
         @DisplayName("잘못된 포멧으로 된 dto")
         @Test
-        void wrongFormatDto() throws Exception {
+        void wrongFormat() throws Exception {
             LoginDto notValidDto = LoginDto.builder()
                 .id("fjiowejfioewjoifjweoijf@@@ioewjofijewiofjewiojioewj")
                 .password("fjioewjifojewiofjewiojfioewjfioewjiofjwe")
@@ -187,7 +188,7 @@ class AuthControllerTest {
 
             mockMvc.perform(TestSnippet.post(url, objectMapper, notValidDto))
                 .andExpect(status().isBadRequest())
-                .andDo(document("NotValidLogin"));
+                .andDo(document(DOCUMENT_NAME));
         }
 
     }
@@ -216,13 +217,13 @@ class AuthControllerTest {
 
         @DisplayName("정상 요청")
         @Test
-        void fine() throws Exception {
+        void ok() throws Exception {
             RequestFieldsSnippet payload = requestFields(
                 fieldWithPath("password").description("user password"));
             map.put("password", user1.getPassword());
             mockMvc.perform(TestSnippet.securePost(url, token.getAccessToken(), objectMapper, map))
                 .andExpect(status().isOk())
-                .andDo(document("Elevate", payload));
+                .andDo(document(DOCUMENT_NAME, payload));
         }
 
         @DisplayName("패스워드가 틀림")
@@ -231,7 +232,7 @@ class AuthControllerTest {
             map.put("password", user1.getPassword() + "abc");
             mockMvc.perform(TestSnippet.securePost(url, token.getAccessToken(), objectMapper, map))
                 .andExpect(status().isForbidden())
-                .andDo(document("ElevateWrongPassword"));
+                .andDo(document(DOCUMENT_NAME));
         }
 
         @DisplayName("로그인 토큰이 잘못됨")
@@ -240,7 +241,7 @@ class AuthControllerTest {
             map.put("password", user1.getPassword());
             mockMvc.perform(TestSnippet.post(url, objectMapper, map))
                 .andExpect(status().isForbidden())
-                .andDo(document("ElevateUnauth"));
+                .andDo(document(DOCUMENT_NAME));
         }
 
         @DisplayName("패스워드 포멧이 잘못됨")
@@ -249,7 +250,7 @@ class AuthControllerTest {
             map.put("password", "123jfkldsajfkldjsaklfjdsalj");
             mockMvc.perform(TestSnippet.securePost(url, token.getAccessToken(), objectMapper, map))
                 .andExpect(status().isBadRequest())
-                .andDo(document("ElevateTooLongPW"));
+                .andDo(document(DOCUMENT_NAME));
         }
     }
 
@@ -273,7 +274,7 @@ class AuthControllerTest {
 
         @Test
         @DisplayName("정상 요청")
-        void fine() throws Exception {
+        void ok() throws Exception {
             JwtTokenDto privilegeToken = jwtTokenProvider.generateTokenDto(
                 UserDetailsDto.builder()
                     .username(user1.getId())
@@ -284,12 +285,12 @@ class AuthControllerTest {
             mockMvc.perform(TestSnippet.securePost(url, privilegeToken.getAccessToken()))
                 .andExpect(status().isOk())
                 .andExpect((rst) -> assertNull(em.find(Member.class, member1.getId())))
-                .andDo(document("Deregister"));
+                .andDo(document(DOCUMENT_NAME));
         }
 
         @Test
         @DisplayName("권한이 없는 유저가 요청")
-        void noPrivilege() throws Exception {
+        void notPrivilege() throws Exception {
             token = jwtTokenProvider.generateTokenDto(
                 UserDetailsDto.builder()
                     .username(user2.getId())
@@ -299,7 +300,7 @@ class AuthControllerTest {
                     .build());
             mockMvc.perform(TestSnippet.securePost(url, token.getAccessToken()))
                 .andExpect(status().isForbidden())
-                .andDo(document("DeregisterNoPrivilege"));
+                .andDo(document(DOCUMENT_NAME));
         }
 
     }
@@ -326,10 +327,10 @@ class AuthControllerTest {
 
         @DisplayName("정상 요청")
         @Test
-        void fine() throws Exception {
+        void ok() throws Exception {
             mockMvc.perform(TestSnippet.secureGet(url, token.getRefreshToken()))
                 .andExpect(status().isOk())
-                .andDo(document("Refresh",
+                .andDo(document(DOCUMENT_NAME,
                     responseFields(
                         fieldWithPath("result")
                             .type(JsonFieldType.STRING)
@@ -342,7 +343,7 @@ class AuthControllerTest {
         void wrongToken() throws Exception {
             mockMvc.perform(TestSnippet.secureGet(url, "abc"))
                 .andExpect(status().isBadRequest())
-                .andDo(document("RefreshBadToken"));
+                .andDo(document(DOCUMENT_NAME));
         }
     }
 
@@ -360,7 +361,7 @@ class AuthControllerTest {
 
         @DisplayName("정상 요청")
         @Test
-        void fine() throws Exception {
+        void ok() throws Exception {
             JwtTokenDto token = jwtTokenProvider.generateTokenDto(
                 UserDetailsDto.builder()
                     .username(user1.getId())
@@ -371,7 +372,7 @@ class AuthControllerTest {
             mockMvc.perform(TestSnippet.secureGet(url, token.getAccessToken()))
                 .andExpect(status().isOk())
                 .andExpect(content().json("{result: true}"))
-                .andDo(document("Privileged",
+                .andDo(document(DOCUMENT_NAME,
                     responseFields(
                         fieldWithPath("result")
                             .type(JsonFieldType.BOOLEAN)
@@ -381,7 +382,7 @@ class AuthControllerTest {
 
         @DisplayName("권한이 없는 유저가 요청")
         @Test
-        void noPrivilege() throws Exception {
+        void notPrivilege() throws Exception {
             JwtTokenDto token = jwtTokenProvider.generateTokenDto(
                 UserDetailsDto.builder()
                     .username(user1.getId())
@@ -392,7 +393,7 @@ class AuthControllerTest {
             mockMvc.perform(TestSnippet.secureGet(url, token.getAccessToken()))
                 .andExpect(status().isOk())
                 .andExpect(content().json("{result: false}"))
-                .andDo(document("PrivilegedFalse"));
+                .andDo(document(DOCUMENT_NAME));
         }
     }
 
@@ -413,7 +414,7 @@ class AuthControllerTest {
 
         @DisplayName("정상 요청")
         @Test
-        void fine() throws Exception {
+        void ok() throws Exception {
             JwtTokenDto token = jwtTokenProvider.generateTokenDto(
                 UserDetailsDto.builder()
                     .username(admin.getUsername())
@@ -424,7 +425,7 @@ class AuthControllerTest {
             mockMvc.perform(TestSnippet.secureGet(url, token.getAccessToken()))
                 .andExpect(status().isOk())
                 .andExpect(content().json("{result: true}"))
-                .andDo(document("AdminCheck",
+                .andDo(document(DOCUMENT_NAME,
                     responseFields(
                         fieldWithPath("result")
                             .type(JsonFieldType.BOOLEAN)
@@ -434,7 +435,7 @@ class AuthControllerTest {
 
         @DisplayName("권한이 없는 유저가 요청")
         @Test
-        void noPrivilege() throws Exception {
+        void notPrivilege() throws Exception {
             JwtTokenDto token = jwtTokenProvider.generateTokenDto(
                 UserDetailsDto.builder()
                     .username(user1.getId())
@@ -445,7 +446,7 @@ class AuthControllerTest {
             mockMvc.perform(TestSnippet.secureGet(url, token.getAccessToken()))
                 .andExpect(status().isOk())
                 .andExpect(content().json("{result: false}"))
-                .andDo(document("AdminCheckFalse"));
+                .andDo(document(DOCUMENT_NAME));
         }
     }
 }
