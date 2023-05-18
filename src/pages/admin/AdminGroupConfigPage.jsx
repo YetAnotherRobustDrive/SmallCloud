@@ -7,7 +7,7 @@ import CustomRootNode from "../../services/group/CustomRootNode";
 import Flow from "../../services/group/Flow";
 
 const nodeTypes = { customNode: CustomNode, customRootNode: CustomRootNode };
-export default function AdminGroupConfig() {
+export default function AdminGroupConfigPage() {
 
     return (
         <>

@@ -3,7 +3,7 @@ import { useSelector } from 'react-redux';
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import LogoutUser from '../services/user/LogoutUser';
 import AdminConfigPage from './admin/AdminConfigPage';
-import AdminGroupConfig from './admin/AdminGroupConfig';
+import AdminGroupConfigPage from './admin/AdminGroupConfigPage';
 import AdminPage from './admin/AdminPage';
 import AdminQuestionList from './admin/AdminQuestionList';
 import AdminUserCtrlPage from './admin/AdminUserCtrlPage';
@@ -67,7 +67,7 @@ export default () => {
                                 <Route path='/admin' element={<AdminConfigPage />} />
                                 <Route path='/admin/rules' element={<AdminConfigPage />} />
                                 <Route path='/admin/user' element={<AdminUserCtrlPage />} />
-                                <Route path='/admin/group' element={<AdminGroupConfig />} />
+                                <Route path='/admin/group' element={<AdminGroupConfigPage />} />
                                 <Route path='/admin/user/register' element={<AdminUserRegister />} />
                                 <Route path='/admin/questions' element={<AdminQuestionList />} />
                             </>
