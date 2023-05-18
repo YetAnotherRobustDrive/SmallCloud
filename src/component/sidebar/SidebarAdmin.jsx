@@ -17,7 +17,7 @@ export default function SidebarAdmin() {
         <Link className="link">약관 변경</Link>
       </div>
       <div className="menuBox">
-        <Link className="link">조직도 구성</Link>
+        <Link className="link" to="/admin/group">조직도 구성</Link>
       </div>
       <div className="menuBox">
         <Link className="link" to='/admin/user'>사용자 관리</Link>
