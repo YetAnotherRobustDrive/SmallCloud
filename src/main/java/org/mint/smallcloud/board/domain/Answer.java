@@ -7,7 +7,7 @@ import lombok.NoArgsConstructor;
 import javax.persistence.*;
 import java.time.LocalDateTime;
 
-@Table(name = "BOARDS")
+@Table(name = "ANSWER")
 @Entity
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Getter
@@ -27,18 +27,18 @@ public class Answer {
     @Column(name = "CREATED_DATE")
     private LocalDateTime createdDate;
 
-    @OneToOne(mappedBy = "id")
-    @Column(name = "BOARD_ID")
-    private Board boardId;
+    @OneToOne(mappedBy = "answer")
+    @Column(name = "QUESTION_ID")
+    private Question question;
 
-    protected Answer(String title, String content, Board boardId){
+    protected Answer(String title, String content, Question question){
         this.title = title;
         this.content = content;
-        this.boardId = boardId;
+        this.question = question;
         this.createdDate = LocalDateTime.now();
     }
 
-    public static Answer answer(String title, String content, Board boardId) {
-        return new Answer(title, content, boardId);
+    public static Answer answer(String title, String content, Question question) {
+        return new Answer(title, content, question);
     }
 }

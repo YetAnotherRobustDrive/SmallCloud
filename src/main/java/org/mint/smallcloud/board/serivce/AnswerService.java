@@ -2,9 +2,11 @@ package org.mint.smallcloud.board.serivce;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.checkerframework.checker.units.qual.A;
 import org.mint.smallcloud.board.domain.Answer;
 import org.mint.smallcloud.board.dto.RequestDto;
 import org.mint.smallcloud.board.repository.AnswerRepository;
+import org.mint.smallcloud.board.repository.BoardRepository;
 import org.springframework.stereotype.Service;
 
 @Slf4j
@@ -18,10 +20,9 @@ public class AnswerService {
         Answer answer = Answer.answer(
                 requestDto.getTitle(),
                 requestDto.getContent(),
-                requestDto.getBoard()
+                requestDto.getQuestion()
         );
         answerRepository.save(answer);
         return true;
     }
-
 }
