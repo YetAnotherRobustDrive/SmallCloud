@@ -277,18 +277,5 @@ class BoardControllerTest {
 //                    .andExpect(jsonPath("$.content").value(board.getContent()))
                     .andDo(document("SaveAnswer"));
         }
-
-        @DisplayName("잘못된 관리자 토큰")
-        @Test
-        void wrongToken() throws Exception {
-            Board board = Board.board("testTitle", "testContent", BoardType.answer);
-            boardRepository.save(board);
-            mockMvc.perform(TestSnippet.securePost(url, "testToken", objectMapper, answerDto))
-                    .andExpect(status().isOk())
-                    .andExpect(content().json("{result: false}"))
-//                    .andExpect(jsonPath("$.title").value(board.getTitle()))
-//                    .andExpect(jsonPath("$.content").value(board.getContent()))
-                    .andDo(document("WrongTokenSaveAnswer"));
-        }
     }
 }

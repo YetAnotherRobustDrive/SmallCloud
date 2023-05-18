@@ -11,7 +11,8 @@ import java.util.List;
 public interface BoardRepository extends JpaRepository<Board, Long> {
     List<Board> findByWriter(String writer);
 
-    List<Board> findByType(BoardType type);
+    List<Board> findByBoardType(BoardType type);
 
-    List<Board> findTop2ByOrderByTypeDesc(BoardType type);
+//    @Query("select board FROM Board board where board.boardType = :type order by board.id limit 2")
+//    List<Board> findTop2ByBoardType(BoardType type);
 }

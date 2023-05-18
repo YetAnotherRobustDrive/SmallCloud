@@ -29,8 +29,8 @@ public class Board {
     @Column(name = "CREATED_DATE")
     private LocalDateTime createdDate;
 
-    @OneToOne
-    @JoinColumn(name = "id")
+    @Enumerated(EnumType.STRING)
+    @Column(name = "BOARD_TYPE")
     private BoardType boardType;
 
     /**
