@@ -58,6 +58,16 @@ public class Label {
     }
 
     public void addFile(DataNode file) {
+        if (this.files.contains(file)) return;
+        this.files.add(file);
+        file.addLabel(this);
+    }
+
+    public void deleteFile(DataNode dataNode) {
+        if (!this.files.contains(dataNode)) return;
+        this.files.remove(dataNode);
+        dataNode.deleteLabel(this);
+
     }
 
     public void setName(String name) {

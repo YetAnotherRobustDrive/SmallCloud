@@ -3,6 +3,7 @@ package org.mint.smallcloud.share.domain;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.mint.smallcloud.file.domain.DataNode;
 import org.mint.smallcloud.file.domain.File;
 import org.mint.smallcloud.group.domain.Group;
 import org.mint.smallcloud.user.domain.Member;
@@ -24,7 +25,7 @@ public abstract class Share {
 
     @ManyToOne
     @JoinColumn(name = "FILE")
-    private File file;
+    private DataNode file;
 
     @Override
     public boolean equals(Object obj) {
@@ -44,6 +45,22 @@ public abstract class Share {
 
     public static Share of(Group target, File file) {
         return GroupShare.of(target, file);
+    }
+
+    public void setFile(DataNode file) {
+        if (file == null) {
+            removeFile();
+            return;
+        }
+        if (this.file != null && this.file.equals(file)) return;
+        this.file = file;
+        this.file.addShare(this);
+    }
+
+    public void removeFile() {
+        if (this.file == null) return;
+        this.file.deleteShare(this);
+        this.file = null;
     }
 
     @Override

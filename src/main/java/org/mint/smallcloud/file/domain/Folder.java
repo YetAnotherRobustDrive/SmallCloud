@@ -5,10 +5,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.mint.smallcloud.user.domain.Member;
 
-import javax.persistence.CascadeType;
-import javax.persistence.Entity;
-import javax.persistence.OneToMany;
-import javax.persistence.Table;
+import javax.persistence.*;
 import java.util.List;
 
 @Entity
@@ -29,8 +26,17 @@ public class Folder extends DataNode {
         subDataNodes = null;
     }
 
-    public static Folder of(String name, Member member) {
-        return new Folder(name, member);
+    @Transient
+    public static final String ROOT_NAME = "_ROOT_";
+
+    public static Folder of(Folder folder, String name, Member member) {
+        Folder ret = new Folder(name, member);
+        ret.setParentFolder(folder);
+        return ret;
+    }
+
+    public static Folder createRoot(Member member) {
+        return new Folder(ROOT_NAME, member);
     }
 
     @Override
@@ -39,5 +45,19 @@ public class Folder extends DataNode {
         if (obj == null) return false;
         return obj instanceof Folder
             && ((Folder) obj).getId().equals(this.getId());
+    }
+
+    public void addChild(DataNode dataNode) {
+        if (this.subDataNodes.contains(dataNode)) return;
+        this.subDataNodes.add(dataNode);
+        dataNode.setParentFolder(this);
+    }
+
+    public boolean hasChildWithName(String name) {
+        for (DataNode dataNode : this.subDataNodes) {
+            if (dataNode.getName().equals(name))
+                return true;
+        }
+        return false;
     }
 }

@@ -3,9 +3,6 @@ package org.mint.smallcloud.file.domain;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import org.mint.smallcloud.group.domain.Group;
-import org.mint.smallcloud.label.domain.Label;
-import org.mint.smallcloud.share.domain.Share;
 import org.mint.smallcloud.user.domain.Member;
 
 import javax.persistence.Column;
@@ -30,13 +27,15 @@ public class File extends DataNode {
         this.size = size;
     }
 
-    public static File of(FileType fileType, FileLocation location, Long size, Member member) {
-        return new File(
+    public static File of(Folder parent, FileType fileType, FileLocation location, Long size, Member member) {
+        File ret = new File(
             fileType,
             location,
             size,
             member.getId()
         );
+        ret.setParentFolder(parent);
+        return ret;
     }
 
     @Override
@@ -47,23 +46,5 @@ public class File extends DataNode {
             && ((File) obj).getId().equals(this.getId());
     }
 
-    /* TODO: */
-    public void addShare(Share share) {
-    }
 
-    public void deleteShare(Share share) {
-    }
-
-    public void addLabel(Label label) {
-    }
-
-    public void deleteLabel(Label label) {
-    }
-
-    public void shareToUser(Member member) {
-    }
-
-    public void shareToGroup(Group group) {
-    }
-    /* TODO */
 }

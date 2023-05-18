@@ -42,7 +42,7 @@ public abstract class DataNode {
         cascade = CascadeType.ALL,
         orphanRemoval = true
     )
-    private List<Share> Shares;
+    private List<Share> shares;
 
 
     @ManyToMany(mappedBy = "labels")
@@ -54,12 +54,50 @@ public abstract class DataNode {
         this.authorId = authorId;
     }
 
-    public static DataNode createFolder(String name, Member member) {
-        return Folder.of(name, member);
+    public static DataNode createFolder(Folder parent, String name, Member member) {
+        return Folder.of(parent, name, member);
     }
 
-    public static DataNode createFile(FileType filetype, FileLocation location, Long size, Member member) {
-        return File.of(filetype, location, size, member);
+    public static DataNode createFile(Folder parent, FileType filetype, FileLocation location, Long size, Member member) {
+        return File.of(parent, filetype, location, size, member);
+    }
+
+    public void setParentFolder(Folder folder) {
+        if (this.parentFolder.equals(folder)) return;
+        this.parentFolder = folder;
+        folder.addChild(this);
+    }
+
+    public void addShare(Share share) {
+        if (shares.contains(share)) return;
+        shares.add(share);
+        share.setFile(this);
+    }
+
+    public void deleteShare(Share share) {
+        if (!shares.contains(share)) return;
+        shares.remove(share);
+        share.setFile(null);
+    }
+
+    public void addLabel(Label label) {
+        if (labels.contains(label)) return;
+        labels.add(label);
+        label.addFile(this);
+    }
+
+    public void deleteLabel(Label label) {
+        if (!labels.contains(label)) return;
+        labels.remove(label);
+        label.deleteFile(this);
+    }
+
+    public String getName() {
+        return fileType.getName();
+    }
+
+    public String getType() {
+        return fileType.getType();
     }
 
     @Override
