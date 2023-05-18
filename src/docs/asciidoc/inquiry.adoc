@@ -47,3 +47,11 @@ IMPORTANT: 잘못된 문의 선택 조회
 operation::WrongTokenGetInquiry[snippets='http-response']
 
 IMPORTANT: 토큰이 잘못됨
+
+=== 답변 등록
+
+operation::SaveAnswer[snippets='http-request']
+
+==== 성공
+
+operation::SaveAnswer[snippets='http-response']
