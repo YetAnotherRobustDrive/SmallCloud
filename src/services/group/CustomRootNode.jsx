@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Handle, Position } from 'reactflow';
+import { Background, Handle, Position } from 'reactflow';
 import "../../css/node.css";
 
 export default function CustomRootNode({ data, isConnectable }) {
@@ -7,7 +7,7 @@ export default function CustomRootNode({ data, isConnectable }) {
   return (
     <div 
     className="customNode" 
-    style={isFocus ? {border:"2px solid black"} : {border:"2px solid #777777"}}
+    style={isFocus ? {border:"2px solid black", backgroundColor:"#ececec"} : {border:"2px solid #777777", backgroundColor:"#ececec"}}
     onClick={()=>{setIsFocus(true)}}
     onMouseLeave={()=>{setIsFocus(false)}}
     >

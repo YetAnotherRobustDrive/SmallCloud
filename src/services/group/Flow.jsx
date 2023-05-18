@@ -5,16 +5,21 @@ import ReactFlow, {
 } from 'reactflow';
 
 import 'reactflow/dist/style.css';
+import PostGroup from './PostGroup';
 
 export default function Flow(props) {
     const [nodes, setNodes] = useState([]);
     const [edges, setEdges] = useState([]);
+    const [isRootExist, setIsRootExist] = useState(false);
 
     const edgeUpdateSuccessful = useRef(true);
     const currEdge = useRef();
-    currEdge.current = edges;
     const currNode = useRef();
-    currNode.current = nodes.length;
+    const isRootExistRef = useRef();
+
+    isRootExistRef.current = isRootExist;
+    currEdge.current = edges;
+    currNode.current = nodes;
 
     const onConnect = useCallback((params) => {
         const exist = currEdge.current.find((e) => e.target === params.target);
@@ -27,6 +32,9 @@ export default function Flow(props) {
     const onEdgesChange = useCallback((changes) => setEdges((eds) => applyNodeChanges(changes, eds)), []);
     const onNodesDelete = useCallback(
         (deleted) => {
+            if (deleted[0].type == "customRootNode") {
+                setIsRootExist(false);
+            }
             setEdges(
                 deleted.reduce((acc, node) => {
                     const incomers = getIncomers(node, nodes, edges);
@@ -61,7 +69,12 @@ export default function Flow(props) {
 
     const handleClickAdd = () => {
         const name = window.prompt("새 그룹의 이름을 입력해주세요.");
-        if (currNode.current != 0) {
+        const exist = currNode.current.find((e) => e.id === name);
+        if (exist != undefined) {
+            return;
+        }
+
+        if (isRootExistRef.current == true) {
             const newNode = nodes.concat({
                 id: name,
                 type: 'customNode',
@@ -82,14 +95,15 @@ export default function Flow(props) {
                     label: name,
                 }
             })
+            setIsRootExist(true);
             setNodes(newNode);
             return;
         }
     }
 
-    const handleClickSave = () => {
+    const handleClickSave = async () => {
+        await PostGroup(currEdge.current);
         console.log(currEdge.current)
-        console.log(currNode.current)
     }
 
     return (
