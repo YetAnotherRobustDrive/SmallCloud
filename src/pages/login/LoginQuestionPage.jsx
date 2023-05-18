@@ -18,8 +18,6 @@ export default function LoginQuestionPage() {
         const user = await GetUserInfo();
 
         const inputData = new FormData(e.target);
-        inputData.append("writer", user.nickname);
-        const value = Object.fromEntries(inputData.entries());
         if (inputData.get("content") == "" || inputData.get("title") == "" || inputData.get("contact") == "") {
             setIsEmpty(true);
             return;
@@ -28,8 +26,9 @@ export default function LoginQuestionPage() {
             setIsNotCheck(true);
             return;
         }
+        inputData.delete("check");
+        const value = Object.fromEntries(inputData.entries());
         const res = await PostBoard(value);
-        console.log(res);
         if (!res[0]) {
             if (res[1] != undefined) {
                 setMessage(res[1]);                

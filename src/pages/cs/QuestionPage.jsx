@@ -23,6 +23,7 @@ export default function QuestionPage() {
 
         const inputData = new FormData(e.target);
         inputData.append("writer", user.nickname);
+        inputData.append("contact", "010-0000-0000");
         const value = Object.fromEntries(inputData.entries());
 
         if (inputData.get("content") == "" || inputData.get("title") == "") {
