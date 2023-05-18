@@ -38,4 +38,4 @@ out/
 
 /data
 /minio
-/main/resources/static/docs
+/src/main/resources/static/docs/
