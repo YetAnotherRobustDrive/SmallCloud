@@ -70,4 +70,8 @@ public class BoardController {
         boolean result = boardService.registerAnswer(requestDto);
         return ResponseDto.<Boolean>builder().result(result).build();
     }
+
+    @Secured({Roles.S_ADMIN})
+    @GetMapping("/questioned")
+    public List<Board> getQuestioned( return BoardService.getQuestioned())
 }

@@ -2,10 +2,12 @@ package org.mint.smallcloud.board.serivce;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.mint.smallcloud.board.domain.Answer;
 import org.mint.smallcloud.board.domain.BoardType;
 import org.mint.smallcloud.board.dto.RequestDto;
 import org.mint.smallcloud.board.dto.BoardDto;
 import org.mint.smallcloud.board.domain.Board;
+import org.mint.smallcloud.board.repository.AnswerRepository;
 import org.mint.smallcloud.board.repository.BoardRepository;
 import org.springframework.stereotype.Service;
 
@@ -44,13 +46,9 @@ public class BoardService {
                 .build();
     }
 
-    public boolean registerAnswer(RequestDto requestDto) {
-        Board board = Board.board(
-                requestDto.getTitle(),
-                requestDto.getContent(),
-                BoardType.answer);
-        boardRepository.save(board);
-        return true;
-    }
 
+
+    public List<Board> getQuestioned() {
+        return boardRepository.find
+    }
 }
