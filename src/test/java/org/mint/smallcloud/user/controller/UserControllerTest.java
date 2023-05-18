@@ -8,6 +8,7 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mint.smallcloud.TestSnippet;
 import org.mint.smallcloud.file.domain.FileLocation;
+import org.mint.smallcloud.group.domain.Group;
 import org.mint.smallcloud.security.dto.UserDetailsDto;
 import org.mint.smallcloud.security.jwt.dto.JwtTokenDto;
 import org.mint.smallcloud.security.jwt.tokenprovider.JwtTokenProvider;
@@ -50,6 +51,7 @@ class UserControllerTest {
 
     private MockMvc mockMvc;
     private final String URL_PREFIX = "/users";
+    private final String DOCUMENT_NAME = "User/{ClassName}/{methodName}";
 
     @Autowired
     private ObjectMapper objectMapper;
@@ -96,16 +98,16 @@ class UserControllerTest {
 
     @Nested
     @DisplayName("/users/{username}/delete docs")
-    class delete {
+    class Delete {
         final String url = URL_PREFIX + "/{username}/delete";
 
         @DisplayName("정상 요청")
         @Test
-        public void find() throws Exception {
+        public void ok() throws Exception {
             mockMvc.perform(TestSnippet.secured(post(url, member1.getUsername()), adminToken.getAccessToken()))
                 .andExpect(status().isOk())
                 .andExpect((rst) -> assertNull(em.find(Member.class, member1.getId())))
-                .andDo(document("UserDelete",
+                .andDo(document(DOCUMENT_NAME,
                     pathParameters(
                         parameterWithName("username").description("삭제하려는 유저의 아이디")
                     )));
@@ -117,7 +119,7 @@ class UserControllerTest {
         public void wrongFormat() throws Exception {
             mockMvc.perform(TestSnippet.secured(post(url, "jfieowoifwejiofjioewjfioewjiof"), adminToken.getAccessToken()))
                 .andExpect(status().isBadRequest())
-                .andDo(document("UserDeleteUsernameToLong"));
+                .andDo(document(DOCUMENT_NAME));
         }
 
         @DisplayName("유저가 잘못된 접근")
@@ -125,21 +127,21 @@ class UserControllerTest {
         public void unauthorized() throws Exception {
             mockMvc.perform(TestSnippet.secured(post(url, member1.getUsername()), memberToken.getAccessToken()))
                 .andExpect(status().isForbidden())
-                .andDo(document("UserDeleteUnauthorized"));
+                .andDo(document(DOCUMENT_NAME));
         }
 
         @DisplayName("없는 유저 삭제 요청")
         @Test
-        public void noUser() throws Exception {
+        public void notFindUser() throws Exception {
             mockMvc.perform(TestSnippet.secured(post(url, "fewfas"), adminToken.getAccessToken()))
                 .andExpect(status().isForbidden())
-                .andDo(document("UserDeleteNotUser"));
+                .andDo(document(DOCUMENT_NAME));
         }
     }
 
     @Nested
     @DisplayName("/users docs")
-    class register {
+    class Register {
         private final String url = URL_PREFIX;
         private RegisterDto registerDto;
 
@@ -154,11 +156,11 @@ class UserControllerTest {
 
         @DisplayName("정상 요청")
         @Test
-        public void find() throws Exception {
+        public void ok() throws Exception {
 
             mockMvc.perform(TestSnippet.securePost(url, adminToken.getAccessToken(), objectMapper, registerDto))
                 .andExpect(status().isOk())
-                .andDo(document("UserRegister", requestFields(
+                .andDo(document(DOCUMENT_NAME, requestFields(
                     fieldWithPath("id").description("user id"),
                     fieldWithPath("name").description("user nickname"),
                     fieldWithPath("password").description("user password"))));
@@ -169,7 +171,7 @@ class UserControllerTest {
         public void unauthorized() throws Exception {
             mockMvc.perform(TestSnippet.securePost(url, memberToken.getAccessToken(), objectMapper, registerDto))
                 .andExpect(status().isForbidden())
-                .andDo(document("UserRegisterUnauthorized"));
+                .andDo(document(DOCUMENT_NAME));
         }
 
         @DisplayName("잘못된 요청 포멧")
@@ -182,12 +184,12 @@ class UserControllerTest {
                 .build();
             mockMvc.perform(TestSnippet.securePost(url, adminToken.getAccessToken(), objectMapper, registerDto))
                 .andExpect(status().isBadRequest())
-                .andDo(document("UserRegisterWrongFormat"));
+                .andDo(document(DOCUMENT_NAME));
         }
 
         @DisplayName("존재하는 유저 등록 요청")
         @Test
-        public void duplicate() throws Exception {
+        public void duplicated() throws Exception {
             registerDto = RegisterDto.builder()
                 .name(member1.getNickname())
                 .id(member1.getUsername())
@@ -195,21 +197,26 @@ class UserControllerTest {
                 .build();
             mockMvc.perform(TestSnippet.securePost(url, adminToken.getAccessToken(), objectMapper, registerDto))
                 .andExpect(status().isForbidden())
-                .andDo(document("UserRegisterDuplicated"));
+                .andDo(document(DOCUMENT_NAME));
         }
     }
 
     @Nested
     @DisplayName("/users/{username}/update docs")
-    class update {
+    class Update {
         private final String url = URL_PREFIX + "/{username}/update";
         private UserProfileRequestDto userProfileRequestDto;
+        private Group group1;
 
         @BeforeEach
         public void boot() {
+            group1 = Group.of("group1");
+            em.persist(group1);
+            em.flush();
             userProfileRequestDto = UserProfileRequestDto.builder()
                 .username("abc")
                 .nickname("def")
+                .groupName("group1")
                 .profileImageLocation(FileLocation.of("testLocation"))
                 .build();
         }
@@ -217,18 +224,20 @@ class UserControllerTest {
 
         @DisplayName("정상 요청")
         @Test
-        public void fine() throws Exception {
+        public void ok() throws Exception {
             mockMvc.perform(TestSnippet.secured(post(url, member1.getUsername()), adminToken.getAccessToken(), objectMapper, userProfileRequestDto))
                 .andExpect(status().isOk())
                 .andExpect((rst) -> {
                     Member member = em.find(Member.class, member1.getId());
                     assertEquals(member.getUsername(), userProfileRequestDto.getUsername());
                     assertEquals(member.getNickname(), userProfileRequestDto.getNickname());
+                    assertEquals(member.getGroupName(), userProfileRequestDto.getGroupName());
                 })
-                .andDo(document("UserUpdate",
+                .andDo(document(DOCUMENT_NAME,
                     requestFields(
                         fieldWithPath("username").description("바꾸려는 id"),
                         fieldWithPath("nickname").description("바꾸려는 nickname"),
+                        fieldWithPath("groupName").description("바꾸려는 group의 이름"),
                         fieldWithPath("location").description("프로필 이미지 위치")
                     ),
                     pathParameters(
@@ -241,7 +250,7 @@ class UserControllerTest {
         void unauthorized() throws Exception {
             mockMvc.perform(TestSnippet.secured(post(url, member1.getUsername()), memberToken.getAccessToken(), objectMapper, userProfileRequestDto))
                 .andExpect(status().isForbidden())
-                .andDo(document("UserUpdateUnauthorized"));
+                .andDo(document(DOCUMENT_NAME));
         }
 
         @DisplayName("잘못된 포멧의 요청")
@@ -249,11 +258,12 @@ class UserControllerTest {
         void wrongFormat() throws Exception {
             userProfileRequestDto = UserProfileRequestDto.builder()
                 .username("wfoijfijefwijifzzzeijfejfeiwfwj")
+                .groupName("feiweaaafjiowefiewfiowefiwefiwefi")
                 .profileImageLocation(null)
                 .build();
             mockMvc.perform(TestSnippet.secured(post(url, member1.getUsername()), adminToken.getAccessToken(), objectMapper, userProfileRequestDto))
                 .andExpect(status().isBadRequest())
-                .andDo(document("UserUpdateWrongFormat"));
+                .andDo(document(DOCUMENT_NAME));
         }
 
         @DisplayName("없는 유저")
@@ -261,11 +271,12 @@ class UserControllerTest {
         void notFoundUser() throws Exception {
             userProfileRequestDto = UserProfileRequestDto.builder()
                 .username("abc")
+                .groupName("abc")
                 .profileImageLocation(null)
                 .build();
             mockMvc.perform(TestSnippet.secured(post(url, "abc"), adminToken.getAccessToken(), objectMapper, userProfileRequestDto))
                 .andExpect(status().isForbidden())
-                .andDo(document("UserUpdateNotFoundUser"));
+                .andDo(document(DOCUMENT_NAME));
         }
 
         @DisplayName("중복된 username")
@@ -276,11 +287,24 @@ class UserControllerTest {
             em.flush();
             userProfileRequestDto = UserProfileRequestDto.builder()
                 .username("abc")
+                .groupName("group1")
                 .profileImageLocation(null)
                 .build();
             mockMvc.perform(TestSnippet.secured(post(url, member1.getUsername()), adminToken.getAccessToken(), objectMapper, userProfileRequestDto))
                 .andExpect(status().isForbidden())
-                .andDo(document("UserUpdateDuplicated"));
+                .andDo(document(DOCUMENT_NAME));
+        }
+
+        @DisplayName("없는 그룹")
+        @Test
+        void notFoundGroup() throws Exception {
+            userProfileRequestDto = UserProfileRequestDto.builder()
+                .username(member1.getUsername())
+                .groupName("abc")
+                .build();
+            mockMvc.perform(TestSnippet.secured(post(url, member1.getUsername()), adminToken.getAccessToken(), objectMapper, userProfileRequestDto))
+                .andExpect(status().isForbidden())
+                .andDo(document(DOCUMENT_NAME));
         }
     }
 
@@ -291,7 +315,7 @@ class UserControllerTest {
 
         @DisplayName("정상 요청")
         @Test
-        void fine() throws Exception {
+        void ok() throws Exception {
             mockMvc.perform(TestSnippet.secured(get(url, member1.getUsername()), adminToken.getAccessToken()))
                 .andExpect(status().isOk())
                 .andExpect((rst) -> {
@@ -300,7 +324,7 @@ class UserControllerTest {
                     assertEquals(dto.getNickname(), member1.getNickname());
                     assertEquals(dto.getGroupName(), member1.getGroupName());
                 })
-                .andDo(document("UserProfile",
+                .andDo(document(DOCUMENT_NAME,
                     pathParameters(
                         parameterWithName("username").description("조회하려는 유저의 id")
                     )));
@@ -311,7 +335,7 @@ class UserControllerTest {
         void unauthorized() throws Exception {
             mockMvc.perform(TestSnippet.secured(get(url, member1.getUsername()), memberToken.getAccessToken()))
                 .andExpect(status().isForbidden())
-                .andDo(document("UserProfileUnauthorized"));
+                .andDo(document(DOCUMENT_NAME));
         }
 
         @DisplayName("존재하지 않는 유저")
@@ -319,16 +343,16 @@ class UserControllerTest {
         void notFoundUser() throws Exception {
             mockMvc.perform(TestSnippet.secured(get(url, "abc"), adminToken.getAccessToken()))
                 .andExpect(status().isForbidden())
-                .andDo(document("UserProfileNotFoundUser"));
+                .andDo(document(DOCUMENT_NAME));
         }
 
 
         @DisplayName("잘못된 유저 포멧")
         @Test
-        void notValidUser() throws Exception {
+        void wrongFormat() throws Exception {
             mockMvc.perform(TestSnippet.secured(get(url, "fdsafdsafsfasdsafdfdas"), adminToken.getAccessToken()))
                 .andExpect(status().isBadRequest())
-                .andDo(document("UserProfileNotValidUser"));
+                .andDo(document(DOCUMENT_NAME));
         }
 
     }

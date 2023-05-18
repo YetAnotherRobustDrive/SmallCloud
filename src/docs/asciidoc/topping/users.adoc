@@ -1,96 +1,95 @@
-
 === 삭제 (delete)
 
-operation::UserDelete[snippets='http-request,path-parameters']
+operation::User/Delete/ok[snippets='http-request,path-parameters']
 
 ==== 성공
 
-operation::UserDelete[snippets='http-response']
+operation::User/Delete/ok[snippets='http-response']
 
 ==== 실패
 
-operation::UserDeleteUsernameToLong[snippets='http-response']
+operation::User/Delete/wrongFormat[snippets='http-response']
 
 IMPORTANT: 아이디가 너무 길 때
 
-operation::UserDeleteNotUser[snippets='http-response']
+operation::User/Delete/notFindUser[snippets='http-response']
 
 IMPORTANT: 등록되지 않은 유저일 때
 
-operation::UserDeleteUnauthorized[snippets='http-response']
+operation::User/Delete/unauthorized[snippets='http-response']
 
 IMPORTANT: 권한이 없을 때
 
 === 등록 (register)
 
-operation::UserRegister[snippets='http-request,request-fields']
+operation::User/Register/ok[snippets='http-request,request-fields']
 
 ==== 성공
 
-operation::UserRegister[snippets='http-response']
+operation::User/Register/ok[snippets='http-response']
 
 ==== 실패
 
-operation::UserRegisterUnauthorized[snippets='http-response']
+operation::User/Register/unauthorized[snippets='http-response']
 
 IMPORTANT: 권한이 없을 때
 
-operation::UserRegisterWrongFormat[snippets='http-response']
+operation::User/Register/wrongFormat[snippets='http-response']
 
 IMPORTANT: payload가 올바르지 않을 때
 
-operation::UserRegisterDuplicated[snippets='http-response']
+operation::User/Register/duplicated[snippets='http-response']
 
 IMPORTANT: 중복된 유저 등록
 
 === 프로필 업데이트 (update)
 
-operation::UserUpdate[snippets='http-request,request-fields,path-parameters']
+operation::User/Update/ok[snippets='http-request,request-fields,path-parameters']
 
 ==== 성공
 
-operation::UserUpdate[snippets='http-response']
+operation::User/Update/ok[snippets='http-response']
 
 ==== 실패
 
-operation::UserUpdateUnauthorized[snippets='http-response']
+operation::User/Update/unauthorized[snippets='http-response']
 
 IMPORTANT: 권한이 없을 때
 
-operation::UserUpdateWrongFormat[snippets='http-response']
+operation::User/Update/wrongFormat[snippets='http-response']
 
 IMPORTANT: payload가 올바르지 않을 때
 
-operation::UserUpdateNotFoundUser[snippets='http-response']
+operation::User/Update/notFoundUser[snippets='http-response']
 
 IMPORTANT: 유저를 찾을 수 없을 때
 
-operation::UserUpdateDuplicated[snippets='http-response']
+operation::User/Update/duplicatedName[snippets='http-response']
 
 IMPORTANT: 중복된 유저 등록
 
-operation::UserUpdateNotFound[snippets='http-response']
+operation::User/Update/notFoundGroup[snippets='http-response']
 
 IMPORTANT: 그룹을 찾을 수 없을 때
 
 === 프로필 조회 (profile)
 
-operation::UserProfile[snippets='http-request,path-parameters']
+operation::User/Profile/ok[snippets='http-request,path-parameters']
 
 ==== 성공
 
-operation::UserProfile[snippets='http-response']
+operation::User/Profile/ok[snippets='http-response']
 
 ==== 실패
 
-operation::UserProfileUnauthorized[snippets='http-response']
+operation::User/Profile/unauthorized[snippets='http-response']
 
 IMPORTANT: 권한이 없을 때
 
-operation::UserProfileNotFoundUser[snippets='http-response']
+operation::User/Profile/notFoundUser[snippets='http-response']
 
 IMPORTANT: 유저를 찾을 수 없을 때
 
-operation::UserProfileNotValidUser[snippets='http-response']
+operation::User/Profile/wrongFormat[snippets='http-response']
 
-IMPORTANT: 유저 아이디가 유효하지 않을 때
+IMPORTANT: payload가 올바르지 않을 때

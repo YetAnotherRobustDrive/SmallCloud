@@ -45,7 +45,7 @@ public abstract class DataNode {
     private List<Share> shares;
 
 
-    @ManyToMany(mappedBy = "labels")
+    @ManyToMany(mappedBy = "files")
     private List<Label> labels;
 
     protected DataNode(FileType fileType, Long authorId) {

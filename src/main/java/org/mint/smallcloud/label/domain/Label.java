@@ -30,7 +30,7 @@ public class Label {
     @ManyToMany
     @JoinTable(
         name = "LABEL_DATA_NODE",
-        joinColumns = @JoinColumn(name = "DATA_NODE_ID"),
+        joinColumns = @JoinColumn(name = "LABEL_ID"),
         inverseJoinColumns = @JoinColumn(name = "DATA_NODE_ID")
     )
     private List<DataNode> files;
