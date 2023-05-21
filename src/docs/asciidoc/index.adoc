@@ -16,6 +16,7 @@ include::topping/auth.adoc[]
 
 include::topping/users.adoc[]
 
+[[inquiries]]
 == 문의 관련 (inquiries)
 
-include::inquiry.adoc[]
+include::topping/inquiry.adoc[]
