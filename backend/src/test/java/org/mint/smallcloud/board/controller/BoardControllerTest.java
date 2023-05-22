@@ -260,11 +260,11 @@ class BoardControllerTest {
     @Nested
     @DisplayName("/inquiries/ 문의 답변 테스트")
     class answer {
-        private RequestDto answerDto;
+        private RequestDto requestDto;
 
         @BeforeEach
         void boot() {
-            answerDto = RequestDto.builder()
+            requestDto = RequestDto.builder()
                 .title("testTitle")
                 .content("testContent")
                 .questionId(1L)
@@ -280,12 +280,12 @@ class BoardControllerTest {
             questionRepository.save(question);
             Answer answer = Answer.answer("testTitle1", "testContent1", question);
             answerRepository.save(answer);
-            answerDto = RequestDto.builder()
+            requestDto = RequestDto.builder()
                 .title("testTitle1")
                 .content("testContent1")
                 .questionId(question.getId())
                 .build();
-            mockMvc.perform(TestSnippet.securePost(url, adminToken.getAccessToken(), objectMapper, answerDto))
+            mockMvc.perform(TestSnippet.securePost(url, adminToken.getAccessToken(), objectMapper, requestDto))
                 .andExpect(status().isOk())
                 .andExpect(content().json("{result: true}"))
                 .andDo(document(DOCUMENT_NAME));
@@ -298,15 +298,49 @@ class BoardControllerTest {
             questionRepository.save(question);
             Answer answer = Answer.answer("testTitle1", "testContent1", question);
             answerRepository.save(answer);
-            answerDto = RequestDto.builder()
+            requestDto = RequestDto.builder()
                 .title("testTitle1")
                 .content("testContent1")
                 .questionId(question.getId())
                 .build();
-            mockMvc.perform(TestSnippet.securePost(url, adminToken.getAccessToken(), objectMapper, answerDto))
+            mockMvc.perform(TestSnippet.securePost(url, adminToken.getAccessToken(), objectMapper, requestDto))
                 .andExpect(status().isOk())
                 .andExpect(content().json("{result:true}"))
                 .andDo(document(DOCUMENT_NAME));
+        }
+
+        @DisplayName("답변 내용이 없는 답변 저장")
+        @Test
+        void noContent() throws Exception {
+            Question question = Question.question("testTitle", "testContent", "testContact", "testWriter", null);
+            questionRepository.save(question);
+            Answer answer = Answer.answer("testTitle1", null, question);
+            answerRepository.save(answer);
+            requestDto = RequestDto.builder()
+                    .title("testTitle1")
+                    .content(null)
+                    .questionId(question.getId())
+                    .build();
+            mockMvc.perform(TestSnippet.securePost(url, adminToken.getAccessToken(), objectMapper, requestDto))
+                    .andExpect(status().isBadRequest())
+                    .andDo(document(DOCUMENT_NAME));
+        }
+
+        @DisplayName("잘못된 토큰")
+        @Test
+        void wrongToken() throws Exception {
+            Question question = Question.question("testTitle", "testContent", "testContact", null, null);
+            questionRepository.save(question);
+            Answer answer = Answer.answer("testTitle1", "testContent1", question);
+            answerRepository.save(answer);
+            requestDto = RequestDto.builder()
+                    .title("testTitle1")
+                    .content("testContent1")
+                    .questionId(question.getId())
+                    .build();
+            mockMvc.perform(TestSnippet.securePost(url, "testToken", objectMapper, requestDto))
+                    .andExpect(status().isBadRequest())
+                    .andDo(document(DOCUMENT_NAME));
         }
     }
 
