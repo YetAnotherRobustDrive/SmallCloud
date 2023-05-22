@@ -9,10 +9,9 @@ import java.util.List;
 
 @Repository
 public interface BoardRepository extends JpaRepository<Board, Long> {
-    List<Board> findByWriter(String writer);
+
 
     List<Board> findByBoardType(BoardType type);
 
-//    @Query("select board FROM Board board where board.boardType = :type order by board.id limit 2")
-//    List<Board> findTop2ByBoardType(BoardType type);
+//    List<Board> findTop2ByBoardTypeOrderByCreatedDateDesc (BoardType type);
 }

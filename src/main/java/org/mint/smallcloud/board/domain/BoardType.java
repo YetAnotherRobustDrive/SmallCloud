@@ -12,7 +12,7 @@ public enum BoardType {
      * privacy - 개인정보처리방침(얘도 2개 가져와야 함)
      */
 
-        question, answer, faq, announcement, terms, privacy
+        faq, announcement, terms, privacy
 
 
 }
