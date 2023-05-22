@@ -50,15 +50,31 @@ IMPORTANT: 토큰이 잘못됨
 
 === 답변 등록
 
-operation::Board/answer/ok[snippets='http-request']
+operation::Board/answer/okOneToOneAnswer[snippets='http-request']
 
 ==== 성공
 
-operation::Board/answer/ok[snippets='http-response']
+operation::Board/answer/okOneToOneAnswer[snippets='http-response']
 
-=== 답변 없는 문의 조회
+IMPORTANT: 1:1 문의 상황일 때
 
-operation::Board/noAnswer/ok[snippets='http-request"]
+operation::Board/answer/okLoginAnswer[snippets='http-response']
+
+IMPORTANT: 로그인 문의 상황일 때
+
+==== 실패
+
+operation::Board/answer/noContent[snippets='http-response']
+
+IMPORTANT: 답변 내용이 없을 때
+
+operation::Board/answer/wrongToken[snippets='http-response']
+
+IMPORTANT: 토큰이 잘못됨
+
+=== 답변 되지 않은 문의 조회
+
+operation::Board/noAnswer/ok[snippets='http-request']
 
 ==== 성공
 
