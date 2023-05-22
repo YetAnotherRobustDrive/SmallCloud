@@ -6,14 +6,15 @@
 :toclevels: 2
 :sectlinks:
 
-[[overview]]
+[[auth]]
 == 인증 관련 (auth)
 
-include::auth.adoc[]
+include::topping/auth.adoc[]
 
+[[users]]
 == 유저 관련 (users)
 
-include::users.adoc[]
+include::topping/users.adoc[]
 
 == 문의 관련 (inquiries)
 

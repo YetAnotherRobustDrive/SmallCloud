@@ -23,8 +23,10 @@ public enum ExceptionStatus {
     INTERNAL_SERVER_ERROR(HttpStatus.INTERNAL_SERVER_ERROR, "internal server error."),
     NOT_REFRESH_TOKEN(HttpStatus.FORBIDDEN, "refresh토큰이 아닙니다."),
     NOT_FOUND_GROUP_NAME(HttpStatus.FORBIDDEN, "해당 이름을 가진 그룹을 찾을 수 없습니다."),
-    NOT_FOUND_INQUIRY(HttpStatus.NOT_FOUND, "문의를 찾을 수 없습니다."),
     FILE_NOT_FOUND(HttpStatus.FORBIDDEN, "해당 경로에 파일이 없습니다."),
+    NOT_FOUND_DIRECTORY(HttpStatus.FORBIDDEN, "해당 경로에 디렉토리가 없습니다."),
+    ALREADY_EXISTS_DIRECTORY(HttpStatus.FORBIDDEN, "해당 경로에 이미 디렉토리가 존재합니다."),
+    NOT_FOUND_INQUIRY(HttpStatus.NOT_FOUND, "문의를 찾을 수 없습니다."),
     ;
 
     ExceptionStatus(HttpStatus status, String message) {

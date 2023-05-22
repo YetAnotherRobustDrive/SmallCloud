@@ -57,7 +57,7 @@ public class UserDetailsResolver {
             return User.builder()
                 .username(userDetails.getUsername())
                 .password(userDetails.getPassword())
-                .roles(Roles.PRIVILEGE)
+                .roles(Roles.COMMON, Roles.PRIVILEGE)
                 .disabled(true)
                 .build();
         return userDetails;

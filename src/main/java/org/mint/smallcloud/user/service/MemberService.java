@@ -6,6 +6,8 @@ import org.mint.smallcloud.bucket.exception.StorageSettingException;
 import org.mint.smallcloud.bucket.service.StorageService;
 import org.mint.smallcloud.exception.ExceptionStatus;
 import org.mint.smallcloud.exception.ServiceException;
+import org.mint.smallcloud.file.service.DirectoryService;
+import org.mint.smallcloud.group.service.GroupThrowerService;
 import org.mint.smallcloud.security.dto.LoginDto;
 import org.mint.smallcloud.security.dto.UserDetailsDto;
 import org.mint.smallcloud.user.domain.Member;
@@ -16,15 +18,20 @@ import org.mint.smallcloud.user.mapper.UserMapper;
 import org.mint.smallcloud.user.repository.MemberRepository;
 import org.springframework.stereotype.Service;
 
+import javax.transaction.Transactional;
+
 @Slf4j
 @Service
 @RequiredArgsConstructor
+@Transactional
 public class MemberService {
 
     private final MemberThrowerService memberThrowerService;
     private final MemberRepository memberRepository;
+    private final GroupThrowerService groupThrowerService;
     private final UserMapper userMapper;
     private final StorageService storageService;
+    private final DirectoryService directoryService;
 
     public UserDetailsDto getUserDetails(String username) {
         Member member = memberThrowerService.getMemberByUsername(username);
@@ -43,6 +50,7 @@ public class MemberService {
             registerDto.getPassword(),
             registerDto.getName());
         memberRepository.save(member);
+        directoryService.createRootDirectory(member);
     }
 
     public void deregisterCommon(String username) {
@@ -67,6 +75,9 @@ public class MemberService {
         }
         if (userProfileDto.getNickname() != null && !userProfileDto.getNickname().equals(member.getUsername())) {
             member.setNickname(userProfileDto.getNickname());
+        }
+        if (userProfileDto.getGroupName() != null && (!member.hasGroup() || !userProfileDto.getGroupName().equals(member.getGroupName()))) {
+            member.setGroup(groupThrowerService.getGroupByName(userProfileDto.getGroupName()));
         }
         if (userProfileDto.getProfileImageLocation() != null && !userProfileDto.getProfileImageLocation().equals(member.getProfileImageLocation())) {
             try {

@@ -3,7 +3,7 @@ package org.mint.smallcloud.label.domain;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import org.mint.smallcloud.file.domain.File;
+import org.mint.smallcloud.file.domain.DataNode;
 import org.mint.smallcloud.user.domain.Member;
 
 import javax.persistence.*;
@@ -27,8 +27,13 @@ public class Label {
     @JoinColumn(name = "OWNER")
     private Member owner;
 
-    @ManyToMany(mappedBy = "labels")
-    private List<File> files;
+    @ManyToMany
+    @JoinTable(
+        name = "LABEL_DATA_NODE",
+        joinColumns = @JoinColumn(name = "LABEL_ID"),
+        inverseJoinColumns = @JoinColumn(name = "DATA_NODE_ID")
+    )
+    private List<DataNode> files;
 
     protected Label(String name, Member owner) {
         this.name = name;
@@ -52,7 +57,17 @@ public class Label {
         return getId().hashCode();
     }
 
-    public void addFile(File file) {
+    public void addFile(DataNode file) {
+        if (this.files.contains(file)) return;
+        this.files.add(file);
+        file.addLabel(this);
+    }
+
+    public void deleteFile(DataNode dataNode) {
+        if (!this.files.contains(dataNode)) return;
+        this.files.remove(dataNode);
+        dataNode.deleteLabel(this);
+
     }
 
     public void setName(String name) {
