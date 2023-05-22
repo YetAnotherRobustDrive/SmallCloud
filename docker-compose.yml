@@ -23,7 +23,7 @@ services:
   spring:
     image: small_cloud
     restart: always
-    build: .
+    build: backend
     ports:
       - "8000:8000"
     depends_on:
@@ -31,6 +31,15 @@ services:
         condition: service_healthy
       minio:
         condition: service_started
+
+  react:
+    image: small_cloud_front
+    restart: always
+    build: frontend
+    ports:
+      - "3000:3000"
+    depends_on:
+      - spring
 
   minio:
     image: minio/minio:latest

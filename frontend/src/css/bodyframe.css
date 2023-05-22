@@ -1,0 +1,69 @@
+.bodyframe{
+    border: none;
+    position: absolute;
+    top: 75px;
+    left: 220px;
+    width: calc(100% - 220px);
+    z-index: -100;
+}
+
+.narrow {
+    height: 140px;
+    display: flex;
+    overflow-x:scroll;
+    overflow-y: hidden;
+    position: relative;
+}
+
+.gridscroll{
+    overflow-y: scroll;
+    overflow-x: hidden;
+}
+
+.gridbox {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(110px, 1fr));
+    place-items: center;
+}
+
+.listscroll{
+    overflow-y: scroll;
+    height: calc(100vh - 299px);
+}
+
+.listbox {
+    display: flex;
+    position: relative;
+}
+
+.listbox .icon {
+    font-size: 40px;
+    width: 50px;
+    height: 50px;
+    padding-left: 10px;
+    align-items: center;
+    justify-content: center;
+    display: flex;
+}
+
+.listbox .name {
+    position: relative;
+    left: 10px;
+    width: fit-content;
+    max-width: 150px;
+    height: 50px;
+    display: inline-block;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    line-height: 50px;
+    text-align: start;
+}
+
+.listbox .size{
+    align-items: center;
+    justify-content: center;
+    display: flex;
+    position: absolute;
+    right: 10px;
+    height: 50px;
+}

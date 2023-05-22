@@ -1,0 +1,17 @@
+[
+    {
+        "id": 7,
+        "name": "string",
+        "type": "file"
+    },
+    {
+        "id": 8,
+        "name": "string",
+        "type": "folder"
+    },
+    {
+        "id": 9,
+        "name": "string",
+        "type": "file"
+    }
+]
