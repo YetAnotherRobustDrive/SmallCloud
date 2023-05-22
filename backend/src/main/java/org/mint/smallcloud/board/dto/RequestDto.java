@@ -15,8 +15,8 @@ public class RequestDto {
 
     private  final String title;
 
-    @Size(min = 1, max = 500, message = "문의 내용은 500자 이하로 작성해 주세요.")
-    @NotBlank(message = "문의 내용은 필수로 들어가야 합니다.")
+    @Size(min = 1, max = 500, message = "답변 내용은 500자 이하로 작성해 주세요.")
+    @NotBlank(message = "답변 내용은 필수로 들어가야 합니다.")
     private final String content;
 
     @NotNull(message = "질문 테이블의 정보가 들어가야 합니다.")
