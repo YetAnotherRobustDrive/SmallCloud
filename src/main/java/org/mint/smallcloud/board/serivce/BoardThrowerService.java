@@ -3,7 +3,6 @@ package org.mint.smallcloud.board.serivce;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.mint.smallcloud.board.domain.Question;
-import org.mint.smallcloud.board.repository.BoardRepository;
 import org.mint.smallcloud.board.repository.QuestionRepository;
 import org.mint.smallcloud.exception.ExceptionStatus;
 import org.mint.smallcloud.exception.ServiceException;

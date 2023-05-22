@@ -3,11 +3,9 @@ package org.mint.smallcloud.board.controller;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.mint.smallcloud.ResponseDto;
-import org.mint.smallcloud.board.domain.Board;
 import org.mint.smallcloud.board.domain.Question;
 import org.mint.smallcloud.board.dto.QuestionDto;
 import org.mint.smallcloud.board.dto.RequestDto;
-import org.mint.smallcloud.board.dto.BoardDto;
 import org.mint.smallcloud.board.serivce.AnswerService;
 import org.mint.smallcloud.board.serivce.BoardService;
 import org.mint.smallcloud.board.serivce.QuestionService;
@@ -82,7 +80,9 @@ public class BoardController {
     }
 
     // 문의 비답변 목록 가져오기
-//    @Secured({Roles.S_ADMIN})
-//    @GetMapping("/questioned")
-//    public List<Question> getQuestioned( return questionService.getQuestioned())
+    @Secured({Roles.S_ADMIN})
+    @GetMapping("/questioned")
+    public List<Question> getQuestioned() {
+        return questionService.findQuestioned();
+    }
 }

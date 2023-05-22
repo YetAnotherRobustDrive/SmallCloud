@@ -27,18 +27,15 @@ public class Answer {
     @Column(name = "CREATED_DATE")
     private LocalDateTime createdDate;
 
-    @OneToOne(mappedBy = "answer")
-    @Column(name = "QUESTION_ID")
-    private Question question;
 
-    protected Answer(String title, String content, Question question){
+    protected Answer(String title, String content, Long id){
         this.title = title;
         this.content = content;
-        this.question = question;
+        this.id = id;
         this.createdDate = LocalDateTime.now();
     }
 
-    public static Answer answer(String title, String content, Question question) {
-        return new Answer(title, content, question);
+    public static Answer answer(String title, String content, Long id) {
+        return new Answer(title, content, id);
     }
 }

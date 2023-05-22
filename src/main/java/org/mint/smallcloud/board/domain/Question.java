@@ -3,6 +3,7 @@ package org.mint.smallcloud.board.domain;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
@@ -11,6 +12,7 @@ import java.time.LocalDateTime;
 @Entity
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Getter
+@Setter
 public class Question {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -65,6 +67,14 @@ public class Question {
         this.createdDate = LocalDateTime.now();
     }
 
+    protected Question(String title, String content, String contact, String writer, Answer answer){
+        this.title = title;
+        this.content = content;
+        this.contact = contact;
+        this.writer = writer;
+        this.answer = answer;
+        this.createdDate = LocalDateTime.now();
+    }
 
     public static Question question(String title, String content) {
         return new Question(title, content);
@@ -82,4 +92,7 @@ public class Question {
         return new Question(title, content, contact, writer);
     }
 
+    public static Question question(String title, String content, String contact, String writer, Answer answer) {
+        return new Question(title, content, contact, writer, answer);
+    }
 }

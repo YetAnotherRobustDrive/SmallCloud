@@ -13,7 +13,7 @@ import java.util.List;
 @Service
 @RequiredArgsConstructor
 public class QuestionService {
-    private final BoardThrowerService questionThrowerService;
+    private final BoardThrowerService boardThrowerService;
     private final QuestionRepository questionRepository;
 
     public List<Question> findAll() {
@@ -22,7 +22,7 @@ public class QuestionService {
 
     public QuestionDto findById(Long questionId) throws Exception {
 
-        Question question = questionThrowerService.findById(questionId);
+        Question question = boardThrowerService.findById(questionId);
         return QuestionDto.builder()
                 .title(question.getTitle())
                 .content(question.getContent())
@@ -37,5 +37,9 @@ public class QuestionService {
                 questionDto.getContact(),
                 questionDto.getWriter());
         questionRepository.save(board);
+    }
+
+    public List<Question> findQuestioned() {
+        return questionRepository.findByAnswer(null);
     }
 }

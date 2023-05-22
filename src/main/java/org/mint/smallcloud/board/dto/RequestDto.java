@@ -3,10 +3,9 @@ package org.mint.smallcloud.board.dto;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
-import org.mint.smallcloud.board.domain.Board;
-import org.mint.smallcloud.board.domain.Question;
 
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
 @Getter
@@ -20,7 +19,7 @@ public class RequestDto {
     @NotBlank(message = "문의 내용은 필수로 들어가야 합니다.")
     private final String content;
 
-    @NotBlank(message = "질문 테이블의 정보가 들어가야 합니다.")
-    private final Question question;
+    @NotNull(message = "질문 테이블의 정보가 들어가야 합니다.")
+    private final Long questionId;
 }
 
