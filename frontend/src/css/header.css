@@ -1,0 +1,82 @@
+.header {
+    border-bottom: 1px solid black;
+    height: 75px;   
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    background-color: white;
+    display: flex;
+    z-index: 98;
+}
+
+.logo {
+    float: left;
+    height: 55px;
+    width: fit-content;
+    padding: 10px;
+    display: flex;
+}
+
+img {
+    height: 100%
+}
+
+.logo span {
+    padding-left: 10px;
+    display: flex;
+    height: 100%;
+    align-items: center;
+    font-size: 35px;
+    font-weight: 500;
+    max-width: 175px;
+    overflow: hidden;
+}
+
+.searchbar {
+    height: 100%;
+    width: 100%;
+    align-items: center;
+    display: flex;
+    padding-left: 30px;
+    padding-right: 30px;
+}
+
+.searchbar div {
+    align-items: center;
+    display: flex;
+    border: 2px solid black;
+    border-radius: 4px;
+    width: 100%;
+    min-width: 300px;
+    max-width: 1000px;
+    padding: 10px;
+    margin: auto;
+}
+
+.searchbar input {
+    width: 100%;
+    border: none;
+    font-size: large;
+    font-weight: 200;
+}
+
+.searchbar input:focus {
+    outline: none;
+}
+
+.two {
+    float: right;
+    display: flex;
+    align-items: center;
+    padding: 5px;
+}
+
+.two div {
+    padding: 5px;
+    font-size: 30px;
+}
+
+.link {
+    text-decoration: none;
+}
