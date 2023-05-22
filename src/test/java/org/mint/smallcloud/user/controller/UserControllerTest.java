@@ -216,7 +216,6 @@ class UserControllerTest {
             userProfileRequestDto = UserProfileRequestDto.builder()
                 .username("abc")
                 .nickname("def")
-                .groupName("group1")
                 .profileImageLocation(FileLocation.of("testLocation"))
                 .build();
         }
@@ -231,13 +230,11 @@ class UserControllerTest {
                     Member member = em.find(Member.class, member1.getId());
                     assertEquals(member.getUsername(), userProfileRequestDto.getUsername());
                     assertEquals(member.getNickname(), userProfileRequestDto.getNickname());
-                    assertEquals(member.getGroupName(), userProfileRequestDto.getGroupName());
                 })
                 .andDo(document(DOCUMENT_NAME,
                     requestFields(
                         fieldWithPath("username").description("바꾸려는 id"),
                         fieldWithPath("nickname").description("바꾸려는 nickname"),
-                        fieldWithPath("groupName").description("바꾸려는 group의 이름"),
                         fieldWithPath("location").description("프로필 이미지 위치")
                     ),
                     pathParameters(
@@ -258,7 +255,6 @@ class UserControllerTest {
         void wrongFormat() throws Exception {
             userProfileRequestDto = UserProfileRequestDto.builder()
                 .username("wfoijfijefwijifzzzeijfejfeiwfwj")
-                .groupName("feiweaaafjiowefiewfiowefiwefiwefi")
                 .profileImageLocation(null)
                 .build();
             mockMvc.perform(TestSnippet.secured(post(url, member1.getUsername()), adminToken.getAccessToken(), objectMapper, userProfileRequestDto))
@@ -271,7 +267,6 @@ class UserControllerTest {
         void notFoundUser() throws Exception {
             userProfileRequestDto = UserProfileRequestDto.builder()
                 .username("abc")
-                .groupName("abc")
                 .profileImageLocation(null)
                 .build();
             mockMvc.perform(TestSnippet.secured(post(url, "abc"), adminToken.getAccessToken(), objectMapper, userProfileRequestDto))
@@ -287,20 +282,7 @@ class UserControllerTest {
             em.flush();
             userProfileRequestDto = UserProfileRequestDto.builder()
                 .username("abc")
-                .groupName("group1")
                 .profileImageLocation(null)
-                .build();
-            mockMvc.perform(TestSnippet.secured(post(url, member1.getUsername()), adminToken.getAccessToken(), objectMapper, userProfileRequestDto))
-                .andExpect(status().isForbidden())
-                .andDo(document(DOCUMENT_NAME));
-        }
-
-        @DisplayName("없는 그룹")
-        @Test
-        void notFoundGroup() throws Exception {
-            userProfileRequestDto = UserProfileRequestDto.builder()
-                .username(member1.getUsername())
-                .groupName("abc")
                 .build();
             mockMvc.perform(TestSnippet.secured(post(url, member1.getUsername()), adminToken.getAccessToken(), objectMapper, userProfileRequestDto))
                 .andExpect(status().isForbidden())

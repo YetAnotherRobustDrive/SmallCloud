@@ -76,9 +76,6 @@ public class MemberService {
         if (userProfileDto.getNickname() != null && !userProfileDto.getNickname().equals(member.getUsername())) {
             member.setNickname(userProfileDto.getNickname());
         }
-        if (userProfileDto.getGroupName() != null && (!member.hasGroup() || !userProfileDto.getGroupName().equals(member.getGroupName()))) {
-            member.setGroup(groupThrowerService.getGroupByName(userProfileDto.getGroupName()));
-        }
         if (userProfileDto.getProfileImageLocation() != null && !userProfileDto.getProfileImageLocation().equals(member.getProfileImageLocation())) {
             try {
                 if (!storageService.isFileExist(userProfileDto.getProfileImageLocation().getLocation()))
