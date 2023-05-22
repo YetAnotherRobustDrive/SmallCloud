@@ -11,7 +11,7 @@ import java.time.LocalDateTime;
 @Entity
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Getter
-public class Board {
+public class    Board {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "BOARD_ID")
@@ -22,9 +22,6 @@ public class Board {
 
     @Column(name = "CONTENT")
     private String content;
-
-    @Column(name = "CONTACT")
-    private String contact;
 
     @Column(name = "CREATED_DATE")
     private LocalDateTime createdDate;
@@ -41,19 +38,16 @@ public class Board {
 //    @JoinColumn(name = "id")
 //    private Member writer;
 
-    @Column(name = "WRITER")
-    private String writer;
-
     protected Board(String title, String content){
         this.title = title;
         this.content = content;
         this.createdDate = LocalDateTime.now();
     }
 
-    protected Board(String title, String content, String contact){
+    protected Board(String title, String content, Long id){
         this.title = title;
         this.content = content;
-        this.contact = contact;
+        this.id = id;
         this.createdDate = LocalDateTime.now();
     }
 
@@ -64,41 +58,17 @@ public class Board {
         this.createdDate = LocalDateTime.now();
     }
 
-    protected Board(String title, String content, String contact, String writer){
-        this.title = title;
-        this.content = content;
-        this.contact = contact;
-        this.writer = writer;
-        this.createdDate = LocalDateTime.now();
-    }
-
-    protected Board(String title, String content, String contact, String writer, BoardType boardType){
-        this.title = title;
-        this.content = content;
-        this.contact = contact;
-        this.writer = writer;
-        this.boardType = boardType;
-        this.createdDate = LocalDateTime.now();
-    }
-
-
     public static Board board(String title, String content) {
         return new Board(title, content);
     }
 
-    public static Board board(String title, String content, String contact) {
-        return new Board(title, content, contact);
+    public static Board board(String title, String content, Long id) {
+        return new Board(title, content, id);
     }
 
     public static Board board(String title, String content, BoardType boardType) {
         return new Board(title, content, boardType);
     }
 
-    public static Board board(String title, String content, String contact, String writer) {
-        return new Board(title, content, contact, writer);
-    }
 
-    public static Board board(String title, String content, String contact, String writer, BoardType boardType) {
-        return new Board(title, content, contact, writer, boardType);
-    }
 }

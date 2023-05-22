@@ -1,57 +1,69 @@
 === 문의 등록
 
-operation::OneToOneRegisterInquiry[snippets='http-request,request-fields']
+operation::Board/Save/okOneToOne[snippets='http-request,request-fields']
 
 ==== 성공
 
-operation::OneToOneRegisterInquiry[snippets='http-response']
+operation::Board/Save/okOneToOne[snippets='http-response']
 
 IMPORTANT: 로그인 하고 요청
 
-operation::LoginRegisterInquiry[snippets='http-response']
+operation::Board/Save/okLogin[snippets='http-response']
 
 IMPORTANT: 로그인 안하고 요청
 
 ==== 실패
 
-operation::NoContactInquiry[snippets='http-response']
+operation::Board/Save/wrongToken[snippets='http-response']
 
 IMPORTANT: 연락처가 없을 때
 
-operation::WrongTokenSaveInquiry[snippets='http-response']
+operation::Board/Save/wrongToken[snippets='http-response']
 
 IMPORTANT: 토큰이 잘못되었을 때
 
 === 문의 전체 조회
 
-operation::GetAllInquiries[snippets='http-request']
+operation::Board/GetInquiries/ok[snippets='http-request']
 
 ==== 성공
 
-operation::GetAllInquiries[snippets='http-response']
+operation::Board/GetInquiries/ok[snippets='http-response']
 
 === 선택
 
-operation::GetOneInquiry[snippets='http-request,path-parameters']
+operation::Board/select/ok[snippets='http-request,path-parameters']
 
 ==== 성공
 
-operation::GetOneInquiry[snippets='http-response']
+operation::Board/select/ok[snippets='http-response']
 
 ==== 실패
 
-operation::CannotFindInquiry[snippets='http-response']
+operation::Board/select/wrongSelect[snippets='http-response']
 
 IMPORTANT: 잘못된 문의 선택 조회
 
-operation::WrongTokenGetInquiry[snippets='http-response']
+operation::Board/select/wrongSelect[snippets='http-response']
 
 IMPORTANT: 토큰이 잘못됨
 
 === 답변 등록
 
-operation::SaveAnswer[snippets='http-request']
+operation::Board/answer/ok[snippets='http-request']
 
 ==== 성공
 
-operation::SaveAnswer[snippets='http-response']
+operation::Board/answer/ok[snippets='http-response']
+
+=== 답변 없는 문의 조회
+
+operation::Board/noAnswer/ok[snippets='http-request"]
+
+==== 성공
+
+operation::Board/noAnswer/ok[snippets='http-response']
+
+==== 실패
+
+operation::Board/noAnswer/wrongToken[snippets='http-response']
