@@ -3,7 +3,6 @@ package org.mint.smallcloud.board.domain;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
@@ -12,7 +11,6 @@ import java.time.LocalDateTime;
 @Entity
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Getter
-@Setter
 public class Question {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -38,20 +36,20 @@ public class Question {
     @JoinColumn(name = "ANSWER_ID")
     private Answer answer;
 
-    protected Question(String title, String content){
+    protected Question(String title, String content) {
         this.title = title;
         this.content = content;
         this.createdDate = LocalDateTime.now();
     }
 
-    protected Question(String title, String content, Long id){
+    protected Question(String title, String content, Long id) {
         this.title = title;
         this.content = content;
         this.id = id;
         this.createdDate = LocalDateTime.now();
     }
 
-    protected Question(String title, String content, String contact){
+    protected Question(String title, String content, String contact) {
         this.title = title;
         this.content = content;
         this.contact = contact;
@@ -59,7 +57,7 @@ public class Question {
     }
 
 
-    protected Question(String title, String content, String contact, String writer){
+    protected Question(String title, String content, String contact, String writer) {
         this.title = title;
         this.content = content;
         this.contact = contact;
@@ -67,12 +65,12 @@ public class Question {
         this.createdDate = LocalDateTime.now();
     }
 
-    protected Question(String title, String content, String contact, String writer, Answer answer){
+    protected Question(String title, String content, String contact, String writer, Answer answer) {
         this.title = title;
         this.content = content;
         this.contact = contact;
         this.writer = writer;
-        this.answer = answer;
+        setAnswer(answer);
         this.createdDate = LocalDateTime.now();
     }
 
@@ -94,5 +92,25 @@ public class Question {
 
     public static Question question(String title, String content, String contact, String writer, Answer answer) {
         return new Question(title, content, contact, writer, answer);
+    }
+
+    public void setAnswer(Answer answer) {
+        if (answer == null || answer == this.answer)
+            return;
+        this.answer = answer;
+        answer.setQuestion(this);
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (!(obj instanceof Question))
+            return false;
+        Question question = (Question) obj;
+        return this.id.equals(question.id);
+    }
+
+    @Override
+    public int hashCode() {
+        return this.id.hashCode();
     }
 }

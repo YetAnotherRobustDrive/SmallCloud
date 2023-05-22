@@ -121,19 +121,19 @@ class BoardControllerTest {
         @BeforeEach
         void boot() {
             securedQuestionDto = QuestionDto.builder()
-                    .title("testTitle")
+                .title("testTitle")
                 .content("testContent")
                 .contact("010-1234-5678")
                 .writer("testWriter")
                 .build();
             questionDto = QuestionDto.builder()
-                    .title("testTitle")
+                .title("testTitle")
                 .content("testContent")
                 .contact("010-1234-5678")
                 .writer("testWriter")
                 .build();
             noContactQuestionDto = QuestionDto.builder()
-                    .title("testTitle")
+                .title("testTitle")
                 .content("testContent")
                 .writer("testWriter")
                 .build();
@@ -144,7 +144,7 @@ class BoardControllerTest {
         @Test
         void okOneToOne() throws Exception {
             RequestFieldsSnippet payload = requestFields(
-                    fieldWithPath("title").description("글의 제목을 담고 있습니다."),
+                fieldWithPath("title").description("글의 제목을 담고 있습니다."),
                 fieldWithPath("content").description("사용자 질문의 내용을 담고 있습니다."),
                 fieldWithPath("contact").description("사용자의 연락처를 담고 있습니다."),
                 fieldWithPath("writer").description("글의 작성자를 담고 있습니다."));
@@ -206,10 +206,10 @@ class BoardControllerTest {
         void ok() throws Exception {
             mockMvc.perform(TestSnippet.secureGet(url, adminToken.getAccessToken()))
                 .andExpect(status().isOk())
-                    .andExpect(jsonPath("$.[0].title").value(findQuestion.get(0).getTitle()))
+                .andExpect(jsonPath("$.[0].title").value(findQuestion.get(0).getTitle()))
                 .andExpect(jsonPath("$.[0].content").value(findQuestion.get(0).getContent()))
                 .andExpect(jsonPath("$.[0].contact").value(findQuestion.get(0).getContact()))
-                    .andExpect(jsonPath("$.[1].title").value(findQuestion.get(1).getTitle()))
+                .andExpect(jsonPath("$.[1].title").value(findQuestion.get(1).getTitle()))
                 .andExpect(jsonPath("$.[1].content").value(findQuestion.get(1).getContent()))
                 .andExpect(jsonPath("$.[1].contact").value(findQuestion.get(1).getContact()))
                 .andDo(document(DOCUMENT_NAME));
@@ -228,7 +228,7 @@ class BoardControllerTest {
             questionRepository.save(question);
             mockMvc.perform(TestSnippet.secured(get(url, question.getId()), adminToken.getAccessToken()))
                 .andExpect(status().isOk())
-                    .andExpect(jsonPath("$.title").value(question.getTitle()))
+                .andExpect(jsonPath("$.title").value(question.getTitle()))
                 .andExpect(jsonPath("$.content").value(question.getContent()))
                 .andExpect(jsonPath("$.contact").value(question.getContact()))
                 .andDo(document(DOCUMENT_NAME,
@@ -241,7 +241,7 @@ class BoardControllerTest {
         @Test
         void wrongSelect() throws Exception {
             mockMvc.perform(TestSnippet.secured(get(url, 1000), adminToken.getAccessToken()))
-                .andExpect(status().isNotFound())
+                .andExpect(status().isForbidden())
                 .andDo(document(DOCUMENT_NAME));
         }
 
@@ -265,10 +265,10 @@ class BoardControllerTest {
         @BeforeEach
         void boot() {
             answerDto = RequestDto.builder()
-                    .title("testTitle")
-                    .content("testContent")
-                    .questionId(1L)
-                    .build();
+                .title("testTitle")
+                .content("testContent")
+                .questionId(1L)
+                .build();
         }
 
         final String url = URL_PREFIX + "/answer";
@@ -278,12 +278,17 @@ class BoardControllerTest {
         void okOneToOneAnswer() throws Exception {
             Question question = Question.question("testTitle", "testContent", "testContact", "testWriter", null);
             questionRepository.save(question);
-            Answer answer = Answer.answer("testTitle1", "testContent1", question.getId());
+            Answer answer = Answer.answer("testTitle1", "testContent1", question);
             answerRepository.save(answer);
+            answerDto = RequestDto.builder()
+                .title("testTitle1")
+                .content("testContent1")
+                .questionId(question.getId())
+                .build();
             mockMvc.perform(TestSnippet.securePost(url, adminToken.getAccessToken(), objectMapper, answerDto))
-                    .andExpect(status().isOk())
-                    .andExpect(content().json("{result: true}"))
-                    .andDo(document(DOCUMENT_NAME));
+                .andExpect(status().isOk())
+                .andExpect(content().json("{result: true}"))
+                .andDo(document(DOCUMENT_NAME));
         }
 
         @DisplayName("정상적 로그인 문의 답변 저장")
@@ -291,12 +296,17 @@ class BoardControllerTest {
         void okLoginAnswer() throws Exception {
             Question question = Question.question("testTitle", "testContent", "testContact", null, null);
             questionRepository.save(question);
-            Answer answer = Answer.answer("testTitle1", "testContent1", question.getId());
+            Answer answer = Answer.answer("testTitle1", "testContent1", question);
             answerRepository.save(answer);
-            mockMvc.perform(TestSnippet.post(url, objectMapper, answerDto))
-                    .andExpect(status().isOk())
-                    .andExpect(content().json("{result:true}"))
-                    .andDo(document(DOCUMENT_NAME));
+            answerDto = RequestDto.builder()
+                .title("testTitle1")
+                .content("testContent1")
+                .questionId(question.getId())
+                .build();
+            mockMvc.perform(TestSnippet.securePost(url, adminToken.getAccessToken(), objectMapper, answerDto))
+                .andExpect(status().isOk())
+                .andExpect(content().json("{result:true}"))
+                .andDo(document(DOCUMENT_NAME));
         }
     }
 
@@ -312,7 +322,7 @@ class BoardControllerTest {
 
         @BeforeEach
         void boot() {
-            answer = Answer.answer("testTitle", "testContent", 1L);
+            answer = Answer.answer("testTitle", "testContent", null);
             answerRepository.save(answer);
             question = Question.question("testTitle", "testContent", "testContact", "testWriter", answer);
             question1 = Question.question("testTitle", "testContent", "testContact", "testWriter", null);
@@ -323,21 +333,21 @@ class BoardControllerTest {
 
         @Test
         @DisplayName("정상적 문의 조회")
-        void ok() throws Exception{
+        void ok() throws Exception {
             mockMvc.perform(TestSnippet.secureGet(url, adminToken.getAccessToken()))
-                    .andExpect(status().isOk())
-                    .andExpect(jsonPath("$.[0].title").value(findQuestion.get(0).getTitle()))
-                    .andExpect(jsonPath("$.[0].content").value(findQuestion.get(0).getContent()))
-                    .andExpect(jsonPath("$.[0].contact").value(findQuestion.get(0).getContact()))
-                    .andDo(document(DOCUMENT_NAME));
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.[0].title").value(findQuestion.get(0).getTitle()))
+                .andExpect(jsonPath("$.[0].content").value(findQuestion.get(0).getContent()))
+                .andExpect(jsonPath("$.[0].contact").value(findQuestion.get(0).getContact()))
+                .andDo(document(DOCUMENT_NAME));
         }
 
         @Test
         @DisplayName("잘못된 토큰")
-        void  wrongToken() throws Exception {
+        void wrongToken() throws Exception {
             mockMvc.perform(TestSnippet.secured(get(url, findQuestion), "testWrongToken"))
-                    .andExpect(status().isBadRequest())
-                    .andDo(document(DOCUMENT_NAME));
+                .andExpect(status().isBadRequest())
+                .andDo(document(DOCUMENT_NAME));
         }
     }
 }

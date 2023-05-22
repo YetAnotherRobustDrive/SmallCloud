@@ -27,15 +27,39 @@ public class Answer {
     @Column(name = "CREATED_DATE")
     private LocalDateTime createdDate;
 
+    @OneToOne(mappedBy = "answer")
+    private Question question;
 
-    protected Answer(String title, String content, Long id){
+
+    protected Answer(String title, String content, Question question) {
         this.title = title;
         this.content = content;
-        this.id = id;
         this.createdDate = LocalDateTime.now();
+        setQuestion(question);
     }
 
-    public static Answer answer(String title, String content, Long id) {
-        return new Answer(title, content, id);
+    public static Answer answer(String title, String content, Question question) {
+        return new Answer(title, content, question);
+    }
+
+    public void setQuestion(Question question) {
+        if (question == null || this.question == question)
+            return;
+        this.question = question;
+        question.setAnswer(this);
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (obj instanceof Answer) {
+            Answer answer = (Answer) obj;
+            return this.id.equals(answer.id);
+        }
+        return false;
+    }
+
+    @Override
+    public int hashCode() {
+        return id.hashCode();
     }
 }
