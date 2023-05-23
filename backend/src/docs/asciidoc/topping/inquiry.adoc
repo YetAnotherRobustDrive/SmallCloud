@@ -83,3 +83,15 @@ operation::Board/noAnswer/ok[snippets='http-response']
 ==== 실패
 
 operation::Board/noAnswer/wrongToken[snippets='http-response']
+
+=== 내 문의 전체 조회
+
+operation::Board/myQuestions/ok[snippets='http-request']
+
+==== 성공
+
+operation::Board/myQuestions/ok[snippets='http-response']
+
+==== 실패
+
+operation::Board/myQuestions/wrongToken[snippets='http-response']
