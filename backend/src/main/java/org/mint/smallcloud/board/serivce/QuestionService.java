@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.mint.smallcloud.board.domain.Question;
 import org.mint.smallcloud.board.dto.QuestionDto;
+import org.mint.smallcloud.board.mapper.QuestionMapper;
 import org.mint.smallcloud.board.repository.QuestionRepository;
 import org.springframework.stereotype.Service;
 
@@ -15,9 +16,11 @@ import java.util.List;
 public class QuestionService {
     private final BoardThrowerService boardThrowerService;
     private final QuestionRepository questionRepository;
+    private final QuestionMapper questionMapper;
 
-    public List<Question> findAll() {
-        return questionRepository.findAll();
+    public List<QuestionDto> findAll() {
+        List<Question> question = questionRepository.findAll();
+        return question.stream().map(questionMapper::toQuestionDto).toList();
     }
 
     public QuestionDto findById(Long questionId) throws Exception {
@@ -39,7 +42,13 @@ public class QuestionService {
         questionRepository.save(board);
     }
 
-    public List<Question> findQuestioned() {
-        return questionRepository.findByAnswer(null);
+    public List<QuestionDto> findQuestioned() {
+        List<Question> question = questionRepository.findByAnswer(null);
+        return question.stream().map(questionMapper::toQuestionDto).toList();
+    }
+
+    public List<QuestionDto> findMyQuestions(String writer) {
+        List<Question> question = questionRepository.findByWriter(writer);
+        return question.stream().map(questionMapper::toQuestionDto).toList();
     }
 }

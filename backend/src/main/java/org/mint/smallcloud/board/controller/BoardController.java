@@ -41,7 +41,7 @@ public class BoardController {
     // 전체 question 가져오기
     @Secured({Roles.S_ADMIN})
     @GetMapping
-    public List<Question> getInquiries() {
+    public List<QuestionDto> getInquiries() {
         return questionService.findAll();
     }
 
@@ -82,7 +82,14 @@ public class BoardController {
     // 문의 비답변 목록 가져오기
     @Secured({Roles.S_ADMIN})
     @GetMapping("/questioned")
-    public List<Question> getQuestioned() {
+    public List<QuestionDto> getQuestioned() {
         return questionService.findQuestioned();
+    }
+
+    // 내 문의 내역 리스트 가져오기
+    @Secured({Roles.S_COMMON})
+    @GetMapping("/myQuestions")
+    public List<QuestionDto> getMyQuestions(@RequestParam("writer") String writer) {
+        return questionService.findMyQuestions(writer);
     }
 }

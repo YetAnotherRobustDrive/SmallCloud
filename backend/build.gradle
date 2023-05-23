@@ -7,7 +7,7 @@ plugins {
 
 group = 'org.mint'
 version = '0.0.1-SNAPSHOT'
-sourceCompatibility = '11'
+sourceCompatibility = "16"
 
 ext {
     snippetsDir = file('build/generated-snippets')
@@ -81,3 +81,4 @@ bootJar {
         into '/static/docs'
     }
 }
+targetCompatibility = JavaVersion.VERSION_16
