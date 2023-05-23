@@ -9,6 +9,7 @@ import org.mint.smallcloud.board.repository.QuestionRepository;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Slf4j
 @Service
@@ -20,7 +21,7 @@ public class QuestionService {
 
     public List<QuestionDto> findAll() {
         List<Question> question = questionRepository.findAll();
-        return question.stream().map(questionMapper::toQuestionDto).toList();
+        return question.stream().map(questionMapper::toQuestionDto).collect(Collectors.toList());
     }
 
     public QuestionDto findById(Long questionId) throws Exception {
@@ -44,11 +45,11 @@ public class QuestionService {
 
     public List<QuestionDto> findQuestioned() {
         List<Question> question = questionRepository.findByAnswer(null);
-        return question.stream().map(questionMapper::toQuestionDto).toList();
+        return question.stream().map(questionMapper::toQuestionDto).collect(Collectors.toList());
     }
 
     public List<QuestionDto> findMyQuestions(String writer) {
         List<Question> question = questionRepository.findByWriter(writer);
-        return question.stream().map(questionMapper::toQuestionDto).toList();
+        return question.stream().map(questionMapper::toQuestionDto).collect(Collectors.toList());
     }
 }
