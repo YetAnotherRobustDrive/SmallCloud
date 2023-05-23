@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.mint.smallcloud.ResponseDto;
 import org.mint.smallcloud.board.domain.Question;
+import org.mint.smallcloud.board.dto.BoardDto;
 import org.mint.smallcloud.board.dto.QuestionDto;
 import org.mint.smallcloud.board.dto.RequestDto;
 import org.mint.smallcloud.board.serivce.AnswerService;
@@ -92,4 +93,10 @@ public class BoardController {
     public List<QuestionDto> getMyQuestions(@RequestParam("writer") String writer) {
         return questionService.findMyQuestions(writer);
     }
+
+    // FAQ 조회
+//    @GetMapping("/faq")
+//    public List<BoardDto> getFrequentlyAskedQuestions() {
+//        return boardService.
+//    }
 }
