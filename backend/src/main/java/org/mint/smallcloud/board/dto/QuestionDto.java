@@ -23,5 +23,7 @@ public class QuestionDto {
     private final String content;
 
     private final String writer;
+
+    private final Long answerId;
 }
 
