@@ -81,4 +81,3 @@ bootJar {
         into '/static/docs'
     }
 }
-targetCompatibility = JavaVersion.VERSION_16
