@@ -13,5 +13,14 @@ import java.util.List;
 @Service
 @RequiredArgsConstructor
 public class BoardService {
+    private final BoardRepository boardRepository;
 
+    public boolean saveBoard(BoardDto boardDto) {
+        Board board = Board.board(
+                boardDto.getTitle(),
+                boardDto.getContent(),
+                boardDto.getBoardType());
+        boardRepository.save(board);
+        return true;
+    }
 }

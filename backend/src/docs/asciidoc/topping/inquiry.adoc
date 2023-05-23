@@ -95,3 +95,25 @@ operation::Board/myQuestions/ok[snippets='http-response']
 ==== 실패
 
 operation::Board/myQuestions/wrongToken[snippets='http-response']
+
+=== 보드 등록
+
+operation::Board/saveBoard/ok[snippets='http-request']
+
+==== 성공
+
+operation::Board/saveBoard/ok[snippets='http-response']
+
+==== 실패
+
+operation::Board/saveBoard/wrongToken[snippets='http-response']
+
+IMPORTANT: 잘못된 토큰
+
+operation::Board/saveBoard/noContent[snippets='http-response']
+
+IMPORTANT: 보드 내용 생략했을 때
+
+operation::Board/saveBoard/noType[snippets='http-response']
+
+IMPORTANT: 보드 타입 생략했을 때

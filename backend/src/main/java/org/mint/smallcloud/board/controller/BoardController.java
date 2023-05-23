@@ -94,9 +94,11 @@ public class BoardController {
         return questionService.findMyQuestions(writer);
     }
 
-    // FAQ 조회
-//    @GetMapping("/faq")
-//    public List<BoardDto> getFrequentlyAskedQuestions() {
-//        return boardService.
-//    }
+    // board 등록
+    @Secured({Roles.S_ADMIN})
+    @PostMapping("/board")
+    public ResponseDto<Boolean> saveBoard(@Valid @RequestBody BoardDto boardDto) {
+        boolean result = boardService.saveBoard(boardDto);
+        return ResponseDto.<Boolean>builder().result(result).build();
+    }
 }

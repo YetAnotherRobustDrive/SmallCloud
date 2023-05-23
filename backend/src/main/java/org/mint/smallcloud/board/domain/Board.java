@@ -38,32 +38,12 @@ public class    Board {
 //    @JoinColumn(name = "id")
 //    private Member writer;
 
-    protected Board(String title, String content){
-        this.title = title;
-        this.content = content;
-        this.createdDate = LocalDateTime.now();
-    }
-
-    protected Board(String title, String content, Long id){
-        this.title = title;
-        this.content = content;
-        this.id = id;
-        this.createdDate = LocalDateTime.now();
-    }
 
     protected Board(String title, String content, BoardType boardType){
         this.title = title;
         this.content = content;
         this.boardType = boardType;
         this.createdDate = LocalDateTime.now();
-    }
-
-    public static Board board(String title, String content) {
-        return new Board(title, content);
-    }
-
-    public static Board board(String title, String content, Long id) {
-        return new Board(title, content, id);
     }
 
     public static Board board(String title, String content, BoardType boardType) {
