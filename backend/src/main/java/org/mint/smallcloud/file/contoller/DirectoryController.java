@@ -41,7 +41,9 @@ public class DirectoryController {
     public void rename(
         @PathVariable("directoryId") Long directoryId,
         @Valid @RequestBody DirectoryRenameDto dto) {
-
+        UserDetails user = userDetailsProvider.getUserDetails()
+            .orElseThrow(() -> new ServiceException(ExceptionStatus.NO_PERMISSION));
+        directoryFacadeService.rename(directoryId, dto, user.getUsername());
     }
 
     @RequestMapping(method = {RequestMethod.GET, RequestMethod.POST}, value = "/{directoryId}/purge")

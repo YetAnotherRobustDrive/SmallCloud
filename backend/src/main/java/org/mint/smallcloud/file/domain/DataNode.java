@@ -106,6 +106,10 @@ public abstract class DataNode {
         return fileType.getType();
     }
 
+    public void setName(String name) {
+        this.fileType = FileType.of(name, this.getType());
+    }
+
     @Override
     public boolean equals(Object obj) {
         if (obj == this) return true;

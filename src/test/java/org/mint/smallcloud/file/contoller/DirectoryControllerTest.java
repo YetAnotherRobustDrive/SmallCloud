@@ -149,8 +149,7 @@ class DirectoryControllerTest {
                     folderRepository.findByFileType_NameAndParentFolder_Id(dto2.getName() + "_2", folder1.getId())
                         .orElseThrow(Exception::new);
                 })
-                .andExpect(status().isOk())
-                .andDo(document(DOCUMENT_NAME));
+                .andExpect(status().isOk());
         }
 
         @DisplayName("부모 디렉토리가 없는 경우")
@@ -199,4 +198,101 @@ class DirectoryControllerTest {
                 .andDo(document(DOCUMENT_NAME));
         }
     }
+
+    @Nested
+    @DisplayName("/directory/{directoryId}/rename docs")
+    class Rename {
+        private final String url = URL_PREFIX + "/{directoryId}/rename";
+        private Member user1;
+        private Folder root;
+        private Folder folder1;
+        private JwtTokenDto token1;
+
+        @BeforeEach
+        void boot() {
+            user1 = Member.of("user1", "test", "nick");
+            em.persist(user1);
+            token1 = jwtTokenProvider.generateTokenDto(UserDetailsDto
+                .builder()
+                .username(user1.getUsername())
+                .password(user1.getPassword())
+                .roles(user1.getRole()).build());
+            root = Folder.createRoot(user1);
+            folder1 = (Folder) Folder.createFolder(root, "folder1", user1);
+            em.persist(root);
+            em.persist(folder1);
+            em.flush();
+
+        }
+
+        @DisplayName("정상 요청")
+        @Test
+        void ok() throws Exception {
+            DirectoryCreateDto dto1 = DirectoryCreateDto.builder()
+                .name("test")
+                .build();
+            mockMvc.perform(
+                    TestSnippet.secured(post(url, folder1.getId()),
+                        token1.getAccessToken(), objectMapper, dto1))
+                .andExpect(status().isOk())
+                .andExpect((rst) -> folderRepository.findByFileType_NameAndParentFolder_Id(dto1.getName(), root.getId())
+                    .orElseThrow(Exception::new)
+                )
+                .andDo(document(DOCUMENT_NAME,
+                    requestFields(
+                        fieldWithPath("name").description("바꾸려는 디렉터리 이름")
+                    ),
+                    pathParameters(
+                        parameterWithName("directoryId").description("바꾸려는 디렉터리 id")
+                    )));
+        }
+
+        @DisplayName("부모 디렉토리가 없는 경우")
+        @Test
+        void parentNotFound() throws Exception {
+            DirectoryCreateDto dto1 = DirectoryCreateDto.builder()
+                .name("test")
+                .build();
+            mockMvc.perform(
+                    TestSnippet.secured(post(url, folder1.getId() + 1),
+                        token1.getAccessToken(), objectMapper, dto1))
+                .andExpect(status().isForbidden())
+                .andDo(document(DOCUMENT_NAME));
+        }
+
+        @DisplayName("토큰이 없는 경우")
+        @Test
+        void noToken() throws Exception {
+            DirectoryCreateDto dto1 = DirectoryCreateDto.builder()
+                .name("test")
+                .build();
+            mockMvc.perform(
+                    post(url, folder1.getId(), objectMapper, dto1))
+                .andExpect(status().isBadRequest())
+                .andDo(document(DOCUMENT_NAME));
+        }
+
+        @DisplayName("접근 권한이 없는 유저인 경우")
+        @Test
+        void noAccessRight() throws Exception {
+            Member member2 = Member.of("user2", "test", "nick1");
+            em.persist(member2);
+            em.flush();
+            JwtTokenDto token = jwtTokenProvider.generateTokenDto(UserDetailsDto
+                .builder()
+                .username(member2.getUsername())
+                .password(member2.getPassword())
+                .roles(member2.getRole()).build());
+            DirectoryCreateDto dto1 = DirectoryCreateDto.builder()
+                .name("test")
+                .build();
+            mockMvc.perform(
+                    TestSnippet.secured(post(url, folder1.getId()),
+                        token.getAccessToken(), objectMapper, dto1))
+                .andExpect(status().isForbidden())
+                .andDo(document(DOCUMENT_NAME));
+        }
+    }
+
+
 }

@@ -26,4 +26,12 @@ public class DirectoryService {
             folderRepository.save(Folder.of(parent, name, member));
         }
     }
+
+    public void renameDirectory(Folder folder, String name) {
+        if (folderRepository.existsByParentFolderAndFileType_Name(folder.getParentFolder(), name)) {
+            renameDirectory(folder, fileNamePolicy.nextFileName(name));
+        } else {
+            folder.setName(name);
+        }
+    }
 }
