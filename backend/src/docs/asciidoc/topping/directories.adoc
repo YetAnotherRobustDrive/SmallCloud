@@ -1,0 +1,23 @@
+=== 등록 (create)
+
+==== 명세
+
+operation::Directory/Create/ok[snippets='request-fields,path-parameters']
+
+==== 성공
+
+operation::Directory/Create/ok[snippets='http-response']
+
+==== 실패
+
+operation::Directory/Create/parentNotFound[snippets='http-response']
+
+IMPORTANT:부모 디렉토리가 존재하지 않는 경우
+
+operation::Directory/Create/noToken[snippets='http-response']
+
+IMPORTANT:토큰이 없는 경우
+
+operation::Directory/Create/noAccessRight[snippets='http-response']
+
+IMPORTANT:접근 권한이 없는 경우

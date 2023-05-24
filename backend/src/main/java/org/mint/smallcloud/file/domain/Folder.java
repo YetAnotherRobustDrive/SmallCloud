@@ -6,6 +6,7 @@ import lombok.NoArgsConstructor;
 import org.mint.smallcloud.user.domain.Member;
 
 import javax.persistence.*;
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -19,15 +20,14 @@ public class Folder extends DataNode {
         cascade = CascadeType.ALL,
         orphanRemoval = true
     )
-    private List<DataNode> subDataNodes;
-
-    protected Folder(String name, Member member) {
-        super(FileType.of(name, FileType.FOLDER), member.getId());
-        subDataNodes = null;
-    }
+    private List<DataNode> subDataNodes = new ArrayList<>();
 
     @Transient
     public static final String ROOT_NAME = "_ROOT_";
+
+    protected Folder(String name, Member member) {
+        super(FileType.of(name, FileType.FOLDER), member);
+    }
 
     public static Folder of(Folder folder, String name, Member member) {
         Folder ret = new Folder(name, member);

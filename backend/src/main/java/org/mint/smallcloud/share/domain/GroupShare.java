@@ -41,6 +41,12 @@ public class GroupShare extends Share {
 
     @Override
     public boolean canAccess(Member member) {
-        return false;
+        return canAccess(member.getUsername());
+    }
+
+    @Override
+    public boolean canAccess(String username) {
+        return this.getTarget().getMembers().stream()
+            .anyMatch(member -> member.getUsername().equals(username));
     }
 }

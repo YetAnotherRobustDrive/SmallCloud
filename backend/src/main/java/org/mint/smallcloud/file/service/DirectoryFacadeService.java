@@ -16,9 +16,8 @@ public class DirectoryFacadeService {
     private final MemberThrowerService memberThrowerService;
 
     public void create(Long directoryId, DirectoryCreateDto dto, String username) {
-        memberThrowerService.checkExistsByUsername(username);
         Folder folder = directoryThrowerService.getDirectoryById(directoryId);
-        directoryThrowerService.checkExistsByName(folder, dto.getName());
+        directoryThrowerService.checkAccessRight(folder, username);
         directoryService.createDirectory(
             folder, dto.getName(), memberThrowerService.getMemberByUsername(username));
     }

@@ -39,6 +39,11 @@ public class MemberShare extends Share {
 
     @Override
     public boolean canAccess(Member member) {
-        return false;
+        return canAccess(member.getUsername());
+    }
+
+    @Override
+    public boolean canAccess(String username) {
+        return this.getTarget().getUsername().equals(username);
     }
 }
