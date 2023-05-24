@@ -3,6 +3,7 @@ package org.mint.smallcloud.board.controller;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.mint.smallcloud.ResponseDto;
+import org.mint.smallcloud.board.domain.BoardType;
 import org.mint.smallcloud.board.domain.Question;
 import org.mint.smallcloud.board.dto.BoardDto;
 import org.mint.smallcloud.board.dto.QuestionDto;
@@ -100,5 +101,12 @@ public class BoardController {
     public ResponseDto<Boolean> saveBoard(@Valid @RequestBody BoardDto boardDto) {
         boolean result = boardService.saveBoard(boardDto);
         return ResponseDto.<Boolean>builder().result(result).build();
+    }
+
+    // board 조회
+    @Secured({Roles.S_ADMIN, Roles.S_COMMON})
+    @GetMapping("/board")
+    public List<BoardDto> getBoard(@RequestParam BoardType boardType) {
+        return boardService.findBoard(boardType);
     }
 }
