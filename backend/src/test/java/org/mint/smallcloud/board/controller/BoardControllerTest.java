@@ -29,6 +29,8 @@ import org.springframework.restdocs.payload.RequestFieldsSnippet;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.LinkedMultiValueMap;
+import org.springframework.util.MultiValueMap;
 import org.springframework.web.context.WebApplicationContext;
 import org.springframework.web.filter.CharacterEncodingFilter;
 
@@ -38,8 +40,7 @@ import java.awt.desktop.QuitEvent;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
-import static org.mint.smallcloud.board.domain.BoardType.announcement;
-import static org.mint.smallcloud.board.domain.BoardType.faq;
+import static org.mint.smallcloud.board.domain.BoardType.*;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.documentationConfiguration;
 import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.get;
@@ -524,6 +525,80 @@ class BoardControllerTest {
         @DisplayName("잘못된 토큰")
         void wrongToken() throws Exception {
             mockMvc.perform(TestSnippet.secured(get(url, findFAQ), "testWrongToken"))
+                    .andExpect(status().isBadRequest())
+                    .andDo(document(DOCUMENT_NAME));
+        }
+    }
+
+    @Nested
+    @DisplayName("/Inquiries/board 보드 날짜순 2개 조회")
+    class getBoardCreatedDate {
+        final String url = URL_PREFIX + "/board/created";
+        Board board;
+        Board board1;
+        List<Board> findTerms;
+
+        MultiValueMap<String, String> info;
+        @BeforeEach
+        void boot() {
+            board = Board.board("testTitle", "testContent", terms);
+            board1 = Board.board("testTitle1", "testContent1", terms);
+            boardRepository.save(board);
+            boardRepository.save(board1);
+            findTerms = boardRepository.findTop2ByBoardTypeOrderByCreatedDate(terms);
+
+            info = new LinkedMultiValueMap<>();
+            info.add("boardType", terms.name());
+
+        }
+
+        @Test
+        @DisplayName("정상적 첫번째 보드 조회 admin")
+        void okAdminFirst() throws Exception {
+            info.add("createdDate", "0");
+            mockMvc.perform(TestSnippet.secured(get(url).params(info), adminToken.getAccessToken()))
+                    .andExpect(status().isOk())
+                    .andDo(document(DOCUMENT_NAME));
+        }
+
+        @Test
+        @DisplayName("정상적 두번째 보드 조회 admin")
+        void okAdminSecond() throws Exception {
+            info.add("createdDate", "1");
+            mockMvc.perform(TestSnippet.secured(get(url).params(info), adminToken.getAccessToken()))
+                    .andExpect(status().isOk())
+                    .andDo(document(DOCUMENT_NAME));
+        }
+
+        @Test
+        @DisplayName("정상적 첫번째 보드 조회 common")
+        void okCommonFirst() throws Exception {
+            info.add("createdDate", "0");
+            mockMvc.perform(TestSnippet.secured(get(url).params(info), memberToken.getAccessToken()))
+                    .andExpect(status().isOk())
+                    .andDo(document(DOCUMENT_NAME));
+        }
+
+        @Test
+        @DisplayName("정상적 두번째 보드 조회 common")
+        void okCommonSecond() throws Exception {
+            info.add("createdDate", "1");
+            mockMvc.perform(TestSnippet.secured(get(url).params(info), memberToken.getAccessToken()))
+                    .andExpect(status().isOk())
+                    .andDo(document(DOCUMENT_NAME));
+        }
+        @Test
+        @DisplayName("없는 보드 조회")
+        void noBoard() throws Exception {
+            info.add("createdDate", "2");
+            mockMvc.perform(TestSnippet.secured(get(url).params(info), memberToken.getAccessToken()))
+                    .andExpect(status().isBadRequest())
+                    .andDo(document(DOCUMENT_NAME));
+        }
+        @Test
+        @DisplayName("잘못된 토큰")
+        void wrongToken() throws Exception {
+            mockMvc.perform(TestSnippet.secured(get(url, findTerms), "testWrongToken"))
                     .andExpect(status().isBadRequest())
                     .andDo(document(DOCUMENT_NAME));
         }
