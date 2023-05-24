@@ -37,8 +37,8 @@ import javax.persistence.PersistenceContext;
 import java.awt.desktop.QuitEvent;
 import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.*;
+import static org.mint.smallcloud.board.domain.BoardType.announcement;
 import static org.mint.smallcloud.board.domain.BoardType.faq;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.documentationConfiguration;
@@ -482,6 +482,48 @@ class BoardControllerTest {
                     .content("testContent")
                     .build();
             mockMvc.perform(TestSnippet.securePost(url, adminToken.getAccessToken(), objectMapper, boardDto))
+                    .andExpect(status().isBadRequest())
+                    .andDo(document(DOCUMENT_NAME));
+        }
+    }
+
+    @Nested
+    @DisplayName("/Inquiries/board 보드 조회")
+    class getBoard {
+        final String url = URL_PREFIX + "/board";
+        Board board;
+        Board board1;
+        List<Board> findFAQ;
+
+        @BeforeEach
+        void boot() {
+            board = Board.board("testTitle", "testContent", faq);
+            board1 = Board.board("testTitle1", "testContent1", announcement);
+            boardRepository.save(board);
+            boardRepository.save(board1);
+            findFAQ = boardRepository.findByBoardType(faq);
+        }
+
+        @Test
+        @DisplayName("정상적 보드 조회 admin")
+        void okAdmin() throws Exception {
+            mockMvc.perform(TestSnippet.secured(get(url).param("boardType", faq.name()), adminToken.getAccessToken()))
+                    .andExpect(status().isOk())
+                    .andDo(document(DOCUMENT_NAME));
+        }
+
+        @Test
+        @DisplayName("정상적 보드 조회 common")
+        void okCommon() throws Exception {
+            mockMvc.perform(TestSnippet.secured(get(url).param("boardType", faq.name()), memberToken.getAccessToken()))
+                    .andExpect(status().isOk())
+                    .andDo(document(DOCUMENT_NAME));
+        }
+
+        @Test
+        @DisplayName("잘못된 토큰")
+        void wrongToken() throws Exception {
+            mockMvc.perform(TestSnippet.secured(get(url, findFAQ), "testWrongToken"))
                     .andExpect(status().isBadRequest())
                     .andDo(document(DOCUMENT_NAME));
         }

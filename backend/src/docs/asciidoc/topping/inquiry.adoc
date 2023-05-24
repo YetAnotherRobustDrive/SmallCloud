@@ -117,3 +117,21 @@ IMPORTANT: 보드 내용 생략했을 때
 operation::Board/saveBoard/noType[snippets='http-response']
 
 IMPORTANT: 보드 타입 생략했을 때
+
+=== 보드(faq, 공지사항) 전체 조회
+
+operation::Board/getBoard/okAdmin[snippets='http-request']
+
+==== 성공
+
+operation::Board/getBoard/okAdmin[snippets='http-response']
+
+IMPORTANT: ADMIN 일때
+
+operation::Board/getBoard/okCommon[snippets='http-response']
+
+IMPORTANT: COMMON 일때
+
+==== 실패
+
+operation::Board/getBoard/wrongToken[snippets='http-response']
