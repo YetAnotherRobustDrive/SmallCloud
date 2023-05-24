@@ -9,6 +9,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mint.smallcloud.TestSnippet;
 import org.mint.smallcloud.file.domain.Folder;
 import org.mint.smallcloud.file.dto.DirectoryCreateDto;
+import org.mint.smallcloud.file.dto.DirectoryMoveDto;
 import org.mint.smallcloud.file.repository.FolderRepository;
 import org.mint.smallcloud.security.dto.UserDetailsDto;
 import org.mint.smallcloud.security.jwt.dto.JwtTokenDto;
@@ -294,5 +295,59 @@ class DirectoryControllerTest {
         }
     }
 
+    @Nested
+    @DisplayName("/directory/{directoryId}/move docs")
+    class Move {
+        private final String url = URL_PREFIX + "/{directoryId}/move";
+        private Member user1;
+        private Folder root;
+        private Folder parent;
+        private Folder target;
+        private JwtTokenDto token1;
+
+        @BeforeEach
+        void boot() {
+            Member user1 = Member.of("user1", "test", "nick");
+            em.persist(user1);
+            token1 = jwtTokenProvider.generateTokenDto(UserDetailsDto
+                .builder()
+                .username(user1.getUsername())
+                .password(user1.getPassword())
+                .roles(user1.getRole()).build());
+            root = Folder.createRoot(user1);
+            em.persist(root);
+            em.flush();
+            parent = (Folder) Folder.createFolder(root, "folder1", user1);
+            em.persist(parent);
+            em.flush();
+            target = (Folder) Folder.createFolder(root, "folder2", user1);
+            em.persist(target);
+            em.flush();
+        }
+
+        @DisplayName("정상 요청")
+        @Test
+        void ok() throws Exception {
+            DirectoryMoveDto dto1 = DirectoryMoveDto.builder()
+                .directoryId(parent.getId())
+                .build();
+            mockMvc.perform(
+                    TestSnippet.secured(post(url, target.getId()),
+                        token1.getAccessToken(), objectMapper, dto1))
+                .andExpect(status().isOk())
+                .andExpect((rst) ->
+                    folderRepository
+                        .findByFileType_NameAndParentFolder_Id(target.getName(), parent.getId())
+                        .orElseThrow(Exception::new)
+                )
+                .andDo(document(DOCUMENT_NAME,
+                    requestFields(
+                        fieldWithPath("directoryId").description("이동할 목적지 디렉터리 id")
+                    ),
+                    pathParameters(
+                        parameterWithName("directoryId").description("이동시킬 디렉터리 id")
+                    )));
+        }
+    }
 
 }

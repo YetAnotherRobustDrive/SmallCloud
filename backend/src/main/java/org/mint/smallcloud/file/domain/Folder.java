@@ -48,7 +48,7 @@ public class Folder extends DataNode {
     }
 
     public void addChild(DataNode dataNode) {
-        if (this.subDataNodes.contains(dataNode)) return;
+        if (dataNode == null || this.subDataNodes.contains(dataNode)) return;
         this.subDataNodes.add(dataNode);
         dataNode.setParentFolder(this);
     }

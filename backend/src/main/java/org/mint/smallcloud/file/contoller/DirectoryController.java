@@ -65,8 +65,8 @@ public class DirectoryController {
     public void move(
         @PathVariable("directoryId") Long directoryId,
         @Valid @RequestBody DirectoryMoveDto dto) {
-
+        UserDetails user = userDetailsProvider.getUserDetails()
+            .orElseThrow(() -> new ServiceException(ExceptionStatus.NO_PERMISSION));
+        directoryFacadeService.move(directoryId, dto, user.getUsername());
     }
-
-
 }

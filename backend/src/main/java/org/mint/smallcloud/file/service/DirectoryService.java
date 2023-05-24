@@ -2,6 +2,8 @@ package org.mint.smallcloud.file.service;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.mint.smallcloud.exception.ExceptionStatus;
+import org.mint.smallcloud.exception.ServiceException;
 import org.mint.smallcloud.file.domain.FileNamePolicy;
 import org.mint.smallcloud.file.domain.Folder;
 import org.mint.smallcloud.file.repository.FolderRepository;
@@ -33,5 +35,12 @@ public class DirectoryService {
         } else {
             folder.setName(name);
         }
+    }
+
+    public void moveDirectory(Folder target, Folder dest) {
+        if (folderRepository.existsByParentFolderAndFileType_Name(dest, target.getName())) {
+            throw new ServiceException(ExceptionStatus.ALREADY_EXISTS_DIRECTORY);
+        }
+        target.setParentFolder(dest);
     }
 }
