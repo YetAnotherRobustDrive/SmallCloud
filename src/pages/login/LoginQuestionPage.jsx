@@ -5,17 +5,19 @@ import "../../css/login.css"
 import "../../css/modal.css"
 import PostBoard from "../../services/board/PostBoard";
 import GetUserInfo from "../../services/user/GetUserInfo";
+import { useNavigate } from "react-router-dom";
 //todo
 export default function LoginQuestionPage() {    
     const [isEmpty, setIsEmpty] = useState(false);
     const [isFail, setIsFail] = useState(false);
+    const [isSuccess, setIsSuccess] = useState(false);
     const [isNotCheck, setIsNotCheck] = useState(false);
     const [isNoticed, setIsNoticed] = useState(false);
     const [message, setMessage] = useState("일시적인 오류가 발생했습니다.");
+    const navigate = useNavigate();
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-        const user = await GetUserInfo();
 
         const inputData = new FormData(e.target);
         if (inputData.get("content") == "" || inputData.get("title") == "" || inputData.get("contact") == "") {
@@ -37,10 +39,12 @@ export default function LoginQuestionPage() {
             setIsFail(true);
             return;
         }
+        setIsSuccess(true);
     }
 
     return (
         <>
+        {isSuccess && <ModalOk close={() => {setIsSuccess(false); navigate('/')}}>{"문의가 등록되었습니다.\n등록하신 연락처로 답변드리겠습니다."}</ModalOk>}
         {isFail && <ModalOk close={() => setIsFail(false)}>{message}</ModalOk>}
         {isEmpty && <ModalOk close={() => setIsEmpty(false)}>{"입력하지 않은 내용이 있습니다."}</ModalOk>}
         {isNotCheck && <ModalOk close={() => setIsNotCheck(false)}>{"개인정보 수집에 동의해주세요."}</ModalOk>}

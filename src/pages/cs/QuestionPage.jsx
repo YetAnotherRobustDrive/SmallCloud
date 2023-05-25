@@ -15,6 +15,7 @@ import PostBoard from "../../services/board/PostBoard";
 export default function QuestionPage() {
     const [isEmpty, setIsEmpty] = useState(false);
     const [isFail, setIsFail] = useState(false);
+    const [isOK, setIsok] = useState(false);
     const [message, setMessage] = useState("일시적인 오류가 발생했습니다.");
 
     const handleSubmit = async (e) => {
@@ -23,7 +24,7 @@ export default function QuestionPage() {
 
         const inputData = new FormData(e.target);
         inputData.append("writer", user.nickname);
-        inputData.append("contact", "010-0000-0000");
+        inputData.append("contact", "등록된 유저입니다.");
         const value = Object.fromEntries(inputData.entries());
 
         if (inputData.get("content") == "" || inputData.get("title") == "") {
@@ -31,7 +32,6 @@ export default function QuestionPage() {
             return;
         }
         const res = await PostBoard(value);
-        console.log(res);
         if (!res[0]) {
             if (res[1] != undefined) {
                 setMessage(res[1]);                
@@ -40,11 +40,12 @@ export default function QuestionPage() {
             setIsFail(true);
             return;
         }
+        setIsok(true);
     }
 
     return (
         <>
-
+            {isOK && <ModalOk close={() => {setIsok(false); window.location.reload();}}>{"등록되었습니다."}</ModalOk>}
             {isFail && <ModalOk close={() => setIsFail(false)}>{message}</ModalOk>}
             {isEmpty && <ModalOk close={() => setIsEmpty(false)}>{"제목과 내용을 입력해주세요."}</ModalOk>}
             <Header />
