@@ -3,11 +3,11 @@ package org.mint.smallcloud.file.service;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.mint.smallcloud.file.domain.Folder;
-import org.mint.smallcloud.file.dto.DirectoryCreateDto;
-import org.mint.smallcloud.file.dto.DirectoryMoveDto;
-import org.mint.smallcloud.file.dto.DirectoryRenameDto;
+import org.mint.smallcloud.file.dto.*;
 import org.mint.smallcloud.user.service.MemberThrowerService;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -36,5 +36,17 @@ public class DirectoryFacadeService {
         directoryThrowerService.checkAccessRight(target, username);
         directoryThrowerService.checkAccessRight(dest, username);
         directoryService.moveDirectory(target, dest);
+    }
+
+    public DirectoryDto info(Long directoryId, String username) {
+        return DirectoryDto.builder().build();
+    }
+
+    public List<DirectoryDto> subDirectories(Long directoryId, String username) {
+        return null;
+    }
+
+    public List<FileDto> files(Long directoryId, String username) {
+        return null;
     }
 }
