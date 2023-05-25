@@ -272,7 +272,6 @@ class BoardControllerTest {
         @BeforeEach
         void boot() {
             requestDto = RequestDto.builder()
-                .title("testTitle")
                 .content("testContent")
                 .questionId(1L)
                 .build();
@@ -285,10 +284,9 @@ class BoardControllerTest {
         void okOneToOneAnswer() throws Exception {
             Question question = Question.question("testTitle", "testContent", "testContact", "testWriter", null);
             questionRepository.save(question);
-            Answer answer = Answer.answer("testTitle1", "testContent1", question);
+            Answer answer = Answer.answer("testContent1", question);
             answerRepository.save(answer);
             requestDto = RequestDto.builder()
-                .title("testTitle1")
                 .content("testContent1")
                 .questionId(question.getId())
                 .build();
@@ -303,10 +301,9 @@ class BoardControllerTest {
         void okLoginAnswer() throws Exception {
             Question question = Question.question("testTitle", "testContent", "testContact", null, null);
             questionRepository.save(question);
-            Answer answer = Answer.answer("testTitle1", "testContent1", question);
+            Answer answer = Answer.answer("testContent1", question);
             answerRepository.save(answer);
             requestDto = RequestDto.builder()
-                .title("testTitle1")
                 .content("testContent1")
                 .questionId(question.getId())
                 .build();
@@ -321,10 +318,9 @@ class BoardControllerTest {
         void noContent() throws Exception {
             Question question = Question.question("testTitle", "testContent", "testContact", "testWriter", null);
             questionRepository.save(question);
-            Answer answer = Answer.answer("testTitle1", null, question);
+            Answer answer = Answer.answer(null, question);
             answerRepository.save(answer);
             requestDto = RequestDto.builder()
-                    .title("testTitle1")
                     .content(null)
                     .questionId(question.getId())
                     .build();
@@ -338,10 +334,9 @@ class BoardControllerTest {
         void wrongToken() throws Exception {
             Question question = Question.question("testTitle", "testContent", "testContact", null, null);
             questionRepository.save(question);
-            Answer answer = Answer.answer("testTitle1", "testContent1", question);
+            Answer answer = Answer.answer("testContent1", question);
             answerRepository.save(answer);
             requestDto = RequestDto.builder()
-                    .title("testTitle1")
                     .content("testContent1")
                     .questionId(question.getId())
                     .build();
@@ -363,7 +358,7 @@ class BoardControllerTest {
 
         @BeforeEach
         void boot() {
-            answer = Answer.answer("testTitle", "testContent", null);
+            answer = Answer.answer("testContent", null);
             answerRepository.save(answer);
             question = Question.question("testTitle", "testContent", "testContact", "testWriter", answer);
             question1 = Question.question("testTitle", "testContent", "testContact", "testWriter", null);
@@ -403,7 +398,7 @@ class BoardControllerTest {
 
         @BeforeEach
         void boot() {
-            answer = Answer.answer("testTitle", "testContent", null);
+            answer = Answer.answer("testContent", null);
             answerRepository.save(answer);
             question = Question.question("testTitle", "testContent", "testContact", "testWriter", answer);
             question1 = Question.question("testTitle", "testContent", "testContact", "testWriter", null);
@@ -510,7 +505,9 @@ class BoardControllerTest {
         void okAdmin() throws Exception {
             mockMvc.perform(TestSnippet.secured(get(url).param("boardType", faq.name()), adminToken.getAccessToken()))
                     .andExpect(status().isOk())
-                    .andDo(document(DOCUMENT_NAME));
+                    .andDo(document(DOCUMENT_NAME, requestParameters(
+                            parameterWithName("boardType").description("조회할 보드 타입")
+                    )));
         }
 
         @Test
@@ -563,7 +560,10 @@ class BoardControllerTest {
             info.add("createdDate", "0");
             mockMvc.perform(TestSnippet.secured(get(url).params(info), adminToken.getAccessToken()))
                     .andExpect(status().isOk())
-                    .andDo(document(DOCUMENT_NAME));
+                    .andDo(document(DOCUMENT_NAME,requestParameters(
+                            parameterWithName("boardType").description("조회할 보드 타입"),
+                            parameterWithName("createdDate").description("0번이 최근, 1번이 직전 보드")
+                    )));
         }
 
         @Test

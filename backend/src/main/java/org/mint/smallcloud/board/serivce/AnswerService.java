@@ -26,7 +26,7 @@ public class AnswerService {
         Question question = questionRepository
             .findById(requestDto.getQuestionId())
             .orElseThrow(() -> new ServiceException(ExceptionStatus.NOT_FOUND_QUESTION));
-        Answer answer = Answer.answer(requestDto.getTitle(), requestDto.getContent(), question);
+        Answer answer = Answer.answer(requestDto.getContent(), question);
         answerRepository.save(answer);
         return true;
     }
