@@ -18,9 +18,6 @@ public class Answer {
     @Column(name = "ANSWER_ID")
     private Long id;
 
-    @Column(name = "TITLE")
-    private String title;
-
     @Column(name = "CONTENT")
     private String content;
 
@@ -31,15 +28,14 @@ public class Answer {
     private Question question;
 
 
-    protected Answer(String title, String content, Question question) {
-        this.title = title;
+    protected Answer(String content, Question question) {
         this.content = content;
         this.createdDate = LocalDateTime.now();
         setQuestion(question);
     }
 
-    public static Answer answer(String title, String content, Question question) {
-        return new Answer(title, content, question);
+    public static Answer answer(String content, Question question) {
+        return new Answer(content, question);
     }
 
     public void setQuestion(Question question) {

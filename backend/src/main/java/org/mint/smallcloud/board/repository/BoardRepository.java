@@ -13,5 +13,7 @@ public interface BoardRepository extends JpaRepository<Board, Long> {
 
     List<Board> findByBoardType(BoardType type);
 
+    List<Board> findTop2ByBoardTypeOrderByCreatedDate(BoardType type);
+
 //    List<Board> findTop2ByBoardTypeOrderByCreatedDateDesc (BoardType type);
 }
