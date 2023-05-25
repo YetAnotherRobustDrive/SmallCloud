@@ -3,7 +3,9 @@ package org.mint.smallcloud.board.controller;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.mint.smallcloud.ResponseDto;
+import org.mint.smallcloud.board.domain.BoardType;
 import org.mint.smallcloud.board.domain.Question;
+import org.mint.smallcloud.board.dto.BoardDto;
 import org.mint.smallcloud.board.dto.QuestionDto;
 import org.mint.smallcloud.board.dto.RequestDto;
 import org.mint.smallcloud.board.serivce.AnswerService;
@@ -41,7 +43,7 @@ public class BoardController {
     // 전체 question 가져오기
     @Secured({Roles.S_ADMIN})
     @GetMapping
-    public List<Question> getInquiries() {
+    public List<QuestionDto> getInquiries() {
         return questionService.findAll();
     }
 
@@ -82,7 +84,29 @@ public class BoardController {
     // 문의 비답변 목록 가져오기
     @Secured({Roles.S_ADMIN})
     @GetMapping("/questioned")
-    public List<Question> getQuestioned() {
+    public List<QuestionDto> getQuestioned() {
         return questionService.findQuestioned();
+    }
+
+    // 내 문의 내역 리스트 가져오기
+    @Secured({Roles.S_COMMON})
+    @GetMapping("/myQuestions")
+    public List<QuestionDto> getMyQuestions(@RequestParam("writer") String writer) {
+        return questionService.findMyQuestions(writer);
+    }
+
+    // board 등록
+    @Secured({Roles.S_ADMIN})
+    @PostMapping("/board")
+    public ResponseDto<Boolean> saveBoard(@Valid @RequestBody BoardDto boardDto) {
+        boolean result = boardService.saveBoard(boardDto);
+        return ResponseDto.<Boolean>builder().result(result).build();
+    }
+
+    // board 조회
+    @Secured({Roles.S_ADMIN, Roles.S_COMMON})
+    @GetMapping("/board")
+    public List<BoardDto> getBoard(@RequestParam BoardType boardType) {
+        return boardService.findBoard(boardType);
     }
 }

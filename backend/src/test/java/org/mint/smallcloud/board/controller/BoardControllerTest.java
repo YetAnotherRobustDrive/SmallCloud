@@ -8,7 +8,9 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mint.smallcloud.TestSnippet;
 import org.mint.smallcloud.board.domain.Answer;
+import org.mint.smallcloud.board.domain.Board;
 import org.mint.smallcloud.board.domain.Question;
+import org.mint.smallcloud.board.dto.BoardDto;
 import org.mint.smallcloud.board.dto.QuestionDto;
 import org.mint.smallcloud.board.dto.RequestDto;
 import org.mint.smallcloud.board.repository.AnswerRepository;
@@ -32,17 +34,17 @@ import org.springframework.web.filter.CharacterEncodingFilter;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import java.awt.desktop.QuitEvent;
 import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.*;
+import static org.mint.smallcloud.board.domain.BoardType.announcement;
+import static org.mint.smallcloud.board.domain.BoardType.faq;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.documentationConfiguration;
 import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.get;
-import static org.springframework.restdocs.payload.PayloadDocumentation.fieldWithPath;
-import static org.springframework.restdocs.payload.PayloadDocumentation.requestFields;
-import static org.springframework.restdocs.request.RequestDocumentation.parameterWithName;
-import static org.springframework.restdocs.request.RequestDocumentation.pathParameters;
+import static org.springframework.restdocs.payload.PayloadDocumentation.*;
+import static org.springframework.restdocs.request.RequestDocumentation.*;
 import static org.springframework.security.test.web.servlet.setup.SecurityMockMvcConfigurers.springSecurity;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
@@ -125,17 +127,20 @@ class BoardControllerTest {
                 .content("testContent")
                 .contact("010-1234-5678")
                 .writer("testWriter")
+                    .answerId(null)
                 .build();
             questionDto = QuestionDto.builder()
                 .title("testTitle")
                 .content("testContent")
                 .contact("010-1234-5678")
                 .writer("testWriter")
+                    .answerId(null)
                 .build();
             noContactQuestionDto = QuestionDto.builder()
                 .title("testTitle")
                 .content("testContent")
                 .writer("testWriter")
+                    .answerId(null)
                 .build();
 
         }
@@ -147,7 +152,8 @@ class BoardControllerTest {
                 fieldWithPath("title").description("글의 제목을 담고 있습니다."),
                 fieldWithPath("content").description("사용자 질문의 내용을 담고 있습니다."),
                 fieldWithPath("contact").description("사용자의 연락처를 담고 있습니다."),
-                fieldWithPath("writer").description("글의 작성자를 담고 있습니다."));
+                fieldWithPath("writer").description("글의 작성자를 담고 있습니다."),
+                    fieldWithPath("answerId").description("질문의 대한 답변의 내용을 담고 있습니다."));
 
             mockMvc.perform(TestSnippet.securePost(url, memberToken.getAccessToken(), objectMapper, securedQuestionDto))
                 .andExpect(status().isOk())
@@ -382,6 +388,144 @@ class BoardControllerTest {
             mockMvc.perform(TestSnippet.secured(get(url, findQuestion), "testWrongToken"))
                 .andExpect(status().isBadRequest())
                 .andDo(document(DOCUMENT_NAME));
+        }
+    }
+
+    @Nested
+    @DisplayName("/Inquiries/myQuestions 내 문의 내역 전부 가져오기")
+    class myQuestions {
+        final String url = URL_PREFIX + "/myQuestions";
+        private Question question;
+        private Question question1;
+        private Answer answer;
+        private List<Question> findQuestion;
+
+        @BeforeEach
+        void boot() {
+            answer = Answer.answer("testTitle", "testContent", null);
+            answerRepository.save(answer);
+            question = Question.question("testTitle", "testContent", "testContact", "testWriter", answer);
+            question1 = Question.question("testTitle", "testContent", "testContact", "testWriter", null);
+            questionRepository.save(question);
+            questionRepository.save(question1);
+            findQuestion = questionRepository.findByWriter("testWriter");
+        }
+
+        @Test
+        @DisplayName("정상적 문의 조회")
+        void ok() throws Exception {
+            mockMvc.perform(TestSnippet.secured(get(url).param("writer", "testWriter"), memberToken.getAccessToken()))
+                    .andExpect(status().isOk())
+                    .andDo(document(DOCUMENT_NAME,requestParameters(
+                            parameterWithName("writer").description("조회할 문의들의 작성자(로그인)")
+                    )));
+        }
+
+        @Test
+        @DisplayName("잘못된 토큰")
+        void wrongToken() throws Exception {
+            mockMvc.perform(TestSnippet.secured(get(url, findQuestion), "testWrongToken"))
+                    .andExpect(status().isBadRequest())
+                    .andDo(document(DOCUMENT_NAME));
+        }
+    }
+
+    @Nested
+    @DisplayName("/Inquiries/saveBoard 보드 등록")
+    class saveBoard {
+        final String url = URL_PREFIX + "/board";
+
+        @Test
+        @DisplayName("정상적 보드 등록")
+        void ok() throws Exception {
+            BoardDto boardDto = BoardDto.builder()
+                    .title("testTitle")
+                    .content("testContent")
+                    .boardType(faq)
+                    .build();
+            mockMvc.perform(TestSnippet.securePost(url, adminToken.getAccessToken(), objectMapper, boardDto))
+                    .andExpect(status().isOk())
+                    .andExpect(content().json("{result: true}"))
+                    .andDo(document(DOCUMENT_NAME));
+        }
+
+        @Test
+        @DisplayName("잘못된 토큰")
+        void wrongToken() throws Exception {
+            BoardDto boardDto = BoardDto.builder()
+                    .title("testTitle")
+                    .content("testContent")
+                    .boardType(faq)
+                    .build();
+            mockMvc.perform(TestSnippet.securePost(url, "testWrongToken", objectMapper, boardDto))
+                    .andExpect(status().isBadRequest())
+                    .andDo(document(DOCUMENT_NAME));
+        }
+
+        @Test
+        @DisplayName("보드 내용 생략")
+        void noContent() throws Exception {
+            BoardDto boardDto = BoardDto.builder()
+                    .title("testTitle")
+                    .boardType(faq)
+                    .build();
+            mockMvc.perform(TestSnippet.securePost(url, adminToken.getAccessToken(), objectMapper, boardDto))
+                    .andExpect(status().isBadRequest())
+                    .andDo(document(DOCUMENT_NAME));
+        }
+
+        @Test
+        @DisplayName("보드타입 내용 생략")
+        void noType() throws Exception {
+            BoardDto boardDto = BoardDto.builder()
+                    .title("testTitle")
+                    .content("testContent")
+                    .build();
+            mockMvc.perform(TestSnippet.securePost(url, adminToken.getAccessToken(), objectMapper, boardDto))
+                    .andExpect(status().isBadRequest())
+                    .andDo(document(DOCUMENT_NAME));
+        }
+    }
+
+    @Nested
+    @DisplayName("/Inquiries/board 보드 조회")
+    class getBoard {
+        final String url = URL_PREFIX + "/board";
+        Board board;
+        Board board1;
+        List<Board> findFAQ;
+
+        @BeforeEach
+        void boot() {
+            board = Board.board("testTitle", "testContent", faq);
+            board1 = Board.board("testTitle1", "testContent1", announcement);
+            boardRepository.save(board);
+            boardRepository.save(board1);
+            findFAQ = boardRepository.findByBoardType(faq);
+        }
+
+        @Test
+        @DisplayName("정상적 보드 조회 admin")
+        void okAdmin() throws Exception {
+            mockMvc.perform(TestSnippet.secured(get(url).param("boardType", faq.name()), adminToken.getAccessToken()))
+                    .andExpect(status().isOk())
+                    .andDo(document(DOCUMENT_NAME));
+        }
+
+        @Test
+        @DisplayName("정상적 보드 조회 common")
+        void okCommon() throws Exception {
+            mockMvc.perform(TestSnippet.secured(get(url).param("boardType", faq.name()), memberToken.getAccessToken()))
+                    .andExpect(status().isOk())
+                    .andDo(document(DOCUMENT_NAME));
+        }
+
+        @Test
+        @DisplayName("잘못된 토큰")
+        void wrongToken() throws Exception {
+            mockMvc.perform(TestSnippet.secured(get(url, findFAQ), "testWrongToken"))
+                    .andExpect(status().isBadRequest())
+                    .andDo(document(DOCUMENT_NAME));
         }
     }
 }
