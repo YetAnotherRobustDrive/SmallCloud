@@ -13,8 +13,7 @@ export default async function IsAdminToken() {
             },
         })
         const data = await res.json();
-        //return data.result;
-        return true;
+        return data.result;
     } catch (error) {
         return false;
     }

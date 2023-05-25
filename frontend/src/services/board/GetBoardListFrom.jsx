@@ -13,7 +13,7 @@ export default async function GetBoardListFrom(url) {
 
     try {
         const res = await fetch(configData.API_SERVER + url , model);
-        const data = res.json();
+        const data = await res.json();
         if (res.status == 200) {
             return [true, data];  //성공
         }
