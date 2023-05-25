@@ -127,6 +127,10 @@ public class Member {
         this.nickname = nickname;
     }
 
+    public void changeRole(Role role) {
+        this.role = role;
+    }
+
     public void setGroup(Group group) {
         if (getGroup() != null)
             this.group.deleteMember(this);
