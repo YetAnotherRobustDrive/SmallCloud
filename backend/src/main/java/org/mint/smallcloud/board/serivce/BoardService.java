@@ -35,12 +35,12 @@ public class BoardService {
     }
 
     public BoardDto findBoardCreatedDate(BoardType boardType, int createdDate) {
-        List<Board> board = boardThrowerService.findBoardCreatedDate(boardType);
+        Board board = boardThrowerService.findBoardCreatedDate(boardType, createdDate);
 
         return BoardDto.builder()
-                .title(board.get(createdDate).getTitle())
-                .content(board.get(createdDate).getContent())
-                .boardType(board.get(createdDate).getBoardType())
+                .title(board.getTitle())
+                .content(board.getContent())
+                .boardType(board.getBoardType())
                 .build();
     }
 }

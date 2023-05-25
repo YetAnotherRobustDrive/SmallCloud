@@ -12,6 +12,7 @@ import org.mint.smallcloud.exception.ServiceException;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Stack;
 
 @Service
 @RequiredArgsConstructor
@@ -25,18 +26,14 @@ public class BoardThrowerService {
                 .orElseThrow(() -> new ServiceException(ExceptionStatus.NOT_FOUND_INQUIRY));
     }
 
-    public List<Board> findBoardCreatedDate(BoardType boardType) {
-        return boardRepository.findTop2ByBoardTypeOrderByCreatedDate(boardType)
-                .forEach(s -> {
-                    try {
-                        checkIsNotnull(s);
-                    } catch () {}
-                });
-    }
-
-    static void checkIsNotnull(Board board) {
-        if(board.getId() == null) {
+    public Board findBoardCreatedDate(BoardType boardType, int createdDate) {
+        List<Board> BoardList = boardRepository.findTop2ByBoardTypeOrderByCreatedDate(boardType);
+        Board board;
+        try {
+           board = BoardList.get(createdDate);
+        } catch (IndexOutOfBoundsException e) {
             throw new ServiceException(ExceptionStatus.NOT_FOUND_INQUIRY);
         }
+        return board;
     }
 }

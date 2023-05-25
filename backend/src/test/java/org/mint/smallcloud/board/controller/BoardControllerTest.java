@@ -536,20 +536,25 @@ class BoardControllerTest {
         final String url = URL_PREFIX + "/board/created";
         Board board;
         Board board1;
+        Board board2;
         List<Board> findTerms;
-
+        List<Board> findAnnouncement;
         MultiValueMap<String, String> info;
+        MultiValueMap<String, String> info1;
         @BeforeEach
         void boot() {
             board = Board.board("testTitle", "testContent", terms);
             board1 = Board.board("testTitle1", "testContent1", terms);
+            board2 = Board.board("testTitle2","testContent2", announcement);
             boardRepository.save(board);
             boardRepository.save(board1);
+            boardRepository.save(board2);
             findTerms = boardRepository.findTop2ByBoardTypeOrderByCreatedDate(terms);
-
+            findAnnouncement = boardRepository.findTop2ByBoardTypeOrderByCreatedDate(announcement);
             info = new LinkedMultiValueMap<>();
             info.add("boardType", terms.name());
-
+            info1 = new LinkedMultiValueMap<>();
+            info1.add("boardType", announcement.name());
         }
 
         @Test
@@ -588,11 +593,19 @@ class BoardControllerTest {
                     .andDo(document(DOCUMENT_NAME));
         }
         @Test
-        @DisplayName("없는 보드 조회")
-        void noBoard() throws Exception {
+        @DisplayName("잘못된 3번째 보드 조회")
+        void thirdBoard() throws Exception {
             info.add("createdDate", "2");
             mockMvc.perform(TestSnippet.secured(get(url).params(info), memberToken.getAccessToken()))
-                    .andExpect(status().isBadRequest())
+                    .andExpect(status().isForbidden())
+                    .andDo(document(DOCUMENT_NAME));
+        }
+        @Test
+        @DisplayName("없는 보드 조회")
+        void noBoard() throws Exception {
+            info1.add("createdDate", "1");
+            mockMvc.perform(TestSnippet.secured(get(url).params(info1), memberToken.getAccessToken()))
+                    .andExpect(status().isForbidden())
                     .andDo(document(DOCUMENT_NAME));
         }
         @Test
