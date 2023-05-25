@@ -109,4 +109,11 @@ public class BoardController {
     public List<BoardDto> getBoard(@RequestParam BoardType boardType) {
         return boardService.findBoard(boardType);
     }
+
+    // board 최신, 이전 내용조회
+    @Secured({Roles.S_ADMIN, Roles.S_COMMON})
+    @GetMapping("/board/created")
+    public BoardDto getBoardCreatedDate(@RequestParam BoardType boardType, @RequestParam int createdDate) {
+           return boardService.findBoardCreatedDate(boardType, createdDate);
+    }
 }

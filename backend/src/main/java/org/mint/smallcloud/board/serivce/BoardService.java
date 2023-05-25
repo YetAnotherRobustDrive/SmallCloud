@@ -17,6 +17,7 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class BoardService {
     private final BoardRepository boardRepository;
+    private final BoardThrowerService boardThrowerService;
     private final BoardMapper boardMapper;
 
     public boolean saveBoard(BoardDto boardDto) {
@@ -31,5 +32,15 @@ public class BoardService {
     public List<BoardDto> findBoard(BoardType boardType) {
         List<Board> board = boardRepository.findByBoardType(boardType);
         return board.stream().map(boardMapper::toBoardDto).collect(Collectors.toList());
+    }
+
+    public BoardDto findBoardCreatedDate(BoardType boardType, int createdDate) {
+        Board board = boardThrowerService.findBoardCreatedDate(boardType, createdDate);
+
+        return BoardDto.builder()
+                .title(board.getTitle())
+                .content(board.getContent())
+                .boardType(board.getBoardType())
+                .build();
     }
 }

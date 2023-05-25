@@ -135,3 +135,39 @@ IMPORTANT: COMMON 일때
 ==== 실패
 
 operation::Board/getBoard/wrongToken[snippets='http-response']
+
+=== 보드(terms, 공지사항) 조회
+
+operation::Board/getBoardCreatedDate/okAdminFirst[snippets='http-request']
+
+==== 성공
+
+operation::Board/getBoardCreatedDate/okAdminFirst[snippets='http-response']
+
+IMPORTANT: admin 최근 보드 조회
+
+operation::Board/getBoardCreatedDate/okAdminSecond[snippets='http-response']
+
+IMPORTANT: admin 직전 보드 조회
+
+operation::Board/getBoardCreatedDate/okCommonFirst[snippets='http-response']
+
+IMPORTANT: common 최근 보드 조회
+
+operation::Board/getBoardCreatedDate/okCommonSecond[snippets='http-response']
+
+IMPORTANT: common 직전 보드 조회
+
+==== 실패
+
+operation::Board/getBoardCreatedDate/thirdBoard[snippets='http-response']
+
+IMPORTANT: 3번째 보드 조회
+
+operation::Board/getBoardCreatedDate/noBoard[snippets='http-response']
+
+IMPORTANT: 전체 보드 1개일 때 2번째 조회시
+
+operation::Board/getBoardCreatedDate/wrongToken[snippets='http-response']
+
+IMPORTANT: 잘못된 토큰
