@@ -13,6 +13,9 @@ import javax.validation.constraints.Size;
 @AllArgsConstructor
 @Builder
 public class BoardDto {
+
+    private final Long id;
+
     private final String title;
 
     @Size(min = 1)
