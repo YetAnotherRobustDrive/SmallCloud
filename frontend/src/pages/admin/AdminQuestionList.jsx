@@ -42,9 +42,10 @@ export default function AdminQuestionList() {
                     <div className="login" style={{ paddingTop: "10%" }}>문의가 없습니다.</div>
                 }
                 {questions.length != 0 &&
-                    questions.map((d) => {//todo
+                    questions.map((d) => {
                         return <ExtendBoxAdmin
                             key={d.id}
+                            id={d.id}
                             title={d.title}
                             writer={d.writer}
                             contact={d.contact}>

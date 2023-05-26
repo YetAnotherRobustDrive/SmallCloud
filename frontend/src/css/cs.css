@@ -27,6 +27,17 @@
     outline: none;
 }
 
+.extendBox .child {
+    overflow-y: scroll;
+    min-height: 100px;
+    resize: none;
+    border-left: none;
+    border-right: none;
+    padding: 10px;
+    outline: none;
+}
+
+
 .extendBox .quetionBody .questionHeader{
     display: flex;
     border-top: 1px solid black;
