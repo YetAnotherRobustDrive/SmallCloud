@@ -17,7 +17,7 @@ export default function AdminQuestionList() {
 
     useEffect(() => {
         const render = async () => {
-            const res = await GetBoardListFrom('inquiries');
+            const res = await GetBoardListFrom('inquiries/questioned');
             if (!res[0]) {
                 setIsFail(true);
                 setMessage(res[1]);
