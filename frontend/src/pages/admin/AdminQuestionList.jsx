@@ -17,7 +17,7 @@ export default function AdminQuestionList() {
 
     useEffect(() => {
         const render = async () => {
-            const res = await GetBoardListFrom('inquiries');
+            const res = await GetBoardListFrom('inquiries/questioned');
             if (!res[0]) {
                 setIsFail(true);
                 setMessage(res[1]);
@@ -42,9 +42,10 @@ export default function AdminQuestionList() {
                     <div className="login" style={{ paddingTop: "10%" }}>문의가 없습니다.</div>
                 }
                 {questions.length != 0 &&
-                    questions.map((d) => {//todo
+                    questions.map((d) => {
                         return <ExtendBoxAdmin
                             key={d.id}
+                            id={d.id}
                             title={d.title}
                             writer={d.writer}
                             contact={d.contact}>
