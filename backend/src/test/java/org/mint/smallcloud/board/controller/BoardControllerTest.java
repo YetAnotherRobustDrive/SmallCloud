@@ -535,23 +535,23 @@ class BoardControllerTest {
         Board board1;
         Board board2;
         List<Board> findTerms;
-        List<Board> findAnnouncement;
+        List<Board> findPrivacy;
         MultiValueMap<String, String> info;
         MultiValueMap<String, String> info1;
         @BeforeEach
         void boot() {
             board = Board.board("testTitle", "testContent", terms);
             board1 = Board.board("testTitle1", "testContent1", terms);
-            board2 = Board.board("testTitle2","testContent2", announcement);
+            board2 = Board.board("testTitle2","testContent2", privacy);
             boardRepository.save(board);
             boardRepository.save(board1);
             boardRepository.save(board2);
-            findTerms = boardRepository.findTop2ByBoardTypeOrderByCreatedDate(terms);
-            findAnnouncement = boardRepository.findTop2ByBoardTypeOrderByCreatedDate(announcement);
+            findTerms = boardRepository.findTop2ByBoardTypeOrderByCreatedDateDesc(terms);
+            findPrivacy = boardRepository.findTop2ByBoardTypeOrderByCreatedDateDesc(privacy);
             info = new LinkedMultiValueMap<>();
             info.add("boardType", terms.name());
             info1 = new LinkedMultiValueMap<>();
-            info1.add("boardType", announcement.name());
+            info1.add("boardType", privacy.name());
         }
 
         @Test

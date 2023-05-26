@@ -136,7 +136,7 @@ IMPORTANT: COMMON 일때
 
 operation::Board/getBoard/wrongToken[snippets='http-response']
 
-=== 보드(terms, 공지사항) 조회
+=== 보드(terms, privacy) 조회
 
 operation::Board/getBoardCreatedDate/okAdminFirst[snippets='http-request']
 
