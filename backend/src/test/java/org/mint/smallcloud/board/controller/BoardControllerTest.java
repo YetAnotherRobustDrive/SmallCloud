@@ -150,6 +150,7 @@ class BoardControllerTest {
         @Test
         void okOneToOne() throws Exception {
             RequestFieldsSnippet payload = requestFields(
+                    fieldWithPath("id").description("글의 id를 담고 있습니다."),
                 fieldWithPath("title").description("글의 제목을 담고 있습니다."),
                 fieldWithPath("content").description("사용자 질문의 내용을 담고 있습니다."),
                 fieldWithPath("contact").description("사용자의 연락처를 담고 있습니다."),
