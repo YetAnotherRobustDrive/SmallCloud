@@ -16,8 +16,8 @@ export default function TermsPage() {
 
     useEffect(() => {
         const render = async () => {
-            const termRes = await GetBoardListFrom("inquiries/board?boardType=terms&createdDate=0");
-            const privRes = await GetBoardListFrom("inquiries/board?boardType=privacy&createdDate=0");
+            const termRes = await GetBoardListFrom("inquiries/board/created?boardType=terms&createdDate=0");
+            const privRes = await GetBoardListFrom("inquiries/board/created?boardType=privacy&createdDate=0");
             if (!termRes[0] || !privRes[0]) {
                 setIsFail(true);
                 setMessage(termRes[1]);
