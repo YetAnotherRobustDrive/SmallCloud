@@ -26,6 +26,10 @@ import MyPage from './mypage/MyPage';
 import PrivatePage from './mypage/PrivatePage';
 import SecurityInfoPage from './mypage/SecurityInfoPage';
 import ServiceInfoPage from './mypage/ServiceInfoPage';
+import AdminNoticeUploadPage from './admin/AdminNoticeUploadPage';
+import AdminFAQUploadPage from './admin/AdminFAQUploadPage';
+import AdminTermUploadPage from './admin/AdminTermUploadPage';
+import AdminPrivacyUploadPage from './admin/AdminPrivacyUploadPage';
 
 export default () => {
     const isPrivileged = useSelector(state => state.token.isPrivileged);
@@ -70,6 +74,10 @@ export default () => {
                                 <Route path='/admin/group' element={<AdminGroupConfigPage />} />
                                 <Route path='/admin/user/register' element={<AdminUserRegister />} />
                                 <Route path='/admin/questions' element={<AdminQuestionList />} />
+                                <Route path='/admin/notice' element={<AdminNoticeUploadPage />} />
+                                <Route path='/admin/faq' element={<AdminFAQUploadPage />} />
+                                <Route path='/admin/term' element={<AdminTermUploadPage />} />
+                                <Route path='/admin/privacy' element={<AdminPrivacyUploadPage />} />
                             </>
                         }
 
