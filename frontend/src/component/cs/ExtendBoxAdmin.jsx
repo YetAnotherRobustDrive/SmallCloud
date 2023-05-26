@@ -44,7 +44,7 @@ export default function ExtendBoxAdmin(props) {
     
     return (
         <>
-            {isSuccess && <ModalOk close={() => { setIsSuccess(false)}}>{"답변이 등록되었습니다."}</ModalOk>}
+            {isSuccess && <ModalOk close={() => { setIsSuccess(false); window.location.reload()}}>{"답변이 등록되었습니다."}</ModalOk>}
             {isFail && <ModalOk close={() => setIsFail(false)}>{message}</ModalOk>}
             {isEmpty && <ModalOk close={() => setIsEmpty(false)}>{"입력하지 않은 내용이 있습니다."}</ModalOk>}
             <div className="extendBox" key={props.key}>
@@ -61,8 +61,8 @@ export default function ExtendBoxAdmin(props) {
                         <div className="child">{props.children}</div>
                         {props.contact !== "등록된 유저입니다." &&
                             <>
-                                <textarea className="child" placeholder="text.." value={"등록되지 않은 유저는 연락처를 통해 답변해야 합니다."}></textarea>
-                                <button disabled>등록하기</button>
+                                <textarea name="content" className="child" placeholder="text.." value={"연락처를 통한 답변만 가능합니다."}></textarea>
+                                <button>답변완료 처리하기</button>
                             </>
                         }
                         {props.contact === "등록된 유저입니다." && <>
