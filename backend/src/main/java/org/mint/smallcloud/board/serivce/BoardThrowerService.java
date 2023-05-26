@@ -27,7 +27,7 @@ public class BoardThrowerService {
     }
 
     public Board findBoardCreatedDate(BoardType boardType, int createdDate) {
-        List<Board> BoardList = boardRepository.findTop2ByBoardTypeOrderByCreatedDate(boardType);
+        List<Board> BoardList = boardRepository.findTop2ByBoardTypeOrderByCreatedDateDesc(boardType);
         Board board;
         try {
            board = BoardList.get(createdDate);
