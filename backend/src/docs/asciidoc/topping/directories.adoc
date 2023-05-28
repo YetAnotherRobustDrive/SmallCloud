@@ -65,3 +65,24 @@ operation::Directory/Info/ok[snippets='http-request,path-parameters']
 ==== 성공
 
 operation::Directory/Info/ok[snippets='http-response']
+
+=== 자식 폴더 (subDirectories)
+
+==== 명세
+
+operation::Directory/SubDirectories/ok[snippets='http-request,path-parameters']
+
+==== 성공
+
+operation::Directory/SubDirectories/ok[snippets='http-response']
+
+=== 자식 파일 (subFiles)
+
+==== 명세
+
+operation::Directory/Files/ok[snippets='http-request,path-parameters']
+
+==== 성공
+
+operation::Directory/Files/ok[snippets='http-response']
+
