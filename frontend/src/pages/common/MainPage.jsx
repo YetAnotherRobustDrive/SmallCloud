@@ -22,7 +22,7 @@ export default function MainPage() {
         <>
             <Header />
             <Sidebar />
-            <BodyFrame>
+            <BodyFrame hasContext={true}>
                 <BodyHeader text="공유 파일" />
                 <NarrowBox>
                     {
