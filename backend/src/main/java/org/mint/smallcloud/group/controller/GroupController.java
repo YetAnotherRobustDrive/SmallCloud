@@ -1,9 +1,8 @@
 package org.mint.smallcloud.group.controller;
 
 import lombok.RequiredArgsConstructor;
-import org.mint.smallcloud.group.dto.GroupCreateDto;
+import org.mint.smallcloud.group.dto.GroupRequestDto;
 import org.mint.smallcloud.group.dto.GroupTreeDto;
-import org.mint.smallcloud.group.dto.GroupUpdateDto;
 import org.mint.smallcloud.group.service.GroupFacadeService;
 import org.mint.smallcloud.user.domain.Roles;
 import org.mint.smallcloud.user.dto.UserProfileResponseDto;
@@ -21,15 +20,13 @@ public class GroupController {
     // create
     @Secured(Roles.S_ADMIN)
     @PostMapping("/create")
-    public void create(@Valid @RequestBody GroupCreateDto groupCreateDto) {
-         groupFacadeService.create(groupCreateDto);
+    public void update(@Valid @RequestBody List<GroupRequestDto> groupRequestDtos) {
+         groupFacadeService.update(groupRequestDtos);
     }
 
-    // delete
-    @Secured(Roles.S_ADMIN)
-    @RequestMapping(value = "/{groupId}/delete", method = {RequestMethod.GET, RequestMethod.POST})
-    public void delete(@PathVariable("groupId") String groupId) {
-         groupFacadeService.delete(groupId);
+    @RequestMapping(value = "/{groupName}/delete", method = {RequestMethod.GET, RequestMethod.POST})
+    public void delete(@PathVariable("groupName") String groupName) {
+         groupFacadeService.delete(groupName);
     }
 
     // addUser
@@ -42,8 +39,8 @@ public class GroupController {
     // update
     @Secured(Roles.S_ADMIN)
     @PostMapping("/{groupId}/update")
-    public void update(@PathVariable("groupId") String groupId, @Valid @RequestBody GroupUpdateDto groupUpdateDto) {
-         groupFacadeService.update(groupId, groupUpdateDto);
+    public void update(@PathVariable("groupId") String groupId, @Valid @RequestBody GroupRequestDto groupRequestDto) {
+         groupFacadeService.update(groupId, groupRequestDto);
     }
 
     // deleteUser

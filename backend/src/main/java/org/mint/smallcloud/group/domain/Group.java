@@ -49,7 +49,10 @@ public class Group {
     @OneToMany(mappedBy = "group")
     private List<Member> members = new ArrayList<>();
 
-    public Group(String name, Member manager, Group parentGroup) {
+    @OneToOne(mappedBy = "group")
+    private GroupTree groupTree;
+
+    protected Group(String name, Member manager, Group parentGroup) {
         this.name = name;
         this.manager = manager;
         this.parentGroup = parentGroup;

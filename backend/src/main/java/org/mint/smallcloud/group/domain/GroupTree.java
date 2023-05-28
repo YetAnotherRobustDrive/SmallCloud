@@ -1,28 +1,53 @@
 package org.mint.smallcloud.group.domain;
 
-import java.util.List;
+import lombok.AccessLevel;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
 
+import javax.persistence.*;
+
+@Table(name = "GROUP_TREES")
+@Entity
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
+@Getter
 public class GroupTree {
-    private final Long id;
-    private final String name;
-    private final List<GroupTree> children;
 
-    public GroupTree(Long id, String name, List<GroupTree> children) {
-        this.id = id;
-        this.name = name;
-        this.children = children;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "GROUP_TREE_ID")
+    private Long id;
+
+    @OneToOne
+    @JoinColumn(name = "GROUP_ID")
+    private Group group;
+
+    @Column(name = "Y", nullable = false)
+    private Integer y;
+
+    @Column(name = "X", nullable = false)
+    private Integer x;
+
+    protected GroupTree(Group group, Integer y, Integer x) {
+        this.group = group;
+        this.y = y;
+        this.x = x;
     }
 
-
-    public Long getId() {
-        return id;
+    public static GroupTree of(Group group, Integer y, Integer x) {
+        return new GroupTree(group, y, x);
     }
 
-    public String getName() {
-        return name;
+    @Override
+    public boolean equals(Object obj) {
+        if (obj == this) return true;
+        if (obj == null) return false;
+        return obj instanceof GroupTree
+            && ((GroupTree) obj).getId().equals(this.getId());
     }
 
-    public List<GroupTree> getChildren() {
-        return children;
+    @Override
+    public int hashCode() {
+        return getId().hashCode();
     }
+
 }
