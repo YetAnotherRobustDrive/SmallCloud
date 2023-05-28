@@ -9,6 +9,7 @@ import org.mint.smallcloud.label.service.LabelService;
 import org.mint.smallcloud.user.domain.Roles;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.annotation.Secured;
+import org.springframework.security.core.parameters.P;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
@@ -23,7 +24,7 @@ import java.util.List;
 public class LabelController {
     private final LabelService labelService;
 
-    // 라벨 등록
+    // 라벨 생성
     @Secured({Roles.S_COMMON})
     @PostMapping("/register")
     public ResponseEntity<?> register(@Valid @RequestBody LabelDto labelDto) {
@@ -31,7 +32,7 @@ public class LabelController {
         return ResponseEntity.ok().build();
     }
 
-    // 사용자가 만들었던 라벨 삭제
+    // 사용자가 만들었던 라벨 영구 제거
     @Secured({Roles.S_COMMON})
     @PostMapping("/deregister")
     public void deregister(@Valid @RequestBody LabelDto labelDto) {
@@ -45,10 +46,15 @@ public class LabelController {
         labelService.remove(labelDto);
     }
 
+//    // 파일에 라벨 등록
+//    @Secured({Roles.S_COMMON})
+//    @PostMapping("/attach")
+//    public ResponseEntity<?> attach(@Valid @RequestBody )
+
     // 라벨 검색
     @Secured({Roles.S_COMMON})
     @GetMapping("/search")
-    public List<LabelDto> search(String partLabel) {
+    public LabelDto search(String partLabel) {
         return labelService.findLabel(partLabel);
     }
 }

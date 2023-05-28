@@ -27,17 +27,21 @@ public class LabelService {
 
     public void deregister(LabelDto labelDto) {
         remove(labelDto);
-        List<Label> label = labelRepository.findByName(labelDto.getName());
+        Label label = labelRepository.findByName(labelDto.getName());
         labelRepository.delete(label);
     }
 
     public void remove(LabelDto labelDto) {
         labelThrowerService.checkNotExistsByLabelName(labelDto.getName());
-        List<Label> label = labelRepository.findByName(labelDto.getName());
-        label.get(0).deleteFile(labelDto.getFile());
+        Label label = labelRepository.findByName(labelDto.getName());
+        label.deleteFile(labelDto.getFile());
     }
 
-    public List<LabelDto> findLabel(String partLabel) {
-        List<Label> label = labelRepository.findByName(partLabel);
+    public LabelDto findLabel(String partLabel) {
+        Label label = labelRepository.findByName(partLabel);
+        return LabelDto.builder()
+                .name(label.getName())
+                .owner(label.getOwner())
+                .build();
     }
 }

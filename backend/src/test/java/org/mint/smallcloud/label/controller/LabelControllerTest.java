@@ -85,7 +85,4 @@ class LabelControllerTest {
         memberToken = jwtTokenProvider.generateTokenDto(userDetailsDto);
         adminToken = jwtTokenProvider.generateTokenDto(adminDto);
     }
-
-    @Nested
-    @DisplayName("/label/register 라벨 등록 테스트")
 }
