@@ -49,4 +49,9 @@ public class GroupShare extends Share {
         return this.getTarget().getMembers().stream()
             .anyMatch(member -> member.getUsername().equals(username));
     }
+
+    @Override
+    public String getTargetName() {
+        return getTarget().getName();
+    }
 }
