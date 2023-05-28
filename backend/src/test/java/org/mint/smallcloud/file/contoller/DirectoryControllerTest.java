@@ -31,6 +31,7 @@ import javax.transaction.Transactional;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.documentationConfiguration;
+import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.get;
 import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.post;
 import static org.springframework.restdocs.payload.PayloadDocumentation.fieldWithPath;
 import static org.springframework.restdocs.payload.PayloadDocumentation.requestFields;
@@ -395,6 +396,58 @@ class DirectoryControllerTest {
                 .andExpect(status().isForbidden())
                 .andDo(document(DOCUMENT_NAME));
         }
+    }
+
+    @Nested
+    @DisplayName("/directory/{directoryId} docs")
+    class Info {
+        // TODO:
+        private final String url = URL_PREFIX + "/{directoryId}";
+        private Member user1;
+        private Folder root;
+        private Folder parent;
+        private JwtTokenDto token1;
+
+        @BeforeEach
+        public void boot() {
+            user1 = Member.of("user1", "test", "nick");
+            em.persist(user1);
+            token1 = jwtTokenProvider.generateTokenDto(UserDetailsDto
+                .builder()
+                .username(user1.getUsername())
+                .password(user1.getPassword())
+                .roles(user1.getRole()).build());
+            root = Folder.createRoot(user1);
+            em.persist(root);
+            parent = (Folder) Folder.createFolder(root, "folder1", user1);
+            em.persist(parent);
+            em.flush();
+        }
+
+        @DisplayName("정상 요청")
+        @Test
+        void ok() throws Exception {
+            mockMvc.perform(
+                    TestSnippet.secured(get(url, root.getId()),
+                        token1.getAccessToken()))
+                .andExpect(status().isOk())
+                .andDo(document(DOCUMENT_NAME,
+                    pathParameters(
+                        parameterWithName("directoryId").description("디렉터리 id")
+                    )));
+        }
+    }
+
+    @Nested
+    @DisplayName("/directory/{directoryId}/subDirectories docs")
+    class SubDirectories {
+        // TODO:
+    }
+
+    @Nested
+    @DisplayName("/directory/{directoryId}/files docs")
+    class Files {
+        // TODO:
     }
 
 }

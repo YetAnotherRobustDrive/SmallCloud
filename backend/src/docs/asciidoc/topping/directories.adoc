@@ -2,7 +2,7 @@
 
 ==== 명세
 
-operation::Directory/Create/ok[snippets='request-fields,path-parameters']
+operation::Directory/Create/ok[snippets='http-request,request-fields,path-parameters']
 
 ==== 성공
 
@@ -26,7 +26,7 @@ IMPORTANT:접근 권한이 없는 경우
 
 ==== 명세
 
-operation::Directory/Rename/ok[snippets='request-fields,path-parameters']
+operation::Directory/Rename/ok[snippets='http-request,request-fields,path-parameters']
 
 ==== 성공
 
@@ -50,8 +50,18 @@ IMPORTANT:접근 권한이 없는 경우
 
 ==== 명세
 
-operation::Directory/Move/ok[snippets='request-fields,path-parameters']
+operation::Directory/Move/ok[snippets='http-request,request-fields,path-parameters']
 
 ==== 성공
 
 operation::Directory/Move/ok[snippets='http-response']
+
+=== 정보 (info)
+
+==== 명세
+
+operation::Directory/Info/ok[snippets='http-request,path-parameters']
+
+==== 성공
+
+operation::Directory/Info/ok[snippets='http-response']

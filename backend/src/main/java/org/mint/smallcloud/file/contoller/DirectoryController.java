@@ -47,17 +47,17 @@ public class DirectoryController {
 
     @RequestMapping(method = {RequestMethod.GET, RequestMethod.POST}, value = "/{directoryId}/purge")
     public void purge(@PathVariable("directoryId") Long directoryId) {
-
+        // TODO:
     }
 
     @RequestMapping(method = {RequestMethod.GET, RequestMethod.POST}, value = "/{directoryId}/restore")
     public void restore(@PathVariable("directoryId") Long directoryId) {
-
+        // TODO:
     }
 
     @RequestMapping(method = {RequestMethod.GET, RequestMethod.POST}, value = "/{directoryId}/delete")
     public void delete(@PathVariable("directoryId") Long directoryId) {
-
+        // TODO:
     }
 
     @Secured(Roles.S_COMMON)
