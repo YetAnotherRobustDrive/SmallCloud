@@ -69,7 +69,7 @@ public class DirectoryController {
         directoryFacadeService.move(directoryId, dto, user.getUsername());
     }
 
-    @Secured(Roles.S_COMMON)
+    @Secured({Roles.S_COMMON})
     @GetMapping("/{directoryId}")
     public DirectoryDto info(@PathVariable("directoryId") Long directoryId) {
         UserDetails user = getLoginUser();

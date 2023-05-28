@@ -8,6 +8,7 @@ import org.mint.smallcloud.user.domain.Member;
 import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Entity
 @Table(name = "FOLDERS")
@@ -59,5 +60,16 @@ public class Folder extends DataNode {
                 return true;
         }
         return false;
+    }
+    public List<Folder> getSubFolders() {
+        return getSubDataNodes().stream().filter(dataNode -> dataNode instanceof Folder)
+            .map(dataNode -> (Folder) dataNode)
+            .collect(Collectors.toList());
+    }
+
+    public List<File> getFiles() {
+        return getSubDataNodes().stream().filter(dataNode -> dataNode instanceof File)
+            .map(dataNode -> (File) dataNode)
+            .collect(Collectors.toList());
     }
 }

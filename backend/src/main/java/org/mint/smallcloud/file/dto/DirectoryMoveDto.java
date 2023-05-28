@@ -1,14 +1,13 @@
 package org.mint.smallcloud.file.dto;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
 
-@AllArgsConstructor
-@NoArgsConstructor(access = lombok.AccessLevel.PROTECTED)
 @Builder
 @Getter
+@AllArgsConstructor(onConstructor_ = { @JsonCreator(mode = JsonCreator.Mode.PROPERTIES) })
 public class DirectoryMoveDto {
-    private Long directoryId;
+    private final Long directoryId;
 }

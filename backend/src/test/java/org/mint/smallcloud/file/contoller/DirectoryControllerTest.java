@@ -348,6 +348,53 @@ class DirectoryControllerTest {
                         parameterWithName("directoryId").description("이동시킬 디렉터리 id")
                     )));
         }
+
+        @DisplayName("해당하는 디렉토리가 없는 경우")
+        @Test
+        void directoryNotFound() throws Exception {
+            DirectoryMoveDto dto1 = DirectoryMoveDto.builder()
+                .directoryId(parent.getId())
+                .build();
+            mockMvc.perform(
+                    TestSnippet.secured(post(url, target.getId() + 100),
+                        token1.getAccessToken(), objectMapper, dto1))
+                .andExpect(status().isForbidden())
+                .andDo(document(DOCUMENT_NAME));
+        }
+
+        @DisplayName("옮길 디렉토리가 없는 경우")
+        @Test
+        void targetNotFound() throws Exception {
+            DirectoryMoveDto dto1 = DirectoryMoveDto.builder()
+                .directoryId(parent.getId() + 100)
+                .build();
+            mockMvc.perform(
+                    TestSnippet.secured(post(url, target.getId()),
+                        token1.getAccessToken(), objectMapper, dto1))
+                .andExpect(status().isForbidden())
+                .andDo(document(DOCUMENT_NAME));
+        }
+
+        @DisplayName("접근 권한이 없는 경우")
+        @Test
+        void noAccessRight() throws Exception {
+            Member member2 = Member.of("user2", "test", "nick1");
+            em.persist(member2);
+            em.flush();
+            JwtTokenDto token = jwtTokenProvider.generateTokenDto(UserDetailsDto
+                .builder()
+                .username(member2.getUsername())
+                .password(member2.getPassword())
+                .roles(member2.getRole()).build());
+            DirectoryMoveDto dto1 = DirectoryMoveDto.builder()
+                .directoryId(parent.getId())
+                .build();
+            mockMvc.perform(
+                    TestSnippet.secured(post(url, target.getId()),
+                        token.getAccessToken(), objectMapper, dto1))
+                .andExpect(status().isForbidden())
+                .andDo(document(DOCUMENT_NAME));
+        }
     }
 
 }

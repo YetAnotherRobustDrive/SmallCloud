@@ -2,20 +2,28 @@ package org.mint.smallcloud.file.service;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.mint.smallcloud.file.domain.File;
 import org.mint.smallcloud.file.domain.Folder;
 import org.mint.smallcloud.file.dto.*;
+import org.mint.smallcloud.file.mapper.FileMapper;
+import org.mint.smallcloud.file.mapper.FolderMapper;
 import org.mint.smallcloud.user.service.MemberThrowerService;
 import org.springframework.stereotype.Service;
 
+import javax.transaction.Transactional;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
 @Slf4j
+@Transactional
 public class DirectoryFacadeService {
     private final DirectoryThrowerService directoryThrowerService;
     private final DirectoryService directoryService;
     private final MemberThrowerService memberThrowerService;
+    private final FolderMapper folderMapper;
+    private final FileMapper fileMapper;
 
     public void create(Long directoryId, DirectoryCreateDto dto, String username) {
         Folder folder = directoryThrowerService.getDirectoryById(directoryId);
@@ -39,14 +47,22 @@ public class DirectoryFacadeService {
     }
 
     public DirectoryDto info(Long directoryId, String username) {
-        return DirectoryDto.builder().build();
+        Folder folder = directoryThrowerService.getDirectoryById(directoryId);
+        directoryThrowerService.checkAccessRight(folder, username);
+        return folderMapper.toDirectoryDto(folder);
     }
 
     public List<DirectoryDto> subDirectories(Long directoryId, String username) {
-        return null;
+        Folder parentFolder = directoryThrowerService.getDirectoryById(directoryId);
+        directoryThrowerService.checkAccessRight(parentFolder, username);
+        List<Folder> subFolders = parentFolder.getSubFolders();
+        return subFolders.stream().map(folderMapper::toDirectoryDto).collect(Collectors.toList());
     }
 
     public List<FileDto> files(Long directoryId, String username) {
-        return null;
+        Folder folder = directoryThrowerService.getDirectoryById(directoryId);
+        directoryThrowerService.checkAccessRight(folder, username);
+        List<File> files = folder.getFiles();
+        return files.stream().map(fileMapper::toFileDto).collect(Collectors.toList());
     }
 }
