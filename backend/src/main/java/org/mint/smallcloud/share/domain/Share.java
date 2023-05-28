@@ -72,4 +72,6 @@ public abstract class Share {
 
     public abstract boolean canAccess(String username);
 
+    public abstract String getTargetName();
+
 }
