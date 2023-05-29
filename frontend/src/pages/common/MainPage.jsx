@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import BodyFrame from "../../component/Bodyframe";
 import Header from "../../component/header/Header";
 import BodyHeader from "../../component/main/BodyHeader";
@@ -7,16 +7,61 @@ import GridBox from "../../component/main/GridBox";
 import ListBox from "../../component/main/ListBox";
 import NarrowBox from "../../component/main/NarrowBox";
 import UploadBtn from "../../component/main/UploadBtn";
-import Sidebar from "../../component/sidebar/Sidebar";
-
 import ModalFileview from "../../component/modal/ModalFileview";
-import datas from '../../fakeJSON/direcFiles.json';
+import Sidebar from "../../component/sidebar/Sidebar";
+import GetRootDir from "../../services/directory/GetRootDir";
+import GetSubDirList from "../../services/directory/GetSubDirList";
+import GetSubFileList from "../../services/directory/GetSubFileList";
+import PostNewFile from "../../services/file/PostNewFile";
+import PostNewDir from "../../services/directory/PostNewDir";
 
 export default function MainPage() {
 
     const [isGrid, setIsGrid] = useState(true);
     const [isFileView, setIsFileView] = useState(false);
     const [selected, setSelected] = useState();
+    const [isFail, setIsFail] = useState();
+    const [message, setMessage] = useState();
+    const [files, setFiles] = useState([]);
+
+    useEffect(() => {
+        const render = async () => {
+            const rootIDRes = await GetRootDir();
+            if (!rootIDRes[0]) {
+                setIsFail(true);
+                setMessage(rootIDRes[1]);
+                return;
+            }
+
+            const rootID = rootIDRes[1];
+            console.log(rootID)
+            //const res = await PostNewDir(rootID, "test");
+
+            const subFileRes = await GetSubFileList(rootID);
+            if (!subFileRes[0]) {
+                setIsFail(true);
+                setMessage(subFileRes[1]);
+                return;
+            }
+            const subDirRes = await GetSubDirList(rootID);
+            if (!subDirRes[0]) {
+                setIsFail(true);
+                setMessage(subDirRes[1]);
+                return;
+            }
+            setFiles([...subDirRes[1], ...subFileRes[1]]);
+        }
+        render();
+    }, [])
+
+    const handleSubmit = async (e) => {
+        e.preventDefault();
+        const file = e.target.files[0];
+        const formData = new FormData();
+        formData.append('cwd', 22);
+        formData.append('file', file);
+        const res = await PostNewFile(formData);
+    }
 
     return (
         <>
@@ -26,7 +71,7 @@ export default function MainPage() {
                 <BodyHeader text="공유 파일" />
                 <NarrowBox>
                     {
-                        datas.map((data) => {
+                        files.map((data) => {
                             return <CustomIcon
                                 onClick={() => {
                                     setSelected(data);
@@ -41,11 +86,17 @@ export default function MainPage() {
                         })
                     }
                 </NarrowBox>
+                <input
+                    onChange={handleSubmit}
+                    type="file"
+                    id="file"
+                    name="location"
+                />
                 <BodyHeader text="내 파일" addon={setIsGrid} view={isGrid} />
                 {isGrid &&
                     <GridBox height="calc(100vh - 299px)">
                         {
-                            datas.map((data) => {
+                            files.map((data) => {
                                 return <CustomIcon
                                     onClick={() => {
                                         setSelected(data);
@@ -64,13 +115,13 @@ export default function MainPage() {
                 {!isGrid &&
                     <>
                         <div className="listscroll" style={{ height: "calc(100vh - 299px)" }}>{
-                            datas.map((data) => {
-                                return <ListBox key={data.id} 
-                                onClick={() => {
-                                    setSelected(data);
-                                    setIsFileView(true);
-                                }}
-                                data={data} />
+                            files.map((data) => {
+                                return <ListBox key={data.id}
+                                    onClick={() => {
+                                        setSelected(data);
+                                        setIsFileView(true);
+                                    }}
+                                    data={data} />
                             })
                         }
                         </div>
