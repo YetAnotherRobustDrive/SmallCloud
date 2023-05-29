@@ -39,6 +39,7 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.server.ResponseStatusException;
 
 import lombok.Builder;
+import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
@@ -54,6 +55,7 @@ public class FileController {
     private final MemberRepository memberRepository;
 
     @Builder
+    @Getter
     public static class UploadResponse {
         Long id;
         String securityLevel;
