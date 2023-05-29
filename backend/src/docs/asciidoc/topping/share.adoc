@@ -1,0 +1,20 @@
+=== 등록 (create)
+
+==== 명세
+
+operation::Share/Create/ok[snippets='http-request,request-fields']
+
+==== 성공
+
+operation::Share/Create/ok[snippets='http-response']
+
+=== 삭제 (delete)
+
+==== 명세
+
+operation::Share/Delete/ok[snippets='http-request,request-fields']
+
+==== 성공
+
+operation::Share/Delete/ok[snippets='http-response']
+

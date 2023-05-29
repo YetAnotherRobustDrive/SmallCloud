@@ -7,6 +7,7 @@ import org.mint.smallcloud.share.domain.GroupShare;
 import org.mint.smallcloud.user.domain.Member;
 
 import javax.persistence.*;
+import java.util.ArrayList;
 import java.util.List;
 
 @Table(name = "GROUPS")
@@ -43,10 +44,10 @@ public class Group {
         cascade = CascadeType.ALL,
         orphanRemoval = true
     )
-    private List<GroupShare> shares;
+    private List<GroupShare> shares = new ArrayList<>();
 
     @OneToMany(mappedBy = "group")
-    private List<Member> members;
+    private List<Member> members = new ArrayList<>();
 
     public Group(String name, Member manager, Group parentGroup) {
         this.name = name;
@@ -83,5 +84,10 @@ public class Group {
     }
 
     public void deleteMember(Member member) {
+    }
+
+    public void addShare(GroupShare rst) {
+        if (!getShares().contains(rst))
+            getShares().add(rst);
     }
 }
