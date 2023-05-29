@@ -14,12 +14,12 @@ public class LabelThrowerService {
     private final LabelRepository labelRepository;
 
     public void checkExistsByLabelName(String labelName) {
-        if(labelRepository.existsByLabelName(labelName))
+        if(labelRepository.existsByName(labelName))
             throw new ServiceException(ExceptionStatus.ALREADY_EXISTS_LABEL);
     }
 
     public void checkNotExistsByLabelName(String labelName) {
-        if(!labelRepository.existsByLabelName(labelName))
+        if(!labelRepository.existsByName(labelName))
             throw new ServiceException(ExceptionStatus.NOT_FOUND_LABEL);
     }
 }

@@ -8,11 +8,8 @@ import org.springframework.stereotype.Repository;
 import java.util.List;
 
 @Repository
-public interface LabelRepository extends JpaRepository {
-    boolean existsByLabelName(String labelName);
+public interface LabelRepository extends JpaRepository<Label, Long> {
+    boolean existsByName(String labelName);
 
-    //Label findByName(String LabelName);
-
-    // like 붙여서 할건지 고민해야함
     Label findByName(String labelName);
 }

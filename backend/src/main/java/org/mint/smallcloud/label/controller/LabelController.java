@@ -35,21 +35,26 @@ public class LabelController {
     // 사용자가 만들었던 라벨 영구 제거
     @Secured({Roles.S_COMMON})
     @PostMapping("/deregister")
-    public void deregister(@Valid @RequestBody LabelDto labelDto) {
+    public ResponseEntity<?> deregister(@Valid @RequestBody LabelDto labelDto) {
         labelService.deregister(labelDto);
+        return ResponseEntity.ok().build();
     }
 
     // 파일에서의 라벨 제거
     @Secured({Roles.S_COMMON})
     @PostMapping("/remove")
-    public void remove(@Valid @RequestBody LabelDto labelDto) {
+    public ResponseEntity<?> remove(@Valid @RequestBody LabelDto labelDto) {
         labelService.remove(labelDto);
+        return ResponseEntity.ok().build();
     }
 
-//    // 파일에 라벨 등록
-//    @Secured({Roles.S_COMMON})
-//    @PostMapping("/attach")
-//    public ResponseEntity<?> attach(@Valid @RequestBody )
+    // 파일에 라벨 등록
+    @Secured({Roles.S_COMMON})
+    @PostMapping("/attach")
+    public ResponseEntity<?> attach(@Valid @RequestBody LabelDto labelDto) {
+        labelService.attach(labelDto);
+        return ResponseEntity.ok().build();
+    }
 
     // 라벨 검색
     @Secured({Roles.S_COMMON})

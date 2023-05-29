@@ -37,6 +37,13 @@ public class LabelService {
         label.deleteFile(labelDto.getFile());
     }
 
+    public void attach(LabelDto labelDto) {
+        Label label = Label.of(
+                labelDto.getName(),
+                labelDto.getOwner());
+        label.addFile(labelDto.getFile());
+    }
+
     public LabelDto findLabel(String partLabel) {
         Label label = labelRepository.findByName(partLabel);
         return LabelDto.builder()
