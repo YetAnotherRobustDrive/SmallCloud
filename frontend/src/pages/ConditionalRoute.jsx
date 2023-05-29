@@ -21,8 +21,6 @@ import FaqPage from './cs/FaqPage';
 import NoticePage from './cs/NoticePage';
 import QuestionPage from './cs/QuestionPage';
 import TermsPage from './cs/TermsPage';
-import DownloadPage from './load/DownloadPage';
-import UploadPage from './load/UploadPage';
 import LoginPage from './login/LoginPage';
 import LoginQuestionPage from './login/LoginQuestionPage';
 import RegisterPage from './login/RegisterPage';
@@ -55,9 +53,6 @@ export default () => {
                         <Route path='/mypage' element={isPrivileged ? <PrivatePage /> : <MyPage />} />
                         <Route path='/mypage/service' element={isPrivileged ? <ServiceInfoPage /> : <MyPage />} />
                         <Route path='/mypage/security' element={isPrivileged ? <SecurityInfoPage /> : <MyPage />} />
-
-                        <Route path='/upload' element={<UploadPage />} />
-                        <Route path='/download' element={<DownloadPage />} />
 
                         <Route path='/cs/notice' element={<NoticePage />} />
                         <Route path='/cs/terms' element={<TermsPage />} />

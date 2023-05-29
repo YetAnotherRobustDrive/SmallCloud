@@ -42,26 +42,19 @@
     border-radius: 75px;
 }
 
-.works {
-    padding-inline-start: 0;
-}
-
-.works .work{
-    list-style: none;
-}
-
 .open-space {
     position: absolute;
     bottom: 58px;
     right: 40px;
     background-color: white;
     border: 2px solid black;
-    width: 175px;
+    width: 300px;
     z-index: 50;
     border-radius: 4px;
 }
 
 .open-space .upBtn {
+    border: none;
     border-top: 1px solid black;
     height: 40px;
     width: 100%;
@@ -71,13 +64,7 @@
     font-size: 18px;
 }
 
-.open-space .title{
-    border-bottom: 1px solid black;
-    height: 40px;
+.open-space .bay {
     width: 100%;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    font-size: 20px;
-    font-weight: bold;
+    height: 200px;
 }
