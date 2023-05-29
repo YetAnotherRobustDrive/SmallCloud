@@ -1,6 +1,10 @@
 package org.mint.smallcloud.user.controller;
 
 import lombok.RequiredArgsConstructor;
+import org.mint.smallcloud.ResponseDto;
+import org.mint.smallcloud.exception.ExceptionStatus;
+import org.mint.smallcloud.exception.ServiceException;
+import org.mint.smallcloud.security.UserDetailsProvider;
 import org.mint.smallcloud.user.domain.Roles;
 import org.mint.smallcloud.user.dto.RegisterDto;
 import org.mint.smallcloud.user.dto.UserProfileRequestDto;
@@ -19,6 +23,7 @@ import javax.validation.Valid;
 @Validated
 public class UserController {
     private final MemberFacadeService memberFacadeService;
+    private final UserDetailsProvider userDetailsProvider;
 
     @Secured({Roles.S_ADMIN})
     @RequestMapping(
@@ -48,5 +53,15 @@ public class UserController {
     public UserProfileResponseDto profile(
         @UserNameValidation @PathVariable("username") String username) {
         return memberFacadeService.profile(username);
+    }
+
+    @Secured({Roles.S_COMMON})
+    @GetMapping("/root-dir")
+    public ResponseDto<Long> getRootDir() {
+        return ResponseDto.<Long>builder()
+            .result(memberFacadeService
+                .getRootDir(userDetailsProvider.getUserDetails()
+                    .orElseThrow(() -> new ServiceException(ExceptionStatus.NO_PERMISSION)).getUsername()))
+            .build();
     }
 }
