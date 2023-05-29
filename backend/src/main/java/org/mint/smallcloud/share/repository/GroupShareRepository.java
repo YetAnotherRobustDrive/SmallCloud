@@ -6,7 +6,7 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface GroupShareRepository extends JpaRepository<GroupShare, Long> {
-    boolean existsByFileIdAndTargetName(Long fileId, String groupName);
+    boolean existsByFileIdAndTarget_Name(Long fileId, String groupName);
 
-    void deleteByFileIdAndTargetName(Long id, String targetName);
+    void deleteByFileIdAndTarget_Name(Long id, String targetName);
 }

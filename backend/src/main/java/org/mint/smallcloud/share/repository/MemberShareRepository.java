@@ -6,7 +6,7 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface MemberShareRepository extends JpaRepository<MemberShare, Long> {
-    boolean existsByFileIdAndTargetName(Long fileId, String memberName);
+    boolean existsByFileIdAndTarget_Username(Long fileId, String memberName);
 
-    void deleteByFileIdAndTargetName(Long id, String targetName);
+    void deleteByFileIdAndTarget_Username(Long id, String targetName);
 }

@@ -55,10 +55,10 @@ public class ShareService {
             throw new ServiceException(ExceptionStatus.NO_PERMISSION);
         switch (dto.getType()) {
             case GROUP:
-                groupShareRepository.deleteByFileIdAndTargetName(file.getId(), dto.getTargetName());
+                groupShareRepository.deleteByFileIdAndTarget_Name(file.getId(), dto.getTargetName());
                 break;
             case MEMBER:
-                memberShareRepository.deleteByFileIdAndTargetName(file.getId(), dto.getTargetName());
+                memberShareRepository.deleteByFileIdAndTarget_Username(file.getId(), dto.getTargetName());
                 break;
             default:
                 throw new ServiceException(ExceptionStatus.INVALID_PARAMETER);
@@ -66,12 +66,12 @@ public class ShareService {
     }
 
     private void createGroupShare(Group target, File file) {
-        if (groupShareRepository.existsByFileIdAndTargetName(file.getId(), target.getName()))
+        if (groupShareRepository.existsByFileIdAndTarget_Name(file.getId(), target.getName()))
             return;
         groupShareRepository.save(GroupShare.of(target, file));
     }
     private void createMemberShare(Member target, File file) {
-        if (memberShareRepository.existsByFileIdAndTargetName(file.getId(), target.getUsername()))
+        if (memberShareRepository.existsByFileIdAndTarget_Username(file.getId(), target.getUsername()))
             return;
         memberShareRepository.save(MemberShare.of(target, file));
     }
