@@ -21,8 +21,8 @@ public class File extends DataNode {
     @Column(name = "SIZE")
     private Long size;
 
-    protected File(FileType fileType, FileLocation location, Long size, Long authorId) {
-        super(fileType, authorId);
+    protected File(FileType fileType, FileLocation location, Long size, Member member) {
+        super(fileType, member);
         this.location = location;
         this.size = size;
     }
@@ -32,7 +32,7 @@ public class File extends DataNode {
             fileType,
             location,
             size,
-            member.getId()
+            member
         );
         ret.setParentFolder(parent);
         return ret;

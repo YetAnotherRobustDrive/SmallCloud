@@ -6,7 +6,9 @@ import lombok.NoArgsConstructor;
 import org.mint.smallcloud.user.domain.Member;
 
 import javax.persistence.*;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Entity
 @Table(name = "FOLDERS")
@@ -19,15 +21,14 @@ public class Folder extends DataNode {
         cascade = CascadeType.ALL,
         orphanRemoval = true
     )
-    private List<DataNode> subDataNodes;
-
-    protected Folder(String name, Member member) {
-        super(FileType.of(name, FileType.FOLDER), member.getId());
-        subDataNodes = null;
-    }
+    private List<DataNode> subDataNodes = new ArrayList<>();
 
     @Transient
     public static final String ROOT_NAME = "_ROOT_";
+
+    protected Folder(String name, Member member) {
+        super(FileType.of(name, FileType.FOLDER), member);
+    }
 
     public static Folder of(Folder folder, String name, Member member) {
         Folder ret = new Folder(name, member);
@@ -48,7 +49,7 @@ public class Folder extends DataNode {
     }
 
     public void addChild(DataNode dataNode) {
-        if (this.subDataNodes.contains(dataNode)) return;
+        if (dataNode == null || this.subDataNodes.contains(dataNode)) return;
         this.subDataNodes.add(dataNode);
         dataNode.setParentFolder(this);
     }
@@ -59,5 +60,16 @@ public class Folder extends DataNode {
                 return true;
         }
         return false;
+    }
+    public List<Folder> getSubFolders() {
+        return getSubDataNodes().stream().filter(dataNode -> dataNode instanceof Folder)
+            .map(dataNode -> (Folder) dataNode)
+            .collect(Collectors.toList());
+    }
+
+    public List<File> getFiles() {
+        return getSubDataNodes().stream().filter(dataNode -> dataNode instanceof File)
+            .map(dataNode -> (File) dataNode)
+            .collect(Collectors.toList());
     }
 }
