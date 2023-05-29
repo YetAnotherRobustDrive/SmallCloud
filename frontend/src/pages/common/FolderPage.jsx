@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { useParams } from 'react-router-dom';
 import BodyFrame from "../../component/Bodyframe";
 import Header from "../../component/header/Header";
 import BodyHeader from "../../component/main/BodyHeader";
@@ -16,13 +17,14 @@ export default function FolderPage() {
     const [isGrid, setIsGrid] = useState(true);
     const [isFileView, setIsFileView] = useState(false);
     const [selected, setSelected] = useState();
-//todo
+    const params = useParams();
+    
     return (
         <>
             <Header />
             <Sidebar />
-            <BodyFrame>
-                <BodyHeader text={"STUB"} addon={setIsGrid} view={isGrid} />
+            <BodyFrame hasContext={true}>
+                <BodyHeader text={params.fileID} addon={setIsGrid} view={isGrid} />
                 {isGrid &&
                     <GridBox height="calc(100vh - 117px)">
                         {
