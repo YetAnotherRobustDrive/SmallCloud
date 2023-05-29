@@ -135,8 +135,16 @@ public class Member {
     public void setGroup(Group group) {
         if (getGroup() != null)
             this.group.deleteMember(this);
+        if (group == null) {
+            this.group = null;
+            return;
+        }
         this.group = group;
         this.group.addMember(this);
+    }
+
+    public void unsetGroup() {
+        setGroup(null);
     }
 
     public void setProfileImageLocation(FileLocation profileImageLocation) {

@@ -20,8 +20,8 @@ public class GroupController {
     // create
     @Secured(Roles.S_ADMIN)
     @PostMapping("/create")
-    public void update(@Valid @RequestBody List<GroupRequestDto> groupRequestDtos) {
-         groupFacadeService.update(groupRequestDtos);
+    public void create(@Valid @RequestBody GroupRequestDto groupRequestDtos) {
+         groupFacadeService.create(groupRequestDtos);
     }
 
     @RequestMapping(value = "/{groupName}/delete", method = {RequestMethod.GET, RequestMethod.POST})
@@ -31,9 +31,9 @@ public class GroupController {
 
     // addUser
     @Secured(Roles.S_ADMIN)
-    @PostMapping("/{groupId}/add-user/{username}")
-    public void addUser(@PathVariable("groupId") String groupId, @PathVariable("username") String username) {
-         groupFacadeService.addUser(groupId, username);
+    @PostMapping("/{groupName}/add-user/{username}")
+    public void addUser(@PathVariable("groupName") String groupName, @PathVariable("username") String username) {
+         groupFacadeService.addUser(groupName, username);
     }
 
     // update
@@ -51,14 +51,14 @@ public class GroupController {
     }
 
     // readGroupTree
-    @GetMapping("/{groupId}")
-    public GroupTreeDto readGroupTree(@PathVariable("groupId") String groupId) {
-         return groupFacadeService.readGroupTree(groupId);
+    @GetMapping("/{groupName}")
+    public GroupTreeDto readGroupTree(@PathVariable("groupName") String groupName) {
+         return groupFacadeService.readGroupTree(groupName);
     }
 
     // getUserList
-    @GetMapping("/{groupId}/user-list")
-    public List<UserProfileResponseDto> getUserList(@PathVariable("groupId") String groupId) {
-         return groupFacadeService.getUserList(groupId);
+    @GetMapping("/{groupName}/user-list")
+    public List<UserProfileResponseDto> getUserList(@PathVariable("groupName") String groupName) {
+         return groupFacadeService.getUserList(groupName);
     }
 }

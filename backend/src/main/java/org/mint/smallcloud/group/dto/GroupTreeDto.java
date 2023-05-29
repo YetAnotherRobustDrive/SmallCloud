@@ -5,12 +5,12 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 
+import java.util.List;
+
 @Builder
 @Getter
 @AllArgsConstructor(onConstructor_ = { @JsonCreator(mode = JsonCreator.Mode.PROPERTIES) })
 public class GroupTreeDto {
-    private final Long parentName;
-    private final Long groupName;
-    private final Integer y;
-    private final Integer x;
+    private final String name;
+    private final List<GroupTreeDto> subGroups;
 }

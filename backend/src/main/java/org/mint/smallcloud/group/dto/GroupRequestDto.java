@@ -11,7 +11,5 @@ import lombok.Getter;
 @AllArgsConstructor(onConstructor_ = { @JsonCreator(mode = JsonCreator.Mode.PROPERTIES) })
 public class GroupRequestDto {
     private final String groupName; // group name
-    private final Long parentName; // parent group id -> nullable
-    private final Integer y; // y position
-    private final Integer x; // x position
+    private final String parentName; // parent group id -> nullable
 }
