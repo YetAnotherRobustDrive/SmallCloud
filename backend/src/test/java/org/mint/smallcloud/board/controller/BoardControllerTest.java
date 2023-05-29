@@ -150,6 +150,7 @@ class BoardControllerTest {
         @Test
         void okOneToOne() throws Exception {
             RequestFieldsSnippet payload = requestFields(
+                    fieldWithPath("id").description("글의 id를 담고 있습니다."),
                 fieldWithPath("title").description("글의 제목을 담고 있습니다."),
                 fieldWithPath("content").description("사용자 질문의 내용을 담고 있습니다."),
                 fieldWithPath("contact").description("사용자의 연락처를 담고 있습니다."),
@@ -535,23 +536,23 @@ class BoardControllerTest {
         Board board1;
         Board board2;
         List<Board> findTerms;
-        List<Board> findAnnouncement;
+        List<Board> findPrivacy;
         MultiValueMap<String, String> info;
         MultiValueMap<String, String> info1;
         @BeforeEach
         void boot() {
             board = Board.board("testTitle", "testContent", terms);
             board1 = Board.board("testTitle1", "testContent1", terms);
-            board2 = Board.board("testTitle2","testContent2", announcement);
+            board2 = Board.board("testTitle2","testContent2", privacy);
             boardRepository.save(board);
             boardRepository.save(board1);
             boardRepository.save(board2);
-            findTerms = boardRepository.findTop2ByBoardTypeOrderByCreatedDate(terms);
-            findAnnouncement = boardRepository.findTop2ByBoardTypeOrderByCreatedDate(announcement);
+            findTerms = boardRepository.findTop2ByBoardTypeOrderByCreatedDateDesc(terms);
+            findPrivacy = boardRepository.findTop2ByBoardTypeOrderByCreatedDateDesc(privacy);
             info = new LinkedMultiValueMap<>();
             info.add("boardType", terms.name());
             info1 = new LinkedMultiValueMap<>();
-            info1.add("boardType", announcement.name());
+            info1.add("boardType", privacy.name());
         }
 
         @Test

@@ -67,3 +67,10 @@
     right: 10px;
     height: 50px;
 }
+
+.bodyframe .contextMenu {
+    position: absolute;
+    z-index: 99;
+    width: 100px;
+    height: 100px;
+}

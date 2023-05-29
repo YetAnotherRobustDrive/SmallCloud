@@ -17,14 +17,53 @@
     right: 10px;
 }
 
-.extendBox .child {
+.extendBox .quetionBody .child {
     overflow-y: scroll;
-    width: calc(100% - 20px);
     min-height: 100px;
     resize: none;
     border-left: none;
     border-right: none;
-    border-bottom: none;
+    padding: 10px;
+    outline: none;
+}
+
+.extendBox .child {
+    overflow-y: scroll;
+    min-height: 100px;
+    resize: none;
+    border-left: none;
+    border-right: none;
+    padding: 10px;
+    outline: none;
+}
+
+
+.extendBox .quetionBody .questionHeader{
+    display: flex;
+    border-top: 1px solid black;
+    border-bottom: 1px solid black;
+    padding: 5px;
+    padding-left: 10px;
+    padding-right: 10px;
+    position: relative;
+    align-items: center;
+}
+
+.extendBox .quetionBody .questionHeader .right{
+    position: absolute;
+    right: 10px;
+}
+ 
+.extendBox .quetionBody {
+    display: flex;
+    flex-direction: column;
+}
+
+.extendBox .quetionBody button{
+    border: 0;
+    border-radius: 5px;
+    padding: 5px;
+    align-items: center;
 }
 
 .terms {

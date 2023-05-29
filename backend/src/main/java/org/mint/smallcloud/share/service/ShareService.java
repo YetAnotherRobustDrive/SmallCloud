@@ -1,14 +1,13 @@
 package org.mint.smallcloud.share.service;
 
 
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.stereotype.Service;
+
+@Service
+@RequiredArgsConstructor
+@Slf4j
 public class ShareService {
-    public String getShare(Long id) {
-        return "";
-    }
-
-    public void removeShare(Long id) {
-    }
-
-    public void updateShareMembers(String members) {
-    }
+    
 }

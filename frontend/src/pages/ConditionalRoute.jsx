@@ -1,16 +1,22 @@
 import React from 'react';
 import { useSelector } from 'react-redux';
-import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
+import { Route, BrowserRouter as Router, Routes } from 'react-router-dom';
 import LogoutUser from '../services/user/LogoutUser';
 import AdminConfigPage from './admin/AdminConfigPage';
+import AdminFAQUploadPage from './admin/AdminFAQUploadPage';
 import AdminGroupConfigPage from './admin/AdminGroupConfigPage';
+import AdminNoticeUploadPage from './admin/AdminNoticeUploadPage';
 import AdminPage from './admin/AdminPage';
+import AdminPrivacyUploadPage from './admin/AdminPrivacyUploadPage';
 import AdminQuestionList from './admin/AdminQuestionList';
+import AdminTermUploadPage from './admin/AdminTermUploadPage';
 import AdminUserCtrlPage from './admin/AdminUserCtrlPage';
 import AdminUserRegister from './admin/AdminUserRegister';
 import ErrorPage from './common/ErrorPage';
+import FavoritesPage from './common/FavoritesPage';
 import FolderPage from './common/FolderPage';
 import MainPage from './common/MainPage';
+import TrashBinPage from './common/TrashBinPage';
 import FaqPage from './cs/FaqPage';
 import NoticePage from './cs/NoticePage';
 import QuestionPage from './cs/QuestionPage';
@@ -20,8 +26,6 @@ import UploadPage from './load/UploadPage';
 import LoginPage from './login/LoginPage';
 import LoginQuestionPage from './login/LoginQuestionPage';
 import RegisterPage from './login/RegisterPage';
-import FavoritesPage from './main/FavoritesPage';
-import TrashBinPage from './main/TrashBinPage';
 import MyPage from './mypage/MyPage';
 import PrivatePage from './mypage/PrivatePage';
 import SecurityInfoPage from './mypage/SecurityInfoPage';
@@ -70,6 +74,10 @@ export default () => {
                                 <Route path='/admin/group' element={<AdminGroupConfigPage />} />
                                 <Route path='/admin/user/register' element={<AdminUserRegister />} />
                                 <Route path='/admin/questions' element={<AdminQuestionList />} />
+                                <Route path='/admin/notice' element={<AdminNoticeUploadPage />} />
+                                <Route path='/admin/faq' element={<AdminFAQUploadPage />} />
+                                <Route path='/admin/term' element={<AdminTermUploadPage />} />
+                                <Route path='/admin/privacy' element={<AdminPrivacyUploadPage />} />
                             </>
                         }
 
