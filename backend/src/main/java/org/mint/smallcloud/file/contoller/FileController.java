@@ -111,7 +111,7 @@ public class FileController {
     }
 
     @GetMapping("/{fileId}")
-    public ResponseEntity<Resource> download(@PathVariable("id") Long fileId) throws Exception {
+    public ResponseEntity<Resource> download(@PathVariable("fileId") Long fileId) throws Exception {
         UserDetails user = getLoginUser();
         String userName = user.getUsername();
         Optional<Member> memberOpt = memberRepository.findByUsername(userName);
