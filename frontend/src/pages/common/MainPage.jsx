@@ -8,6 +8,7 @@ import ListBox from "../../component/main/ListBox";
 import NarrowBox from "../../component/main/NarrowBox";
 import UploadBtn from "../../component/main/UploadBtn";
 import ModalFileview from "../../component/modal/ModalFileview";
+import ModalLoading from "../../component/modal/ModalLoading";
 import Sidebar from "../../component/sidebar/Sidebar";
 import GetRootDir from "../../services/directory/GetRootDir";
 import GetSubDirList from "../../services/directory/GetSubDirList";
@@ -21,6 +22,7 @@ export default function MainPage() {
     const [isFileView, setIsFileView] = useState(false);
     const [selected, setSelected] = useState();
     const [isFail, setIsFail] = useState();
+    const [isLoading, setIsLoading] = useState(true);
     const [message, setMessage] = useState();
     const [files, setFiles] = useState([]);
 
@@ -52,6 +54,7 @@ export default function MainPage() {
             setFiles([...subDirRes[1], ...subFileRes[1]]);
         }
         render();
+        setTimeout(() => setIsLoading(false), 500);
     }, [])
 
     const handleSubmit = async (e) => {
@@ -65,6 +68,7 @@ export default function MainPage() {
 
     return (
         <>
+        {isLoading && <ModalLoading isOpen={isLoading} />}
             <Header />
             <Sidebar />
             <BodyFrame hasContext={true}>

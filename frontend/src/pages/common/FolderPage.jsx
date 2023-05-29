@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useParams } from 'react-router-dom';
 import BodyFrame from "../../component/Bodyframe";
 import Header from "../../component/header/Header";
@@ -8,6 +8,7 @@ import GridBox from "../../component/main/GridBox";
 import ListBox from "../../component/main/ListBox";
 import UploadBtn from "../../component/main/UploadBtn";
 import ModalFileview from "../../component/modal/ModalFileview";
+import ModalLoading from "../../component/modal/ModalLoading";
 import Sidebar from "../../component/sidebar/Sidebar";
 
 import datas from '../../fakeJSON/direcFiles.json';
@@ -16,11 +17,17 @@ export default function FolderPage() {
 
     const [isGrid, setIsGrid] = useState(true);
     const [isFileView, setIsFileView] = useState(false);
+    const [isLoading, setIsLoading] = useState(true);
     const [selected, setSelected] = useState();
     const params = useParams();
-    
+
+    useEffect(() => {
+        setTimeout(() => setIsLoading(false), 500);
+    }, [])
+
     return (
         <>
+            {isLoading && <ModalLoading isOpen={isLoading} />}
             <Header />
             <Sidebar />
             <BodyFrame hasContext={true}>
