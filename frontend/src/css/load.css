@@ -107,6 +107,11 @@
     overflow: hidden;
 }
 
+.upload-btn .btn-header .open-space .progressBar{
+    padding-left: 10px;
+    width: calc(100% - 10px);
+}
+
 .droparea {
     position: absolute;
     width: 100%;

@@ -1,27 +1,51 @@
 import RefreshToken from "../token/RefreshToken";
 import configData from "../../config/config.json"
 
-export default async function PostNewFile(value) {
+export default async function PostNewFile(value, setter, after) {
     await RefreshToken();
     const accessToken = localStorage.getItem("accessToken");
-    const model = {
-        method: "POST",
-        headers: {
-            "Authorization": "Bearer " + accessToken,
-        },
-        body: value,
-    };
+    
 
     try {
-        const res = await fetch(configData.API_SERVER + 'files', model);
-        const data = await res.json();
+        const upload = async () => {
+            return new Promise((resolve, reject) => {
+                const xhr = new XMLHttpRequest();
+                xhr.open('POST', configData.API_SERVER + 'files', true);
+                xhr.upload.addEventListener("progress", (e) => {
+                    const percentage = (e.loaded / e.total) * 100;
+                    console.log(percentage);
+                    setter(percentage);
+                });
+                xhr.onreadystatechange = () => {
+                    if (xhr.readyState === XMLHttpRequest.DONE) {
+                        const res = JSON.parse(xhr.responseText);
+                        if (xhr.status !== 200) {           
+                            setter(0);
+                            resolve(res);
+                        }
+                        else {
+                            const tRes = {
+                                "status": 200,
+                                "data": res
+                            }
+                            resolve(tRes);
+                        }
+                    }
+                }
+                xhr.setRequestHeader("Authorization", "Bearer " + accessToken);
+                xhr.send(value);
+            });
+        }
+
+        const res = await upload();
         if (res.status == 200) {
-            return [true, data];  //성공
+            after(true);
+            return [true, res.data];  //성공
         }
         else {
-            throw data; //실패
+            throw res; //실패
         }
     } catch (e) {
-        return [false, e.message]; //실패 후 처리
+        return [false, "업로드에 실패했습니다.\n다시 시도해주세요."]; //실패 후 처리
     }
 }
