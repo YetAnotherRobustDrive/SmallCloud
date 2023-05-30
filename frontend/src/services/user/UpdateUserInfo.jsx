@@ -3,7 +3,6 @@ import RefreshToken from "../token/RefreshToken";
 import configData from "../../config/config.json"
 
 export default async function UpdateUserInfo(value) {
-    console.log(value);
     await RefreshToken();
     const accessToken = localStorage.getItem("accessToken");
     const model = {

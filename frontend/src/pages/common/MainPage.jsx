@@ -36,7 +36,6 @@ export default function MainPage() {
             }
 
             const rootID = rootIDRes[1];
-            console.log(rootID)
             //const res = await PostNewDir(rootID, "test");
 
             const subFileRes = await GetSubFileList(rootID);

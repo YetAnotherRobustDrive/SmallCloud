@@ -86,10 +86,6 @@
     border-top: 1px solid black;
 }
 
-.upload-btn .btn-header .open-space input[type="file"] {
-    /* display: none; */
-}
-
 .upload-btn .btn-header .open-space .title{
     display: block;
     width: 100%;
@@ -109,6 +105,11 @@
     white-space: pre-line;
     color: gray;
     overflow: hidden;
+}
+
+.upload-btn .btn-header .open-space .progressBar{
+    padding-left: 10px;
+    width: calc(100% - 10px);
 }
 
 .droparea {
