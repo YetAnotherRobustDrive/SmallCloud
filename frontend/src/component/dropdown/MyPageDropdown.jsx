@@ -6,10 +6,8 @@ import { Link } from "react-router-dom";
 export default function MypageDropdown() {
 
     const options = [
-        { id: 1, label: <Link to='/mypage'>마이페이지</Link>  },
-        { id: 2, label: <Link to='/upload'>업로드 목록</Link> },
-        { id: 3, label: <Link to='/download'>다운로드 목록</Link> },
-        { id: 4, label: <Link to='/logout'>로그아웃</Link> }
+        { label: <Link to='/mypage'>마이페이지</Link>  },
+        { label: <Link to='/logout'>로그아웃</Link> }
     ];
 
     const [isOpen, setIsOpen] = useState(false);
@@ -24,9 +22,9 @@ export default function MypageDropdown() {
                 <BsPersonCircle />
                 {isOpen && (
                     <ul className="dropdown-options" onMouseLeave={() => setIsOpen(false)}>
-                        {options.map((option) => (
+                        {options.map((option, idx) => (
                             <li
-                                key={option.id}
+                                key={idx}
                                 className="dropdown-option"
                                 onClick={() => handleOptionClick(option)}
                             >

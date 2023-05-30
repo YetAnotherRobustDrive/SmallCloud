@@ -1,19 +1,18 @@
 import RefreshToken from "../token/RefreshToken";
 import configData from "../../config/config.json"
 
-export default async function PostNewFile(value) {
+export default async function GetDirInfo(id) {
     await RefreshToken();
     const accessToken = localStorage.getItem("accessToken");
     const model = {
-        method: "POST",
+        method: "GET",
         headers: {
             "Authorization": "Bearer " + accessToken,
         },
-        body: value,
     };
 
     try {
-        const res = await fetch(configData.API_SERVER + 'files', model);
+        const res = await fetch(configData.API_SERVER + 'directory/' + id , model);
         const data = await res.json();
         if (res.status == 200) {
             return [true, data];  //성공
