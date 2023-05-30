@@ -86,10 +86,6 @@
     border-top: 1px solid black;
 }
 
-.upload-btn .btn-header .open-space input[type="file"] {
-    /* display: none; */
-}
-
 .upload-btn .btn-header .open-space .title{
     display: block;
     width: 100%;
