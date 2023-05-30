@@ -39,7 +39,6 @@ export default function FaqPage() {
                 }
                 {dataList.length != 0 &&
                     dataList.map((data) => {
-                        console.log(data);
                         return <ExtendBox key={data.id} title={data.title}>{data.content}</ExtendBox>
                     })
                 }

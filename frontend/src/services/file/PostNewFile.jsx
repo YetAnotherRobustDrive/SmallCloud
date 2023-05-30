@@ -13,7 +13,6 @@ export default async function PostNewFile(value, setter, after) {
                 xhr.open('POST', configData.API_SERVER + 'files', true);
                 xhr.upload.addEventListener("progress", (e) => {
                     const percentage = (e.loaded / e.total) * 100;
-                    console.log(percentage);
                     setter(percentage);
                 });
                 xhr.onreadystatechange = () => {

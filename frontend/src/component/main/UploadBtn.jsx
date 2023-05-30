@@ -61,7 +61,6 @@ export default function UploadBtn() {
             formData.append('cwd', curr);
             formData.append('file', file);
             const res = await PostNewFile(formData, setUploadState, setIsEnd);
-            console.log(res);
             if (!res[0]) {
                 setIsFail(true);
                 setMessage(res[1]);
