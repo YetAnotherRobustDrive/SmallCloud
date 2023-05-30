@@ -5,7 +5,7 @@ import PostNewDir from "../../services/directory/PostNewDir";
 import ModalGetString from "../modal/ModalGetString";
 import '../../css/context.css'
 
-export default function ContextBody(props) {
+export default function ContextBody() {
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [isFail, setIsFail] = useState();
     const [message, setMessage] = useState();
@@ -32,7 +32,7 @@ export default function ContextBody(props) {
             }
             window.location.reload();
         }
-        if (newName != undefined) {
+        if (newName !== undefined && newName !== "") {
             mkFile();
         }
     }, [newName])
