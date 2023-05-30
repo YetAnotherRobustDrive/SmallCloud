@@ -15,6 +15,7 @@ import GetSubDirList from "../../services/directory/GetSubDirList";
 import GetSubFileList from "../../services/directory/GetSubFileList";
 import PostNewFile from "../../services/file/PostNewFile";
 import PostNewDir from "../../services/directory/PostNewDir";
+import PostMoveDir from "../../services/directory/PostMoveDir";
 
 export default function MainPage() {
 
@@ -25,6 +26,8 @@ export default function MainPage() {
     const [isLoading, setIsLoading] = useState(true);
     const [message, setMessage] = useState();
     const [files, setFiles] = useState([]);
+    const [target, setTarget] = useState(0);
+    const [source, setSource] = useState(0);
 
     useEffect(() => {
         const render = async () => {
@@ -55,6 +58,18 @@ export default function MainPage() {
         render();
         setTimeout(() => setIsLoading(false), 500);
     }, [])
+
+    useEffect(() => {
+        const move = async () => {
+            const res = await PostMoveDir(source, target);
+            setTarget(0);
+            setSource(0);
+            window.location.reload();
+        }
+        if (target !== 0 && source !== 0 && target !== source) {
+            move();
+        }
+    },[target, source])
 
     return (
         <>
@@ -90,6 +105,8 @@ export default function MainPage() {
                                         setSelected(data);
                                         setIsFileView(true);
                                     }}
+                                    targetSetter={setTarget}
+                                    sourceSetter={setSource}
                                     key={data.id}
                                     id={data.id}
                                     name={data.name}
