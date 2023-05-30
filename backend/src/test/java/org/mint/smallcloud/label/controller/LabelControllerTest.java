@@ -105,8 +105,7 @@ class LabelControllerTest {
         fileLocation = FileLocation.of("testLocation");
 
         rootFolder = Folder.createRoot(member);
-        em.persist(rootFolder);
-        em.flush();
+
 //        folder = DataNode.createFolder(rootFolder,"testName", member);
 
         dataNode = DataNode.createFile(rootFolder, fileType, fileLocation, 100L, member);

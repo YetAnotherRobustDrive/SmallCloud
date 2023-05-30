@@ -128,4 +128,8 @@ public abstract class DataNode {
             return true;
         return getShares().stream().anyMatch(share -> share.canAccess(username));
     }
+
+    public boolean canAccessUser(Member member) {
+        return canAccessUser(member.getUsername());
+    }
 }

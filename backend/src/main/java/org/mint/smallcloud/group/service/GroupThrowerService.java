@@ -19,8 +19,8 @@ public class GroupThrowerService {
             .orElseThrow(() -> new ServiceException(ExceptionStatus.NOT_FOUND_GROUP_NAME));
     }
 
-    public void checkExistedGroupName(String groupName) {
-        if (!groupRepository.existsByName(groupName))
-            throw new ServiceException(ExceptionStatus.NOT_FOUND_GROUP_NAME);
+    public void checkDuplicateGroupName(String groupName) {
+        if (groupRepository.existsByName(groupName))
+            throw new ServiceException(ExceptionStatus.GROUP_NAME_ALREADY_EXISTS);
     }
 }

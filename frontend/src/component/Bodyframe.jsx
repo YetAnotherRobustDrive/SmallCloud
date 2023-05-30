@@ -1,11 +1,10 @@
 import React, { useState } from "react";
 import '../css/bodyframe.css'
-import ContextBody from "./contextMenu/ContextMenu";
+import ContextBody from "./contextMenu/ContextBody";
 
 export default function BodyFrame(props) {
     const hasContext = (props.hasContext === true ? true : false);
     const [isContextOpen, setIsContextOpen] = useState(false);
-    const contextOptions = ["폴더 생성", "2222", "시간 ↑", "시간 ↓"];
 
     const handleContext = (e) => {
         e.preventDefault();
@@ -25,9 +24,7 @@ export default function BodyFrame(props) {
             <div className="bodyframe" onContextMenu={handleContext}>
                 {hasContext &&
                     <div id="context" className="contextMenu" onMouseLeave={() => setIsContextOpen(false)}>
-                        {isContextOpen &&
-                            <ContextBody options={contextOptions} />
-                        }
+                        {isContextOpen && <ContextBody />}
                     </div>
                 }
                 {props.children}

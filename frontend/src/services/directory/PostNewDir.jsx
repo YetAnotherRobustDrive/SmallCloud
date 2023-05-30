@@ -17,11 +17,11 @@ export default async function PostNewDir(targetID, name) {
 
     try {
         const res = await fetch(configData.API_SERVER + "directory/" + targetID + '/create'  , model);
-        const data = await res.json();
         if (res.status == 200) {
-            return [true, data];  //성공
+            return [true, ''];  //성공
         }
         else {
+            const data = await res.json();
             throw data; //실패
         }
     } catch (e) {
