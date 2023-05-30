@@ -2,11 +2,18 @@ FROM openjdk:11
 
 WORKDIR /app
 
-COPY . .
-
-RUN sed -i -e 's/\r$//' ./gradlew
+COPY ./gradlew .
+COPY ./gradle ./gradle
+COPY ./build.gradle .
+COPY ./settings.gradle .
+COPY ./gradlew.bat .
 
 RUN chmod +x ./gradlew
+RUN sed -i -e 's/\r$//' ./gradlew
+
+RUN ./gradlew dependencies
+
+COPY . .
 
 RUN ./gradlew build
 

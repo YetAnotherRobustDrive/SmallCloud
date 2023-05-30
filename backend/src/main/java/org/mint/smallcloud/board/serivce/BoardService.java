@@ -38,6 +38,7 @@ public class BoardService {
         Board board = boardThrowerService.findBoardCreatedDate(boardType, createdDate);
 
         return BoardDto.builder()
+                .id(board.getId())
                 .title(board.getTitle())
                 .content(board.getContent())
                 .boardType(board.getBoardType())

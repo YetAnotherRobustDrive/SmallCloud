@@ -20,3 +20,13 @@ include::topping/users.adoc[]
 == 문의 관련 (inquiries)
 
 include::topping/inquiry.adoc[]
+
+[[directories]]
+== 디렉토리 관련 (directories)
+
+include::topping/directories.adoc[]
+
+[[share]]
+== 공유 관련 (share)
+
+include::topping/share.adoc[]

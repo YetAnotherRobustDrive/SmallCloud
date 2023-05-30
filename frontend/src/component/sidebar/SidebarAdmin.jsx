@@ -8,13 +8,22 @@ export default function SidebarAdmin() {
     <div className="sidebar">
       <div className="stub" />
       <div className="menuBox">
-        <Link className="link" to='/admin/rules'>정책변경</Link>
+        <Link className="link" to='/admin/questions'>문의 답변</Link>
       </div>
       <div className="menuBox">
-        <Link className="link">개인정보 취급 방침 변경</Link>
+        <Link className="link" to='/admin/rules'>정책 변경</Link>
       </div>
       <div className="menuBox">
-        <Link className="link">약관 변경</Link>
+        <Link className="link" to='/admin/privacy'>개인정보취급방침 변경</Link>
+      </div>
+      <div className="menuBox">
+        <Link className="link" to='/admin/term'>약관 변경</Link>
+      </div>
+      <div className="menuBox">
+        <Link className="link" to='/admin/notice'>공지 등록</Link>
+      </div>
+      <div className="menuBox">
+        <Link className="link" to='/admin/faq'>FAQ 등록</Link>
       </div>
       <div className="menuBox">
         <Link className="link" to="/admin/group">조직도 구성</Link>
@@ -24,9 +33,6 @@ export default function SidebarAdmin() {
       </div>
       <div className="menuBox">
         <Link className="link" to='/admin/user/register'>사용자 등록</Link>
-      </div>
-      <div className="menuBox">
-        <Link className="link" to='/admin/questions'>문의 답변하기</Link>
       </div>
       <div className="menuBox">
         <Link className="link">시스템 로그</Link>

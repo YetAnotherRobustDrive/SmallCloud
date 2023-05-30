@@ -24,4 +24,10 @@ public class DirectoryThrowerService {
             throw new ServiceException(ExceptionStatus.ALREADY_EXISTS_DIRECTORY);
         }
     }
+
+    public void checkAccessRight(Folder folder, String username) {
+        if (!folder.canAccessUser(username)) {
+            throw new ServiceException(ExceptionStatus.NO_PERMISSION);
+        }
+    }
 }

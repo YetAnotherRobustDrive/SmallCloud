@@ -9,6 +9,7 @@ import org.mint.smallcloud.user.domain.Member;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 
 @Table(name = "DATA_NODES")
@@ -29,8 +30,9 @@ public abstract class DataNode {
     @Column(name = "CREATE_DATE")
     private LocalDateTime createdDate;
 
-    @Column(name = "AUTHOR_ID")
-    private Long authorId;
+    @ManyToOne
+    @JoinColumn(name = "AUTHOR_ID")
+    private Member author;
 
     @ManyToOne
     @JoinColumn(name = "FOLDER_ID")
@@ -42,16 +44,16 @@ public abstract class DataNode {
         cascade = CascadeType.ALL,
         orphanRemoval = true
     )
-    private List<Share> shares;
+    private List<Share> shares = new ArrayList<>();
 
 
     @ManyToMany(mappedBy = "files")
-    private List<Label> labels;
+    private List<Label> labels = new ArrayList<>();
 
-    protected DataNode(FileType fileType, Long authorId) {
+    protected DataNode(FileType fileType, Member author) {
         this.fileType = fileType;
         this.createdDate = LocalDateTime.now();
-        this.authorId = authorId;
+        this.author = author;
     }
 
     public static DataNode createFolder(Folder parent, String name, Member member) {
@@ -63,31 +65,35 @@ public abstract class DataNode {
     }
 
     public void setParentFolder(Folder folder) {
-        if (this.parentFolder.equals(folder)) return;
+        if (folder == null) {
+            this.parentFolder = null;
+            return;
+        }
+        if (this.parentFolder != null && this.parentFolder.equals(folder)) return;
         this.parentFolder = folder;
         folder.addChild(this);
     }
 
     public void addShare(Share share) {
-        if (shares.contains(share)) return;
-        shares.add(share);
+        if (share == null || this.shares.contains(share)) return;
+        this.shares.add(share);
         share.setFile(this);
     }
 
     public void deleteShare(Share share) {
-        if (!shares.contains(share)) return;
+        if (share == null || !shares.contains(share)) return;
         shares.remove(share);
         share.setFile(null);
     }
 
     public void addLabel(Label label) {
-        if (labels.contains(label)) return;
+        if (label == null || labels.contains(label)) return;
         labels.add(label);
         label.addFile(this);
     }
 
     public void deleteLabel(Label label) {
-        if (!labels.contains(label)) return;
+        if (label == null || !labels.contains(label)) return;
         labels.remove(label);
         label.deleteFile(this);
     }
@@ -98,6 +104,10 @@ public abstract class DataNode {
 
     public String getType() {
         return fileType.getType();
+    }
+
+    public void setName(String name) {
+        this.fileType = FileType.of(name, this.getType());
     }
 
     @Override
@@ -111,5 +121,15 @@ public abstract class DataNode {
     @Override
     public int hashCode() {
         return getId().hashCode();
+    }
+
+    public boolean canAccessUser(String username) {
+        if (this.getAuthor().getUsername().equals(username))
+            return true;
+        return getShares().stream().anyMatch(share -> share.canAccess(username));
+    }
+
+    public boolean canAccessUser(Member member) {
+        return canAccessUser(member.getUsername());
     }
 }

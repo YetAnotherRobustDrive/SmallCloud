@@ -47,8 +47,8 @@ public class TestSnippet {
         return request
             .content(objectMapper.writeValueAsString(dto))
             .contentType(MediaType.APPLICATION_JSON)
-            .header(AUTH_NAME, AUTH_VALUE_PREFIX + token)
-            .accept(MediaType.APPLICATION_JSON);
+            .accept(MediaType.APPLICATION_JSON)
+            .header(AUTH_NAME, AUTH_VALUE_PREFIX + token);
     }
 
     public static MockHttpServletRequestBuilder withSecurePost(String url, String userId, ObjectMapper objectMapper, Object dto, String... roles) throws JsonProcessingException {

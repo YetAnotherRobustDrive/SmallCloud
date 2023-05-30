@@ -7,6 +7,7 @@ import org.mint.smallcloud.share.domain.GroupShare;
 import org.mint.smallcloud.user.domain.Member;
 
 import javax.persistence.*;
+import java.util.ArrayList;
 import java.util.List;
 
 @Table(name = "GROUPS")
@@ -27,42 +28,34 @@ public class Group {
     @JoinColumn(name = "PARENT_GROUP_ID")
     private Group parentGroup;
 
-    @ManyToOne
-    @JoinColumn(name = "MANAGER_ID")
-    private Member manager;
-
     @OneToMany(
         mappedBy = "parentGroup",
         cascade = CascadeType.ALL,
         orphanRemoval = true
     )
-    private List<Group> subGroups;
+    private List<Group> subGroups = new ArrayList<>();
 
     @OneToMany(
         mappedBy = "target",
         cascade = CascadeType.ALL,
         orphanRemoval = true
     )
-    private List<GroupShare> shares;
+    private List<GroupShare> shares = new ArrayList<>();
 
     @OneToMany(mappedBy = "group")
-    private List<Member> members;
+    private List<Member> members = new ArrayList<>();
 
-    public Group(String name, Member manager, Group parentGroup) {
+    protected Group(String name, Group parentGroup) {
         this.name = name;
-        this.manager = manager;
         this.parentGroup = parentGroup;
-        if (this.manager != null) {
-            addMember(manager);
-        }
     }
 
-    public static Group of(String name, Member member, Group parent) {
-        return new Group(name, member, parent);
+    public static Group of(String name, Group parent) {
+        return new Group(name, parent);
     }
 
     public static Group of(String name) {
-        return new Group(name, null, null);
+        return new Group(name, null);
     }
 
     @Override
@@ -78,10 +71,30 @@ public class Group {
         return getId().hashCode();
     }
 
-    /* TODO: */
     public void addMember(Member member) {
+        if (!this.members.contains(member)) {
+            this.members.add(member);
+            member.setGroup(this);
+        }
     }
 
     public void deleteMember(Member member) {
+        if (this.members.contains(member)) {
+            this.members.remove(member);
+            member.setGroup(null);
+        }
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public void setParentGroup(Group parentGroup) {
+        this.parentGroup = parentGroup;
+    }
+
+    public void addShare(GroupShare rst) {
+        if (!getShares().contains(rst))
+            getShares().add(rst);
     }
 }

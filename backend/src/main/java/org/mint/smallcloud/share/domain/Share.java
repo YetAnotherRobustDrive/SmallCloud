@@ -4,7 +4,6 @@ import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.mint.smallcloud.file.domain.DataNode;
-import org.mint.smallcloud.file.domain.File;
 import org.mint.smallcloud.group.domain.Group;
 import org.mint.smallcloud.user.domain.Member;
 
@@ -21,6 +20,7 @@ public abstract class Share {
 
     @Id
     @Column(name = "SHARE_ID")
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @ManyToOne
@@ -35,15 +35,15 @@ public abstract class Share {
             && ((Share) obj).getId().equals(this.getId());
     }
 
-    protected Share(File file) {
+    protected Share(DataNode file) {
         this.file = file;
     }
 
-    public static Share of(Member target, File file) {
+    public static Share of(Member target, DataNode file) {
         return MemberShare.of(target, file);
     }
 
-    public static Share of(Group target, File file) {
+    public static Share of(Group target, DataNode file) {
         return GroupShare.of(target, file);
     }
 
@@ -69,4 +69,9 @@ public abstract class Share {
     }
 
     public abstract boolean canAccess(Member member);
+
+    public abstract boolean canAccess(String username);
+
+    public abstract String getTargetName();
+
 }

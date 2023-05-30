@@ -28,6 +28,8 @@ public enum ExceptionStatus {
     ALREADY_EXISTS_DIRECTORY(HttpStatus.FORBIDDEN, "해당 경로에 이미 디렉토리가 존재합니다."),
     NOT_FOUND_INQUIRY(HttpStatus.FORBIDDEN, "문의를 찾을 수 없습니다."),
     NOT_FOUND_QUESTION(HttpStatus.FORBIDDEN, "질문을 찾을 수 없습니다."),
+    INVALID_PARAMETER(HttpStatus.BAD_REQUEST, "파라미터가 올바르지 않습니다."),
+    GROUP_NAME_ALREADY_EXISTS(HttpStatus.FORBIDDEN, "이미 그룹이 존재합니다"),
     ALREADY_EXISTS_LABEL(HttpStatus.FORBIDDEN, "이미 존재하는 라벨입니다."),
     NOT_FOUND_LABEL(HttpStatus.FORBIDDEN, "라벨을 찾을 수 없습니다."),
     ;

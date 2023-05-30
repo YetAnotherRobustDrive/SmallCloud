@@ -1,0 +1,19 @@
+.context {
+    background-color: #c2c2c2;
+    border: 1px solid white;
+    padding: 10px;
+    width: fit-content;
+}
+
+.context .optionList {
+    margin: 0;
+    padding: 0;
+}
+
+.context .optionList .option {
+    color: white;
+    text-decoration: none;
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}

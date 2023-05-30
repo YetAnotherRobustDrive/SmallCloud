@@ -28,6 +28,7 @@ public class QuestionService {
 
         Question question = boardThrowerService.findById(questionId);
         return QuestionDto.builder()
+                .id(question.getId())
                 .title(question.getTitle())
                 .content(question.getContent())
                 .contact(question.getContact())

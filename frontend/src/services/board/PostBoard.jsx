@@ -33,6 +33,6 @@ export default async function PostBoard(value) {
         }
         return [true, ''];
     } catch (data) {
-        return [false, data.message];
+        return data.message === undefined ? [false, data] : [false, data.message];
     }
 }

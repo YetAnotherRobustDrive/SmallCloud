@@ -9,6 +9,7 @@ import org.mint.smallcloud.share.domain.MemberShare;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 
 @Table(name = "MEMBERS")
@@ -55,7 +56,7 @@ public class Member {
         cascade = CascadeType.ALL,
         orphanRemoval = true
     )
-    private List<MemberShare> shares;
+    private List<MemberShare> shares = new ArrayList<>();
 
     protected Member(String username, String password, String nickname, Role role) {
         this.username = username;
@@ -127,14 +128,31 @@ public class Member {
         this.nickname = nickname;
     }
 
+    public void changeRole(Role role) {
+        this.role = role;
+    }
+
     public void setGroup(Group group) {
         if (getGroup() != null)
             this.group.deleteMember(this);
+        if (group == null) {
+            this.group = null;
+            return;
+        }
         this.group = group;
         this.group.addMember(this);
     }
 
+    public void unsetGroup() {
+        setGroup(null);
+    }
+
     public void setProfileImageLocation(FileLocation profileImageLocation) {
         this.profileImageLocation = profileImageLocation;
+    }
+
+    public void addShare(MemberShare share) {
+        if (!shares.contains(share))
+            shares.add(share);
     }
 }
