@@ -3,9 +3,8 @@ package org.mint.smallcloud.label.dto;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
-import org.mint.smallcloud.file.domain.DataNode;
-import org.mint.smallcloud.user.domain.Member;
-import org.springframework.security.access.annotation.Secured;
+import org.mint.smallcloud.file.dto.DataNodeLabelDto;
+import org.mint.smallcloud.user.dto.UserLabelDto;
 
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
@@ -18,9 +17,7 @@ public class LabelDto {
     @NotBlank
     private final String name;
 
-    @NotBlank
-    private final Member owner;
+    private final UserLabelDto owner;
 
-    @NotBlank
-    private final DataNode file;
+    private final DataNodeLabelDto file;
 }
