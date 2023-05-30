@@ -10,8 +10,9 @@ export default function CustomIcon(props) {
     const [right, setRight] = useState(null);
     const navigate = useNavigate();
 
-    const handleOnClick = () => {
-        if (props.type == "file") {
+    const handleOnClick = (e) => {
+        e.preventDefault();
+        if (props.type === "file") {
             props.onClick();
             return;
         }
@@ -23,7 +24,7 @@ export default function CustomIcon(props) {
 
     useEffect(() => {
         setIcon(
-            props.type == "file" ? <FcFile /> : <FcFolder />
+            props.type === "file" ? <FcFile /> : <FcFolder />
         )
         setLeft(() => {
             switch (props.stage) {
@@ -50,8 +51,30 @@ export default function CustomIcon(props) {
             }
         })
     }, [])
+
+    const handelDrop = (e) => {
+        e.preventDefault();
+        if (props.type == "folder") {
+            props.targetSetter(props.id);            
+        }
+    }
+
+    const handelDragEnd = (e) => {
+        e.preventDefault();
+        props.sourceSetter(props.id);
+    }
+    const handelDragOver = (e) => {
+        e.preventDefault();
+    }
+
     return (
-        <div className="CustomIcon" onClick={handleOnClick}>
+        <div className="CustomIcon"  draggable>
+            <label className="dropzone"
+                htmlFor="icon"
+                onClick={handleOnClick}
+                onDragEnd={handelDragEnd}
+                onDragOver={handelDragOver}
+                onDrop={handelDrop} draggable/>
             <div className="icon">
                 {icon}
                 <div className="labels">
