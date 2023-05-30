@@ -64,7 +64,62 @@
     font-size: 18px;
 }
 
-.open-space .bay {
+
+.upload-btn .btn-header .open-space .bay {
+    display: flex;
     width: 100%;
     height: 200px;
+    justify-content: center;
+    align-items: center;
+    font-size: 60px;
+    text-align: center;
+    border-top: 1px solid black;
+}
+
+.upload-btn .btn-header .open-space .bayHover {
+    display: flex;
+    width: 100%;
+    height: 200px;
+    justify-content: center;
+    align-items: center;
+    font-size: 60px;
+    border-top: 1px solid black;
+}
+
+.upload-btn .btn-header .open-space input[type="file"] {
+    /* display: none; */
+}
+
+.upload-btn .btn-header .open-space .title{
+    display: block;
+    width: 100%;
+    padding: 5px;
+    font-size: 20px;
+    text-align: center;
+    white-space: pre-line;
+}
+
+.upload-btn .btn-header .open-space .subtitle{
+    display: block;
+    width: 100%;
+    font-size: 16px;
+    padding: 5px;
+    height: 21px;
+    text-align: center;
+    white-space: pre-line;
+    color: gray;
+    overflow: hidden;
+}
+
+.droparea {
+    position: absolute;
+    width: 100%;
+    height: 230px;
+    top: 40px;
+    z-index: 9999;
+    font-size: 0;
+}
+
+.droparea::file-selector-button {
+    display: none;
 }

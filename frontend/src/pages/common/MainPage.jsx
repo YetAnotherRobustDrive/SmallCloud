@@ -57,18 +57,9 @@ export default function MainPage() {
         setTimeout(() => setIsLoading(false), 500);
     }, [])
 
-    const handleSubmit = async (e) => {
-        e.preventDefault();
-        const file = e.target.files[0];
-        const formData = new FormData();
-        formData.append('cwd', 22);
-        formData.append('file', file);
-        const res = await PostNewFile(formData);
-    }
-
     return (
         <>
-        {isLoading && <ModalLoading isOpen={isLoading} />}
+            {isLoading && <ModalLoading isOpen={isLoading} />}
             <Header />
             <Sidebar />
             <BodyFrame hasContext={true}>
@@ -90,12 +81,6 @@ export default function MainPage() {
                         })
                     }
                 </NarrowBox>
-                <input
-                    onChange={handleSubmit}
-                    type="file"
-                    id="file"
-                    name="location"
-                />
                 <BodyHeader text="내 파일" addon={setIsGrid} view={isGrid} />
                 {isGrid &&
                     <GridBox height="calc(100vh - 299px)">

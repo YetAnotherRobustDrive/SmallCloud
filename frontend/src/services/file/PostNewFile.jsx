@@ -9,11 +9,11 @@ export default async function PostNewFile(value) {
         headers: {
             "Authorization": "Bearer " + accessToken,
         },
-        body : value,
+        body: value,
     };
 
     try {
-        const res = await fetch(configData.API_SERVER + 'files'  , model);
+        const res = await fetch(configData.API_SERVER + 'files', model);
         const data = await res.json();
         if (res.status == 200) {
             return [true, data];  //성공

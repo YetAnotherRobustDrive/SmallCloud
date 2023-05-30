@@ -71,9 +71,9 @@ export default function PrivatePage() {
         console.log("asdfasdf");
     }
 
-    const reader = new FileReader();
     const handleImgChange = (e) => {
         const file = e.target.files[0];
+        const reader = new FileReader();
         reader.readAsDataURL(file);
 
         return new Promise((resolve) => {
