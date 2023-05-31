@@ -27,17 +27,12 @@ export default function Filetree() {
   }, [])
 
   async function parseTree(folder, depth) {
-
-    const subFileRes = await GetSubFileList(folder);
-    if (!subFileRes[0]) {
-      return subFileRes[1];
-    }
     const subDirRes = await GetSubDirList(folder);
     if (!subDirRes[0]) {
       return subDirRes[1];
     }
 
-    const subAll = [...subDirRes[1], ...subFileRes[1]];
+    const subAll = [...subDirRes[1]];
 
     let taps = '';
     for (let index = 0; index < depth; index++) {
