@@ -54,7 +54,7 @@ export default function CustomIcon(props) {
 
     const handelDrop = (e) => {
         e.preventDefault();
-        if (props.type == "folder") {
+        if (props.type === "folder") {
             props.targetSetter(props.id);            
         }
     }

@@ -30,11 +30,11 @@ export default function RegisterPage() {
 
         const inputData = new FormData(e.target);
         const value = Object.fromEntries(inputData.entries());
-        if (inputData.get("name") == "" || inputData.get("id") == "" || inputData.get("password") == "" || inputData.get("password_chk") == "") {
+        if (inputData.get("name") === "" || inputData.get("id") === "" || inputData.get("password") === "" || inputData.get("password_chk") === "") {
             setIsEmpty(true);
             return;
         }
-        else if (inputData.get("password_chk") != inputData.get("password")) {
+        else if (inputData.get("password_chk") !== inputData.get("password")) {
             setIsChkWrong(true);
             return;
         }

@@ -38,10 +38,10 @@ export default function AdminQuestionList() {
             <SidebarAdmin />
             <BodyFrame>
                 <BodyHeader text="미확인 문의" />
-                {questions.length == 0 &&
+                {questions.length === 0 &&
                     <div className="login" style={{ paddingTop: "10%" }}>문의가 없습니다.</div>
                 }
-                {questions.length != 0 &&
+                {questions.length !== 0 &&
                     questions.map((d) => {
                         return <ExtendBoxAdmin
                             key={d.id}

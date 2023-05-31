@@ -25,7 +25,7 @@ export default function AdminPrivacyUploadPage() {
                 setMessage(res[1]);
                 return;
             }
-            if (res[1].length != 0) {
+            if (res[1].length !== 0) {
                 setCurr(res[1].content);                
             }
         };
@@ -40,13 +40,13 @@ export default function AdminPrivacyUploadPage() {
         inputData.append("boardType", "privacy");
         const value = Object.fromEntries(inputData.entries());
 
-        if (inputData.get("content") == "") {
+        if (inputData.get("content") === "") {
             setIsEmpty(true);
             return;
         }
         const res = await PostBoardAdmin(value);
         if (!res[0]) {
-            if (typeof res[1] == "object") {
+            if (typeof res[1] === "object") {
                 let tmpMessage = new String();
                 for (const [key, value] of Object.entries(res[1])) {
                     tmpMessage += value + '\n';

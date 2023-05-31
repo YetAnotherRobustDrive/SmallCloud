@@ -13,10 +13,10 @@ export default function Filetree() {
   const navigate = useNavigate();
 
   function parseTree(folder, depth) {
-    if (folder == 0) { //remove before apply fetch
+    if (folder === 0) { //remove before apply fetch
       folder = FT_folder
     }
-    else if (folder == 8) {
+    else if (folder === 8) {
       folder = FT_file
     }
     else {
@@ -27,12 +27,12 @@ export default function Filetree() {
     for (let index = 0; index < depth; index++) {
       taps += '   ';
     }
-    if (depth != 0) {
+    if (depth !== 0) {
       taps += '└';
     }
 
     return folder.map((d) => {
-      if (d.type == 'folder') {
+      if (d.type === 'folder') {
         //fetch here
         return (
           <div key={d.id} id={d.id} className="folder" onClick={() => { navigate("/files/" + d.id); }}>

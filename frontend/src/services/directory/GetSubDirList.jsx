@@ -17,7 +17,7 @@ export default async function GetSubDirList(id) {
         data.forEach(e => {
             e.type = "folder"
         });
-        if (res.status == 200) {
+        if (res.status === 200) {
             return [true, data];  //성공
         }
         else {

@@ -15,7 +15,7 @@ export default function EditableColumn(props) {
                 size="10" 
                 disabled={props.disabled}/>
             </div>
-            {(props.title == "PW") &&
+            {(props.title === "PW") &&
                 <button onClick={props.onClick} className="icon" ><TbEdit /></button>
             }
         </div>

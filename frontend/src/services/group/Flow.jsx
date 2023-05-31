@@ -69,7 +69,7 @@ export default function Flow(props) {
 
     const onConnect = useCallback((params) => {
         const exist = edgeRef.current.find((e) => e.target === params.target);
-        if (exist != undefined) {
+        if (exist !== undefined) {
             return false;
         }
         return setEdges((eds) => addEdge({ source: params.source, target: params.target, type: "step" }, eds));
@@ -78,7 +78,7 @@ export default function Flow(props) {
     const onEdgesChange = useCallback((changes) => setEdges((eds) => applyNodeChanges(changes, eds)), []);
     const onNodesDelete = useCallback(
         (deleted) => {
-            if (deleted[0].type == "customRootNode") {
+            if (deleted[0].type === "customRootNode") {
                 setIsRootExist(false);
             }
             setEdges(
@@ -116,11 +116,11 @@ export default function Flow(props) {
     const handleClickAdd = () => {
         const name = window.prompt("새 그룹의 이름을 입력해주세요.");
         const exist = nodeRef.current.find((e) => e.id === name);
-        if (exist != undefined) {
+        if (exist !== undefined) {
             return;
         }
 
-        if (isRootExistRef.current == true) {
+        if (isRootExistRef.current === true) {
             const newNode = nodes.concat({
                 id: name,
                 type: 'customNode',

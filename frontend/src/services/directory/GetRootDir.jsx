@@ -14,7 +14,7 @@ export default async function GetRootDir() {
     try {
         const res = await fetch(configData.API_SERVER + 'users/root-dir' , model);
         const data = await res.json();
-        if (res.status == 200) {
+        if (res.status === 200) {
             return [true, data.result];  //성공
         }
         else {

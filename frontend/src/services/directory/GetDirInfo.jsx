@@ -14,7 +14,7 @@ export default async function GetDirInfo(id) {
     try {
         const res = await fetch(configData.API_SERVER + 'directory/' + id , model);
         const data = await res.json();
-        if (res.status == 200) {
+        if (res.status === 200) {
             return [true, data];  //성공
         }
         else {

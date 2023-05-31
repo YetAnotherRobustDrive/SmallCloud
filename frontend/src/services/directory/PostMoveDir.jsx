@@ -17,7 +17,7 @@ export default async function PostMoveDir(sourceID, targetID) {
 
     try {
         const res = await fetch(configData.API_SERVER + "directory/" + sourceID + '/move', model);
-        if (res.status == 200) {
+        if (res.status === 200) {
             return [true, ''];  //성공
         }
         else {

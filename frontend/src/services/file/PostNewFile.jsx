@@ -37,7 +37,7 @@ export default async function PostNewFile(value, setter, after) {
         }
 
         const res = await upload();
-        if (res.status == 200) {
+        if (res.status === 200) {
             after(true);
             return [true, res.data];  //성공
         }

@@ -23,7 +23,7 @@ export default function ModalGetString(props) {
                     type="text"
                     placeholder="text"
                     onKeyDown={(e) => {
-                        if (e.key == "Enter") {
+                        if (e.key === "Enter") {
                             props.setter(e.target.value);
                             props.after();                   
                         }
