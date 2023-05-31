@@ -19,6 +19,8 @@
 }
 
 .fileview .head .filename {
+    white-space: nowrap;
+    display: inline;
     padding: 5px;
     max-width: 175px;
     text-overflow: ellipsis;
