@@ -33,10 +33,10 @@ export default function NoticePage() {
             <Header />
             <SidebarCS />
             <BodyFrame>
-                {dataList.length == 0 &&
+                {dataList.length === 0 &&
                     <div className="login" style={{ paddingTop: "10%" }}>등록된 공지사항이 없습니다.</div>
                 }
-                {dataList.length != 0 &&
+                {dataList.length !== 0 &&
                     dataList.map((data) => {
                         return <ExtendBox key={data.id} title={data.title}>{data.content}</ExtendBox>
                     })

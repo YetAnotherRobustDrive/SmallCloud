@@ -19,14 +19,14 @@ export default function ExtendBoxAdmin(props) {
 
         const inputData = new FormData(e.target);
         inputData.append("questionId", props.id);
-        if (inputData.get("content") == "") {
+        if (inputData.get("content") === "") {
             setIsEmpty(true);
             return;
         }
         const value = Object.fromEntries(inputData.entries());
         const res = await PostAnswer(value);
         if (!res[0]) {
-            if (typeof res[1] == "object") {
+            if (typeof res[1] === "object") {
                 let tmpMessage = new String();
                 for (const [key, value] of Object.entries(res[1])) {
                     tmpMessage += value + '\n';

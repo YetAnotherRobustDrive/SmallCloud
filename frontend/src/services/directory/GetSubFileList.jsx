@@ -17,7 +17,7 @@ export default async function GetSubFileList(id) {
         data.forEach(e => {
             e.type = "file"
         });
-        if (res.status == 200) {
+        if (res.status === 200) {
             return [true, data];  //성공
         }
         else {

@@ -19,13 +19,13 @@ export default function AdminFAQUploadPage() {
         inputData.append("boardType", "faq");
         const value = Object.fromEntries(inputData.entries());
 
-        if (inputData.get("content") == "" || inputData.get("title") == "") {
+        if (inputData.get("content") === "" || inputData.get("title") === "") {
             setIsEmpty(true);
             return;
         }
         const res = await PostBoardAdmin(value);
         if (!res[0]) {
-            if (typeof res[1] == "object") {
+            if (typeof res[1] === "object") {
                 let tmpMessage = new String();
                 for (const [key, value] of Object.entries(res[1])) {
                     tmpMessage += value + '\n';
