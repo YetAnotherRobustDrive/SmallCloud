@@ -2,26 +2,43 @@ import React, { useEffect, useState } from "react";
 import { useNavigate } from 'react-router-dom'
 import "../../css/sidebar.css"
 import { FcFolder, FcFile } from 'react-icons/fc'
-
-import FT_folder from '../../fakeJSON/filetree.json'
-import FT_file from '../../fakeJSON/filetree_th.json'
-import FT_middle from '../../fakeJSON/filetree_sec.json'
+import GetRootDir from "../../services/directory/GetRootDir";
+import GetSubFileList from "../../services/directory/GetSubFileList";
+import GetSubDirList from "../../services/directory/GetSubDirList";
 
 export default function Filetree() {
 
   const [datas, setDatas] = useState();
   const navigate = useNavigate();
 
-  function parseTree(folder, depth) {
-    if (folder === 0) { //remove before apply fetch
-      folder = FT_folder
+  useEffect(() => {
+    const render = async () => {
+
+      const rootIDRes = await GetRootDir();
+      if (!rootIDRes[0]) {
+        return rootIDRes[1];
+      }
+      const rootID = rootIDRes[1];
+      console.log(rootID)
+      const res = await parseTree(rootID, 0);
+      console.log(res);
+      setDatas(res);
     }
-    else if (folder === 8) {
-      folder = FT_file
+    render();
+  }, [])
+
+  async function parseTree(folder, depth) {
+
+    const subFileRes = await GetSubFileList(folder);
+    if (!subFileRes[0]) {
+      return subFileRes[1];
     }
-    else {
-      folder = FT_middle
+    const subDirRes = await GetSubDirList(folder);
+    if (!subDirRes[0]) {
+      return subDirRes[1];
     }
+
+    const subAll = [...subDirRes[1], ...subFileRes[1]];
 
     let taps = '';
     for (let index = 0; index < depth; index++) {
@@ -30,14 +47,14 @@ export default function Filetree() {
     if (depth !== 0) {
       taps += '└';
     }
-
-    return folder.map((d) => {
+    console.log(subAll);
+    const children = await Promise.all(subAll.map(async (d) => {
       if (d.type === 'folder') {
-        //fetch here
+        const subChildren = await parseTree(d.id, depth + 1);
         return (
           <div key={d.id} id={d.id} className="folder" onClick={() => { navigate("/files/" + d.id); }}>
             <span>{taps}<FcFolder />{d.name}</span>
-            {parseTree(d.id, depth + 1)}
+            {subChildren}
           </div>
         )
       }
@@ -48,13 +65,9 @@ export default function Filetree() {
           </div>
         )
       }
-    })
+    }));
+    return children;
   }
-
-  useEffect(() => {
-    setDatas(parseTree(0, 0));
-  }, [])
-
   return (
     <div className="filetree">
       {datas}
