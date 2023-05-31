@@ -19,9 +19,7 @@ export default function Filetree() {
         return rootIDRes[1];
       }
       const rootID = rootIDRes[1];
-      console.log(rootID)
       const res = await parseTree(rootID, 0);
-      console.log(res);
       setDatas(res);
     }
     render();
@@ -47,7 +45,6 @@ export default function Filetree() {
     if (depth !== 0) {
       taps += '└';
     }
-    console.log(subAll);
     const children = await Promise.all(subAll.map(async (d) => {
       if (d.type === 'folder') {
         const subChildren = await parseTree(d.id, depth + 1);
