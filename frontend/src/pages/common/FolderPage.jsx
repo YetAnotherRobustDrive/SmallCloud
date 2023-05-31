@@ -13,6 +13,7 @@ import Sidebar from "../../component/sidebar/Sidebar";
 import GetSubDirList from "../../services/directory/GetSubDirList";
 import GetSubFileList from "../../services/directory/GetSubFileList";
 import GetDirInfo from "../../services/directory/GetDirInfo";
+import PostMoveDir from "../../services/directory/PostMoveDir";
 
 export default function FolderPage() {
 
@@ -24,6 +25,8 @@ export default function FolderPage() {
     const [message, setMessage] = useState();
     const [files, setFiles] = useState([]);
     const [name, setName] = useState([]);
+    const [target, setTarget] = useState(0);
+    const [source, setSource] = useState(0);
     const params = useParams();
 
     useEffect(() => {
@@ -54,6 +57,18 @@ export default function FolderPage() {
         }
     }, [params.fileID])
 
+    useEffect(() => {
+        const move = async () => {
+            const res = await PostMoveDir(source, target);
+            setTarget(0);
+            setSource(0);
+            window.location.reload();
+        }
+        if (target !== 0 && source !== 0 && target !== source) {
+            move();
+        }
+    },[target, source])
+
     return (
         <>
             {isLoading && <ModalLoading isOpen={isLoading} />}
@@ -70,6 +85,8 @@ export default function FolderPage() {
                                         setSelected(data);
                                         setIsFileView(true);
                                     }}
+                                    targetSetter={setTarget}
+                                    sourceSetter={setSource}
                                     key={data.id}
                                     id={data.id}
                                     name={data.name}

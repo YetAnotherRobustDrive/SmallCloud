@@ -39,7 +39,6 @@ export default function MainPage() {
             }
 
             const rootID = rootIDRes[1];
-            //const res = await PostNewDir(rootID, "test");
 
             const subFileRes = await GetSubFileList(rootID);
             if (!subFileRes[0]) {
@@ -86,6 +85,8 @@ export default function MainPage() {
                                     setSelected(data);
                                     setIsFileView(true);
                                 }}
+                                targetSetter={setTarget}
+                                sourceSetter={setSource}
                                 key={data.id}
                                 id={data.id}
                                 name={data.name}

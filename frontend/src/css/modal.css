@@ -6,7 +6,8 @@
 
 .modalOuterDown {
     display: block;
-    width: 250px;
+    width: 40vw;
+    z-index: 999;
 }
 
 

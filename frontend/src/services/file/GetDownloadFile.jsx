@@ -47,7 +47,6 @@ export default async function GetDownloadFile(targetID, setter, after, filename)
         }
 
         const res = await upload();
-        console.log(res.data);
         if (res.status === 200) {
             after(true);
             return [true, res.data];  //성공
