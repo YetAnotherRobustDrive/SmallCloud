@@ -32,6 +32,7 @@ public enum ExceptionStatus {
     GROUP_NAME_ALREADY_EXISTS(HttpStatus.FORBIDDEN, "이미 그룹이 존재합니다"),
     ALREADY_EXISTS_LABEL(HttpStatus.FORBIDDEN, "이미 존재하는 라벨입니다."),
     NOT_FOUND_LABEL(HttpStatus.FORBIDDEN, "라벨을 찾을 수 없습니다."),
+    NOT_FOUND_OWNER(HttpStatus.FORBIDDEN, "소유자를 찾을 수 없습니다."),
     ;
 
     ExceptionStatus(HttpStatus status, String message) {

@@ -8,16 +8,17 @@ import org.mint.smallcloud.user.dto.UserLabelDto;
 
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
+import java.util.List;
 
 @Getter
 @AllArgsConstructor
 @Builder
-public class LabelDto {
+public class LabelFilesDto {
     @Size(min=1, max=10, message = "라벨 이름은 10자 이하로 작성해주세요.")
     @NotBlank
     private final String name;
 
     private final UserLabelDto owner;
 
-    private final DataNodeLabelDto file;
+    private final List<DataNodeLabelDto> file;
 }
