@@ -122,3 +122,9 @@
     margin-right: 5px;
     text-underline-position: under;
 }
+
+.customSpanForDown{
+    white-space: pre;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
