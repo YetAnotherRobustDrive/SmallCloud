@@ -4,6 +4,12 @@
     align-items: center;
 }
 
+.modalOuterDown {
+    display: block;
+    width: 250px;
+}
+
+
 .modalOuter button {
     border: none;
     background-color: white;
