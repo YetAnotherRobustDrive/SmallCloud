@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { useNavigate } from 'react-router-dom'
 import "../../css/sidebar.css"
 import { FcFolder, FcFile } from 'react-icons/fc'
@@ -10,6 +10,7 @@ export default function Filetree() {
 
   const [datas, setDatas] = useState();
   const navigate = useNavigate();
+  const ref = useRef();
 
   useEffect(() => {
     const render = async () => {
@@ -49,7 +50,7 @@ export default function Filetree() {
       if (d.type === 'folder') {
         const subChildren = await parseTree(d.id, depth + 1);
         return (
-          <div key={d.id} id={d.id} className="folder" onClick={() => { navigate("/files/" + d.id); }}>
+          <div key={d.id} id={d.id} className="folder" onClick={(e) => {e.preventDefault(); e.stopPropagation(); navigate("/files/" + e.currentTarget.id)}}>
             <span>{taps}<FcFolder />{d.name}</span>
             {subChildren}
           </div>
