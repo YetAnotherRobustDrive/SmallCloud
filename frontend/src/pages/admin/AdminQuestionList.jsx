@@ -29,7 +29,6 @@ export default function AdminQuestionList() {
         render();
     }, [])
 
-
     return (
         <>
             {isLoading && <ModalLoading isOpen={isLoading} />}

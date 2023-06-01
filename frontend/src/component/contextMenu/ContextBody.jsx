@@ -45,6 +45,8 @@ export default function ContextBody() {
         <>
             {isModalOpen &&
                 <ModalGetString
+                    title={"폴더 생성"}
+                    placeholder={"폴더 이름"}
                     setter={setNewName}
                     isOpen={isModalOpen}
                     after={() => setIsModalOpen(false)}

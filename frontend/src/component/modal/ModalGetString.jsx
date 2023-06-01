@@ -1,5 +1,7 @@
-import React, { useState } from "react";
+import React from "react";
+import { AiOutlineClose } from 'react-icons/ai';
 import Modal from 'react-modal';
+import '../../css/modal.css';
 
 export default function ModalGetString(props) {
 
@@ -15,19 +17,31 @@ export default function ModalGetString(props) {
     }
     Modal.setAppElement("#root")
 
+    const handleClose = (e) => {
+        e.preventDefault();
+        props.after();
+    }
+
+    const handleKeyDown = (e) => {
+        if (e.key === "Enter") {
+            e.preventDefault();
+            props.setter(e.target.value);
+            props.after();
+        }
+    }
+
     return (
         <Modal isOpen={props.isOpen} style={modalStyle}>
             <div className="modalOuter">
-                <span>이름 입력</span>
+                <div className="modalShareHeader">
+                    <span className="title">{props.title}</span>
+                    <div className="close" onClick={handleClose}><AiOutlineClose /></div>
+                </div>
                 <input
+                    defaultValue={props.defaultValue}
                     type="text"
-                    placeholder="text"
-                    onKeyDown={(e) => {
-                        if (e.key === "Enter") {
-                            props.setter(e.target.value);
-                            props.after();                   
-                        }
-                    }}
+                    placeholder={props.placeholder}
+                    onKeyDown={handleKeyDown}
                     autoFocus
                 />
             </div>

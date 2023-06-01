@@ -65,7 +65,7 @@
     padding: 0 4px 0 4px;
 }
 
-.name {
+.CustomIcon .name {
     display: block;
     position: relative;
     font-size: 16px;
