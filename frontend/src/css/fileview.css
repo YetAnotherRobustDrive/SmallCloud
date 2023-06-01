@@ -146,6 +146,20 @@
     font-size: larger;
 }
 
+.labels .icon {
+    background: none;
+    border: none;
+    padding: 0;
+    font-size: larger;
+    display: inline-flex;
+    vertical-align: sub;
+}
+
+.labels .icon:hover {
+    background-color: #e2e2e2;
+    border-radius: 5px
+}
+
 .labels .label{
     font-weight: normal;
     font-size: large;

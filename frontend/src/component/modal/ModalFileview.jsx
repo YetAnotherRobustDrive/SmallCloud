@@ -4,6 +4,7 @@ import ModalFileopen from "./ModalFileopen";
 import { AiOutlineClose } from "react-icons/ai";
 import { MdOpenInFull } from "react-icons/md";
 import { GoCloudDownload } from 'react-icons/go'
+import { TbEdit } from 'react-icons/tb'
 import GetDownloadFile from "../../services/file/GetDownloadFile";
 import ProgressBar from "../../component/updown/ProgressBar"
 import ModalEmpty from "./ModalEmpty";
@@ -20,7 +21,11 @@ export default function ModalFileview(props) {
         const res = await GetDownloadFile(fileData.id, setPercentage, () => { }, fileData.name)
         setTimeout(() => setIsNowDownload(false), 500);
     }
-    const str = "a-s-d-f";
+
+    const handleLabelEdit = (e) => {
+        e.stopPropagation();
+        e.preventDefault();
+    }
 
     return (
         <>
@@ -51,6 +56,7 @@ export default function ModalFileview(props) {
                             <>
                                 <div className="labels">
                                     <span>라벨</span>
+                                    <button onClick={handleLabelEdit} className="icon" ><TbEdit /></button>
                                     <div className="label">
                                         {fileData.labels.length === 0? "없음" : fileData.labels.map((label, index) => {
                                             return ("#" + label + " ")
