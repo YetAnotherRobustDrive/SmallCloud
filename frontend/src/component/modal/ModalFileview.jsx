@@ -5,15 +5,19 @@ import { AiOutlineClose } from "react-icons/ai";
 import { MdOpenInFull } from "react-icons/md";
 import { GoCloudDownload } from 'react-icons/go'
 import { TbEdit } from 'react-icons/tb'
+import {BsFillShareFill} from 'react-icons/bs'
 import GetDownloadFile from "../../services/file/GetDownloadFile";
 import ProgressBar from "../../component/updown/ProgressBar"
 import ModalEmpty from "./ModalEmpty";
+import ModalAddShare from "./ModalAddShare";
 
 export default function ModalFileview(props) {
     const [isFileOpen, setIsFileOpen] = useState(false);
+    const [isShareOpen, setIsShareOpen] = useState(true);
     const [isGeneralSelected, setIsGeneralSelected] = useState(true);
     const [isNowDownload, setIsNowDownload] = useState(false);
     const [percentage, setPercentage] = useState(0);
+    const [sharedList, setSharedList] = useState([]);
     const fileData = props.file;
 
     const handleDownload = async (e) => {
@@ -26,6 +30,9 @@ export default function ModalFileview(props) {
         e.stopPropagation();
         e.preventDefault();
     }
+    const handleShare = async (e) => {
+        setIsShareOpen(true);
+    }
 
     return (
         <>
@@ -34,6 +41,7 @@ export default function ModalFileview(props) {
                     <div className='head'>
                         <span className='filename'>{fileData.name}</span>
                         <div className="fileBtn">
+                            <div className='icon' onClick={handleShare}><BsFillShareFill /></div>
                             <div className='icon' onClick={handleDownload}><GoCloudDownload /></div>
                             <div className='icon' onClick={() => setIsFileOpen(true)}><MdOpenInFull /></div>
                             <div className='icon' onClick={() => props.after()}><AiOutlineClose /></div>
@@ -52,7 +60,7 @@ export default function ModalFileview(props) {
                                 공유
                             </span>
                         </div>
-                        {isGeneralSelected &&
+                        {isGeneralSelected && //일반
                             <>
                                 <div className="labels">
                                     <span>라벨</span>
@@ -89,9 +97,17 @@ export default function ModalFileview(props) {
                                 </div>
                             </>
                         }
-                        {!isGeneralSelected &&
+                        {!isGeneralSelected && //공유
                             <>
-                                <div>{fileData.shared ? "공유 O" : "공유 X"}</div>
+                                <div>
+                                    <span>현재 공유대상</span>
+                                    <div className="shareList">
+                                        {sharedList.length === 0 ?
+                                            "현재 공유대상이 없습니다." :
+                                            sharedList.map((item, index) => { })
+                                        }
+                                    </div>
+                                </div>
                             </>
                         }
                     </div>
@@ -108,6 +124,13 @@ export default function ModalFileview(props) {
                         <ProgressBar value={percentage} />
                     </>
                 </ModalEmpty>
+            }
+            {isShareOpen &&
+                <ModalAddShare
+                    fileID={fileData.id}
+                    isOpen={isShareOpen}
+                    after={() => setIsShareOpen(false)}
+                />
             }
         </>
     )
