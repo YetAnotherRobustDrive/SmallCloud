@@ -2,12 +2,12 @@
     display: flex;
     flex-direction: column;
     align-items: center;
+    z-index: 999;
 }
 
 .modalOuterDown {
     display: block;
     width: 40vw;
-    z-index: 999;
 }
 
 
@@ -41,4 +41,38 @@
 
 button:focus {
     outline: 0;
+}
+
+.modalOuter .modalShareHeader {
+    display: flex;
+    flex-direction: row;
+    width: 30vw;
+    min-width: 400px;
+}
+
+.modalShareHeader .close {
+    margin-left: auto;
+}
+
+.ReactModal__Overlay {
+    z-index: 999;
+}
+
+.modalShareBody .shareInput {
+    width: 30vw;
+    min-width: 400px;
+    padding: 10px;
+    border: none;
+    border-bottom: 1px solid black;
+    margin: 0;
+}
+
+.modalShareBody .shareInput:focus {
+    outline: none;
+}
+
+.modalShareBody {
+    height: 20%;
+    border: 1px solid black;
+    
 }

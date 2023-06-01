@@ -42,8 +42,7 @@
     height: 21px;
     width: 21px;
     font-size: 21px;
-    margin-left: 5px;
-    border: 1px solid black;
+    margin-left: 10px;
     display: flex;
     text-align: center;
     justify-content: center;
@@ -51,6 +50,7 @@
 
 .fileview .head .fileBtn .icon:hover{
     background-color: #e2e2e2;
+    border-radius: 5px;
 }
 
 .fileopen {
@@ -127,4 +127,14 @@
     white-space: pre;
     overflow: hidden;
     text-overflow: ellipsis;
+}
+
+.fileview .body .shardList {
+    width: calc(100% - 20px);
+    padding: 5px;
+    margin: 5px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    border: 1px solid black;
 }
