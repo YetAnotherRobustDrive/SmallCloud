@@ -46,8 +46,6 @@ button:focus {
 .modalOuter .modalShareHeader {
     display: flex;
     flex-direction: row;
-    width: 30vw;
-    min-width: 400px;
 }
 
 .modalShareHeader .close {
@@ -63,7 +61,7 @@ button:focus {
     min-width: 400px;
     padding: 10px;
     border: none;
-    border-bottom: 1px solid black;
+    border: 1px solid black;    
     margin: 0;
 }
 
@@ -73,6 +71,56 @@ button:focus {
 
 .modalShareBody {
     height: 20%;
+}
+
+.modalShareBody .candidates {
+    padding: 10px;    
+    width: 90%;
+    margin-left: calc(5% - 10px);
+    height: 200px;
+    overflow-x: hidden;
+    overflow-y: scroll;
+    margin-top: 25px;
+    border: 1px solid black;    
+}
+
+.modalShareBody .resultItem {
+    text-align: center;
+    justify-content: start;
+    border-bottom: 1px solid #ccc;
+    display: flex;
+    padding: 10px 10px 10px 0;
+}
+
+.resultItem .close {
+    margin-left: auto;
+}
+
+.modalShareHeader {
+    width: 100%;
+}
+
+.modalShareHeader .title {
+    padding: 10px;
+}
+
+.resultItem .icon {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-left: 0;
+    margin-right: 10px;
+}
+
+.searchResult {
     border: 1px solid black;
-    
+    width: 30vw;
+    min-width: 400px;
+    position: absolute;
+    padding: 10px;
+    height: 100px;
+    overflow-x: hidden;
+    overflow-y: scroll;
+    background-color: white;
+    border-top: none;
 }

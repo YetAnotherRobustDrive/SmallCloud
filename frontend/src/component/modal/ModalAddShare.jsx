@@ -1,9 +1,13 @@
-import React from "react";
+import React, { useState } from "react";
 import Modal from 'react-modal';
 import { AiOutlineClose } from 'react-icons/ai'
+import { MdPerson, MdGroups } from 'react-icons/md'
 import '../../css/modal.css'
 
 export default function ModalAddShare(props) {
+
+    const [searched, setSearched] = useState([]);
+    const [candidate, setCandidate] = useState([]);
 
     const modalStyle = {
         content: {
@@ -20,20 +24,107 @@ export default function ModalAddShare(props) {
         props.after();
     }
 
+    const handleOnChange = (e) => { //fetch 로 변경
+        if (e.target.value !== "") {
+            setSearched([
+                {
+                    "name": e.target.value,
+                    "type": "MEMBER",
+                }
+            ])
+        }
+        else {
+            setSearched([]);
+        }
+    }
+
+    const addCandidate = (name, type) => {
+        window.document.getElementById("shareInput").value = "";
+        setSearched([]);
+        const res = candidate.find((e) => e.name === name);
+        if (res === undefined) {
+            setCandidate([
+                ...candidate,
+                {
+                    "name": name,
+                    "type": type,
+                }
+            ]);            
+        }
+    }
+
+    const handleKeyDown = (e) => {
+        if (e.key === "Escape") {
+            e.preventDefault();
+            setSearched([]);
+            e.target.value = "";
+        }
+    }
+
+    const handleClick = (e) => {
+        e.stopPropagation();
+        e.preventDefault();
+        const idx = e.currentTarget.id;
+        let tmp = [...candidate];
+        tmp.splice(idx, 1);
+        setCandidate(tmp);
+    }
+
+    const handleSubmit = async (e) => {
+        e.preventDefault();
+        candidate.forEach((d) => {
+            const data = {
+                "fileId": props.fileID,
+                "targetName": d.name,
+                "type": d.type
+            }
+            console.log(data);
+        })
+    }
+
     Modal.setAppElement("#root");
     return (
         <Modal isOpen={props.isOpen} style={modalStyle}>
-            <div className="modalOuter">
+            <div className="modalOuter" >
                 <div className="modalShareHeader">
                     <span className="title">공유 추가하기</span>
                     <div className="close" onClick={handleClose}><AiOutlineClose /></div>
                 </div>
                 <div className="modalShareBody">
-                    <input className="shareInput" type="text" placeholder="공유할 사용자나 그룹의 이름을 입력하세요." />
-                    <div className="searchResult">
-                        asdf
+                    <input
+                        id="shareInput"
+                        className="shareInput"
+                        type="text"
+                        placeholder="추가할 사용자나 그룹의 이름을 입력하세요."
+                        onKeyDown={handleKeyDown}
+                        onChange={handleOnChange} />
+                    {searched.length !== 0 &&
+                        <div className="searchResult">
+                            {searched.map((item, index) => {
+                                return (
+                                    <div className="resultItem" key={index} onClick={() => addCandidate(item.name, item.type)}>
+                                        <div className="icon">{item.type === "MEMBER" ? <MdPerson /> : <MdGroups />}</div>
+                                        <span className="name">{item.name}</span>
+                                    </div>
+                                )
+                            })}
+                        </div>
+                    }
+                    <div className="candidates">
+                        {candidate.length === 0 ?
+                            "공유 대상이 없습니다." :
+                            candidate.map((item, index) => {
+                                return (
+                                    <div className="resultItem" key={index}>
+                                        <div className="icon">{item.type === "MEMBER" ? <MdPerson /> : <MdGroups />}</div>
+                                        <span className="name">{item.name}</span>
+                                        <div id={index} className="close" onClick={handleClick}><AiOutlineClose /></div>
+                                    </div>
+                                )
+                            })}
                     </div>
                 </div>
+                <button onClick={handleSubmit}>추가하기</button>
             </div>
         </Modal>
     )

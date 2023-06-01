@@ -93,6 +93,7 @@ export default function ModalFileview(props) {
             }
             {isShareOpen &&
                 <ModalAddShare
+                    fileID={fileData.id}
                     isOpen={isShareOpen}
                     after={() => setIsShareOpen(false)}
                 />
