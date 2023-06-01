@@ -21,6 +21,13 @@
 .modalOuter input {
     margin-top: 30px;
     margin-bottom: 30px;
+    border: 1px solid black;
+    padding: 5px;
+    border-radius: 3px;
+}
+
+.modalOuter input:focus {
+    outline: none;
 }
 
 .modalOuter .nick {
@@ -123,4 +130,9 @@ button:focus {
     overflow-y: scroll;
     background-color: white;
     border-top: none;
+}
+
+.modalOuter .getStrClose {
+    margin-left: auto;
+    float: right;
 }

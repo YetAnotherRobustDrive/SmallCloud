@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import '../../css/fileview.css';
 import ModalFileopen from "./ModalFileopen";
 import { AiOutlineClose } from "react-icons/ai";
@@ -10,10 +10,13 @@ import GetDownloadFile from "../../services/file/GetDownloadFile";
 import ProgressBar from "../../component/updown/ProgressBar"
 import ModalEmpty from "./ModalEmpty";
 import ModalAddShare from "./ModalAddShare";
+import ModalGetString from "./ModalGetString";
 
 export default function ModalFileview(props) {
     const [isFileOpen, setIsFileOpen] = useState(false);
-    const [isShareOpen, setIsShareOpen] = useState(true);
+    const [isShareOpen, setIsShareOpen] = useState(false);
+    const [isLabelEditOpen, setIsLabelEditOpen] = useState(false);
+    const [newLables, setNewLabels] = useState("");
     const [isGeneralSelected, setIsGeneralSelected] = useState(true);
     const [isNowDownload, setIsNowDownload] = useState(false);
     const [percentage, setPercentage] = useState(0);
@@ -29,10 +32,26 @@ export default function ModalFileview(props) {
     const handleLabelEdit = (e) => {
         e.stopPropagation();
         e.preventDefault();
+        setIsLabelEditOpen(true);
     }
+
     const handleShare = async (e) => {
+        e.stopPropagation();
+        e.preventDefault();
         setIsShareOpen(true);
     }
+
+    useEffect(() => {      
+        const editLabel = () => {
+            const labelsForPost = [];
+            newLables.split(/\s|#/).filter(Boolean).forEach(async (label) => {
+                labelsForPost.push(label);
+            });
+            console.log([...new Set(labelsForPost)]);
+        }
+        editLabel();
+    }, [newLables])
+            
 
     return (
         <>
@@ -131,6 +150,16 @@ export default function ModalFileview(props) {
                     isOpen={isShareOpen}
                     after={() => setIsShareOpen(false)}
                 />
+            }
+            {isLabelEditOpen &&
+                    <ModalGetString
+                        defaultValue={fileData.labels}
+                        title={"라벨 수정"}
+                        placeholder={"#라벨1 #라벨2 #라벨3"}
+                        setter={setNewLabels}
+                        isOpen={isLabelEditOpen}
+                        after={() => setIsLabelEditOpen(false)}
+                    />
             }
         </>
     )
