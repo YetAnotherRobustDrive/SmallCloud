@@ -20,6 +20,7 @@ export default function ModalFileview(props) {
         const res = await GetDownloadFile(fileData.id, setPercentage, () => { }, fileData.name)
         setTimeout(() => setIsNowDownload(false), 500);
     }
+    const str = "a-s-d-f";
 
     return (
         <>
@@ -48,10 +49,38 @@ export default function ModalFileview(props) {
                         </div>
                         {isGeneralSelected &&
                             <>
-                                <div>{fileData.id}</div>
-                                <div>{fileData.securityLevel}</div>
-                                <div>{fileData.writingStage}</div>
-                                <div>{fileData.size}</div>
+                                <div className="labels">
+                                    <span>라벨</span>
+                                    <div className="label">
+                                        {fileData.labels.length === 0? "없음" : fileData.labels.map((label, index) => {
+                                            return ("#" + label + " ")
+                                        })}
+                                    </div>
+                                </div>
+                                <div className="column">
+                                    <span>크기</span>
+                                    <div className="value">
+                                        {fileData.size}
+                                    </div>
+                                </div>
+                                <div className="column">
+                                    <span>파일 형식</span>
+                                    <div className="value">
+                                        {fileData.name.substring(fileData.name.lastIndexOf(".") + 1, fileData.name.length)}
+                                        </div>
+                                </div>
+                                <div className="column">
+                                    <span>작성자</span>
+                                    <div className="value">
+                                        {fileData.authorName}
+                                        </div>
+                                </div>
+                                <div className="column">
+                                    <span>생성일</span>
+                                    <div className="value">
+                                    {fileData.createdDate.substring(0, fileData.createdDate.indexOf("T")).replace(/-/g, ".")}
+                                    </div>
+                                </div>
                             </>
                         }
                         {!isGeneralSelected &&
@@ -69,8 +98,8 @@ export default function ModalFileview(props) {
             {isNowDownload &&
                 <ModalEmpty close={() => setPercentage(0)} isOpen={isNowDownload}>
                     <>
-                    <span className="customSpanForDown">{fileData.name + "\n다운로드 중..."} </span>
-                    <ProgressBar value={percentage} />
+                        <span className="customSpanForDown">{fileData.name + "\n다운로드 중..."} </span>
+                        <ProgressBar value={percentage} />
                     </>
                 </ModalEmpty>
             }
