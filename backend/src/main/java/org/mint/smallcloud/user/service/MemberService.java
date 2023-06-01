@@ -7,7 +7,6 @@ import org.mint.smallcloud.bucket.service.StorageService;
 import org.mint.smallcloud.exception.ExceptionStatus;
 import org.mint.smallcloud.exception.ServiceException;
 import org.mint.smallcloud.file.service.DirectoryService;
-import org.mint.smallcloud.group.service.GroupThrowerService;
 import org.mint.smallcloud.security.dto.LoginDto;
 import org.mint.smallcloud.security.dto.UserDetailsDto;
 import org.mint.smallcloud.user.domain.Member;
@@ -19,6 +18,8 @@ import org.mint.smallcloud.user.repository.MemberRepository;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Slf4j
 @Service
@@ -28,7 +29,6 @@ public class MemberService {
 
     private final MemberThrowerService memberThrowerService;
     private final MemberRepository memberRepository;
-    private final GroupThrowerService groupThrowerService;
     private final UserMapper userMapper;
     private final StorageService storageService;
     private final DirectoryService directoryService;
@@ -86,5 +86,13 @@ public class MemberService {
             }
             member.setProfileImageLocation(member.getProfileImageLocation());
         }
+    }
+
+    public List<String> search(String q) {
+        if (q.isBlank())
+            return List.<String>of();
+        return memberRepository
+            .findByUsernameLike("%" + q + "%")
+            .stream().map(Member::getUsername).collect(Collectors.toList());
     }
 }

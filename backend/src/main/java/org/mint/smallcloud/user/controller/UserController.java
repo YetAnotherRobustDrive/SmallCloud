@@ -1,6 +1,10 @@
 package org.mint.smallcloud.user.controller;
 
 import lombok.RequiredArgsConstructor;
+import org.mint.smallcloud.ResponseDto;
+import org.mint.smallcloud.exception.ExceptionStatus;
+import org.mint.smallcloud.exception.ServiceException;
+import org.mint.smallcloud.security.UserDetailsProvider;
 import org.mint.smallcloud.user.domain.Roles;
 import org.mint.smallcloud.user.dto.RegisterDto;
 import org.mint.smallcloud.user.dto.UserProfileRequestDto;
@@ -12,6 +16,7 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.util.List;
 
 @RestController
 @RequestMapping("/users")
@@ -19,6 +24,7 @@ import javax.validation.Valid;
 @Validated
 public class UserController {
     private final MemberFacadeService memberFacadeService;
+    private final UserDetailsProvider userDetailsProvider;
 
     @Secured({Roles.S_ADMIN})
     @RequestMapping(
@@ -49,4 +55,17 @@ public class UserController {
         @UserNameValidation @PathVariable("username") String username) {
         return memberFacadeService.profile(username);
     }
+
+    @GetMapping("/search")
+    public ResponseDto<List<String>> search(
+        @RequestParam("q") String q) {
+        userDetailsProvider
+            .getUserDetails()
+            .orElseThrow(() -> new ServiceException(ExceptionStatus.NO_PERMISSION));
+        List<String> usernames = memberFacadeService.search(q);
+        return ResponseDto.<List<String>>builder()
+            .result(usernames)
+            .build();
+    }
+
 }
