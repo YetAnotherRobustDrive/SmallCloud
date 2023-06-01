@@ -73,3 +73,15 @@ IMPORTANT: 라벨을 등록할 파일이 없을 때
 operation::Label/attach/wrongToken[snippets='http-response']
 
 IMPORTANT: 토큰이 잘못됐을 때
+
+=== 라벨 검색 (search)
+
+operation::Label/search/ok[snippets='http-request']
+
+==== 성공
+
+operation::Label/search/ok[snippets='http-response']
+
+==== 실패
+
+operation::Label/search/wrongToken[snippets='http-response']

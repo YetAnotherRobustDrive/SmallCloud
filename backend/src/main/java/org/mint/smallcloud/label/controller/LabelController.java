@@ -70,13 +70,13 @@ public class LabelController {
     }
 
     // 라벨 검색
-//    @Secured({Roles.S_COMMON})
-//    @GetMapping("/search")
-//    public LabelFilesDto search(String partLabel) {
-//        String userName = userDetailsProvider
-//                .getUserDetails().orElseThrow(() -> new ServiceException(ExceptionStatus.NO_PERMISSION)).getUsername();
-//        return labelService.findLabel(partLabel, userName);
-//    }
+    @Secured({Roles.S_COMMON})
+    @GetMapping("/search")
+    public LabelFilesDto search(@Valid @RequestParam String labelName) {
+        String userName = userDetailsProvider
+                .getUserDetails().orElseThrow(() -> new ServiceException(ExceptionStatus.NO_PERMISSION)).getUsername();
+        return labelService.findLabel(labelName, userName);
+    }
 
     /**
      * - todo (필요해 보이는)

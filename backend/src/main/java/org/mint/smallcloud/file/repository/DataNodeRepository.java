@@ -11,5 +11,5 @@ import java.util.List;
 @Repository
 public interface DataNodeRepository extends JpaRepository<DataNode, Long> {
     List<DataNode> findByAuthor(Member author);
-//    List<DataNode> findByName(String labelName);
+    List<DataNode> findByLabels(String labelName);
 }

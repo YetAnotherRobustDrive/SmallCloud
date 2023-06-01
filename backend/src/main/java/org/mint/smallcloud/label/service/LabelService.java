@@ -17,8 +17,8 @@ import org.mint.smallcloud.user.dto.UserLabelDto;
 import org.mint.smallcloud.user.service.MemberThrowerService;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
-import java.util.MissingResourceException;
 
 @Slf4j
 @Service
@@ -78,21 +78,31 @@ public class LabelService {
         label.addFile(dataNode);
     }
 
-//    public LabelFilesDto findLabel(String labelName, String userName) {
-//
-//        Member member = memberThrowerService.getMemberByUsername(userName);
-//        List<DataNode> dataNode = dataNodeThrowerService.findByName(labelName);
-//        labelThrowerService.checkNotExistsByLabelName(labelName, member);
-//        Label label = labelRepository.findByNameAndOwner(labelName, member);
-//        // DataNodeLabelDto 가져와야 함
-//        dataNode.forEach(e -> {
-//
-//        });
-//        // UserLabelDto 가져와야함 (member)
-//        return LabelFilesDto.builder()
-//                .name(label.getName())
-//                .owner()
-//                .file()
-//                .build();
-//    }
+    public LabelFilesDto findLabel(String labelName, String userName) {
+
+        Member member = memberThrowerService.getMemberByUsername(userName);
+        labelThrowerService.checkNotExistsByLabelName(labelName, member);
+        Label label = labelRepository.findByNameAndOwner(labelName, member);
+        List<DataNode> dataNode = label.getFiles();
+        List<DataNodeLabelDto> dataNodeLabelDtos = new ArrayList<>();
+        dataNode.forEach(e -> {
+            DataNodeLabelDto dataNodeLabelDto = DataNodeLabelDto.builder()
+                    .id(e.getId())
+                    .name(e.getName())
+                    .createdDate(e.getCreatedDate())
+                    .parentFolderId(e.getParentFolder().getId())
+                    .build();
+            dataNodeLabelDtos.add(dataNodeLabelDto);
+        });
+
+        UserLabelDto userLabelDto = UserLabelDto.builder()
+                .nickname(member.getNickname())
+                .username(member.getUsername())
+                .build();
+        return LabelFilesDto.builder()
+                .name(label.getName())
+                .owner(userLabelDto)
+                .file(dataNodeLabelDtos)
+                .build();
+    }
 }

@@ -32,8 +32,10 @@ import org.springframework.web.filter.CharacterEncodingFilter;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 
+import static org.mint.smallcloud.board.domain.BoardType.faq;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.documentationConfiguration;
+import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.get;
 import static org.springframework.restdocs.payload.PayloadDocumentation.fieldWithPath;
 import static org.springframework.restdocs.payload.PayloadDocumentation.requestFields;
 import static org.springframework.security.test.web.servlet.setup.SecurityMockMvcConfigurers.springSecurity;
@@ -310,22 +312,13 @@ class LabelControllerTest {
                     .file(null)
                     .build();
         }
-        @DisplayName("정상적인 라벨 생성")
+        @DisplayName("정상적인 라벨 붙이기")
         @Test
         void ok() throws Exception {
-            RequestFieldsSnippet payload = requestFields(
-                    fieldWithPath("name").description("라벨의 이름을 담고 있습니다."),
-                    fieldWithPath("owner.username").description("라벨 작성자의 이름를 담고 있습니다."),
-                    fieldWithPath("owner.nickname").description("라벨 작성자의 닉네임을 담고 있습니다."),
-                    fieldWithPath("file.id").description("라벨이 등록된 파일의 id를 담고 있습니다."),
-                    fieldWithPath("file.name").description("라벨이 등록된 파일의 이름을 담고 있습니다."),
-                    fieldWithPath("file.parentFolderId").description("라벨이 등록된 파일의 부모 폴더 id를 담고 있습니다."),
-                    fieldWithPath("file.createdDate").description("라벨이 등록된 파일의 생성일자를 담고 있습니다."));
-
             mockMvc.perform(TestSnippet.securePost(url,memberToken.getAccessToken(), objectMapper, labelDto))
                     .andExpect(status().isOk())
                     .andDo(print())
-                    .andDo(document(DOCUMENT_NAME, payload));
+                    .andDo(document(DOCUMENT_NAME));
         }
 
         @DisplayName("라벨 이름이 존재하지 않음")
@@ -357,6 +350,42 @@ class LabelControllerTest {
         void wrongToken() throws Exception {
             mockMvc.perform(TestSnippet.securePost(url, "testWrongToken", objectMapper, labelDto))
                     .andExpect(status().isBadRequest())
+                    .andDo(document(DOCUMENT_NAME));
+        }
+    }
+
+    @Nested
+    @DisplayName("/labels/search 라벨 검색하기 테스트")
+    class search {
+        private final String url = URL_PREFIX + "/search";
+        private LabelDto labelDto;
+        @BeforeEach
+        void boot() {
+            labelDto = LabelDto.builder()
+                    .name("testLabel")
+                    .owner(userLabelDto)
+                    .file(dataNodeLabelDto)
+                    .build();
+            Label label = Label.of(
+                    labelDto.getName(),
+                    member);
+            label.addFile(dataNode);
+            labelRepository.save(label);
+        }
+        @Test
+        @DisplayName("정상적인 라벨 검색")
+        void ok() throws Exception {
+            mockMvc.perform(TestSnippet.secured(get(url).param("labelName", "testLabel"), memberToken.getAccessToken(), objectMapper, labelDto))
+                    .andExpect(status().isOk())
+                    .andDo(print())
+                    .andDo(document(DOCUMENT_NAME));
+        }
+        @Test
+        @DisplayName("잘못된 토큰")
+        void wrongToken() throws Exception {
+            mockMvc.perform(TestSnippet.secured(get(url).param("labelName", "testLabel"), "testToken", objectMapper, labelDto))
+                    .andExpect(status().isBadRequest())
+                    .andDo(print())
                     .andDo(document(DOCUMENT_NAME));
         }
     }
