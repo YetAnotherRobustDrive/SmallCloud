@@ -154,7 +154,7 @@ export default function ModalFileview(props) {
             {isLabelEditOpen &&
                     <ModalGetString
                         defaultValue={fileData.labels}
-                        title={"라벨 수정"}
+                        title={"라벨 수정하기"}
                         placeholder={"#라벨1 #라벨2 #라벨3"}
                         setter={setNewLabels}
                         isOpen={isLabelEditOpen}

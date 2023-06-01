@@ -1,4 +1,5 @@
 import React from "react";
+import { AiOutlineClose } from 'react-icons/ai';
 import Modal from 'react-modal';
 import '../../css/modal.css';
 
@@ -32,7 +33,10 @@ export default function ModalGetString(props) {
     return (
         <Modal isOpen={props.isOpen} style={modalStyle}>
             <div className="modalOuter">
-                <span>{props.title}</span>
+                <div className="modalShareHeader">
+                    <span className="title">{props.title}</span>
+                    <div className="close" onClick={handleClose}><AiOutlineClose /></div>
+                </div>
                 <input
                     defaultValue={props.defaultValue}
                     type="text"
@@ -40,7 +44,6 @@ export default function ModalGetString(props) {
                     onKeyDown={handleKeyDown}
                     autoFocus
                 />
-                <div className="getStrClose" onClick={handleClose}>닫기</div>
             </div>
         </Modal>
     )
