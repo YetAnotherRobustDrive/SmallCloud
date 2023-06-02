@@ -6,33 +6,27 @@
     position: relative;
 }
 
+.CustomIcon:hover {
+    cursor: pointer;
+    top: -5px;
+}
+
+.CustomIcon .icon .real {
+    display: flex;
+    align-items: start;
+    justify-content: start;
+}
+
+.CustomIcon .icon .real[name="file"] {
+    font-size: 70px;
+}
+
 .CustomIcon .dropzone{
     position: absolute;
     width: 70%;
     height: 70%;
     margin-top: 10%;
-    z-index: 9999;
-}
-
-.CustomIcon:hover {
-    z-index: 98;
-    border-radius: 4px;
-}
-
-.CustomIcon:hover > .name{
-    border-radius: 4px;
-    padding: 10px;
-    font-size: 20px;
-    left: -15px;
-}
-
-.CustomIcon:hover > .icon{
-    font-size: 90px;
-}
-
-.CustomIcon:hover > .icon .labels{
-    font-size: 14px;
-    width: 90px;
+    z-index: 999;
 }
 
 .CustomIcon .icon {
@@ -68,7 +62,7 @@
 .CustomIcon .name {
     display: block;
     position: relative;
-    font-size: 16px;
+    font-size: 12px;
     min-width: 110px;
     overflow:hidden;
     text-overflow: ellipsis;

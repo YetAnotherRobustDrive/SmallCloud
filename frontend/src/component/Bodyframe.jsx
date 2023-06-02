@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import '../css/bodyframe.css'
 import ContextBody from "./contextMenu/ContextBody";
 
@@ -6,6 +6,13 @@ export default function BodyFrame(props) {
     const hasContext = (props.hasContext === true ? true : false);
     const [isContextOpen, setIsContextOpen] = useState(false);
 
+    useEffect(() => {
+        const context = window.document.getElementById("context");
+
+        context.style.width = "0";
+        context.style.height = "0";
+
+    }, [])
     const handleContext = (e) => {
         e.preventDefault();
         if (!hasContext) return;
@@ -13,9 +20,11 @@ export default function BodyFrame(props) {
         const context = window.document.getElementById("context");
         const newX = (e.clientX - 220 - 5);
         const newY = (e.clientY - 75 - 5);
+        context.style.width = "100px";
+        context.style.height = "fit-content";
 
-        context.style.left = (e.clientX + context.offsetWidth < window.innerWidth ? newX : newX - 100) + "px";
-        context.style.top = (e.clientY + context.offsetHeight < window.innerHeight ? newY : newY - 100) + "px";
+        context.style.left = (e.clientX + context.offsetWidth < window.innerWidth ? newX : newX - context.offsetWidth) + "px";
+        context.style.top = (e.clientY + context.offsetHeight < window.innerHeight ? newY : newY - context.offsetHeight) + "px";
         isContextOpen ? setIsContextOpen(false) : setIsContextOpen(true);
     }
 
@@ -23,7 +32,7 @@ export default function BodyFrame(props) {
         <>
             <div className="bodyframe" onContextMenu={handleContext}>
                 {hasContext &&
-                    <div id="context" className="contextMenu" onMouseLeave={() => setIsContextOpen(false)}>
+                    <div id="context" className="contextMenu" onMouseLeave={() => setIsContextOpen(false)} >
                         {isContextOpen && <ContextBody />}
                     </div>
                 }

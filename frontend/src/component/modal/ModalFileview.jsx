@@ -59,6 +59,8 @@ export default function ModalFileview(props) {
                 <div className="fileview" >
                     <div className='head'>
                         <span className='filename'>{fileData.name}</span>
+                    </div>
+                    <div className='head'>
                         <div className="fileBtn">
                             <div className='icon' onClick={handleShare}><BsFillShareFill /></div>
                             <div className='icon' onClick={handleDownload}><GoCloudDownload /></div>

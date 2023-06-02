@@ -76,26 +76,6 @@ export default function MainPage() {
             <Header />
             <Sidebar />
             <BodyFrame hasContext={true}>
-                <BodyHeader text="공유 파일" />
-                <NarrowBox>
-                    {
-                        files.map((data) => {
-                            return <CustomIcon
-                                onClick={() => {
-                                    setSelected(data);
-                                    setIsFileView(true);
-                                }}
-                                targetSetter={setTarget}
-                                sourceSetter={setSource}
-                                key={data.id}
-                                id={data.id}
-                                name={data.name}
-                                type={data.type}
-                                stage={data.writingStage}
-                                secu={data.securityLevel} />
-                        })
-                    }
-                </NarrowBox>
                 <BodyHeader text="내 파일" addon={setIsGrid} view={isGrid} />
                 {isGrid &&
                     <GridBox height="calc(100vh - 299px)">
@@ -134,7 +114,30 @@ export default function MainPage() {
                     </>
                 }
                 <UploadBtn />
+
+                <BodyHeader text="공유 파일" />
+                <NarrowBox>
+                    {
+                        files.map((data) => {
+                            return <CustomIcon
+                                onClick={() => {
+                                    setSelected(data);
+                                    setIsFileView(true);
+                                }}
+                                noContext={true}
+                                targetSetter={setTarget}
+                                sourceSetter={setSource}
+                                key={data.id}
+                                id={data.id}
+                                name={data.name}
+                                type={data.type}
+                                stage={data.writingStage}
+                                secu={data.securityLevel} />
+                        })
+                    }
+                </NarrowBox>
             </BodyFrame>
+            
             {isFileView && (
                 <>
                     <ModalFileview
