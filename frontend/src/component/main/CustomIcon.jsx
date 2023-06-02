@@ -89,11 +89,13 @@ export default function CustomIcon(props) {
 
     return (
         <>
-            <div id={"context" + props.id} className="contextMenu" onMouseLeave={() => {setIsContextOpen(false)}}>
-                {isContextOpen &&
-                    contextMenu
-                }
-            </div>
+            {props.noContext !== true &&
+                <div id={"context" + props.id} className="contextMenu" onMouseLeave={() => { setIsContextOpen(false) }}>
+                    {isContextOpen &&
+                        contextMenu
+                    }
+                </div>
+            }
             <div className="CustomIcon" draggable>
                 <label className="dropzone"
                     htmlFor="icon"
