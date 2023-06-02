@@ -2,12 +2,16 @@ import React, { useEffect, useState } from "react";
 import { FcFile, FcFolder } from 'react-icons/fc';
 import { useNavigate } from "react-router-dom";
 import '../../css/customIcon.css';
+import ContextFile from "../contextMenu/ContextFile";
+import ContextFolder from "../contextMenu/ContextFolder";
 
 export default function CustomIcon(props) {
 
     const [icon, setIcon] = useState(null);
     const [left, setLeft] = useState(null);
     const [right, setRight] = useState(null);
+    const [isContextOpen, setIsContextOpen] = useState(false);
+
     const navigate = useNavigate();
 
     const handleOnClick = (e) => {
@@ -55,7 +59,7 @@ export default function CustomIcon(props) {
     const handelDrop = (e) => {
         e.preventDefault();
         if (props.type === "folder") {
-            props.targetSetter(props.id);            
+            props.targetSetter(props.id);
         }
     }
 
@@ -67,23 +71,49 @@ export default function CustomIcon(props) {
         e.preventDefault();
     }
 
+    const handleOnContextMenu = (e) => {
+        e.preventDefault();
+        e.stopPropagation(); 
+        isContextOpen ? setIsContextOpen(false) : setIsContextOpen(true);
+        const context = window.document.getElementById("context" + props.id);
+        const newX = (e.clientX - 220 - 5);
+        const newY = (e.clientY - 75 - 5);
+        context.style.width = "100px";
+        context.style.height = "fit-content";
+
+        context.style.left = (e.clientX + context.offsetWidth < window.innerWidth ? newX : newX - context.offsetWidth) + "px";
+        context.style.top = (e.clientY + context.offsetHeight < window.innerHeight ? newY : newY - context.offsetHeight) + "px";
+    }
+
+    const contextMenu = (props.type == "file" ? <ContextFile fileID={props.id} /> : <ContextFolder folderID={props.id} />);
+
     return (
-        <div className="CustomIcon"  draggable>
-            <label className="dropzone"
-                htmlFor="icon"
-                onClick={handleOnClick}
-                onDragEnd={handelDragEnd}
-                onDragOver={handelDragOver}
-                onDrop={handelDrop} draggable/>
-            <div className="icon">
-                {icon}
-                <div className="labels">
-                    <div className="left">{left}</div>
-                    <div className="right">{right}</div>
-                </div>
+        <>
+            <div id={"context" + props.id} className="contextMenu" onMouseLeave={() => {setIsContextOpen(false)}}>
+                {isContextOpen &&
+                    contextMenu
+                }
             </div>
-            <span className="name">{props.name}</span>
-        </div>
+            <div className="CustomIcon" draggable>
+                <label className="dropzone"
+                    htmlFor="icon"
+                    onContextMenu={handleOnContextMenu}
+                    onClick={handleOnClick}
+                    onDragEnd={handelDragEnd}
+                    onDragOver={handelDragOver}
+                    onDrop={handelDrop} draggable />
+                <div className="icon">
+                    <div className="real" name={props.type}>
+                        {icon}
+                    </div>
+                    <div className="labels">
+                        <div className="left">{left}</div>
+                        <div className="right">{right}</div>
+                    </div>
+                </div>
+                <span className="name">{props.name}</span>
+            </div>
+        </>
     )
 
 } 

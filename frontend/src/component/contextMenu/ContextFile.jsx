@@ -1,52 +1,38 @@
 import React, { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
-import GetRootDir from "../../services/directory/GetRootDir";
-import PostNewDir from "../../services/directory/PostNewDir";
+import '../../css/context.css';
+import PostNewDirName from "../../services/directory/PostNewDirName";
 import ModalGetString from "../modal/ModalGetString";
-import '../../css/context.css'
 
-export default function ContextBody() {
+export default function ContextFile(props) {
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [isFail, setIsFail] = useState();
     const [message, setMessage] = useState();
     const [newName, setNewName] = useState();
-    const params = useParams();
 
     useEffect(() => {
-        const mkFile = async () => {
-            let curr = params.fileID;
-            if (curr === undefined) {     
-                const rootIDRes = await GetRootDir();
-                if (!rootIDRes[0]) {
-                    setIsFail(true);
-                    setMessage(rootIDRes[1]);
-                    return;
-                }    
-                curr = rootIDRes[1];
-            }
-            const res = await PostNewDir(curr, newName);
+        const rename = async () => {
+            const res = await PostNewDirName(props.folderID, newName);
             if (!res[0]) {
                 setIsFail(true);
-                setMessage(res[1]); 
-                return;               
+                setMessage(res[1]);
+                return;
             }
             window.location.reload();
         }
         if (newName !== undefined && newName !== "") {
-            mkFile();
+            rename();
         }
     }, [newName])
 
     const options = [
-        { label: "폴더 생성", onClick: () => setIsModalOpen(true) },
     ];
 
     return (
         <>
             {isModalOpen &&
                 <ModalGetString
-                    title={"폴더 생성"}
-                    placeholder={"폴더 이름"}
+                    title={"폴더 이름 바꾸기"}
+                    placeholder={"새 이름"}
                     setter={setNewName}
                     isOpen={isModalOpen}
                     after={() => setIsModalOpen(false)}
