@@ -15,13 +15,7 @@ import org.springframework.stereotype.Service;
 public class LabelThrowerService {
     private final LabelRepository labelRepository;
 
-    public void checkExistsByLabelName(String labelName, Member owner) {
-        if(labelRepository.existsByNameAndOwner(labelName, owner))
-            throw new ServiceException(ExceptionStatus.ALREADY_EXISTS_LABEL);
-    }
-
-    public void checkNotExistsByLabelName(String labelName, Member owner) {
-        if(!labelRepository.existsByNameAndOwner(labelName, owner))
-            throw new ServiceException(ExceptionStatus.NOT_FOUND_LABEL);
+    public boolean checkExistsByLabelName(String labelName, Member owner) {
+        return labelRepository.existsByNameAndOwner(labelName, owner);
     }
 }

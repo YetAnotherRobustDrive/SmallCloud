@@ -1,13 +1,9 @@
 package org.mint.smallcloud.file.contoller;
 
-import java.io.InputStream;
-import java.net.URLEncoder;
-import java.nio.charset.StandardCharsets;
-import java.util.Optional;
-
-import javax.servlet.http.HttpServletRequest;
-
-
+import lombok.Builder;
+import lombok.Getter;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.mint.smallcloud.bucket.dto.FileObjectDto;
 import org.mint.smallcloud.bucket.service.StorageService;
 import org.mint.smallcloud.exception.ExceptionStatus;
@@ -18,7 +14,7 @@ import org.mint.smallcloud.file.domain.FileType;
 import org.mint.smallcloud.file.domain.Folder;
 import org.mint.smallcloud.file.repository.FileRepository;
 import org.mint.smallcloud.file.repository.FolderRepository;
-import org.mint.smallcloud.file.service.DirectoryService;
+import org.mint.smallcloud.label.service.LabelService;
 import org.mint.smallcloud.security.UserDetailsProvider;
 import org.mint.smallcloud.user.domain.Member;
 import org.mint.smallcloud.user.repository.MemberRepository;
@@ -29,19 +25,16 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.server.ResponseStatusException;
 
-import lombok.Builder;
-import lombok.Getter;
-import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
+import javax.servlet.http.HttpServletRequest;
+import java.io.InputStream;
+import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
+import java.util.List;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("/files")
@@ -53,6 +46,7 @@ public class FileController {
     private final FileRepository fileRepository;
     private final UserDetailsProvider userDetailsProvider;
     private final MemberRepository memberRepository;
+    private final LabelService labelService;
 
     @Builder
     @Getter
@@ -147,7 +141,15 @@ public class FileController {
             .contentType(mediaType)
             .body(new InputStreamResource(stream));
     }
-    
+
+    @PostMapping("{fileId}/update/label")
+    public ResponseEntity<?> updateLabel(@RequestParam List<String> labels, @RequestParam("fileId") Long fileId) {
+        String userName = userDetailsProvider
+                .getUserDetails().orElseThrow(() -> new ServiceException(ExceptionStatus.NO_PERMISSION)).getUsername();
+        labelService.updateFile(fileId, labels, userName);
+        return  ResponseEntity.ok().build();
+    }
+
     private String encode(String fileName) {
         try {
             return URLEncoder.encode(fileName, StandardCharsets.UTF_8.toString());

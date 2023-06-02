@@ -5,12 +5,10 @@ import lombok.extern.slf4j.Slf4j;
 import org.mint.smallcloud.exception.ExceptionStatus;
 import org.mint.smallcloud.exception.ServiceException;
 import org.mint.smallcloud.file.domain.DataNode;
-import org.mint.smallcloud.file.dto.DataNodeLabelDto;
 import org.mint.smallcloud.file.repository.DataNodeRepository;
 
 import org.mint.smallcloud.label.domain.Label;
-import org.mint.smallcloud.label.dto.LabelDto;
-import org.mint.smallcloud.label.dto.LabelFilesDto;
+
 import org.mint.smallcloud.label.repository.LabelRepository;
 import org.mint.smallcloud.user.domain.Member;
 import org.mint.smallcloud.user.dto.UserLabelDto;
@@ -29,80 +27,53 @@ public class LabelService {
     private final DataNodeRepository dataNodeRepository;
     private final MemberThrowerService memberThrowerService;
 
-    public void register(LabelDto labelDto, String userName) {
-        Member member = memberThrowerService.getMemberByUsername(userName);
-        if (labelDto.getFile() == null)
-            throw new ServiceException(ExceptionStatus.FILE_NOT_FOUND);
-        if (labelDto.getOwner()==null)
+    public void register(String labelName, UserLabelDto userLabelDto, DataNode dataNode, Member member) {
+        if (userLabelDto==null)
             throw new ServiceException(ExceptionStatus.NOT_FOUND_OWNER);
-        DataNode dataNode = dataNodeRepository.findById(labelDto.getFile().getId())
-                        .orElseThrow(() -> new ServiceException(ExceptionStatus.FILE_NOT_FOUND));
-        labelThrowerService.checkExistsByLabelName(labelDto.getName(), member);
         Label label = Label.of(
-                labelDto.getName(),
+                labelName,
                 member);
         label.addFile(dataNode);
-        labelRepository.save(label);
+        if(!labelThrowerService.checkExistsByLabelName(labelName, member))
+            labelRepository.save(label);
     }
 
-    public void deregister(LabelDto labelDto, String userName) {
-        Member member = memberThrowerService.getMemberByUsername(userName);
-        labelThrowerService.checkNotExistsByLabelName(labelDto.getName(), member);
-        Label label = labelRepository.findByNameAndOwner(labelDto.getName(), member);
-        List<DataNode> dataNodeFiles = dataNodeRepository.findByAuthor(member);
-        dataNodeFiles.forEach(s -> s.deleteLabel(label));
-        labelRepository.delete(label);
-    }
 
-    public void remove(LabelDto labelDto, String userName) {
-        Member member = memberThrowerService.getMemberByUsername(userName);
-        DataNode dataNode = dataNodeRepository.findById(labelDto.getFile().getId())
-                .orElseThrow(() -> new ServiceException(ExceptionStatus.FILE_NOT_FOUND));
-        labelThrowerService.checkNotExistsByLabelName(labelDto.getName(), member);
-        Label label = labelRepository.findByNameAndOwner(labelDto.getName(), member);
+    public void remove(String labelName, DataNode dataNode, Member member) {
+        Label label = labelRepository.findByNameAndOwner(labelName, member);
         label.deleteFile(dataNode);
     }
 
-    public void attach(LabelDto labelDto, String userName) {
+    /**
+     * 파일 : 라벨1, 라벨2, 라벨3
+     * temp = 파일
+     * labels : 라벨1, new1, new2
+
+     * 파일 - labels : 라벨2, 라벨3 (빼야 하는거)
+     * labels - temp : new1, new2 (더해야 하는거)
+     */
+    public void updateFile(Long fileId, List<String> labels, String userName) {
         Member member = memberThrowerService.getMemberByUsername(userName);
-        if (labelDto.getFile() == null)
-            throw new ServiceException(ExceptionStatus.FILE_NOT_FOUND);
-        if (labelDto.getOwner()==null)
-            throw new ServiceException(ExceptionStatus.NOT_FOUND_OWNER);
-        DataNode dataNode = dataNodeRepository.findById(labelDto.getFile().getId())
+        DataNode dataNode = dataNodeRepository.findById(fileId)
                 .orElseThrow(() -> new ServiceException(ExceptionStatus.FILE_NOT_FOUND));
-        labelThrowerService.checkExistsByLabelName(labelDto.getName(), member);
-        Label label = Label.of(
-                labelDto.getName(),
-                member);
-        label.addFile(dataNode);
-    }
-
-    public LabelFilesDto findLabel(String labelName, String userName) {
-
-        Member member = memberThrowerService.getMemberByUsername(userName);
-        labelThrowerService.checkNotExistsByLabelName(labelName, member);
-        Label label = labelRepository.findByNameAndOwner(labelName, member);
-        List<DataNode> dataNode = label.getFiles();
-        List<DataNodeLabelDto> dataNodeLabelDtos = new ArrayList<>();
-        dataNode.forEach(e -> {
-            DataNodeLabelDto dataNodeLabelDto = DataNodeLabelDto.builder()
-                    .id(e.getId())
-                    .name(e.getName())
-                    .createdDate(e.getCreatedDate())
-                    .parentFolderId(e.getParentFolder().getId())
-                    .build();
-            dataNodeLabelDtos.add(dataNodeLabelDto);
+        List<Label> labelList = new ArrayList<>();
+        labels.forEach(e -> {
+            labelList.add(labelRepository.findByNameAndOwner(e, member));
         });
-
-        UserLabelDto userLabelDto = UserLabelDto.builder()
-                .nickname(member.getNickname())
-                .username(member.getUsername())
-                .build();
-        return LabelFilesDto.builder()
-                .name(label.getName())
-                .owner(userLabelDto)
-                .file(dataNodeLabelDtos)
-                .build();
+        List<Label> tempLabels = dataNode.getLabels();
+        // delete
+        dataNode.getLabels().removeAll(labelList);
+        dataNode.getLabels().forEach(s -> {
+            remove(s.getName(), dataNode, member);
+        });
+        // register
+        labelList.removeAll(tempLabels);
+        labelList.forEach(e -> {
+            UserLabelDto userLabelDto = UserLabelDto.builder()
+                    .nickname(member.getNickname())
+                    .username(member.getUsername())
+                    .build();
+            register(e.getName(), userLabelDto, dataNode, member);
+        });
     }
 }
