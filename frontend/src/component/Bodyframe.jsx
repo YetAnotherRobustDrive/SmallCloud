@@ -7,6 +7,7 @@ export default function BodyFrame(props) {
     const [isContextOpen, setIsContextOpen] = useState(false);
 
     useEffect(() => {
+        if (!hasContext) return;
         const context = window.document.getElementById("context");
 
         context.style.width = "0";
