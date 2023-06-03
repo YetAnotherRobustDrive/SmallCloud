@@ -142,7 +142,7 @@ public class FileController {
             .body(new InputStreamResource(stream));
     }
 
-    @PostMapping("{fileId}/update/label")
+    @PostMapping("/{fileId}/update/label")
     public ResponseEntity<?> updateLabel(@RequestParam List<String> labels, @RequestParam("fileId") Long fileId) {
         String userName = userDetailsProvider
                 .getUserDetails().orElseThrow(() -> new ServiceException(ExceptionStatus.NO_PERMISSION)).getUsername();

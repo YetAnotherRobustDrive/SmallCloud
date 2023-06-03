@@ -11,6 +11,7 @@ import org.mint.smallcloud.file.domain.DataNode;
 import org.mint.smallcloud.file.domain.FileLocation;
 import org.mint.smallcloud.file.domain.FileType;
 import org.mint.smallcloud.file.domain.Folder;
+import org.mint.smallcloud.label.domain.Label;
 import org.mint.smallcloud.security.dto.UserDetailsDto;
 import org.mint.smallcloud.security.jwt.dto.JwtTokenDto;
 import org.mint.smallcloud.security.jwt.tokenprovider.JwtTokenProvider;
@@ -20,6 +21,7 @@ import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMock
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.restdocs.RestDocumentationContextProvider;
 import org.springframework.restdocs.RestDocumentationExtension;
+import org.springframework.restdocs.payload.RequestFieldsSnippet;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.transaction.annotation.Transactional;
@@ -33,6 +35,10 @@ import javax.persistence.PersistenceContext;
 
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.documentationConfiguration;
+import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.get;
+import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.post;
+import static org.springframework.restdocs.payload.PayloadDocumentation.fieldWithPath;
+import static org.springframework.restdocs.payload.PayloadDocumentation.requestFields;
 import static org.springframework.restdocs.request.RequestDocumentation.parameterWithName;
 import static org.springframework.restdocs.request.RequestDocumentation.requestParameters;
 import static org.springframework.security.test.web.servlet.setup.SecurityMockMvcConfigurers.springSecurity;
@@ -97,13 +103,15 @@ class FileControllerTest {
 
     @Nested
     @DisplayName("/files/{fileId}/update/label docs")
-    class Label {
+    class labelUpdate {
         private final String url =  URL_PREFIX + "/{fileId}/update/label";
         private Folder parent;
         private DataNode dataNode;
         private DataNode dataNode1;
-        private org.mint.smallcloud.label.domain.Label label;
+        private DataNode noDataNode;
+        private Label label;
         private MultiValueMap<String, String> info;
+        private MultiValueMap<String, String> info1;
 
         @BeforeEach
         public void boot() {
@@ -112,25 +120,34 @@ class FileControllerTest {
             em.persist(parent);
             em.flush();
 
-            label = org.mint.smallcloud.label.domain.Label.of("testName", member);
+            label = Label.of("testName", member);
+            em.persist(label);
+            em.flush();
 
             dataNode = DataNode.createFile(rootFolder, fileType, fileLocation, 100L, member);
             dataNode1 = DataNode.createFile(parent, fileType, fileLocation, 100L, member);
             dataNode1.addLabel(label);
+            noDataNode = null;
             em.persist(dataNode);
             em.persist(dataNode1);
             em.flush();
+
             info = new LinkedMultiValueMap<>();
-        }
-        @DisplayName("정상 요청")
-        @Test
-        void ok() throws Exception {
             info.add("labels", "testLabel1");
             info.add("labels", "testLabel2");
             info.add("labels", "testLabel3");
             info.add("fileId", dataNode.getId().toString());
-            mockMvc.perform(TestSnippet.securePost(url, memberToken.getAccessToken())
-                            .params(info))
+
+            info1 = new LinkedMultiValueMap<>();
+            info1.add("labels", "testLabel1");
+            info1.add("labels", "testLabel2");
+            info1.add("labels", "testLabel3");
+            info1.add("fileId", "100");
+        }
+        @DisplayName("정상 요청(파일에 라벨이 하나도 없을 때)")
+        @Test
+        void okNoLabels() throws Exception {
+            mockMvc.perform(TestSnippet.secured(post(url, dataNode.getId()).params(info), memberToken.getAccessToken()))
                     .andExpect(status().isOk())
                     .andDo(print())
                     .andDo(document(DOCUMENT_NAME,
@@ -139,15 +156,39 @@ class FileControllerTest {
                                     parameterWithName("fileId").description("업데이트할 파일 id")
                             )));
         }
+
+        @DisplayName("정상 요청(파일에 라벨이 일부 존재할 때)")
+        @Test
+        void okSomeLabels() throws Exception {
+            mockMvc.perform(TestSnippet.secured(post(url, dataNode1.getId()).params(info), memberToken.getAccessToken()))
+                    .andExpect(status().isOk())
+                    .andDo(print())
+                    .andDo(document(DOCUMENT_NAME));
+        }
+
+        @DisplayName("파일이 없을 때")
+        @Test
+        void noFile() throws Exception {
+            mockMvc.perform(TestSnippet.secured(post(url, dataNode.getId()).params(info1), memberToken.getAccessToken()))
+                    .andExpect(status().isForbidden())
+                    .andDo(print())
+                    .andDo(document(DOCUMENT_NAME));
+        }
+        @Test
+        @DisplayName("잘못된 토큰")
+        void wrongToken() throws Exception {
+            mockMvc.perform(TestSnippet.secured(post(url, dataNode.getId()).params(info), "testWrongToken"))
+                    .andExpect(status().isForbidden())
+                    .andDo(document(DOCUMENT_NAME));
+        }
+
         /**
          * 폴더에도 라벨 붙이기
-         * 파일에 라벨이 하나도 없을 때 붙이기
-         * 파일에 라벨이 일부 존재할 때 붙이기
-         * 파일에 라벨이 일부 존재할 때 제거
-         * 파일에 라벨이 하나도 없을 때 제거
+         * 파일에 라벨이 하나도 없을 때  ㅇ
+         * 파일에 라벨이 일부 존재할 때  ㅇ
          *
-         * 파일이 없을 때
-         * 토큰이 잘못 됐을 때
+         * 파일이 없을 때 ------
+         * 토큰이 잘못 됐을 때 ㅇ
          */
     }
 }

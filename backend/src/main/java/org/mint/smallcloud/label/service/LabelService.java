@@ -17,6 +17,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Slf4j
 @Service
@@ -52,28 +53,23 @@ public class LabelService {
      * 파일 - labels : 라벨2, 라벨3 (빼야 하는거)
      * labels - temp : new1, new2 (더해야 하는거)
      */
+
     public void updateFile(Long fileId, List<String> labels, String userName) {
         Member member = memberThrowerService.getMemberByUsername(userName);
         DataNode dataNode = dataNodeRepository.findById(fileId)
                 .orElseThrow(() -> new ServiceException(ExceptionStatus.FILE_NOT_FOUND));
-        List<Label> labelList = new ArrayList<>();
-        labels.forEach(e -> {
-            labelList.add(labelRepository.findByNameAndOwner(e, member));
-        });
-        List<Label> tempLabels = dataNode.getLabels();
-        // delete
-        dataNode.getLabels().removeAll(labelList);
-        dataNode.getLabels().forEach(s -> {
-            remove(s.getName(), dataNode, member);
-        });
-        // register
-        labelList.removeAll(tempLabels);
-        labelList.forEach(e -> {
-            UserLabelDto userLabelDto = UserLabelDto.builder()
-                    .nickname(member.getNickname())
-                    .username(member.getUsername())
-                    .build();
-            register(e.getName(), userLabelDto, dataNode, member);
-        });
+        dataNode.getLabels().stream()
+                .filter(label -> !labels.contains(label.getName()))
+                .forEach(label -> remove(label.getName(), dataNode, member));
+        List<String> tempLabelsName = dataNode.getLabels().stream().map(Label::getName).collect(Collectors.toList());
+        labels.stream()
+                .filter(label -> !tempLabelsName.contains(label))
+                .forEach(label -> {
+                    UserLabelDto userLabelDto = UserLabelDto.builder()
+                            .nickname(member.getNickname())
+                            .username(member.getUsername())
+                            .build();
+                    register(label, userLabelDto, dataNode, member);
+                });
     }
 }
