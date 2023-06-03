@@ -1,16 +1,14 @@
 import React, { useEffect, useRef, useState } from "react";
-import { useNavigate } from 'react-router-dom'
-import "../../css/sidebar.css"
-import { FcFolder, FcFile } from 'react-icons/fc'
+import { FcFile, FcFolder } from 'react-icons/fc';
+import { useNavigate } from 'react-router-dom';
+import "../../css/sidebar.css";
 import GetRootDir from "../../services/directory/GetRootDir";
-import GetSubFileList from "../../services/directory/GetSubFileList";
 import GetSubDirList from "../../services/directory/GetSubDirList";
 
 export default function Filetree() {
 
   const [datas, setDatas] = useState();
   const navigate = useNavigate();
-  const ref = useRef();
 
   useEffect(() => {
     const render = async () => {
@@ -63,7 +61,8 @@ export default function Filetree() {
   }
   return (
     <div className="filetree">
-      {datas}
+      {datas ? 
+      <div style={{ textAlign: "center", marginTop: "20px" }}>파일이 없습니다.</div>  : datas}
     </div>
   )
 }
