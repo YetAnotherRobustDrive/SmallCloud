@@ -7,7 +7,7 @@ import GetSubDirList from "../../services/directory/GetSubDirList";
 
 export default function Filetree() {
 
-  const [datas, setDatas] = useState();
+  const [datas, setDatas] = useState([]);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -61,7 +61,7 @@ export default function Filetree() {
   }
   return (
     <div className="filetree">
-      {datas ? 
+      {datas.length === 0 ? 
       <div style={{ textAlign: "center", marginTop: "20px" }}>파일이 없습니다.</div>  : datas}
     </div>
   )
