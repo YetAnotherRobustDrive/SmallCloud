@@ -5,6 +5,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.mint.smallcloud.exception.ExceptionStatus;
 import org.mint.smallcloud.exception.ServiceException;
 import org.mint.smallcloud.file.domain.DataNode;
+import org.mint.smallcloud.file.dto.LabelUpdateDto;
 import org.mint.smallcloud.file.repository.DataNodeRepository;
 
 import org.mint.smallcloud.label.domain.Label;
@@ -54,15 +55,15 @@ public class LabelService {
      * labels - temp : new1, new2 (더해야 하는거)
      */
 
-    public void updateFile(Long fileId, List<String> labels, String userName) {
+    public void updateFile(LabelUpdateDto labelUpdateDto, String userName) {
         Member member = memberThrowerService.getMemberByUsername(userName);
-        DataNode dataNode = dataNodeRepository.findById(fileId)
+        DataNode dataNode = dataNodeRepository.findById(labelUpdateDto.getFileId())
                 .orElseThrow(() -> new ServiceException(ExceptionStatus.FILE_NOT_FOUND));
         dataNode.getLabels().stream()
-                .filter(label -> !labels.contains(label.getName()))
+                .filter(label -> !labelUpdateDto.getLabels().contains(label.getName()))
                 .forEach(label -> remove(label.getName(), dataNode, member));
         List<String> tempLabelsName = dataNode.getLabels().stream().map(Label::getName).collect(Collectors.toList());
-        labels.stream()
+        labelUpdateDto.getLabels().stream()
                 .filter(label -> !tempLabelsName.contains(label))
                 .forEach(label -> {
                     UserLabelDto userLabelDto = UserLabelDto.builder()

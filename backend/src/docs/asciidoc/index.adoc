@@ -30,3 +30,8 @@ include::topping/directories.adoc[]
 == 공유 관련 (share)
 
 include::topping/share.adoc[]
+
+[[files]]
+== 파일 관련 (files)
+
+include::topping/file.adoc[]
