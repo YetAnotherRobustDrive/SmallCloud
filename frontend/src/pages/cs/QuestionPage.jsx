@@ -6,7 +6,6 @@ import BodyHeader from "../../component/main/BodyHeader";
 import SidebarCS from "../../component/sidebar/SidebarCS";
 
 import ModalOk from "../../component/modal/ModalOk";
-import datas from "../../fakeJSON/FAQ.json";
 import GetUserInfo from "../../services/user/GetUserInfo";
 
 import '../../css/cs.css';
@@ -17,6 +16,7 @@ export default function QuestionPage() {
     const [isFail, setIsFail] = useState(false);
     const [isOK, setIsok] = useState(false);
     const [message, setMessage] = useState("일시적인 오류가 발생했습니다.");
+    const [myQuestion, setMyQuestion] = useState([]);
 
     const handleSubmit = async (e) => {
         e.preventDefault();
@@ -68,7 +68,7 @@ export default function QuestionPage() {
                 <BodyHeader text="내 문의 내역" />
                 <div style={{ overflow: "scroll", overflowX: "hidden", height: "calc(100vh - 579px)" }}>
                     {
-                        datas.map((data) => {
+                        myQuestion.map((data) => {
                             return <ExtendBox key={data.id} title={data.title}>{data.content}</ExtendBox>
                         })
                     }
