@@ -12,6 +12,7 @@ import org.mint.smallcloud.file.domain.File;
 import org.mint.smallcloud.file.domain.FileLocation;
 import org.mint.smallcloud.file.domain.FileType;
 import org.mint.smallcloud.file.domain.Folder;
+import org.mint.smallcloud.file.dto.LabelUpdateDto;
 import org.mint.smallcloud.file.repository.FileRepository;
 import org.mint.smallcloud.file.repository.FolderRepository;
 import org.mint.smallcloud.label.service.LabelService;
@@ -24,6 +25,7 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.config.web.servlet.FormLoginDsl;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -142,11 +144,11 @@ public class FileController {
             .body(new InputStreamResource(stream));
     }
 
-    @PostMapping("/{fileId}/update/label")
-    public ResponseEntity<?> updateLabel(@RequestParam List<String> labels, @RequestParam("fileId") Long fileId) {
+    @PostMapping("/update/label")
+    public ResponseEntity<?> updateLabel(@RequestBody LabelUpdateDto labelUpdateDto) {
         String userName = userDetailsProvider
                 .getUserDetails().orElseThrow(() -> new ServiceException(ExceptionStatus.NO_PERMISSION)).getUsername();
-        labelService.updateFile(fileId, labels, userName);
+        labelService.updateFile(labelUpdateDto, userName);
         return  ResponseEntity.ok().build();
     }
 

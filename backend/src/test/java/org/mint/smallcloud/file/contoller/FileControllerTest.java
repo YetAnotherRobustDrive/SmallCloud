@@ -11,6 +11,7 @@ import org.mint.smallcloud.file.domain.DataNode;
 import org.mint.smallcloud.file.domain.FileLocation;
 import org.mint.smallcloud.file.domain.FileType;
 import org.mint.smallcloud.file.domain.Folder;
+import org.mint.smallcloud.file.dto.LabelUpdateDto;
 import org.mint.smallcloud.label.domain.Label;
 import org.mint.smallcloud.security.dto.UserDetailsDto;
 import org.mint.smallcloud.security.jwt.dto.JwtTokenDto;
@@ -32,6 +33,9 @@ import org.springframework.web.filter.CharacterEncodingFilter;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.documentationConfiguration;
@@ -67,6 +71,9 @@ class FileControllerTest {
     private FileLocation fileLocation;
     private Folder rootFolder;
     private DataNode dataNode;
+    private LabelUpdateDto labelUpdateDto;
+    private LabelUpdateDto labelUpdateDto1;
+    private List<String> labels = new ArrayList<>();
 
     @BeforeEach
     void setUp(WebApplicationContext webApplicationContext, RestDocumentationContextProvider restDocumentation) {
@@ -99,19 +106,28 @@ class FileControllerTest {
         em.flush();
         rootFolder.addChild(dataNode);
 
+        labels.add("testLabel1");
+        labels.add("testLabel2");
+        labels.add("testLabel3");
+        labelUpdateDto = LabelUpdateDto.builder()
+                .fileId(dataNode.getId())
+                .labels(labels)
+                .build();
+        labelUpdateDto1 = LabelUpdateDto.builder()
+                .fileId(100L)
+                .labels(labels)
+                .build();
+
     }
 
     @Nested
-    @DisplayName("/files/{fileId}/update/label docs")
+    @DisplayName("/files/update/label docs")
     class labelUpdate {
-        private final String url =  URL_PREFIX + "/{fileId}/update/label";
+        private final String url =  URL_PREFIX + "/update/label";
         private Folder parent;
         private DataNode dataNode;
         private DataNode dataNode1;
-        private DataNode noDataNode;
         private Label label;
-        private MultiValueMap<String, String> info;
-        private MultiValueMap<String, String> info1;
 
         @BeforeEach
         public void boot() {
@@ -127,40 +143,28 @@ class FileControllerTest {
             dataNode = DataNode.createFile(rootFolder, fileType, fileLocation, 100L, member);
             dataNode1 = DataNode.createFile(parent, fileType, fileLocation, 100L, member);
             dataNode1.addLabel(label);
-            noDataNode = null;
             em.persist(dataNode);
             em.persist(dataNode1);
             em.flush();
-
-            info = new LinkedMultiValueMap<>();
-            info.add("labels", "testLabel1");
-            info.add("labels", "testLabel2");
-            info.add("labels", "testLabel3");
-            info.add("fileId", dataNode.getId().toString());
-
-            info1 = new LinkedMultiValueMap<>();
-            info1.add("labels", "testLabel1");
-            info1.add("labels", "testLabel2");
-            info1.add("labels", "testLabel3");
-            info1.add("fileId", "100");
         }
         @DisplayName("정상 요청(파일에 라벨이 하나도 없을 때)")
         @Test
         void okNoLabels() throws Exception {
-            mockMvc.perform(TestSnippet.secured(post(url, dataNode.getId()).params(info), memberToken.getAccessToken()))
+            RequestFieldsSnippet payload = requestFields(
+                    fieldWithPath("fileId").description("파일의 id를 담고 있습니다."),
+                    fieldWithPath("labels").description("파일에 등록할 라벨 리스트를 담고 있습니다."));
+            mockMvc.perform(TestSnippet.secured(post(url),
+                            memberToken.getAccessToken(), objectMapper, labelUpdateDto))
                     .andExpect(status().isOk())
                     .andDo(print())
-                    .andDo(document(DOCUMENT_NAME,
-                            requestParameters(
-                                    parameterWithName("labels").description("업데이트할 라벨 리스트"),
-                                    parameterWithName("fileId").description("업데이트할 파일 id")
-                            )));
+                    .andDo(document(DOCUMENT_NAME, payload));
         }
 
         @DisplayName("정상 요청(파일에 라벨이 일부 존재할 때)")
         @Test
         void okSomeLabels() throws Exception {
-            mockMvc.perform(TestSnippet.secured(post(url, dataNode1.getId()).params(info), memberToken.getAccessToken()))
+            mockMvc.perform(TestSnippet.secured(post(url),
+                            memberToken.getAccessToken(), objectMapper, labelUpdateDto))
                     .andExpect(status().isOk())
                     .andDo(print())
                     .andDo(document(DOCUMENT_NAME));
@@ -169,7 +173,8 @@ class FileControllerTest {
         @DisplayName("파일이 없을 때")
         @Test
         void noFile() throws Exception {
-            mockMvc.perform(TestSnippet.secured(post(url, dataNode.getId()).params(info1), memberToken.getAccessToken()))
+            mockMvc.perform(TestSnippet.secured(post(url),
+                            memberToken.getAccessToken(), objectMapper, labelUpdateDto1))
                     .andExpect(status().isForbidden())
                     .andDo(print())
                     .andDo(document(DOCUMENT_NAME));
@@ -177,18 +182,10 @@ class FileControllerTest {
         @Test
         @DisplayName("잘못된 토큰")
         void wrongToken() throws Exception {
-            mockMvc.perform(TestSnippet.secured(post(url, dataNode.getId()).params(info), "testWrongToken"))
+            mockMvc.perform(TestSnippet.secured(post(url),
+                            "testWrongToken", objectMapper, labelUpdateDto))
                     .andExpect(status().isForbidden())
                     .andDo(document(DOCUMENT_NAME));
         }
-
-        /**
-         * 폴더에도 라벨 붙이기
-         * 파일에 라벨이 하나도 없을 때  ㅇ
-         * 파일에 라벨이 일부 존재할 때  ㅇ
-         *
-         * 파일이 없을 때 ------
-         * 토큰이 잘못 됐을 때 ㅇ
-         */
     }
 }
