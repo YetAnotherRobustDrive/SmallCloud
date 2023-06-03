@@ -7,6 +7,7 @@ import org.mint.smallcloud.file.domain.DataNode;
 import org.mint.smallcloud.user.domain.Member;
 
 import javax.persistence.*;
+import java.util.ArrayList;
 import java.util.List;
 
 @Table(name = "LABELS")
@@ -33,7 +34,7 @@ public class Label {
         joinColumns = @JoinColumn(name = "LABEL_ID"),
         inverseJoinColumns = @JoinColumn(name = "DATA_NODE_ID")
     )
-    private List<DataNode> files;
+    private List<DataNode> files = new ArrayList<>();
 
     protected Label(String name, Member owner) {
         this.name = name;
