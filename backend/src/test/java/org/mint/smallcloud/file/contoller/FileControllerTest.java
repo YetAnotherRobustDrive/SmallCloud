@@ -73,7 +73,9 @@ class FileControllerTest {
     private DataNode dataNode;
     private LabelUpdateDto labelUpdateDto;
     private LabelUpdateDto labelUpdateDto1;
+    private LabelUpdateDto labelUpdateDto2;
     private List<String> labels = new ArrayList<>();
+    private List<String> labels1 = new ArrayList<>();
 
     @BeforeEach
     void setUp(WebApplicationContext webApplicationContext, RestDocumentationContextProvider restDocumentation) {
@@ -109,6 +111,8 @@ class FileControllerTest {
         labels.add("testLabel1");
         labels.add("testLabel2");
         labels.add("testLabel3");
+
+        labels1.add("testLabel1");
         labelUpdateDto = LabelUpdateDto.builder()
                 .fileId(dataNode.getId())
                 .labels(labels)
@@ -128,6 +132,7 @@ class FileControllerTest {
         private DataNode dataNode;
         private DataNode dataNode1;
         private Label label;
+        private Label label1;
 
         @BeforeEach
         public void boot() {
@@ -136,16 +141,26 @@ class FileControllerTest {
             em.persist(parent);
             em.flush();
 
-            label = Label.of("testName", member);
+            label = Label.of("testLabel1", member);
             em.persist(label);
+            em.flush();
+
+            label1 = Label.of("testLabel2", member);
+            em.persist(label1);
             em.flush();
 
             dataNode = DataNode.createFile(rootFolder, fileType, fileLocation, 100L, member);
             dataNode1 = DataNode.createFile(parent, fileType, fileLocation, 100L, member);
             dataNode1.addLabel(label);
+            dataNode1.addLabel(label1);
             em.persist(dataNode);
             em.persist(dataNode1);
             em.flush();
+
+            labelUpdateDto2 =  LabelUpdateDto.builder()
+                    .fileId(dataNode1.getId())
+                    .labels(labels1)
+                    .build();
         }
         @DisplayName("정상 요청(파일에 라벨이 하나도 없을 때)")
         @Test
@@ -164,7 +179,7 @@ class FileControllerTest {
         @Test
         void okSomeLabels() throws Exception {
             mockMvc.perform(TestSnippet.secured(post(url),
-                            memberToken.getAccessToken(), objectMapper, labelUpdateDto))
+                            memberToken.getAccessToken(), objectMapper, labelUpdateDto2))
                     .andExpect(status().isOk())
                     .andDo(print())
                     .andDo(document(DOCUMENT_NAME));
