@@ -11,6 +11,7 @@ import ProgressBar from "../../component/updown/ProgressBar"
 import ModalEmpty from "./ModalEmpty";
 import ModalAddShare from "./ModalAddShare";
 import ModalGetString from "./ModalGetString";
+import PostLabelFile from "../../services/file/PostLabelFile";
 
 export default function ModalFileview(props) {
     const [isFileOpen, setIsFileOpen] = useState(false);
@@ -47,7 +48,7 @@ export default function ModalFileview(props) {
             newLables.split(/\s|#/).filter(Boolean).forEach(async (label) => {
                 labelsForPost.push(label);
             });
-            console.log([...new Set(labelsForPost)]);
+            PostLabelFile(fileData.id, [...new Set(labelsForPost)]);
         }
         editLabel();
     }, [newLables])
