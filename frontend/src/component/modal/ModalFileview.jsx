@@ -5,7 +5,7 @@ import { AiOutlineClose } from "react-icons/ai";
 import { MdOpenInFull } from "react-icons/md";
 import { GoCloudDownload } from 'react-icons/go'
 import { TbEdit } from 'react-icons/tb'
-import {BsFillShareFill} from 'react-icons/bs'
+import { BsFillShareFill } from 'react-icons/bs'
 import GetDownloadFile from "../../services/file/GetDownloadFile";
 import ProgressBar from "../../component/updown/ProgressBar"
 import ModalEmpty from "./ModalEmpty";
@@ -42,17 +42,22 @@ export default function ModalFileview(props) {
         setIsShareOpen(true);
     }
 
-    useEffect(() => {      
-        const editLabel = () => {
-            const labelsForPost = [];
+    useEffect(() => {
+        const editLabel = async () => {
+            let labelsForPost = [];
             newLables.split(/\s|#/).filter(Boolean).forEach(async (label) => {
                 labelsForPost.push(label);
             });
-            PostLabelFile(fileData.id, [...new Set(labelsForPost)]);
+            labelsForPost = [...new Set(labelsForPost)];
+            if (labelsForPost.length !== 0) {
+                await PostLabelFile(fileData.id, labelsForPost);
+                alert("라벨이 수정되었습니다.");
+                window.location.reload();
+            }
         }
         editLabel();
     }, [newLables])
-            
+
 
     return (
         <>
@@ -88,8 +93,8 @@ export default function ModalFileview(props) {
                                     <span>라벨</span>
                                     <button onClick={handleLabelEdit} className="icon" ><TbEdit /></button>
                                     <div className="label">
-                                        {fileData.labels.length === 0? "없음" : fileData.labels.map((label, index) => {
-                                            return ("#" + label + " ")
+                                        {fileData.labels.length === 0 ? "없음" : fileData.labels.map((label, index) => {
+                                            return ("#" + label.name + " ");
                                         })}
                                     </div>
                                 </div>
@@ -103,18 +108,18 @@ export default function ModalFileview(props) {
                                     <span>파일 형식</span>
                                     <div className="value">
                                         {fileData.name.substring(fileData.name.lastIndexOf(".") + 1, fileData.name.length)}
-                                        </div>
+                                    </div>
                                 </div>
                                 <div className="column">
                                     <span>작성자</span>
                                     <div className="value">
                                         {fileData.authorName}
-                                        </div>
+                                    </div>
                                 </div>
                                 <div className="column">
                                     <span>생성일</span>
                                     <div className="value">
-                                    {fileData.createdDate.substring(0, fileData.createdDate.indexOf("T")).replace(/-/g, ".")}
+                                        {fileData.createdDate.substring(0, fileData.createdDate.indexOf("T")).replace(/-/g, ".")}
                                     </div>
                                 </div>
                             </>
@@ -155,14 +160,16 @@ export default function ModalFileview(props) {
                 />
             }
             {isLabelEditOpen &&
-                    <ModalGetString
-                        defaultValue={fileData.labels}
-                        title={"라벨 수정하기"}
-                        placeholder={"#라벨1 #라벨2 #라벨3"}
-                        setter={setNewLabels}
-                        isOpen={isLabelEditOpen}
-                        after={() => setIsLabelEditOpen(false)}
-                    />
+                <ModalGetString
+                    defaultValue={fileData.labels.map((label, index) => {
+                        return " " + label.name;
+                    })}
+                    title={"라벨 수정하기"}
+                    placeholder={"#라벨1 #라벨2 #라벨3"}
+                    setter={setNewLabels}
+                    isOpen={isLabelEditOpen}
+                    after={() => setIsLabelEditOpen(false)}
+                />
             }
         </>
     )

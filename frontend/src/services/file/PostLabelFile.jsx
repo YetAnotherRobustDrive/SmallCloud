@@ -17,7 +17,7 @@ export default async function PostLabelFile(fileID, value) {
     };
 
     try {
-        const res = await fetch(configData.API_SERVER + "files/" + fileID + '/update/label', model);
+        const res = await fetch(configData.API_SERVER + 'files/update/label', model);
         if (res.status === 200) {
             return [true, ''];  //성공
         }
