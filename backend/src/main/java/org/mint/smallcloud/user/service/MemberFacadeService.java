@@ -13,6 +13,7 @@ import org.mint.smallcloud.user.dto.UserProfileResponseDto;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
+import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -49,6 +50,10 @@ public class MemberFacadeService {
             authThrowerService.checkLoginAdmin();
         }
         return rst;
+    }
+
+    public List<String> search(String q) {
+        return memberService.search(q);
     }
 
     public Long getRootDir(String username) {
