@@ -43,11 +43,11 @@ public class DirectoryController {
         directoryFacadeService.rename(directoryId, dto, user.getUsername());
     }
 
-    // TODO: 여기 아래 3개의 메서드는 라벨이 있어야 구현 가능하다. 이후 구현하자
-
+    @Secured(Roles.S_COMMON)
     @RequestMapping(method = {RequestMethod.GET, RequestMethod.POST}, value = "/{directoryId}/purge")
     public void purge(@PathVariable("directoryId") Long directoryId) {
-        // TODO:
+        UserDetails user = getLoginUser();
+        directoryFacadeService.purge(directoryId, user.getUsername());
     }
 
     @RequestMapping(method = {RequestMethod.GET, RequestMethod.POST}, value = "/{directoryId}/restore")
@@ -57,7 +57,8 @@ public class DirectoryController {
 
     @RequestMapping(method = {RequestMethod.GET, RequestMethod.POST}, value = "/{directoryId}/delete")
     public void delete(@PathVariable("directoryId") Long directoryId) {
-        // TODO:
+        UserDetails user = getLoginUser();
+        directoryFacadeService.delete(directoryId, user.getUsername());
     }
 
     @Secured(Roles.S_COMMON)

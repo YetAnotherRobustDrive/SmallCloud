@@ -220,7 +220,7 @@ class FileControllerTest {
         void noFile() throws Exception {
             mockMvc.perform(TestSnippet.secured(post(url),
                             memberToken.getAccessToken(), objectMapper, labelUpdateDto1))
-                    .andExpect(status().isForbidden())
+                    .andExpect(status().isNotFound())
                     .andDo(print())
                     .andDo(document(DOCUMENT_NAME));
         }
