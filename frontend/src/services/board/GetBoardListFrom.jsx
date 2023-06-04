@@ -18,7 +18,7 @@ export default async function GetBoardListFrom(url) {
             return [true, data];  //성공
         }
         else if (res.status === 404) {
-            return [true, []];  //성공 (없음)
+            return [true, null];  //성공 (없음)
         }
         else {
             throw data; //실패
