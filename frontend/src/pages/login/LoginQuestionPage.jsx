@@ -19,11 +19,11 @@ export default function LoginQuestionPage() {
         e.preventDefault();
 
         const inputData = new FormData(e.target);
-        if (inputData.get("content") == "" || inputData.get("title") == "" || inputData.get("contact") == "") {
+        if (inputData.get("content") === "" || inputData.get("title") === "" || inputData.get("contact") === "") {
             setIsEmpty(true);
             return;
         }
-        else if (inputData.get("check") == null) {
+        else if (inputData.get("check") === null) {
             setIsNotCheck(true);
             return;
         }
@@ -31,7 +31,7 @@ export default function LoginQuestionPage() {
         const value = Object.fromEntries(inputData.entries());
         const res = await PostBoard(value);
         if (!res[0]) {
-            if (typeof res[1] == "object") {
+            if (typeof res[1] === "object") {
                 let tmpMessage = new String();
                 for (const [key, value] of Object.entries(res[1])) {
                     tmpMessage += value + '\n';

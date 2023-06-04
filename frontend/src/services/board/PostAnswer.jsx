@@ -21,6 +21,6 @@ export default async function PostAnswer(value) {
         }
         return [true, ''];
     } catch (data) {
-        return [false, data.message != undefined ? data.message : data];
+        return [false, data.message !== undefined ? data.message : data];
     }
 }

@@ -6,7 +6,7 @@ import SortDropdown from "../dropdown/SortDropdown";
 export default function BodyHeader(props) {
 
     return (
-        <div className="bodyHeader">
+        <div className="bodyHeader" onContextMenu={e => { e.stopPropagation(); e.preventDefault(); }}>
             <div className="text">
                 {props.text}
             </div>

@@ -14,10 +14,10 @@ export default async function GetBoardListFrom(url) {
     try {
         const res = await fetch(configData.API_SERVER + url , model);
         const data = await res.json();
-        if (res.status == 200) {
+        if (res.status === 200) {
             return [true, data];  //성공
         }
-        else if (res.status == 404) {
+        else if (res.status === 404) {
             return [true, null];  //성공 (없음)
         }
         else {

@@ -4,7 +4,7 @@ package org.mint.smallcloud.share.domain;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import org.mint.smallcloud.file.domain.File;
+import org.mint.smallcloud.file.domain.DataNode;
 import org.mint.smallcloud.group.domain.Group;
 import org.mint.smallcloud.user.domain.Member;
 
@@ -30,13 +30,16 @@ public class GroupShare extends Share {
             && ((GroupShare) obj).getId().equals(this.getId());
     }
 
-    protected GroupShare(Group target, File file) {
+    protected GroupShare(Group target, DataNode file) {
         super(file);
         this.target = target;
     }
 
-    public static GroupShare of(Group target, File file) {
-        return new GroupShare(target, file);
+    public static GroupShare of(Group target, DataNode file) {
+        GroupShare rst = new GroupShare(target, file);
+        target.addShare(rst);
+        file.addShare(rst);
+        return rst;
     }
 
     @Override

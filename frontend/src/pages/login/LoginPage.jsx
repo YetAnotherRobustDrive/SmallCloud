@@ -42,7 +42,7 @@ export default function LoginPage() {
             body: JSON.stringify(value),
         };
 
-        if (inputData.get("id") == "" || inputData.get("password") == "") {
+        if (inputData.get("id") === "" || inputData.get("password") === "") {
             setIsEmpty(true);
             return;
         }
@@ -59,7 +59,7 @@ export default function LoginPage() {
             setLoginInfo({isSuccess: true, id: inputData.get("id")});
             return;
         } catch (e) {
-            if (e.message != undefined) setMessage(e.message)
+            if (e.message !== undefined) setMessage(e.message)
             setIsFail(true);
         }
     }

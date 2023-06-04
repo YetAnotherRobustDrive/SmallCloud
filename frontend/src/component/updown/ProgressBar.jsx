@@ -7,7 +7,6 @@ export default function ProgressBar(props){
 
     return (
         <div className="progressBar">
-            <div>{props.name}</div>
             <LinearProgressWithLabel value={props.value} />
         </div>
     )

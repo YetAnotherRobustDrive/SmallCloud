@@ -15,10 +15,10 @@ export default async function AdminRegisterUser(value) {
 
     try {
         const res = await fetch(configData.API_SERVER + 'users', model);
-        if (res.status == 200) {
+        if (res.status === 200) {
             return [true, ''];  //성공
         }
-        else if (res.status == 400) {
+        else if (res.status === 400) {
             const data = await res.json();
             throw "입력 형식 오류입니다.";
         }

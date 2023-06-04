@@ -27,13 +27,13 @@ export default function QuestionPage() {
         inputData.append("contact", "등록된 유저입니다.");
         const value = Object.fromEntries(inputData.entries());
 
-        if (inputData.get("content") == "" || inputData.get("title") == "") {
+        if (inputData.get("content") === "" || inputData.get("title") === "") {
             setIsEmpty(true);
             return;
         }
         const res = await PostBoard(value);
         if (!res[0]) {
-            if (typeof res[1] == "object") {
+            if (typeof res[1] === "object") {
                 let tmpMessage = new String();
                 for (const [key, value] of Object.entries(res[1])) {
                     tmpMessage += value + '\n';

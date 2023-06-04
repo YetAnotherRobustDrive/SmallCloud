@@ -34,12 +34,11 @@ export default function FaqPage() {
             <Header />
             <SidebarCS />
             <BodyFrame>
-                {dataList.length == 0 &&
+                {dataList.length === 0 &&
                     <div className="login" style={{ paddingTop: "10%" }}>등록된 FAQ가 없습니다.</div>
                 }
-                {dataList.length != 0 &&
+                {dataList.length !== 0 &&
                     dataList.map((data) => {
-                        console.log(data);
                         return <ExtendBox key={data.id} title={data.title}>{data.content}</ExtendBox>
                     })
                 }

@@ -1,7 +1,10 @@
 package org.mint.smallcloud.user.service;
 
 import lombok.RequiredArgsConstructor;
+import org.mint.smallcloud.exception.ExceptionStatus;
 import org.mint.smallcloud.exception.ServiceException;
+import org.mint.smallcloud.file.repository.FileRepository;
+import org.mint.smallcloud.file.repository.FolderRepository;
 import org.mint.smallcloud.security.service.AuthThrowerService;
 import org.mint.smallcloud.user.domain.Member;
 import org.mint.smallcloud.user.dto.RegisterDto;
@@ -19,6 +22,7 @@ public class MemberFacadeService {
     private final MemberService memberService;
     private final MemberThrowerService memberThrowerService;
     private final AuthThrowerService authThrowerService;
+    private final FolderRepository folderRepository;
 
     public void delete(String username) {
         memberService.deregisterCommon(username);
@@ -50,5 +54,11 @@ public class MemberFacadeService {
 
     public List<String> search(String q) {
         return memberService.search(q);
+    }
+
+    public Long getRootDir(String username) {
+        return folderRepository.findByParentFolderIsNullAndAuthor(memberThrowerService.getMemberByUsername(username))
+            .orElseThrow(() -> new ServiceException(ExceptionStatus.INTERNAL_SERVER_ERROR))
+            .getId();
     }
 }

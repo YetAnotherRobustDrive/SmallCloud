@@ -43,7 +43,7 @@ export default function PrivatePage() {
             const hour = ("0" + joinDate.getHours()).slice(-2);
             const min = ("0" + joinDate.getMinutes()).slice(-2);
             setJoined(year + "-" + month + "-" + day + ' ' + hour + ':' + min);
-            if (res.group != null)
+            if (res.group !== null)
                 setGroup(res.group);
             if (img === null) {
                 setImg(default_profile_img);
@@ -71,9 +71,9 @@ export default function PrivatePage() {
         console.log("asdfasdf");
     }
 
-    const reader = new FileReader();
     const handleImgChange = (e) => {
         const file = e.target.files[0];
+        const reader = new FileReader();
         reader.readAsDataURL(file);
 
         return new Promise((resolve) => {

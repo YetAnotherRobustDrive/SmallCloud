@@ -25,3 +25,13 @@ include::topping/inquiry.adoc[]
 == 디렉토리 관련 (directories)
 
 include::topping/directories.adoc[]
+
+[[share]]
+== 공유 관련 (share)
+
+include::topping/share.adoc[]
+
+[[files]]
+== 파일 관련 (files)
+
+include::topping/file.adoc[]

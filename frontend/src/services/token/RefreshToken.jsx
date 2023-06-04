@@ -4,8 +4,8 @@ import jwtDecode from "jwt-decode";
 export default async function RefreshToken() {
     const time = Math.ceil(Date.now() / 1000);
     const accessToken = localStorage.getItem("accessToken");
-    if (accessToken == null) {
-        return false;        
+    if (accessToken === null) {
+        return false;
     }
     const accessTokenExp = jwtDecode(accessToken).exp;
 
@@ -17,10 +17,12 @@ export default async function RefreshToken() {
     const refreshTokenExp = jwtDecode(refreshToken).exp;
 
     if (refreshTokenExp < time) {
+        localStorage.removeItem("accessToken");
+        localStorage.removeItem("refreshToken");
         return false;
     }
 
-    let model = {
+    const model = {
         method: "GET",
         headers: {
             "Authorization": "Bearer " + refreshToken,
@@ -30,6 +32,8 @@ export default async function RefreshToken() {
     try {
         const res = await fetch(configData.API_SERVER + 'auth/refresh', model);
         if (!res.ok) {
+            localStorage.removeItem("accessToken");
+            localStorage.removeItem("refreshToken");
             throw new Error('');
         }
         const data = await res.json();

@@ -34,7 +34,7 @@ export default function ModalCheckPW(props) {
     }
 
     const handleSubmit = async (e) => {
-        if (e.key == 'Enter') {
+        if (e.key === 'Enter') {
             const refreshOk = await RefreshToken();
             if(!refreshOk) {
                 window.alert('로그인 정보가 만료되었습니다.');
@@ -46,7 +46,7 @@ export default function ModalCheckPW(props) {
             if (!isOk) { //fail
                 setCount(count + 1);
                 setMessage(message);
-                if (message == 'JWT토큰이 올바르지 않습니다.') {
+                if (message === 'JWT토큰이 올바르지 않습니다.') {
                     window.alert('로그인 정보가 만료되었습니다.');
                     navigate('/login');
                 }

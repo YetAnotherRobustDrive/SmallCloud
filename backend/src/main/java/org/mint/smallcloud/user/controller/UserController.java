@@ -1,10 +1,6 @@
 package org.mint.smallcloud.user.controller;
 
 import lombok.RequiredArgsConstructor;
-import org.mint.smallcloud.ResponseDto;
-import org.mint.smallcloud.exception.ExceptionStatus;
-import org.mint.smallcloud.exception.ServiceException;
-import org.mint.smallcloud.security.UserDetailsProvider;
 import org.mint.smallcloud.user.domain.Roles;
 import org.mint.smallcloud.user.dto.RegisterDto;
 import org.mint.smallcloud.user.dto.UserProfileRequestDto;
@@ -68,4 +64,14 @@ public class UserController {
             .build();
     }
 
+
+    @Secured({Roles.S_COMMON})
+    @GetMapping("/root-dir")
+    public ResponseDto<Long> getRootDir() {
+        return ResponseDto.<Long>builder()
+            .result(memberFacadeService
+                .getRootDir(userDetailsProvider.getUserDetails()
+                    .orElseThrow(() -> new ServiceException(ExceptionStatus.NO_PERMISSION)).getUsername()))
+            .build();
+    }
 }

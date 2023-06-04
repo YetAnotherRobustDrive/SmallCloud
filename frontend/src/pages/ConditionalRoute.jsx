@@ -1,35 +1,33 @@
 import React from 'react';
 import { useSelector } from 'react-redux';
-import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
+import { Route, BrowserRouter as Router, Routes } from 'react-router-dom';
 import LogoutUser from '../services/user/LogoutUser';
 import AdminConfigPage from './admin/AdminConfigPage';
+import AdminFAQUploadPage from './admin/AdminFAQUploadPage';
 import AdminGroupConfigPage from './admin/AdminGroupConfigPage';
+import AdminNoticeUploadPage from './admin/AdminNoticeUploadPage';
 import AdminPage from './admin/AdminPage';
+import AdminPrivacyUploadPage from './admin/AdminPrivacyUploadPage';
 import AdminQuestionList from './admin/AdminQuestionList';
+import AdminTermUploadPage from './admin/AdminTermUploadPage';
 import AdminUserCtrlPage from './admin/AdminUserCtrlPage';
 import AdminUserRegister from './admin/AdminUserRegister';
 import ErrorPage from './common/ErrorPage';
+import FavoritesPage from './common/FavoritesPage';
 import FolderPage from './common/FolderPage';
 import MainPage from './common/MainPage';
+import TrashBinPage from './common/TrashBinPage';
 import FaqPage from './cs/FaqPage';
 import NoticePage from './cs/NoticePage';
 import QuestionPage from './cs/QuestionPage';
 import TermsPage from './cs/TermsPage';
-import DownloadPage from './load/DownloadPage';
-import UploadPage from './load/UploadPage';
 import LoginPage from './login/LoginPage';
 import LoginQuestionPage from './login/LoginQuestionPage';
 import RegisterPage from './login/RegisterPage';
-import FavoritesPage from './main/FavoritesPage';
-import TrashBinPage from './main/TrashBinPage';
 import MyPage from './mypage/MyPage';
 import PrivatePage from './mypage/PrivatePage';
 import SecurityInfoPage from './mypage/SecurityInfoPage';
 import ServiceInfoPage from './mypage/ServiceInfoPage';
-import AdminNoticeUploadPage from './admin/AdminNoticeUploadPage';
-import AdminFAQUploadPage from './admin/AdminFAQUploadPage';
-import AdminTermUploadPage from './admin/AdminTermUploadPage';
-import AdminPrivacyUploadPage from './admin/AdminPrivacyUploadPage';
 
 export default () => {
     const isPrivileged = useSelector(state => state.token.isPrivileged);
@@ -55,9 +53,6 @@ export default () => {
                         <Route path='/mypage' element={isPrivileged ? <PrivatePage /> : <MyPage />} />
                         <Route path='/mypage/service' element={isPrivileged ? <ServiceInfoPage /> : <MyPage />} />
                         <Route path='/mypage/security' element={isPrivileged ? <SecurityInfoPage /> : <MyPage />} />
-
-                        <Route path='/upload' element={<UploadPage />} />
-                        <Route path='/download' element={<DownloadPage />} />
 
                         <Route path='/cs/notice' element={<NoticePage />} />
                         <Route path='/cs/terms' element={<TermsPage />} />
