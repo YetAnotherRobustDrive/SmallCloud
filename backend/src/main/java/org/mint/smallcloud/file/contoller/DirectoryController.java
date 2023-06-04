@@ -50,11 +50,14 @@ public class DirectoryController {
         directoryFacadeService.purge(directoryId, user.getUsername());
     }
 
+    @Secured(Roles.S_COMMON)
     @RequestMapping(method = {RequestMethod.GET, RequestMethod.POST}, value = "/{directoryId}/restore")
     public void restore(@PathVariable("directoryId") Long directoryId) {
-        // TODO:
+        UserDetails user = getLoginUser();
+        directoryFacadeService.restore(directoryId, user.getUsername());
     }
 
+    @Secured(Roles.S_COMMON)
     @RequestMapping(method = {RequestMethod.GET, RequestMethod.POST}, value = "/{directoryId}/delete")
     public void delete(@PathVariable("directoryId") Long directoryId) {
         UserDetails user = getLoginUser();

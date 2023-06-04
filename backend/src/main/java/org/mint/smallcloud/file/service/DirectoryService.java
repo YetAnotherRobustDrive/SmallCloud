@@ -45,10 +45,14 @@ public class DirectoryService {
     }
 
     public void purgeDirectory(Folder folder) {
-
+        folderRepository.delete(folder);
     }
 
     public void deleteDirectory(Folder folder) {
+        /* TODO: Add trash tag */
+    }
 
+    public void restoreDirectory(Folder folder) {
+        /* TODO: Remove trash tag */
     }
 }
