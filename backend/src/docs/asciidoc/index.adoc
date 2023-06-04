@@ -35,3 +35,8 @@ include::topping/share.adoc[]
 == 파일 관련 (files)
 
 include::topping/file.adoc[]
+
+[[group]]
+== 그룹 관련 (group)
+
+include::topping/group.adoc[]

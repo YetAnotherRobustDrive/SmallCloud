@@ -1,0 +1,63 @@
+=== 그룹 만들기
+
+operation::Group/Create/ok[snippets='http-request,request-fields']
+
+==== 성공
+
+operation::Group/Create/ok[snippets='http-response']
+
+=== 그룹 삭제
+
+operation::Group/Delete/ok[snippets='http-response,path-parameters']
+
+==== 성공
+
+operation::Group/Delete/ok[snippets='http-response']
+
+=== 그룹원 추가
+
+operation::Group/AddUser/ok[snippets='http-request,path-parameters']
+
+==== 성공
+
+operation::Group/AddUser/ok[snippets='http-response']
+
+=== 그룹 업데이트
+
+operation::Group/Update/ok[snippets='http-request,request-fields']
+
+==== 성공
+
+operation::Group/Update/ok[snippets='http-response']
+
+=== 그룹원 삭제
+
+operation::Group/DeleteUser/ok[snippets='http-request,path-parameters']
+
+==== 성공
+
+operation::Group/DeleteUser/ok[snippets='http-response']
+
+=== 그룹 트리
+
+operation::Group/GroupTree/ok[snippets='http-request,path-parameters']
+
+==== 성공
+
+operation::Group/GroupTree/ok[snippets='http-response']
+
+=== 그룹원 목록
+
+operation::Group/UserList/ok[snippets='http-request,path-parameters']
+
+==== 성공
+
+operation::Group/UserList/ok[snippets='http-response']
+
+=== 그룹 검색
+
+operation::Group/Search/ok[snippets='http-request,request-parameters']
+
+==== 성공
+
+operation::Group/Search/ok[snippets='http-response']

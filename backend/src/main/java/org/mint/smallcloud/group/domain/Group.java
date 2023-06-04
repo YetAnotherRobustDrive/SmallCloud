@@ -90,7 +90,31 @@ public class Group {
     }
 
     public void setParentGroup(Group parentGroup) {
+        if (getParentGroup() == null) {
+            this.parentGroup = parentGroup;
+            if (parentGroup != null)
+                parentGroup.addSubGroup(this);
+            return;
+        }
+        if (getParentGroup().equals(parentGroup)) return;
+        this.parentGroup.deleteSubGroup(this);
         this.parentGroup = parentGroup;
+        if (parentGroup != null)
+            parentGroup.addSubGroup(this);
+    }
+
+    public void addSubGroup(Group subGroup) {
+        if (!this.subGroups.contains(subGroup)) {
+            this.subGroups.add(subGroup);
+            subGroup.setParentGroup(this);
+        }
+    }
+
+    public void deleteSubGroup(Group subGroup) {
+        if (this.subGroups.contains(subGroup)) {
+            this.subGroups.remove(subGroup);
+            subGroup.setParentGroup(null);
+        }
     }
 
     public void addShare(GroupShare rst) {

@@ -18,6 +18,17 @@ public class TestSnippet {
             .accept(MediaType.APPLICATION_JSON);
     }
 
+    public static MockHttpServletRequestBuilder post(String url, Object... urls) throws JsonProcessingException {
+        return RestDocumentationRequestBuilders.post(url, urls);
+    }
+
+    public static MockHttpServletRequestBuilder post(String url, ObjectMapper objectMapper, Object dto, Object... urls) throws JsonProcessingException {
+        return RestDocumentationRequestBuilders.post(url, urls)
+            .content(objectMapper.writeValueAsString(dto))
+            .contentType(MediaType.APPLICATION_JSON)
+            .accept(MediaType.APPLICATION_JSON);
+    }
+
     public static MockHttpServletRequestBuilder securePost(String url, String token, ObjectMapper objectMapper, Object dto) throws JsonProcessingException {
         return RestDocumentationRequestBuilders.post(url)
             .content(objectMapper.writeValueAsString(dto))
