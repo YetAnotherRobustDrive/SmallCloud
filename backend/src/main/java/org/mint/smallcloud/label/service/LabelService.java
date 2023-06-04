@@ -13,6 +13,7 @@ import org.mint.smallcloud.user.domain.Member;
 import org.mint.smallcloud.user.service.MemberThrowerService;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -59,5 +60,99 @@ public class LabelService {
                     Label labelSaved = register(Label.of(label, member));
                     labelSaved.addFile(dataNode);
                 });
+    }
+
+    public void createDefaultLabels(Member member) {
+        List<String> initLabels = new ArrayList<>();
+        initLabels.add(defaultLabelType.systemDefaultFavorite.toString());
+        initLabels.add(defaultLabelType.systemDefaultFinal.toString());
+        initLabels.add(defaultLabelType.systemDefaultDraft.toString());
+        initLabels.add(defaultLabelType.systemDefaultExpiration.toString());
+        initLabels.add(defaultLabelType.systemDefaultPublic.toString());
+        initLabels.add(defaultLabelType.systemDefaultSecurity.toString());
+        initLabels.add(defaultLabelType.systemDefaultTrash.toString());
+        initLabels.add(defaultLabelType.systemDefaultSensitivity.toString());
+
+        initLabels.forEach(e -> {
+            Label label = Label.of(e, member);
+            labelRepository.save(label);
+        });
+    }
+
+    public void addTrash(DataNode dataNode, Member member) {
+        Label label = labelRepository.findByNameAndOwner(defaultLabelType.systemDefaultTrash.toString(), member);
+        dataNode.addLabel(label);
+    }
+    public void deleteTrash(DataNode dataNode, Member member) {
+        Label label = labelRepository.findByNameAndOwner(defaultLabelType.systemDefaultTrash.toString(), member);
+        dataNode.deleteLabel(label);
+    }
+    public void addFavorite(DataNode dataNode, Member member) {
+        Label label = labelRepository.findByNameAndOwner(defaultLabelType.systemDefaultFavorite.toString(), member);
+        dataNode.addLabel(label);
+    }
+    public void deleteFavorite(DataNode dataNode, Member member) {
+        Label label = labelRepository.findByNameAndOwner(defaultLabelType.systemDefaultFavorite.toString(), member);
+        dataNode.deleteLabel(label);
+    }
+    public void addDraft(DataNode dataNode, Member member) {
+        Label label = labelRepository.findByNameAndOwner(defaultLabelType.systemDefaultDraft.toString(), member);
+        dataNode.addLabel(label);
+    }
+    public void deleteDraft(DataNode dataNode, Member member) {
+        Label label = labelRepository.findByNameAndOwner(defaultLabelType.systemDefaultDraft.toString(), member);
+        dataNode.deleteLabel(label);
+    }
+    public void addExpiration(DataNode dataNode, Member member) {
+        Label label = labelRepository.findByNameAndOwner(defaultLabelType.systemDefaultExpiration.toString(), member);
+        dataNode.addLabel(label);
+    }
+    public void deleteExpiration(DataNode dataNode, Member member) {
+        Label label = labelRepository.findByNameAndOwner(defaultLabelType.systemDefaultExpiration.toString(), member);
+        dataNode.deleteLabel(label);
+    }
+    public void addFinal(DataNode dataNode, Member member) {
+        Label label = labelRepository.findByNameAndOwner(defaultLabelType.systemDefaultFinal.toString(), member);
+        dataNode.addLabel(label);
+    }
+    public void deleteFinal(DataNode dataNode, Member member) {
+        Label label = labelRepository.findByNameAndOwner(defaultLabelType.systemDefaultFinal.toString(), member);
+        dataNode.deleteLabel(label);
+    }
+    public void addSecurity(DataNode dataNode, Member member) {
+        Label label = labelRepository.findByNameAndOwner(defaultLabelType.systemDefaultSecurity.toString(), member);
+        dataNode.addLabel(label);
+    }
+    public void deleteSecurity(DataNode dataNode, Member member) {
+        Label label = labelRepository.findByNameAndOwner(defaultLabelType.systemDefaultSecurity.toString(), member);
+        dataNode.deleteLabel(label);
+    }
+    public void addOpen(DataNode dataNode, Member member) {
+        Label label = labelRepository.findByNameAndOwner(defaultLabelType.systemDefaultPublic.toString(), member);
+        dataNode.addLabel(label);
+    }
+    public void deleteOpen(DataNode dataNode, Member member) {
+        Label label = labelRepository.findByNameAndOwner(defaultLabelType.systemDefaultPublic.toString(), member);
+        dataNode.deleteLabel(label);
+    }
+    public void addSensitivity(DataNode dataNode, Member member) {
+        Label label = labelRepository.findByNameAndOwner(defaultLabelType.systemDefaultSensitivity.toString(), member);
+        dataNode.addLabel(label);
+    }
+    public void deleteSensitivity(DataNode dataNode, Member member) {
+        Label label = labelRepository.findByNameAndOwner(defaultLabelType.systemDefaultSensitivity.toString(), member);
+        dataNode.deleteLabel(label);
+    }
+
+    public enum defaultLabelType {
+        // PREFIX
+        systemDefaultTrash,
+        systemDefaultFavorite,
+        systemDefaultDraft,
+        systemDefaultExpiration,
+        systemDefaultFinal,
+        systemDefaultSecurity,
+        systemDefaultPublic,
+        systemDefaultSensitivity
     }
 }
