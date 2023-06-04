@@ -1,9 +1,12 @@
 package org.mint.smallcloud.group.controller;
 
 import lombok.RequiredArgsConstructor;
+import org.mint.smallcloud.exception.ExceptionStatus;
+import org.mint.smallcloud.exception.ServiceException;
 import org.mint.smallcloud.group.dto.GroupRequestDto;
 import org.mint.smallcloud.group.dto.GroupTreeDto;
 import org.mint.smallcloud.group.service.GroupFacadeService;
+import org.mint.smallcloud.security.UserDetailsProvider;
 import org.mint.smallcloud.user.domain.Roles;
 import org.mint.smallcloud.user.dto.UserProfileResponseDto;
 import org.springframework.security.access.annotation.Secured;
@@ -17,6 +20,7 @@ import java.util.List;
 @RequiredArgsConstructor
 public class GroupController {
     private final GroupFacadeService groupFacadeService;
+    private final UserDetailsProvider userDetailsProvider;
     // create
     @Secured(Roles.S_ADMIN)
     @PostMapping("/create")
@@ -60,5 +64,13 @@ public class GroupController {
     @GetMapping("/{groupName}/user-list")
     public List<UserProfileResponseDto> getUserList(@PathVariable("groupName") String groupName) {
          return groupFacadeService.getUserList(groupName);
+    }
+
+    @GetMapping("/search")
+    public List<String> search(@RequestParam("q") String keyword) {
+        userDetailsProvider
+            .getUserDetails()
+            .orElseThrow(() -> new ServiceException(ExceptionStatus.NO_PERMISSION));
+         return groupFacadeService.search(keyword);
     }
 }
