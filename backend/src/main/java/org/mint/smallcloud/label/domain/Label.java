@@ -68,7 +68,6 @@ public class Label {
         if (!this.files.contains(dataNode)) return;
         this.files.remove(dataNode);
         dataNode.deleteLabel(this);
-
     }
 
     public void setName(String name) {
