@@ -7,12 +7,11 @@ import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mint.smallcloud.TestSnippet;
-import org.mint.smallcloud.file.domain.DataNode;
-import org.mint.smallcloud.file.domain.FileLocation;
-import org.mint.smallcloud.file.domain.FileType;
-import org.mint.smallcloud.file.domain.Folder;
+import org.mint.smallcloud.file.domain.*;
 import org.mint.smallcloud.file.dto.LabelUpdateDto;
+import org.mint.smallcloud.file.repository.FileRepository;
 import org.mint.smallcloud.label.domain.Label;
+import org.mint.smallcloud.label.repository.LabelRepository;
 import org.mint.smallcloud.security.dto.UserDetailsDto;
 import org.mint.smallcloud.security.jwt.dto.JwtTokenDto;
 import org.mint.smallcloud.security.jwt.tokenprovider.JwtTokenProvider;
@@ -23,28 +22,24 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.restdocs.RestDocumentationContextProvider;
 import org.springframework.restdocs.RestDocumentationExtension;
 import org.springframework.restdocs.payload.RequestFieldsSnippet;
+import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.util.LinkedMultiValueMap;
-import org.springframework.util.MultiValueMap;
 import org.springframework.web.context.WebApplicationContext;
 import org.springframework.web.filter.CharacterEncodingFilter;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
-
 import java.util.ArrayList;
 import java.util.List;
 
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.documentationConfiguration;
-import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.get;
 import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.post;
 import static org.springframework.restdocs.payload.PayloadDocumentation.fieldWithPath;
 import static org.springframework.restdocs.payload.PayloadDocumentation.requestFields;
-import static org.springframework.restdocs.request.RequestDocumentation.parameterWithName;
-import static org.springframework.restdocs.request.RequestDocumentation.requestParameters;
 import static org.springframework.security.test.web.servlet.setup.SecurityMockMvcConfigurers.springSecurity;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -53,6 +48,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @AutoConfigureMockMvc
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @Transactional
+@ActiveProfiles("test")
 class FileControllerTest {
     @Autowired
     private ObjectMapper objectMapper;
@@ -76,6 +72,12 @@ class FileControllerTest {
     private LabelUpdateDto labelUpdateDto2;
     private List<String> labels = new ArrayList<>();
     private List<String> labels1 = new ArrayList<>();
+
+    @Autowired
+    LabelRepository labelRepository;
+
+    @Autowired
+    FileRepository fileRepository;
 
     @BeforeEach
     void setUp(WebApplicationContext webApplicationContext, RestDocumentationContextProvider restDocumentation) {
@@ -113,14 +115,7 @@ class FileControllerTest {
         labels.add("testLabel3");
 
         labels1.add("testLabel1");
-        labelUpdateDto = LabelUpdateDto.builder()
-                .fileId(dataNode.getId())
-                .labels(labels)
-                .build();
-        labelUpdateDto1 = LabelUpdateDto.builder()
-                .fileId(100L)
-                .labels(labels)
-                .build();
+        labels1.add("testLabel4");
 
     }
 
@@ -157,6 +152,16 @@ class FileControllerTest {
             em.persist(dataNode1);
             em.flush();
 
+            labelUpdateDto = LabelUpdateDto.builder()
+                    .fileId(dataNode.getId())
+                    .labels(labels)
+                    .build();
+
+            labelUpdateDto1 = LabelUpdateDto.builder()
+                    .fileId(100L)
+                    .labels(labels)
+                    .build();
+
             labelUpdateDto2 =  LabelUpdateDto.builder()
                     .fileId(dataNode1.getId())
                     .labels(labels1)
@@ -168,19 +173,44 @@ class FileControllerTest {
             RequestFieldsSnippet payload = requestFields(
                     fieldWithPath("fileId").description("파일의 id를 담고 있습니다."),
                     fieldWithPath("labels").description("파일에 등록할 라벨 리스트를 담고 있습니다."));
-            mockMvc.perform(TestSnippet.secured(post(url),
-                            memberToken.getAccessToken(), objectMapper, labelUpdateDto))
+            mockMvc.perform(
+                            TestSnippet.secured(post(url),
+                                    memberToken.getAccessToken(), objectMapper, labelUpdateDto))
                     .andExpect(status().isOk())
+                    .andExpect((rst) -> {
+                        List<Label> labels = labelRepository.findAll();
+                        assertThat(labels.size()).isEqualTo(3);
+                        assertThat(labels.get(0).getName()).isEqualTo("testLabel1");
+                        assertThat(labels.get(1).getName()).isEqualTo("testLabel2");
+                        assertThat(labels.get(2).getName()).isEqualTo("testLabel3");
+                    })
+                    .andExpect((rst) -> {
+                        File file = fileRepository.findById(labelUpdateDto.getFileId()).get();
+                        assertThat(file.getLabels().size()).isEqualTo(3);
+                    })
                     .andDo(print())
                     .andDo(document(DOCUMENT_NAME, payload));
         }
 
-        @DisplayName("정상 요청(파일에 라벨이 일부 존재할 때)")
+        @DisplayName("정상 요청(라벨 있는 파일에서 라벨 변경)")
         @Test
         void okSomeLabels() throws Exception {
             mockMvc.perform(TestSnippet.secured(post(url),
                             memberToken.getAccessToken(), objectMapper, labelUpdateDto2))
                     .andExpect(status().isOk())
+                    .andExpect((rst) -> {
+                        List<Label> labels = labelRepository.findAll();
+                        assertThat(labels.size()).isEqualTo(3);
+                        assertThat(labels.get(0).getName()).isEqualTo("testLabel1");
+                        assertThat(labels.get(1).getName()).isEqualTo("testLabel2");
+                        assertThat(labels.get(2).getName()).isEqualTo("testLabel4");
+                    })
+                    .andExpect((rst) -> {
+                        File file = fileRepository.findById(labelUpdateDto2.getFileId()).get();
+                        assertThat(file.getLabels().size()).isEqualTo(2);
+                        assertThat(file.getLabels().get(0).getName()).isEqualTo("testLabel1");
+                        assertThat(file.getLabels().get(1).getName()).isEqualTo("testLabel4");
+                    })
                     .andDo(print())
                     .andDo(document(DOCUMENT_NAME));
         }
