@@ -48,7 +48,7 @@ public class GroupFacadeService {
 
     public void update(String groupName, GroupRequestDto groupRequestDto) {
         Group group = groupThrowerService.getGroupByName(groupName);
-        if (groupRequestDto.getParentName() != null) {
+        if (groupRequestDto.getGroupName() != null) {
             groupThrowerService.checkDuplicateGroupName(groupRequestDto.getGroupName());
             group.setName(groupRequestDto.getGroupName());
         }
@@ -74,6 +74,7 @@ public class GroupFacadeService {
     }
 
     private List<GroupTreeDto> getSubGroups(Group group) {
+        System.out.println(group.getSubGroups().size());
         return group.getSubGroups().stream()
                 .map(subGroup -> GroupTreeDto.builder()
                         .name(subGroup.getName())

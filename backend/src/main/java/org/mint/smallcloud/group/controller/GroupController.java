@@ -24,10 +24,12 @@ public class GroupController {
     // create
     @Secured(Roles.S_ADMIN)
     @PostMapping("/create")
-    public void create(@Valid @RequestBody GroupRequestDto groupRequestDtos) {
-         groupFacadeService.create(groupRequestDtos);
+    public void create(@Valid @RequestBody GroupRequestDto groupRequestDto) {
+         groupFacadeService.create(groupRequestDto);
     }
 
+
+    @Secured(Roles.S_ADMIN)
     @RequestMapping(value = "/{groupName}/delete", method = {RequestMethod.GET, RequestMethod.POST})
     public void delete(@PathVariable("groupName") String groupName) {
          groupFacadeService.delete(groupName);
@@ -42,16 +44,16 @@ public class GroupController {
 
     // update
     @Secured(Roles.S_ADMIN)
-    @PostMapping("/{groupId}/update")
-    public void update(@PathVariable("groupId") String groupId, @Valid @RequestBody GroupRequestDto groupRequestDto) {
-         groupFacadeService.update(groupId, groupRequestDto);
+    @PostMapping("/{groupName}/update")
+    public void update(@PathVariable("groupName") String groupName, @Valid @RequestBody GroupRequestDto groupRequestDto) {
+         groupFacadeService.update(groupName, groupRequestDto);
     }
 
     // deleteUser
     @Secured(Roles.S_ADMIN)
-    @PostMapping("/{groupId}/delete-user/{userId}")
-    public void deleteUser(@PathVariable("groupId") String groupId, @PathVariable("userId") String userId) {
-         groupFacadeService.deleteUser(groupId, userId);
+    @PostMapping("/{groupName}/delete-user/{username}")
+    public void deleteUser(@PathVariable("groupName") String groupName, @PathVariable("username") String username) {
+         groupFacadeService.deleteUser(groupName, username);
     }
 
     // readGroupTree
