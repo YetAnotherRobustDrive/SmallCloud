@@ -5,16 +5,26 @@ import org.mint.smallcloud.ResponseDto;
 import org.mint.smallcloud.exception.ExceptionStatus;
 import org.mint.smallcloud.exception.ServiceException;
 import org.mint.smallcloud.security.UserDetailsProvider;
+import org.mint.smallcloud.user.domain.Member;
 import org.mint.smallcloud.user.domain.Roles;
+import org.mint.smallcloud.user.dto.PhotoDownloadResponseDto;
+import org.mint.smallcloud.user.dto.PhotoUpdateRequestDto;
 import org.mint.smallcloud.user.dto.RegisterDto;
 import org.mint.smallcloud.user.dto.UserProfileRequestDto;
 import org.mint.smallcloud.user.dto.UserProfileResponseDto;
 import org.mint.smallcloud.user.service.MemberFacadeService;
 import org.mint.smallcloud.validation.UserNameValidation;
+import org.springframework.core.io.Resource;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.annotation.Secured;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 import java.util.List;
 
@@ -77,5 +87,40 @@ public class UserController {
                 .getRootDir(userDetailsProvider.getUserDetails()
                     .orElseThrow(() -> new ServiceException(ExceptionStatus.NO_PERMISSION)).getUsername()))
             .build();
+    }
+
+    @Secured({Roles.S_ADMIN, Roles.S_PRIVILEGE})
+    @PostMapping("/profile-photo")
+    public ResponseEntity<Void> updatePhoto(PhotoUpdateRequestDto req)
+        throws Exception {
+        UserDetails user = userDetailsProvider
+            .getUserDetails()
+            .orElseThrow(() -> new ServiceException
+                         (ExceptionStatus.NO_PERMISSION));
+        
+        memberFacadeService.updatePhoto(user.getUsername(),
+                                        req.getImageFile());
+        return ResponseEntity.ok().build();
+    }
+
+    @Secured({Roles.S_COMMON})
+    @GetMapping("/profile-photo")
+    public ResponseEntity<Resource> downloadPhoto() {
+        UserDetails user = userDetailsProvider
+            .getUserDetails()
+            .orElseThrow(() -> new ServiceException
+                         (ExceptionStatus.NO_PERMISSION));
+        
+        PhotoDownloadResponseDto res =
+            memberFacadeService.downloadPhoto(user.getUsername());
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentLength(res.getContentLength());
+        headers.setContentType(MediaType.parseMediaType(res.getContentType()));
+        headers.setPragma("no-cache");
+        headers.setExpires(0);
+        headers.setCacheControl("no-cache, no-store, must-revalidate");
+        return new ResponseEntity<Resource>(res.getPhotoResource(),
+                                            headers,
+                                            HttpStatus.OK);
     }
 }
