@@ -36,15 +36,16 @@ import org.springframework.web.filter.CharacterEncodingFilter;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
-import java.awt.desktop.QuitEvent;
 import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.mint.smallcloud.board.domain.BoardType.*;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.documentationConfiguration;
 import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.get;
-import static org.springframework.restdocs.payload.PayloadDocumentation.*;
+import static org.springframework.restdocs.payload.PayloadDocumentation.fieldWithPath;
+import static org.springframework.restdocs.payload.PayloadDocumentation.requestFields;
 import static org.springframework.restdocs.request.RequestDocumentation.*;
 import static org.springframework.security.test.web.servlet.setup.SecurityMockMvcConfigurers.springSecurity;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
@@ -249,7 +250,7 @@ class BoardControllerTest {
         @Test
         void wrongSelect() throws Exception {
             mockMvc.perform(TestSnippet.secured(get(url, 1000), adminToken.getAccessToken()))
-                .andExpect(status().isForbidden())
+                .andExpect(status().isNotFound())
                 .andDo(document(DOCUMENT_NAME));
         }
 
@@ -598,7 +599,7 @@ class BoardControllerTest {
         void thirdBoard() throws Exception {
             info.add("createdDate", "2");
             mockMvc.perform(TestSnippet.secured(get(url).params(info), memberToken.getAccessToken()))
-                    .andExpect(status().isForbidden())
+                    .andExpect(status().isNotFound())
                     .andDo(document(DOCUMENT_NAME));
         }
         @Test
@@ -606,7 +607,7 @@ class BoardControllerTest {
         void noBoard() throws Exception {
             info1.add("createdDate", "1");
             mockMvc.perform(TestSnippet.secured(get(url).params(info1), memberToken.getAccessToken()))
-                    .andExpect(status().isForbidden())
+                    .andExpect(status().isNotFound())
                     .andDo(document(DOCUMENT_NAME));
         }
         @Test

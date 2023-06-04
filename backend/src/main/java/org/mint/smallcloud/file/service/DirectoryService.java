@@ -43,4 +43,12 @@ public class DirectoryService {
         }
         target.setParentFolder(dest);
     }
+
+    public void purgeDirectory(Folder folder) {
+
+    }
+
+    public void deleteDirectory(Folder folder) {
+
+    }
 }

@@ -134,7 +134,7 @@ class UserControllerTest {
         @Test
         public void notFindUser() throws Exception {
             mockMvc.perform(TestSnippet.secured(post(url, "fewfas"), adminToken.getAccessToken()))
-                .andExpect(status().isForbidden())
+                .andExpect(status().isNotFound())
                 .andDo(document(DOCUMENT_NAME));
         }
     }
@@ -270,7 +270,7 @@ class UserControllerTest {
                 .profileImageLocation(null)
                 .build();
             mockMvc.perform(TestSnippet.secured(post(url, "abc"), adminToken.getAccessToken(), objectMapper, userProfileRequestDto))
-                .andExpect(status().isForbidden())
+                .andExpect(status().isNotFound())
                 .andDo(document(DOCUMENT_NAME));
         }
 
@@ -324,7 +324,7 @@ class UserControllerTest {
         @Test
         void notFoundUser() throws Exception {
             mockMvc.perform(TestSnippet.secured(get(url, "abc"), adminToken.getAccessToken()))
-                .andExpect(status().isForbidden())
+                .andExpect(status().isNotFound())
                 .andDo(document(DOCUMENT_NAME));
         }
 
