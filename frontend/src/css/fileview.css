@@ -172,7 +172,8 @@
     font-size: medium;
     margin-top: auto;
 }
-.fileview .body .shardList {
+
+.fileview .body .shareList {
     width: calc(100% - 20px);
     padding: 5px;
     margin: 5px;
@@ -180,4 +181,41 @@
     flex-direction: column;
     justify-content: center;
     border: 1px solid black;
+}
+
+.fileview .body .shareList .shareItem {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    vertical-align: middle;
+    border-bottom: 1px solid black;
+}
+
+.fileview .body .shareList .shareItem .icon {
+    height: 100%;
+    display: inline-flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 20px;
+}
+
+.fileview .body .shareList .shareItem .name {
+    margin-left: 10px;
+    display: inline-flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 20px;
+}
+
+.share-icon {
+    float: right;
+    margin-top: 10px;
+    margin-right: 10px;
+    font-size: 20px;
+}
+
+.deleteIcon {   
+    margin-left: auto;
+    margin-right: 10px;
+    font-size: 20px;
 }

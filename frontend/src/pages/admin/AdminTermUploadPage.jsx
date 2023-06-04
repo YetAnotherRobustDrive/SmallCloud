@@ -25,7 +25,7 @@ export default function AdminTermUploadPage() {
                 setMessage(res[1]);
                 return;
             }
-            if (res[1].length !== 0) {
+            if (res[1] === null) {
                 setCurr(res[1].content);                
             }
         };

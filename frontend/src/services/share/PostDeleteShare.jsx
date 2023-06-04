@@ -1,7 +1,7 @@
 import RefreshToken from "../token/RefreshToken";
-import configData from "../../config.json";
+import configData from "../../config/config.json"
 
-export default async function PostDeleteShare(value) {
+export default async function PostDeleteShare(fileID, targetName, type) {
     await RefreshToken();
     const accessToken = localStorage.getItem("accessToken");
        
@@ -11,16 +11,20 @@ export default async function PostDeleteShare(value) {
             "Authorization": "Bearer " + accessToken,
             "Content-Type": "application/json"
         },
-        body: JSON.stringify(value),
+        body: JSON.stringify({
+            "fileId" : fileID,
+            "targetName" : targetName,
+            "type" : type,
+        }),
     };
 
     try {
-        const res = await fetch(configData.API_SERVER + "share/create", model);
-        const data = await res.json();
+        const res = await fetch(configData.API_SERVER + "share/delete ", model);
         if (res.status === 200) {
-            return [true, data];  //성공
+            return [true, ''];  //성공
         }
         else {
+            const data = await res.json();
             throw data; //실패
         }
     } catch (e) {

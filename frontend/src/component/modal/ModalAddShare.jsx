@@ -3,6 +3,9 @@ import Modal from 'react-modal';
 import { AiOutlineClose } from 'react-icons/ai'
 import { MdPerson, MdGroups } from 'react-icons/md'
 import '../../css/modal.css'
+import GetSearchUser from "../../services/user/GetSearchUser";
+import GetSearchGroup from "../../services/group/GetSearchGroup";
+import PostCreateShare from "../../services/share/PostCreateShare";
 
 export default function ModalAddShare(props) {
 
@@ -24,14 +27,26 @@ export default function ModalAddShare(props) {
         props.after();
     }
 
-    const handleOnChange = (e) => { //fetch 로 변경
+    const handleOnChange = async (e) =>  {
         if (e.target.value !== "") {
-            setSearched([
-                {
-                    "name": e.target.value,
+            const userSearch = await GetSearchUser(e.target.value);
+            const groupSearch = await GetSearchGroup(e.target.value);
+            if (!userSearch[0] || !groupSearch[0]) {
+                return;
+            }
+            const user = userSearch[1].map((d) => {
+                return {
+                    "name": d,
                     "type": "MEMBER",
                 }
-            ])
+            })
+            const group = groupSearch[1].map((d) => {
+                return {
+                    "name": d,
+                    "type": "GROUP",
+                }
+            })
+            setSearched([...user, ...group]);
         }
         else {
             setSearched([]);
@@ -72,13 +87,19 @@ export default function ModalAddShare(props) {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-        candidate.forEach((d) => {
+        candidate.forEach(async (d) => {
             const data = {
                 "fileId": props.fileID,
                 "targetName": d.name,
                 "type": d.type
             }
-            console.log(data);
+            const res = await PostCreateShare(data);
+            if (!res[0]) {
+                alert(res[1]);
+                return;
+            }
+            alert("공유가 추가되었습니다.");
+            window.location.reload();
         })
     }
 
