@@ -2,7 +2,6 @@ package org.mint.smallcloud.user.service;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.mint.smallcloud.bucket.exception.StorageSettingException;
 import org.mint.smallcloud.bucket.service.StorageService;
 import org.mint.smallcloud.exception.ExceptionStatus;
 import org.mint.smallcloud.exception.ServiceException;
@@ -75,16 +74,6 @@ public class MemberService {
         }
         if (userProfileDto.getNickname() != null && !userProfileDto.getNickname().equals(member.getUsername())) {
             member.setNickname(userProfileDto.getNickname());
-        }
-        if (userProfileDto.getProfileImageLocation() != null && !userProfileDto.getProfileImageLocation().equals(member.getProfileImageLocation())) {
-            try {
-                if (!storageService.isFileExist(userProfileDto.getProfileImageLocation().getLocation()))
-                    throw new ServiceException(ExceptionStatus.FILE_NOT_FOUND);
-            } catch (StorageSettingException e) {
-                e.printStackTrace();
-                throw new ServiceException(ExceptionStatus.INTERNAL_SERVER_ERROR);
-            }
-            member.setProfileImageLocation(member.getProfileImageLocation());
         }
     }
 
