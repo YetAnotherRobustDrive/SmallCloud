@@ -52,7 +52,6 @@ export default function Flow(props) {
                     object.splice(index, 1);
                     return;
                 }
-                item.type = "step";
                 item.id = "reactflow__edge-" + item.source + '-' + item.target;
                 delete item.x;
                 delete item.y;
