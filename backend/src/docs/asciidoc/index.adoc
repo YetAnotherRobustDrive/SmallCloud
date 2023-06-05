@@ -46,3 +46,8 @@ include::topping/group.adoc[]
 
 include::topping/admin.adoc[]
 
+[[label]]
+== 라벨 관련 (label)
+
+include::topping/labels.adoc[]
+
