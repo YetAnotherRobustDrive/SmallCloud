@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import BodyFrame from "../../component/Bodyframe";
 import RuleBox from "../../component/admin/ruleBox";
 import RuleInput from "../../component/admin/ruleInput";
@@ -11,6 +11,10 @@ import default_profile_img from '../../img/defalutProfile.png';
 import AdminGetUserInfo from "../../services/admin/AdminGetUserInfo";
 import GetSearchUser from "../../services/user/GetSearchUser";
 import BodyHeader from "../../component/main/BodyHeader";
+import ModalGetString from "../../component/modal/ModalGetString";
+import AdminInitUserPw from "../../services/admin/AdminInitUserPw";
+import AdminDeactivateUser from "../../services/admin/AdminDeactivateUser";
+import AdminActivateUser from "../../services/admin/AdminActivateUser";
 
 
 export default function AdminUserCtrlPage() {
@@ -19,10 +23,48 @@ export default function AdminUserCtrlPage() {
     const [user, setUser] = useState(null);
     const [joined, setJoined] = useState(null);
     const [searched, setSearched] = useState([]);
+    const [newPw, setNewPw] = useState("");
+    const [isModalOpen, setIsModalOpen] = useState(false);
 
-    const testF = (() => {
-        alert("clicked!");
-    })
+    useEffect(() => {
+        const initPw = async () => {
+            if (newPw === "") {
+                return;
+            }
+            const res = await AdminInitUserPw(user.username, newPw);
+            if (!res[0]) {
+                alert("비밀번호 초기화에 실패했습니다.");
+                return;
+            }
+            alert("비밀번호 초기화에 성공했습니다.");
+        }
+        initPw();
+
+    }, [newPw]);
+
+    const handleDeactivate = async () => {
+        const res = await AdminDeactivateUser(user.username);
+        if (!res[0]) {
+            alert(res[1])
+            return;
+        }
+        alert("사용자 계정 비활성화에 성공했습니다.");
+        setUser(null);
+    }
+
+    const handleActivate = async () => {
+        const res = await AdminActivateUser(user.username);
+        if (!res[0]) {
+            alert(res[1])
+            return;
+        }
+        alert("사용자 계정 활성화에 성공했습니다.");
+        setUser(null);
+    }
+
+    const handlePwInit = async () => {
+        setIsModalOpen(true);
+    }
 
     const handleUserSelect = async (e) => {
         const res = await AdminGetUserInfo(e.target.firstChild.innerHTML);
@@ -72,6 +114,14 @@ export default function AdminUserCtrlPage() {
 
     return (
         <>
+            {isModalOpen &&
+                <ModalGetString
+                    title={"변경할 비밀번호를 입력하세요."}
+                    setter={setNewPw}
+                    isOpen={isModalOpen}
+                    after={() => { setIsModalOpen(false); setUser(null); setNewPw(""); }}
+                />
+            }
             <Header />
             <SidebarAdmin />
             <BodyFrame>
@@ -118,12 +168,12 @@ export default function AdminUserCtrlPage() {
                             <RuleBox
                                 title="사용자 계정 비활성화"
                                 desc="계정을 비활성화합니다.">
-                                <ToggleBtn onClick={testF} />
+                                <ToggleBtn onClick={user.locked ? handleActivate : handleDeactivate} default={user.locked}/>
                             </RuleBox>
                             <RuleBox
                                 title="비밀번호 초기화"
                                 desc="비밀번호를 초기화합니다.">
-                                <button className="initBtn" onClick={testF}>초기화</button>
+                                <button className="initBtn" onClick={handlePwInit}>초기화</button>
                             </RuleBox>
                             <RuleBox
                                 title="계정 만료일 설정"
