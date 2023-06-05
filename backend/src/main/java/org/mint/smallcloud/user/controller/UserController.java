@@ -5,13 +5,8 @@ import org.mint.smallcloud.ResponseDto;
 import org.mint.smallcloud.exception.ExceptionStatus;
 import org.mint.smallcloud.exception.ServiceException;
 import org.mint.smallcloud.security.UserDetailsProvider;
-import org.mint.smallcloud.user.domain.Member;
 import org.mint.smallcloud.user.domain.Roles;
-import org.mint.smallcloud.user.dto.PhotoDownloadResponseDto;
-import org.mint.smallcloud.user.dto.PhotoUpdateRequestDto;
-import org.mint.smallcloud.user.dto.RegisterDto;
-import org.mint.smallcloud.user.dto.UserProfileRequestDto;
-import org.mint.smallcloud.user.dto.UserProfileResponseDto;
+import org.mint.smallcloud.user.dto.*;
 import org.mint.smallcloud.user.service.MemberFacadeService;
 import org.mint.smallcloud.validation.UserNameValidation;
 import org.springframework.core.io.Resource;
@@ -24,7 +19,6 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
-import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 import java.util.List;
 
@@ -122,5 +116,14 @@ public class UserController {
         return new ResponseEntity<Resource>(res.getPhotoResource(),
                                             headers,
                                             HttpStatus.OK);
+    }
+
+    @PostMapping("/password")
+    public void updatePassword(@Valid @RequestBody PasswordUpdateRequestDto dto) {
+        UserDetails user = userDetailsProvider
+            .getUserDetails()
+            .orElseThrow(() -> new ServiceException
+                         (ExceptionStatus.NO_PERMISSION));
+        memberFacadeService.updatePassword(user.getUsername(), dto);
     }
 }
