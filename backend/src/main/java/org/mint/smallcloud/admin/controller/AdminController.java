@@ -5,13 +5,13 @@ import org.mint.smallcloud.admin.dto.ChangePasswordDto;
 import org.mint.smallcloud.admin.service.AdminService;
 import org.mint.smallcloud.user.domain.Roles;
 import org.springframework.security.access.annotation.Secured;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
-
-import javax.validation.Valid;
 
 @RequiredArgsConstructor
 @RestController
 @RequestMapping("/admin")
+@Validated
 public class AdminController {
     private final AdminService adminService;
 
@@ -29,7 +29,10 @@ public class AdminController {
 
     @Secured(Roles.S_ADMIN)
     @PostMapping("/change-password/{username}")
-    public void resetPassword(@PathVariable String username, @Valid @RequestBody ChangePasswordDto dto) {
+    public void resetPassword(
+        @RequestBody ChangePasswordDto dto,
+        @PathVariable String username
+    ) {
         adminService.resetPassword(username, dto);
     }
 }
