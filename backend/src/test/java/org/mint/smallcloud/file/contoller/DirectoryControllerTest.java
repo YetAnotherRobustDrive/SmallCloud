@@ -29,6 +29,7 @@ import javax.persistence.EntityManager;
 import javax.transaction.Transactional;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.documentationConfiguration;
 import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.get;
@@ -38,6 +39,7 @@ import static org.springframework.restdocs.payload.PayloadDocumentation.requestF
 import static org.springframework.restdocs.request.RequestDocumentation.parameterWithName;
 import static org.springframework.restdocs.request.RequestDocumentation.pathParameters;
 import static org.springframework.security.test.web.servlet.setup.SecurityMockMvcConfigurers.springSecurity;
+import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @ExtendWith(RestDocumentationExtension.class)
@@ -517,6 +519,45 @@ class DirectoryControllerTest {
         }
     }
 
+    @Nested
+    @DisplayName("/directory/{directoryId}/purge docs")
+    class Purge {
+        String url = URL_PREFIX + "/{directoryId}/purge";
+        Folder root;
+        Member user1;
+        Folder directory;
+        JwtTokenDto user1Token;
+        @BeforeEach
+        public void boot() {
+            user1 = Member.of("user1", "test", "nick");
+            em.persist(user1);
+            root = Folder.createRoot(user1);
+            em.persist(root);
+            directory = Folder.createFolder(root, "folder1", user1);
+            em.persist(directory);
+            user1Token = jwtTokenProvider.generateTokenDto(UserDetailsDto
+                .builder()
+                .username(user1.getUsername())
+                .password(user1.getPassword())
+                .roles(user1.getRole()).build());
+        }
 
+        @DisplayName("정상 요청")
+        @Test
+        void ok() throws Exception {
+            mockMvc.perform(
+                    TestSnippet.secured(post(url, directory.getId()),
+                        user1Token.getAccessToken()))
+                .andDo(print())
+                .andExpect((rst) -> {
+                    assertNull(folderRepository.findById(directory.getId()).orElse(null));
+                })
+                .andExpect(status().isOk())
+                .andDo(document(DOCUMENT_NAME,
+                    pathParameters(
+                        parameterWithName("directoryId").description("디렉터리 id")
+                    )));
+        }
+    }
 
 }

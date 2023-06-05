@@ -73,4 +73,7 @@ public class Label {
     public void setName(String name) {
         this.name = name;
     }
+    public boolean isTrash() {
+        return this.name.equals(DefaultLabelType.defaultTrash.getLabelName());
+    }
 }

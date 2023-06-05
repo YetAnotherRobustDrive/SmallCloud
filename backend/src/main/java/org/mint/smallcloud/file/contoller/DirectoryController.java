@@ -84,14 +84,14 @@ public class DirectoryController {
     @GetMapping("/{directoryId}/subDirectories")
     public List<DirectoryDto> subDirectories(@PathVariable("directoryId") Long directoryId) {
         UserDetails user = getLoginUser();
-        return directoryFacadeService.subDirectories(directoryId, user.getUsername());
+        return directoryFacadeService.activeSubDirectories(directoryId, user.getUsername());
     }
 
     @Secured(Roles.S_COMMON)
     @GetMapping("/{directoryId}/files")
     public List<FileDto> files(@PathVariable("directoryId") Long directoryId) {
         UserDetails user = getLoginUser();
-        return directoryFacadeService.files(directoryId, user.getUsername());
+        return directoryFacadeService.activeFiles(directoryId, user.getUsername());
     }
 
     private UserDetails getLoginUser() {
