@@ -7,7 +7,6 @@ import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mint.smallcloud.TestSnippet;
-import org.mint.smallcloud.file.domain.FileLocation;
 import org.mint.smallcloud.group.domain.Group;
 import org.mint.smallcloud.security.dto.UserDetailsDto;
 import org.mint.smallcloud.security.jwt.dto.JwtTokenDto;
@@ -216,7 +215,6 @@ class UserControllerTest {
             userProfileRequestDto = UserProfileRequestDto.builder()
                 .username("abc")
                 .nickname("def")
-                .profileImageLocation(FileLocation.of("testLocation"))
                 .build();
         }
 
@@ -234,8 +232,7 @@ class UserControllerTest {
                 .andDo(document(DOCUMENT_NAME,
                     requestFields(
                         fieldWithPath("username").description("바꾸려는 id"),
-                        fieldWithPath("nickname").description("바꾸려는 nickname"),
-                        fieldWithPath("location").description("프로필 이미지 위치")
+                        fieldWithPath("nickname").description("바꾸려는 nickname")
                     ),
                     pathParameters(
                         parameterWithName("username").description("바꾸려고 하는 유저의 id")
@@ -255,7 +252,6 @@ class UserControllerTest {
         void wrongFormat() throws Exception {
             userProfileRequestDto = UserProfileRequestDto.builder()
                 .username("wfoijfijefwijifzzzeijfejfeiwfwj")
-                .profileImageLocation(null)
                 .build();
             mockMvc.perform(TestSnippet.secured(post(url, member1.getUsername()), adminToken.getAccessToken(), objectMapper, userProfileRequestDto))
                 .andExpect(status().isBadRequest())
@@ -267,7 +263,6 @@ class UserControllerTest {
         void notFoundUser() throws Exception {
             userProfileRequestDto = UserProfileRequestDto.builder()
                 .username("abc")
-                .profileImageLocation(null)
                 .build();
             mockMvc.perform(TestSnippet.secured(post(url, "abc"), adminToken.getAccessToken(), objectMapper, userProfileRequestDto))
                 .andExpect(status().isNotFound())
@@ -282,7 +277,6 @@ class UserControllerTest {
             em.flush();
             userProfileRequestDto = UserProfileRequestDto.builder()
                 .username("abc")
-                .profileImageLocation(null)
                 .build();
             mockMvc.perform(TestSnippet.secured(post(url, member1.getUsername()), adminToken.getAccessToken(), objectMapper, userProfileRequestDto))
                 .andExpect(status().isForbidden())

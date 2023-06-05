@@ -82,16 +82,6 @@ public class MemberService {
         if (userProfileDto.getNickname() != null && !userProfileDto.getNickname().equals(member.getUsername())) {
             member.setNickname(userProfileDto.getNickname());
         }
-        if (userProfileDto.getProfileImageLocation() != null && !userProfileDto.getProfileImageLocation().equals(member.getProfileImageLocation())) {
-            try {
-                if (!storageService.isFileExist(userProfileDto.getProfileImageLocation().getLocation()))
-                    throw new ServiceException(ExceptionStatus.FILE_NOT_FOUND);
-            } catch (StorageSettingException e) {
-                e.printStackTrace();
-                throw new ServiceException(ExceptionStatus.INTERNAL_SERVER_ERROR);
-            }
-            member.setProfileImageLocation(member.getProfileImageLocation());
-        }
     }
 
     public void updatePhoto(Member member, MultipartFile file) throws Exception {
