@@ -74,11 +74,15 @@ export default function PrivatePage() {
                 if (res.group !== null)
                     setGroup(res.group);
             }
-            const downloadRes = await downloadImage();
-            if (downloadRes.status !== 200) {
+            try {
+                const downloadRes = await downloadImage();
+                if (downloadRes.status !== 200 || downloadRes === null) {
+                    setImg(default_profile_img);
+                }                
+                setImg(URL.createObjectURL(downloadRes.data));
+            } catch (error) {
                 setImg(default_profile_img);
             }
-            setImg(URL.createObjectURL(downloadRes.data));
             getUserInfo();
         }
         render();
@@ -146,7 +150,6 @@ export default function PrivatePage() {
                     />
                     <EditableColumn
                         title="GROUP"
-                        name="groupName"
                         value={group}
                         disabled={true}
                     />
