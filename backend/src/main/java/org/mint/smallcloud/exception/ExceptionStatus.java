@@ -33,7 +33,7 @@ public enum ExceptionStatus {
     ALREADY_EXISTS_LABEL(HttpStatus.FORBIDDEN, "이미 존재하는 라벨입니다."),
     NOT_FOUND_LABEL(HttpStatus.NOT_FOUND, "라벨을 찾을 수 없습니다."),
     NOT_FOUND_OWNER(HttpStatus.NOT_FOUND, "소유자를 찾을 수 없습니다."),
-    ;
+    USER_LOCKED(HttpStatus.FORBIDDEN, "잠긴 유저입니다.");
 
     ExceptionStatus(HttpStatus status, String message) {
         responseDto = ErrorResponseDto.builder()

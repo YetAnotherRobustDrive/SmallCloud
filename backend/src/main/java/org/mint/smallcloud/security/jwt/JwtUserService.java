@@ -22,7 +22,7 @@ public class JwtUserService {
     private final UserDetailsResolver userdetailsResolver;
 
     public JwtTokenDto login(LoginDto loginDto) {
-        memberService.checkPassword(loginDto);
+        memberService.validLogin(loginDto);
         return jwtTokenProvider.generateTokenDto(
             userdetailsResolver.toUserDetailsDto(
                 userDetailsService.loadUserByUsername(loginDto.getId())

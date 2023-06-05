@@ -38,7 +38,7 @@ public class Member {
     private LocalDateTime changedPasswordDate;
 
     @Column(name = "LOCKED")
-    private boolean locked = false;
+    private boolean locked = true;
 
     @Column(name = "PROFILE_IMAGE_LOCATION")
     private FileLocation profileImageLocation = null;
@@ -76,7 +76,9 @@ public class Member {
     }
 
     public static Member createAdmin(String username, String password, String nickname) {
-        return new Member(username, password, nickname, Role.ADMIN);
+        Member ret = new Member(username, password, nickname, Role.ADMIN);
+        ret.unlock();
+        return ret;
     }
 
     @Override
