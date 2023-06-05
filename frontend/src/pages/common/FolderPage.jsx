@@ -23,10 +23,11 @@ export default function FolderPage() {
     const [selected, setSelected] = useState();
     const [isFail, setIsFail] = useState();
     const [message, setMessage] = useState();
-    const [files, setFiles] = useState([]);
     const [name, setName] = useState([]);
     const [target, setTarget] = useState(0);
     const [source, setSource] = useState(0);
+    const [gridFiles, setGridFiles] = useState([]);
+    const [listFiles, setListFiles] = useState([]);
     const params = useParams();
 
     useEffect(() => {
@@ -44,12 +45,40 @@ export default function FolderPage() {
             if (!subDirRes[0]) {
                 throw subDirRes[1];
             }
-            setFiles([...subDirRes[1], ...subFileRes[1]]);
+            const files = [...subDirRes[1], ...subFileRes[1]];
+            setGridFiles(
+                files.map((data) => {
+                    return <CustomIcon
+                        onClick={() => {
+                            setSelected(data);
+                            setIsFileView(true);
+                        }}
+                        targetSetter={setTarget}
+                        sourceSetter={setSource}
+                        key={data.id}
+                        id={data.id}
+                        name={data.name}
+                        type={data.type}
+                        stage={data.writingStage}
+                        secu={data.securityLevel} />
+                })
+            );
+            setListFiles(
+                files.map((data) => {
+                    return <ListBox
+                        key={data.id}
+                        onClick={() => {
+                            setSelected(data);
+                            setIsFileView(true);
+                        }}
+                        data={data} />
+                })
+            );
         }
         try {
             setIsLoading(true);
             render();
-            setTimeout(() => setIsLoading(false), 500);            
+            setTimeout(() => setIsLoading(false), 500);
         } catch (error) {
             setIsFail(true);
             setMessage(error);
@@ -67,7 +96,7 @@ export default function FolderPage() {
         if (target !== 0 && source !== 0 && target !== source) {
             move();
         }
-    },[target, source])
+    }, [target, source])
 
     return (
         <>
@@ -77,41 +106,15 @@ export default function FolderPage() {
             <BodyFrame hasContext={true}>
                 <BodyHeader text={name} addon={setIsGrid} view={isGrid} />
                 {isGrid &&
-                    <GridBox height="calc(100vh - 117px)">
-                        {
-                            files.map((data) => {
-                                return <CustomIcon
-                                    onClick={() => {
-                                        setSelected(data);
-                                        setIsFileView(true);
-                                    }}
-                                    targetSetter={setTarget}
-                                    sourceSetter={setSource}
-                                    key={data.id}
-                                    id={data.id}
-                                    name={data.name}
-                                    type={data.type}
-                                    stage={data.writingStage}
-                                    secu={data.securityLevel} />
-                            })
-                        }
-                    </GridBox>
+                    (gridFiles.length === 0 ? <div style={{textAlign: "center", marginTop: "20px" }}>파일이 없습니다.</div> :
+                        <GridBox height="calc(100vh - 117px)">
+                            {gridFiles}
+                        </GridBox>)
                 }
                 {!isGrid &&
-                    <>
-                        <div className="listscroll" style={{ height: "calc(100vh - 117px)" }}>{
-                            files.map((data) => {
-                                return <ListBox
-                                    key={data.id}
-                                    onClick={() => {
-                                        setSelected(data);
-                                        setIsFileView(true);
-                                    }}
-                                    data={data} />
-                            })
-                        }
-                        </div>
-                    </>
+                    <div className="listscroll" style={{ height: "calc(100vh - 299px)" }}>
+                        {listFiles.length === 0 ? <div style={{ textAlign: "center", marginTop: "20px" }}>파일이 없습니다.</div> : listFiles}
+                    </div>
                 }
                 <UploadBtn />
             </BodyFrame>

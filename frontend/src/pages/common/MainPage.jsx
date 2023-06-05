@@ -25,9 +25,10 @@ export default function MainPage() {
     const [isFail, setIsFail] = useState();
     const [isLoading, setIsLoading] = useState(true);
     const [message, setMessage] = useState();
-    const [files, setFiles] = useState([]);
     const [target, setTarget] = useState(0);
     const [source, setSource] = useState(0);
+    const [gridFiles, setGridFiles] = useState([]);
+    const [listFiles, setListFiles] = useState([]);
 
     useEffect(() => {
         const render = async () => {
@@ -52,7 +53,34 @@ export default function MainPage() {
                 setMessage(subDirRes[1]);
                 return;
             }
-            setFiles([...subDirRes[1], ...subFileRes[1]]);
+            const files = [...subDirRes[1], ...subFileRes[1]];
+            setGridFiles(
+                files.map((data) => {
+                    return <CustomIcon
+                        onClick={() => {
+                            setSelected(data);
+                            setIsFileView(true);
+                        }}
+                        targetSetter={setTarget}
+                        sourceSetter={setSource}
+                        key={data.id}
+                        id={data.id}
+                        name={data.name}
+                        type={data.type}
+                        stage={data.writingStage}
+                        secu={data.securityLevel} />
+                })
+            )
+            setListFiles(
+                files.map((data) => {
+                    return <ListBox key={data.id}
+                        onClick={() => {
+                            setSelected(data);
+                            setIsFileView(true);
+                        }}
+                        data={data} />
+                })
+            )
         }
         render();
         setTimeout(() => setIsLoading(false), 500);
@@ -68,7 +96,7 @@ export default function MainPage() {
         if (target !== 0 && source !== 0 && target !== source) {
             move();
         }
-    },[target, source])
+    }, [target, source])
 
     return (
         <>
@@ -78,66 +106,28 @@ export default function MainPage() {
             <BodyFrame hasContext={true}>
                 <BodyHeader text="내 파일" addon={setIsGrid} view={isGrid} />
                 {isGrid &&
-                    <GridBox height="calc(100vh - 299px)">
-                        {
-                            files.map((data) => {
-                                return <CustomIcon
-                                    onClick={() => {
-                                        setSelected(data);
-                                        setIsFileView(true);
-                                    }}
-                                    targetSetter={setTarget}
-                                    sourceSetter={setSource}
-                                    key={data.id}
-                                    id={data.id}
-                                    name={data.name}
-                                    type={data.type}
-                                    stage={data.writingStage}
-                                    secu={data.securityLevel} />
-                            })
-                        }
-                    </GridBox>
+                    (gridFiles.length === 0 ? <div style={{ height: "calc(100vh - 299px)", textAlign: "center", marginTop: "20px" }}>파일이 없습니다.</div> :
+                        <GridBox height="calc(100vh - 299px)">
+                            {gridFiles}
+                        </GridBox>)
                 }
                 {!isGrid &&
                     <>
-                        <div className="listscroll" style={{ height: "calc(100vh - 299px)" }}>{
-                            files.map((data) => {
-                                return <ListBox key={data.id}
-                                    onClick={() => {
-                                        setSelected(data);
-                                        setIsFileView(true);
-                                    }}
-                                    data={data} />
-                            })
-                        }
+                        <div className="listscroll" style={{ height: "calc(100vh - 299px)" }}>
+                            {listFiles.length === 0 ? <div style={{ textAlign: "center", marginTop: "20px" }}>파일이 없습니다.</div> : listFiles}
                         </div>
                     </>
                 }
                 <UploadBtn />
 
                 <BodyHeader text="공유 파일" />
-                <NarrowBox>
-                    {
-                        files.map((data) => {
-                            return <CustomIcon
-                                onClick={() => {
-                                    setSelected(data);
-                                    setIsFileView(true);
-                                }}
-                                noContext={true}
-                                targetSetter={setTarget}
-                                sourceSetter={setSource}
-                                key={data.id}
-                                id={data.id}
-                                name={data.name}
-                                type={data.type}
-                                stage={data.writingStage}
-                                secu={data.securityLevel} />
-                        })
-                    }
-                </NarrowBox>
+                {gridFiles.length === 0 ? <div style={{ textAlign: "center", marginTop: "20px" }}>파일이 없습니다.</div> :
+                    <NarrowBox>
+                        {gridFiles}
+                    </NarrowBox>
+                }
             </BodyFrame>
-            
+
             {isFileView && (
                 <>
                     <ModalFileview

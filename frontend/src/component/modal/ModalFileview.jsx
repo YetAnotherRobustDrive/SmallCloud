@@ -1,15 +1,17 @@
 import React, { useEffect, useState } from "react";
-import '../../css/fileview.css';
-import ModalFileopen from "./ModalFileopen";
 import { AiOutlineClose } from "react-icons/ai";
-import { MdOpenInFull } from "react-icons/md";
-import { GoCloudDownload } from 'react-icons/go'
-import { TbEdit } from 'react-icons/tb'
-import {BsFillShareFill} from 'react-icons/bs'
+import { BsFillShareFill } from 'react-icons/bs';
+import { GoCloudDownload } from 'react-icons/go';
+import { MdGroups, MdOpenInFull, MdPerson } from 'react-icons/md';
+import { TbEdit } from 'react-icons/tb';
+import ProgressBar from "../../component/updown/ProgressBar";
+import '../../css/fileview.css';
 import GetDownloadFile from "../../services/file/GetDownloadFile";
-import ProgressBar from "../../component/updown/ProgressBar"
-import ModalEmpty from "./ModalEmpty";
+import PostLabelFile from "../../services/file/PostLabelFile";
+import PostDeleteShare from "../../services/share/PostDeleteShare";
 import ModalAddShare from "./ModalAddShare";
+import ModalEmpty from "./ModalEmpty";
+import ModalFileopen from "./ModalFileopen";
 import ModalGetString from "./ModalGetString";
 
 export default function ModalFileview(props) {
@@ -20,7 +22,6 @@ export default function ModalFileview(props) {
     const [isGeneralSelected, setIsGeneralSelected] = useState(true);
     const [isNowDownload, setIsNowDownload] = useState(false);
     const [percentage, setPercentage] = useState(0);
-    const [sharedList, setSharedList] = useState([]);
     const fileData = props.file;
 
     const handleDownload = async (e) => {
@@ -41,17 +42,37 @@ export default function ModalFileview(props) {
         setIsShareOpen(true);
     }
 
-    useEffect(() => {      
-        const editLabel = () => {
-            const labelsForPost = [];
+    const handleShareDelete = async (e) => {
+        e.stopPropagation();
+        e.preventDefault();
+        const fileID = fileData.id;
+        const targetName = fileData.shares[e.currentTarget.id].targetName;
+        const type = fileData.shares[e.currentTarget.id].type === "MemberShare" ? "MEMBER" : "GROUP";
+        const res = await PostDeleteShare(fileID, targetName, type);
+        if (!res[0]) {
+            alert(res[1]);
+            return;
+        }
+        alert("공유가 해제되었습니다.");
+        window.location.reload();
+    }
+
+    useEffect(() => {
+        const editLabel = async () => {
+            let labelsForPost = [];
             newLables.split(/\s|#/).filter(Boolean).forEach(async (label) => {
                 labelsForPost.push(label);
             });
-            console.log([...new Set(labelsForPost)]);
+            labelsForPost = [...new Set(labelsForPost)];
+            if (labelsForPost.length !== 0) {
+                await PostLabelFile(fileData.id, labelsForPost);
+                alert("라벨이 수정되었습니다.");
+                window.location.reload();
+            }
         }
         editLabel();
     }, [newLables])
-            
+
 
     return (
         <>
@@ -62,7 +83,6 @@ export default function ModalFileview(props) {
                     </div>
                     <div className='head'>
                         <div className="fileBtn">
-                            <div className='icon' onClick={handleShare}><BsFillShareFill /></div>
                             <div className='icon' onClick={handleDownload}><GoCloudDownload /></div>
                             <div className='icon' onClick={() => setIsFileOpen(true)}><MdOpenInFull /></div>
                             <div className='icon' onClick={() => props.after()}><AiOutlineClose /></div>
@@ -87,8 +107,8 @@ export default function ModalFileview(props) {
                                     <span>라벨</span>
                                     <button onClick={handleLabelEdit} className="icon" ><TbEdit /></button>
                                     <div className="label">
-                                        {fileData.labels.length === 0? "없음" : fileData.labels.map((label, index) => {
-                                            return ("#" + label + " ")
+                                        {fileData.labels.length === 0 ? "없음" : fileData.labels.map((label, index) => {
+                                            return ("#" + label.name + " ");
                                         })}
                                     </div>
                                 </div>
@@ -102,30 +122,39 @@ export default function ModalFileview(props) {
                                     <span>파일 형식</span>
                                     <div className="value">
                                         {fileData.name.substring(fileData.name.lastIndexOf(".") + 1, fileData.name.length)}
-                                        </div>
+                                    </div>
                                 </div>
                                 <div className="column">
                                     <span>작성자</span>
                                     <div className="value">
                                         {fileData.authorName}
-                                        </div>
+                                    </div>
                                 </div>
                                 <div className="column">
                                     <span>생성일</span>
                                     <div className="value">
-                                    {fileData.createdDate.substring(0, fileData.createdDate.indexOf("T")).replace(/-/g, ".")}
+                                        {fileData.createdDate.substring(0, fileData.createdDate.indexOf("T")).replace(/-/g, ".")}
                                     </div>
                                 </div>
                             </>
                         }
                         {!isGeneralSelected && //공유
                             <>
-                                <div>
-                                    <span>현재 공유대상</span>
+                                <div className='share-icon' onClick={handleShare}><BsFillShareFill /></div>
+                                <div style={{ margin: "10px" }}>
+                                    <span>현재 공유 상태</span>
                                     <div className="shareList">
-                                        {sharedList.length === 0 ?
+                                        {fileData.shares.length === 0 ?
                                             "현재 공유대상이 없습니다." :
-                                            sharedList.map((item, index) => { })
+                                            fileData.shares.map((item, index) => {
+                                                return (
+                                                    <div className="shareItem" key={index}>
+                                                        <div className="icon">{item.type === "MemberShare" ? <MdPerson /> : <MdGroups />}</div>
+                                                        <span className="name">{item.targetName}</span>
+                                                        <div className="deleteIcon" id={index} onClick={handleShareDelete}><AiOutlineClose /></div>
+                                                    </div>
+                                                )
+                                            })
                                         }
                                     </div>
                                 </div>
@@ -154,14 +183,16 @@ export default function ModalFileview(props) {
                 />
             }
             {isLabelEditOpen &&
-                    <ModalGetString
-                        defaultValue={fileData.labels}
-                        title={"라벨 수정하기"}
-                        placeholder={"#라벨1 #라벨2 #라벨3"}
-                        setter={setNewLabels}
-                        isOpen={isLabelEditOpen}
-                        after={() => setIsLabelEditOpen(false)}
-                    />
+                <ModalGetString
+                    defaultValue={fileData.labels.map((label, index) => {
+                        return " " + label.name;
+                    })}
+                    title={"라벨 수정하기"}
+                    placeholder={"#라벨1 #라벨2 #라벨3"}
+                    setter={setNewLabels}
+                    isOpen={isLabelEditOpen}
+                    after={() => setIsLabelEditOpen(false)}
+                />
             }
         </>
     )

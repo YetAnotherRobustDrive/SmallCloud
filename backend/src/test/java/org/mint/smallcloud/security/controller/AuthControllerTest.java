@@ -166,7 +166,7 @@ class AuthControllerTest {
         @Test
         void notRegistered() throws Exception {
             mockMvc.perform(TestSnippet.post(url, objectMapper, user2))
-                .andExpect(status().isForbidden())
+                .andExpect(status().isNotFound())
                 .andDo(document(DOCUMENT_NAME));
         }
 
@@ -240,7 +240,7 @@ class AuthControllerTest {
         void wrongToken() throws Exception {
             map.put("password", user1.getPassword());
             mockMvc.perform(TestSnippet.post(url, objectMapper, map))
-                .andExpect(status().isForbidden())
+                .andExpect(status().isBadRequest())
                 .andDo(document(DOCUMENT_NAME));
         }
 

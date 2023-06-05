@@ -65,4 +65,16 @@ public class DirectoryFacadeService {
         List<File> files = folder.getFiles();
         return files.stream().map(fileMapper::toFileDto).collect(Collectors.toList());
     }
+
+    public void purge(Long directoryId, String username) {
+        Folder folder = directoryThrowerService.getDirectoryById(directoryId);
+        directoryThrowerService.checkAccessRight(folder, username);
+        directoryService.purgeDirectory(folder);
+    }
+
+    public void delete(Long directoryId, String username) {
+        Folder folder = directoryThrowerService.getDirectoryById(directoryId);
+        directoryThrowerService.checkAccessRight(folder, username);
+        directoryService.deleteDirectory(folder);
+    }
 }

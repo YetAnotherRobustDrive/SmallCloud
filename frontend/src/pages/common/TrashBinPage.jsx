@@ -10,8 +10,6 @@ import ModalFileview from "../../component/modal/ModalFileview";
 import ModalLoading from "../../component/modal/ModalLoading";
 import Sidebar from "../../component/sidebar/Sidebar";
 
-import datas from '../../fakeJSON/direcFiles.json';
-
 export default function TrashBinPage() {
 
     const [isGrid, setIsGrid] = useState(true);
@@ -32,36 +30,13 @@ export default function TrashBinPage() {
                 <BodyHeader text="Trash" addon={setIsGrid} view={isGrid} />
                 {isGrid &&
                     <GridBox height="calc(100vh - 117px)">
-                        {
-                            datas.map((data) => {
-                                return <CustomIcon
-                                    onClick={() => {
-                                        setSelected(data);
-                                        setIsFileView(true);
-                                    }}
-                                    key={data.id}
-                                    id={data.id}
-                                    name={data.name}
-                                    type={data.type}
-                                    stage={data.writingStage}
-                                    secu={data.securityLevel} />
-                            })
-                        }
+                        //need fetch
                     </GridBox>
                 }
                 {!isGrid &&
                     <>
-                        <div className="listscroll" style={{ height: "calc(100vh - 117px)" }}>{
-                            datas.map((data) => {
-                                return <ListBox
-                                    key={data.id}
-                                    onClick={() => {
-                                        setSelected(data);
-                                        setIsFileView(true);
-                                    }}
-                                    data={data} />
-                            })
-                        }
+                        <div className="listscroll" style={{ height: "calc(100vh - 117px)" }}>
+                            //need fetch
                         </div>
                     </>
                 }
