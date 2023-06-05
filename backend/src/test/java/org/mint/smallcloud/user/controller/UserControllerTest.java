@@ -232,8 +232,7 @@ class UserControllerTest {
                 .andDo(document(DOCUMENT_NAME,
                     requestFields(
                         fieldWithPath("username").description("바꾸려는 id"),
-                        fieldWithPath("nickname").description("바꾸려는 nickname"),
-                        fieldWithPath("location").description("프로필 이미지 위치")
+                        fieldWithPath("nickname").description("바꾸려는 nickname")
                     ),
                     pathParameters(
                         parameterWithName("username").description("바꾸려고 하는 유저의 id")
