@@ -9,6 +9,8 @@ import '../../css/mypage.css';
 import RefreshToken from "../../services/token/RefreshToken";
 import GetUserInfo from "../../services/user/GetUserInfo";
 import UpdateUserInfo from "../../services/user/UpdateUserInfo";
+import ModalGetString from "../../component/modal/ModalGetString";
+import ModalGetPW from "../../component/modal/ModalGetPW";
 
 export default function PrivatePage() {
     const [img, setImg] = useState(null);
@@ -20,7 +22,9 @@ export default function PrivatePage() {
     const [isFail, setIsFail] = useState(false);
     const [isFetchFail, setIsFetchFail] = useState(false);
     const [isSuccess, setIsSuccess] = useState(false);
+    const [isModalOpen, setIsModalOpen] = useState(false);
     const [message, setMessage] = useState(false);
+    const [isImgChanged, setIsImgChanged] = useState(false);
     const navigate = useNavigate();
 
     useEffect(() => {
@@ -44,7 +48,7 @@ export default function PrivatePage() {
             setJoined(year + "-" + month + "-" + day + ' ' + hour + ':' + min);
             if (res[1].group !== null)
                 setGroup(res[1].group);
-            
+
             setImg(res[2]);
         }
         getUserInfo();
@@ -55,7 +59,7 @@ export default function PrivatePage() {
         e.preventDefault();
         const inputData = new FormData(e.target);
         const value = Object.fromEntries(inputData.entries());
-        const res = await UpdateUserInfo(value);
+        const res = await UpdateUserInfo(value, isImgChanged);
         if (!res[0]) {
             setIsFail(true);
             setMessage(res[1]);
@@ -64,12 +68,13 @@ export default function PrivatePage() {
         setIsSuccess(true);
     }
 
-    const handleChangePW = (e) => { //todo
+    const handleChangePW = async (e) => {
         e.preventDefault();
-        console.log("asdfasdf");
+        setIsModalOpen(true);
     }
 
     const handleImgChange = (e) => {
+        setIsImgChanged(true);
         const file = e.target.files[0];
         const reader = new FileReader();
         reader.readAsDataURL(file);
@@ -84,6 +89,12 @@ export default function PrivatePage() {
 
     return (
         <>
+            {isModalOpen &&
+                <ModalGetPW
+                    title={"비밀번호 변경"}
+                    isOpen={isModalOpen}
+                    after={() => setIsModalOpen(false)}
+                />}
             {isSuccess && <ModalOk close={() => { window.location.reload() }}>{"변경되었습니다."}</ModalOk>}
             {isFail && <ModalOk close={() => setIsFail(false)}>{message}</ModalOk>}
             {isFetchFail && <ModalOk close={() => { setIsFail(false); navigate('/'); }}>{"일시적인 오류가 발생했습니다."}</ModalOk>}
