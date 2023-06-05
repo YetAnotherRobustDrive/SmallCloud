@@ -106,4 +106,12 @@ public class MemberService {
     public void updatePassword(Member member, String newPassword) {
         member.changePassword(newPassword);
     }
+
+
+    public void validLogin(LoginDto login) {
+        Member member = memberThrowerService.getMemberByUsername(login.getId());
+        if (member.isLocked())
+            throw new ServiceException(ExceptionStatus.USER_LOCKED);
+        checkPassword(login);
+    }
 }
