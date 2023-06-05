@@ -6,7 +6,6 @@ import AdminConfigPage from './admin/AdminConfigPage';
 import AdminFAQUploadPage from './admin/AdminFAQUploadPage';
 import AdminGroupConfigPage from './admin/AdminGroupConfigPage';
 import AdminNoticeUploadPage from './admin/AdminNoticeUploadPage';
-import AdminPage from './admin/AdminPage';
 import AdminPrivacyUploadPage from './admin/AdminPrivacyUploadPage';
 import AdminQuestionList from './admin/AdminQuestionList';
 import AdminTermUploadPage from './admin/AdminTermUploadPage';
@@ -37,48 +36,52 @@ export default () => {
     return (
         <Router>
             <Routes>
-                <Route exact path='/' element={isLoggedIn ? <MainPage /> : <LoginPage />} />
-                <Route path='/register' element={<RegisterPage />} />
-
-                <Route path='/login' element={<LoginPage />} />
-                <Route path='/login/ask' element={<LoginQuestionPage />} />
-                {isLoggedIn &&
+                {isAdmin &&
                     <>
+                        <Route path='/login' element={<LoginPage />} />
                         <Route path='/logout' element={<LogoutUser />} />
-                        <Route path='/favorites' element={<FavoritesPage />} />
-                        <Route path='/trash' element={<TrashBinPage />} />
-
-                        <Route path='/files/:fileID' element={<FolderPage />} />
-
-                        <Route path='/mypage' element={isPrivileged ? <PrivatePage /> : <MyPage />} />
-                        <Route path='/mypage/service' element={isPrivileged ? <ServiceInfoPage /> : <MyPage />} />
-                        <Route path='/mypage/security' element={isPrivileged ? <SecurityInfoPage /> : <MyPage />} />
-
-                        <Route path='/cs/notice' element={<NoticePage />} />
-                        <Route path='/cs/terms' element={<TermsPage />} />
-                        <Route path='/cs/faq' element={<FaqPage />} />
-                        <Route path='/cs/question' element={<QuestionPage />} />
-                        {!isAdmin &&
-                            <Route path='/admin' element={<AdminPage />} />
-                        }
-                        {isAdmin &&
-                            <>
-                                <Route path='/admin' element={<AdminConfigPage />} />
-                                <Route path='/admin/rules' element={<AdminConfigPage />} />
-                                <Route path='/admin/user' element={<AdminUserCtrlPage />} />
-                                <Route path='/admin/group' element={<AdminGroupConfigPage />} />
-                                <Route path='/admin/user/register' element={<AdminUserRegister />} />
-                                <Route path='/admin/questions' element={<AdminQuestionList />} />
-                                <Route path='/admin/notice' element={<AdminNoticeUploadPage />} />
-                                <Route path='/admin/faq' element={<AdminFAQUploadPage />} />
-                                <Route path='/admin/term' element={<AdminTermUploadPage />} />
-                                <Route path='/admin/privacy' element={<AdminPrivacyUploadPage />} />
-                            </>
-                        }
-
+                        <Route path='/' element={<AdminConfigPage />} />
+                        <Route path='/admin' element={<AdminConfigPage />} />
+                        <Route path='/admin/rules' element={<AdminConfigPage />} />
+                        <Route path='/admin/user' element={<AdminUserCtrlPage />} />
+                        <Route path='/admin/group' element={<AdminGroupConfigPage />} />
+                        <Route path='/admin/user/register' element={<AdminUserRegister />} />
+                        <Route path='/admin/questions' element={<AdminQuestionList />} />
+                        <Route path='/admin/notice' element={<AdminNoticeUploadPage />} />
+                        <Route path='/admin/faq' element={<AdminFAQUploadPage />} />
+                        <Route path='/admin/term' element={<AdminTermUploadPage />} />
+                        <Route path='/admin/privacy' element={<AdminPrivacyUploadPage />} />
                     </>
                 }
-                <Route path="*" element={<ErrorPage/>} />
+                {!isAdmin &&
+                    <>
+                        <Route exact path='/' element={isLoggedIn ? <MainPage /> : <LoginPage />} />
+                        <Route path='/register' element={<RegisterPage />} />
+
+                        <Route path='/login' element={<LoginPage />} />
+                        <Route path='/login/ask' element={<LoginQuestionPage />} />
+                        {isLoggedIn &&
+                            <>
+                                <Route path='/logout' element={<LogoutUser />} />
+                                <Route path='/favorites' element={<FavoritesPage />} />
+                                <Route path='/trash' element={<TrashBinPage />} />
+
+                                <Route path='/files/:fileID' element={<FolderPage />} />
+
+                                <Route path='/mypage' element={isPrivileged ? <PrivatePage /> : <MyPage />} />
+                                <Route path='/mypage/service' element={isPrivileged ? <ServiceInfoPage /> : <MyPage />} />
+                                <Route path='/mypage/security' element={isPrivileged ? <SecurityInfoPage /> : <MyPage />} />
+
+                                <Route path='/cs/notice' element={<NoticePage />} />
+                                <Route path='/cs/terms' element={<TermsPage />} />
+                                <Route path='/cs/faq' element={<FaqPage />} />
+                                <Route path='/cs/question' element={<QuestionPage />} />
+
+                            </>
+                        }
+                    </>
+                }
+                <Route path="*" element={<ErrorPage />} />
             </Routes>
         </Router>
     )
