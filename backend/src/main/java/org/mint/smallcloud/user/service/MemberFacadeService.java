@@ -4,14 +4,10 @@ import lombok.RequiredArgsConstructor;
 import org.mint.smallcloud.exception.ExceptionStatus;
 import org.mint.smallcloud.exception.ServiceException;
 import org.mint.smallcloud.file.domain.FileLocation;
-import org.mint.smallcloud.file.repository.FileRepository;
 import org.mint.smallcloud.file.repository.FolderRepository;
 import org.mint.smallcloud.security.service.AuthThrowerService;
 import org.mint.smallcloud.user.domain.Member;
-import org.mint.smallcloud.user.dto.PhotoDownloadResponseDto;
-import org.mint.smallcloud.user.dto.RegisterDto;
-import org.mint.smallcloud.user.dto.UserProfileRequestDto;
-import org.mint.smallcloud.user.dto.UserProfileResponseDto;
+import org.mint.smallcloud.user.dto.*;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -76,5 +72,13 @@ public class MemberFacadeService {
         Member member = memberThrowerService.getMemberByUsername(username);
         FileLocation location = member.getProfileImageLocation();
         return photoService.downloadPhoto(location);
+    }
+
+    public void updatePassword(String username, PasswordUpdateRequestDto dto) {
+        Member member = memberThrowerService.getMemberByUsername(username);
+        if (member.verifyPassword(dto.getPassword()))
+            memberService.updatePassword(member, dto.getNewPassword());
+        else
+            throw new ServiceException(ExceptionStatus.WRONG_PASSWORD);
     }
 }

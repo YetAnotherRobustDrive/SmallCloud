@@ -12,6 +12,7 @@ import org.mint.smallcloud.security.dto.UserDetailsDto;
 import org.mint.smallcloud.security.jwt.dto.JwtTokenDto;
 import org.mint.smallcloud.security.jwt.tokenprovider.JwtTokenProvider;
 import org.mint.smallcloud.user.domain.Member;
+import org.mint.smallcloud.user.dto.PasswordUpdateRequestDto;
 import org.mint.smallcloud.user.dto.RegisterDto;
 import org.mint.smallcloud.user.dto.UserProfileRequestDto;
 import org.mint.smallcloud.user.dto.UserProfileResponseDto;
@@ -39,6 +40,7 @@ import static org.springframework.restdocs.payload.PayloadDocumentation.fieldWit
 import static org.springframework.restdocs.payload.PayloadDocumentation.requestFields;
 import static org.springframework.restdocs.request.RequestDocumentation.*;
 import static org.springframework.security.test.web.servlet.setup.SecurityMockMvcConfigurers.springSecurity;
+import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -363,4 +365,54 @@ class UserControllerTest {
         }
     }
 
+    @Nested
+    @DisplayName("/users/password docs")
+    class Password {
+        private final String url = URL_PREFIX + "/password";
+        private PasswordUpdateRequestDto passwordRequestDto;
+
+        @BeforeEach
+        public void boot() {
+            passwordRequestDto = PasswordUpdateRequestDto.builder()
+                .password(member1.getPassword())
+                .newPassword("newPw2")
+                .build();
+        }
+
+        @DisplayName("정상 요청")
+        @Test
+        void ok() throws Exception {
+            mockMvc.perform(TestSnippet.secured(post(url), memberToken.getAccessToken(), objectMapper, passwordRequestDto))
+                .andExpect(status().isOk())
+                .andExpect((rst) -> {
+                    Member member = em.find(Member.class, member1.getId());
+                    assertEquals(member.getPassword(), passwordRequestDto.getNewPassword());
+                })
+                .andDo(document(DOCUMENT_NAME,
+                    requestFields(
+                        fieldWithPath("password").description("원래 password"),
+                        fieldWithPath("newPassword").description("바꾸려는 password")
+                    )));
+        }
+
+        @DisplayName("권한 없는 요청")
+        @Test
+        void unauthorized() throws Exception {
+            mockMvc.perform(post(url))
+                .andDo(print())
+                .andExpect(status().isBadRequest())
+                .andDo(document(DOCUMENT_NAME));
+        }
+
+        @DisplayName("잘못된 포멧의 요청")
+        @Test
+        void wrongFormat() throws Exception {
+            passwordRequestDto = PasswordUpdateRequestDto.builder()
+                .password("wfoijfijefwijifzzzeijfejfeiwfwj")
+                .build();
+            mockMvc.perform(TestSnippet.secured(post(url), memberToken.getAccessToken(), objectMapper, passwordRequestDto))
+                .andExpect(status().isBadRequest())
+                .andDo(document(DOCUMENT_NAME));
+        }
+    }
 }

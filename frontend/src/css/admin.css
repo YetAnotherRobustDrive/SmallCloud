@@ -96,6 +96,8 @@
 .profile {
     display: flex;
     align-items: center;
+    margin-top: 75px;
+    justify-content: center;
 }
 
 .profile img {
@@ -128,4 +130,35 @@
     border: none;
     padding: 6px;
     font-size: larger;
+}
+
+.searchBox {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    margin: 10px;
+    position: absolute;
+    border: 2px solid black;
+    width: 80%;
+    margin-left: 10%;
+}
+
+.searchBox input {
+    width: calc(100% - 20px);
+    padding: 10px;
+    border: none;
+    border-radius: 3px;
+}
+
+.searchBox input:focus {
+    outline: none;
+}
+
+.userList {
+    width: calc(100% - 20px);
+    padding: 10px;
+    border: none;
+    border-top: 2px solid black;
+    top: 100%;
 }

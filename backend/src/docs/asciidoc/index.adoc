@@ -41,7 +41,13 @@ include::topping/file.adoc[]
 
 include::topping/group.adoc[]
 
+[[admin]]
+== 관리자 관련 (admin)
+
+include::topping/admin.adoc[]
+
 [[label]]
 == 라벨 관련 (label)
 
 include::topping/labels.adoc[]
+

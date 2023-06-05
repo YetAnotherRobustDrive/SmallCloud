@@ -1,11 +1,13 @@
 import React, { useState } from "react";
-import { Link, useNavigate } from 'react-router-dom'
-import logo_img from '../../config/img/logo.png'
-import configData from "../../config/config.json"
-import "../../css/login.css"
-import "../../css/modal.css"
-import ModalOk from "../../component/modal/ModalOk";
 import { useDispatch } from "react-redux";
+import { Link, useNavigate } from 'react-router-dom';
+import ModalOk from "../../component/modal/ModalOk";
+import configData from "../../config/config.json";
+import logo_img from '../../config/img/logo.png';
+import "../../css/login.css";
+import "../../css/modal.css";
+import IsAdminToken from "../../services/token/IsAdminToken";
+import { asyncCheckAdmin } from "../../slice/TokenSlice";
 import { setIsLoggedIn } from "../../slice/UserSlice";
 
 export default function LoginPage() {
@@ -27,6 +29,15 @@ export default function LoginPage() {
         dispath(setIsLoggedIn(loginInfo.id));
         setLoginInfo({isSuccess: false, id: ''});
         navigate('/');
+    }
+    
+    const dispatch = useDispatch();
+    const checkAdmin = async () => {
+        const isAdmin = await IsAdminToken();
+        if (!isAdmin) { //fail
+            return;
+        }
+        dispatch(asyncCheckAdmin()); 
     }
 
     const handleSubmit = async (e) => {
@@ -55,6 +66,7 @@ export default function LoginPage() {
             }
             localStorage.setItem("accessToken", data.accessToken); //성공
             localStorage.setItem("refreshToken", data.refreshToken);
+            await checkAdmin();//check admin        
             
             setLoginInfo({isSuccess: true, id: inputData.get("id")});
             return;

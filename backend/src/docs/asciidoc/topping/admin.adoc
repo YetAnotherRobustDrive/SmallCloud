@@ -1,0 +1,29 @@
+=== 유저 잠금 (lock)
+
+==== 명세
+
+operation::Admin/Lock/ok[snippets='http-request,path-parameters']
+
+==== 성공
+
+operation::Admin/Lock/ok[snippets='http-response']
+
+=== 유저 잠금 (unlock)
+
+==== 명세
+
+operation::Admin/Unlock/ok[snippets='http-request,path-parameters']
+
+==== 성공
+
+operation::Admin/Unlock/ok[snippets='http-response']
+
+=== 유저 패스워드 변경
+
+==== 명세
+
+operation::Admin/ChangePassword/ok[snippets='http-request,path-parameters,request-fields']
+
+==== 성공
+
+operation::Admin/ChangePassword/ok[snippets='http-response']

@@ -2,9 +2,7 @@ package org.mint.smallcloud.user.service;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-
 import org.mint.smallcloud.bucket.dto.FileObjectDto;
-import org.mint.smallcloud.bucket.exception.StorageSettingException;
 import org.mint.smallcloud.bucket.service.StorageService;
 import org.mint.smallcloud.exception.ExceptionStatus;
 import org.mint.smallcloud.exception.ServiceException;
@@ -22,7 +20,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.transaction.Transactional;
-
 import java.net.URLConnection;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -103,5 +100,9 @@ public class MemberService {
         return memberRepository
             .findByUsernameLike("%" + q + "%")
             .stream().map(Member::getUsername).collect(Collectors.toList());
+    }
+
+    public void updatePassword(Member member, String newPassword) {
+        member.changePassword(newPassword);
     }
 }
