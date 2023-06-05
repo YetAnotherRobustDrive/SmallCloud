@@ -11,6 +11,7 @@ import org.mint.smallcloud.file.service.DirectoryService;
 import org.mint.smallcloud.security.dto.LoginDto;
 import org.mint.smallcloud.security.dto.UserDetailsDto;
 import org.mint.smallcloud.user.domain.Member;
+import org.mint.smallcloud.user.domain.Role;
 import org.mint.smallcloud.user.dto.RegisterDto;
 import org.mint.smallcloud.user.dto.UserProfileRequestDto;
 import org.mint.smallcloud.user.dto.UserProfileResponseDto;
@@ -99,7 +100,7 @@ public class MemberService {
             return List.<String>of();
         return memberRepository
             .findByUsernameLike("%" + q + "%")
-            .stream().map(Member::getUsername).collect(Collectors.toList());
+            .stream().filter(e -> !e.isRole(Role.ADMIN)).map(Member::getUsername).collect(Collectors.toList());
     }
 
     public void updatePassword(Member member, String newPassword) {
