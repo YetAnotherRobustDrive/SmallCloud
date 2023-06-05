@@ -19,7 +19,13 @@ export default function QuestionPage() {
 
     useEffect(() => {
         const fetchMyQuestion = async () => {
-            const user = await GetUserInfo();
+            const userRes = await GetUserInfo();
+            if (!userRes[0]) {
+                setIsFail(true);
+                setMessage(userRes[1]);
+                return;
+            }
+            const user = userRes[1];
             const res = await GetBoardListFrom('inquiries/myQuestions?writer=' + user.nickname);
             if (!res[0]) {
                 setIsFail(true);
@@ -33,7 +39,13 @@ export default function QuestionPage() {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-        const user = await GetUserInfo();
+        const userRes = await GetUserInfo();
+        if (!userRes[0]) {
+            setIsFail(true);
+            setMessage(userRes[1]);
+            return;
+        }
+        const user = userRes[1];
 
         const inputData = new FormData(e.target);
         inputData.append("writer", user.nickname);
