@@ -6,9 +6,11 @@ import org.mint.smallcloud.exception.ExceptionStatus;
 import org.mint.smallcloud.exception.ServiceException;
 import org.mint.smallcloud.file.domain.DataNode;
 import org.mint.smallcloud.file.dto.LabelUpdateDto;
+import org.mint.smallcloud.file.mapper.DataNodeMapper;
 import org.mint.smallcloud.file.repository.DataNodeRepository;
 import org.mint.smallcloud.label.domain.Label;
 import org.mint.smallcloud.label.domain.defaultLabelType;
+import org.mint.smallcloud.label.dto.LabelFilesDto;
 import org.mint.smallcloud.label.repository.LabelRepository;
 import org.mint.smallcloud.user.domain.Member;
 import org.mint.smallcloud.user.service.MemberThrowerService;
@@ -26,7 +28,8 @@ public class LabelService {
     private final LabelRepository labelRepository;
     private final DataNodeRepository dataNodeRepository;
     private final MemberThrowerService memberThrowerService;
-
+    private final LabelThrowerService labelThrowerService;
+    private final DataNodeMapper dataNodeMapper;
 
     public Label register(Label label) {
         if(!labelRepository.existsByNameAndOwner(label.getName(), label.getOwner())) {
@@ -61,6 +64,15 @@ public class LabelService {
                     Label labelSaved = register(Label.of(label, member));
                     labelSaved.addFile(dataNode);
                 });
+    }
+    public LabelFilesDto search(String labelName, String userName) {
+        Member member = memberThrowerService.getMemberByUsername(userName);
+        labelThrowerService.findByNameAndOwner(labelName, member);
+        List<DataNode> dataNode = dataNodeRepository.findDataNodeByLabelName(labelName);
+        return LabelFilesDto.builder()
+                .name(labelName)
+                .files(dataNode.stream().map(dataNodeMapper::toDataNodeDto).collect(Collectors.toList()))
+                .build();
     }
 
     public void createDefaultLabels(Member member) {

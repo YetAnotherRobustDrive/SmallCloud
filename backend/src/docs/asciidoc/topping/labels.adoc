@@ -1,0 +1,17 @@
+=== 라벨 검색 (search)
+
+operation::Labels/search/ok[snippets='http-request']
+
+==== 성공
+
+operation::Labels/search/ok[snippets='http-response']
+
+==== 실패
+
+operation::Labels/search/noLabel[snippets='http-response']
+
+IMPORTANT: 등록되지 않은 라벨을 검색했을 때
+
+operation::Labels/search/wrongToken[snippets='http-response']
+
+IMPORTANT: 잘못된 토큰을 사용했을 때

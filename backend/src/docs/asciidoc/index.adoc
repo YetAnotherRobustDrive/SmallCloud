@@ -40,3 +40,8 @@ include::topping/file.adoc[]
 == 그룹 관련 (group)
 
 include::topping/group.adoc[]
+
+[[label]]
+== 라벨 관련 (label)
+
+include::topping/labels.adoc[]
