@@ -6,7 +6,6 @@ import AdminConfigPage from './admin/AdminConfigPage';
 import AdminFAQUploadPage from './admin/AdminFAQUploadPage';
 import AdminGroupConfigPage from './admin/AdminGroupConfigPage';
 import AdminNoticeUploadPage from './admin/AdminNoticeUploadPage';
-import AdminPage from './admin/AdminPage';
 import AdminPrivacyUploadPage from './admin/AdminPrivacyUploadPage';
 import AdminQuestionList from './admin/AdminQuestionList';
 import AdminTermUploadPage from './admin/AdminTermUploadPage';
@@ -37,9 +36,6 @@ export default () => {
     return (
         <Router>
             <Routes>
-                {!isAdmin &&
-                    <Route path='/admin' element={<AdminPage />} />
-                }
                 {isAdmin &&
                     <>
                         <Route path='/login' element={<LoginPage />} />
