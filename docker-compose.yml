@@ -32,7 +32,7 @@ services:
       minio:
         condition: service_started
     environment:
-      - TZ: Asia/Seoul
+      - TZ=Asia/Seoul
 
   react:
     image: small_cloud_front
