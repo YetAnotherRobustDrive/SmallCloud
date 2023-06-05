@@ -6,15 +6,22 @@ import org.mint.smallcloud.exception.ExceptionStatus;
 import org.mint.smallcloud.exception.ServiceException;
 import org.mint.smallcloud.file.domain.FileNamePolicy;
 import org.mint.smallcloud.file.domain.Folder;
+import org.mint.smallcloud.file.repository.DataNodeRepository;
 import org.mint.smallcloud.file.repository.FolderRepository;
+import org.mint.smallcloud.label.service.LabelService;
 import org.mint.smallcloud.user.domain.Member;
 import org.springframework.stereotype.Service;
+
+import javax.transaction.Transactional;
 
 @Service
 @Slf4j
 @RequiredArgsConstructor
+@Transactional
 public class DirectoryService {
     private final FolderRepository folderRepository;
+    private final DataNodeRepository dataNodeRepository;
+    private final LabelService labelService;
     private final FileNamePolicy fileNamePolicy;
 
     public void createRootDirectory(Member member) {
@@ -45,10 +52,14 @@ public class DirectoryService {
     }
 
     public void purgeDirectory(Folder folder) {
-
+        folderRepository.deleteById(folder.getId());
     }
 
-    public void deleteDirectory(Folder folder) {
+    public void deleteDirectory(Folder folder, Member user) {
+        labelService.attachTrash(folder, user);
+    }
 
+    public void restoreDirectory(Folder folder, Member user) {
+        labelService.attachTrash(folder, user);
     }
 }

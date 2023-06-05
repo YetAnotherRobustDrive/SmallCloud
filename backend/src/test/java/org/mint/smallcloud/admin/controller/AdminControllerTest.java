@@ -88,6 +88,8 @@ class AdminControllerTest {
         @DisplayName("정상요청")
         @Test
         void ok () throws Exception {
+            user1.unlock();
+            assertThat(user1.isLocked()).isFalse();
             mockMvc.perform(TestSnippet
                     .secured(post(url, user1.getUsername()), adminToken.getAccessToken()))
                 .andExpect(status().isOk())
@@ -110,6 +112,8 @@ class AdminControllerTest {
         @DisplayName("정상요청")
         @Test
         void ok () throws Exception {
+            user1.lock();
+            assertThat(user1.isLocked()).isTrue();
             mockMvc.perform(TestSnippet
                     .secured(post(url, user1.getUsername()), adminToken.getAccessToken()))
                 .andExpect(status().isOk())

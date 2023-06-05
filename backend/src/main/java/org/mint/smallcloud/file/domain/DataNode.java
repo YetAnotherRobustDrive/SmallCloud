@@ -56,11 +56,11 @@ public abstract class DataNode {
         this.author = author;
     }
 
-    public static DataNode createFolder(Folder parent, String name, Member member) {
+    public static Folder createFolder(Folder parent, String name, Member member) {
         return Folder.of(parent, name, member);
     }
 
-    public static DataNode createFile(Folder parent, FileType filetype, FileLocation location, Long size, Member member) {
+    public static File createFile(Folder parent, FileType filetype, FileLocation location, Long size, Member member) {
         return File.of(parent, filetype, location, size, member);
     }
 
@@ -131,5 +131,14 @@ public abstract class DataNode {
 
     public boolean canAccessUser(Member member) {
         return canAccessUser(member.getUsername());
+    }
+
+    public boolean isActive() {
+        for (Folder folder = parentFolder; folder != null; folder = folder.getParentFolder()) {
+            for (Label label : labels) {
+                if (label.isTrash()) return false;
+            }
+        }
+        return true;
     }
 }

@@ -9,7 +9,7 @@ import org.mint.smallcloud.file.dto.LabelUpdateDto;
 import org.mint.smallcloud.file.mapper.DataNodeMapper;
 import org.mint.smallcloud.file.repository.DataNodeRepository;
 import org.mint.smallcloud.label.domain.Label;
-import org.mint.smallcloud.label.domain.defaultLabelType;
+import org.mint.smallcloud.label.domain.DefaultLabelType;
 import org.mint.smallcloud.label.dto.LabelFilesDto;
 import org.mint.smallcloud.label.repository.LabelRepository;
 import org.mint.smallcloud.user.domain.Member;
@@ -77,14 +77,14 @@ public class LabelService {
 
     public void createDefaultLabels(Member member) {
         List<String> initLabels = new ArrayList<>();
-        initLabels.add(defaultLabelType.defaultFavorite.toString());
-        initLabels.add(defaultLabelType.defaultFinal.toString());
-        initLabels.add(defaultLabelType.defaultDraft.toString());
-        initLabels.add(defaultLabelType.defaultExpiration.toString());
-        initLabels.add(defaultLabelType.defaultPublic.toString());
-        initLabels.add(defaultLabelType.defaultSecurity.toString());
-        initLabels.add(defaultLabelType.defaultTrash.toString());
-        initLabels.add(defaultLabelType.defaultSensitivity.toString());
+        initLabels.add(DefaultLabelType.defaultFavorite.toString());
+        initLabels.add(DefaultLabelType.defaultFinal.toString());
+        initLabels.add(DefaultLabelType.defaultDraft.toString());
+        initLabels.add(DefaultLabelType.defaultExpiration.toString());
+        initLabels.add(DefaultLabelType.defaultPublic.toString());
+        initLabels.add(DefaultLabelType.defaultSecurity.toString());
+        initLabels.add(DefaultLabelType.defaultTrash.toString());
+        initLabels.add(DefaultLabelType.defaultSensitivity.toString());
 
         initLabels.forEach(e -> {
             Label label = Label.of(e, member);
@@ -93,67 +93,67 @@ public class LabelService {
     }
 
     public void attachTrash(DataNode dataNode, Member member) {
-        Label label = labelRepository.findByNameAndOwner(defaultLabelType.defaultTrash.toString(), member);
+        Label label = labelRepository.findByNameAndOwner(DefaultLabelType.defaultTrash.toString(), member);
         dataNode.addLabel(label);
     }
     public void detachTrash(DataNode dataNode, Member member) {
-        Label label = labelRepository.findByNameAndOwner(defaultLabelType.defaultTrash.toString(), member);
+        Label label = labelRepository.findByNameAndOwner(DefaultLabelType.defaultTrash.toString(), member);
         dataNode.deleteLabel(label);
     }
     public void attachFavorite(DataNode dataNode, Member member) {
-        Label label = labelRepository.findByNameAndOwner(defaultLabelType.defaultFavorite.toString(), member);
+        Label label = labelRepository.findByNameAndOwner(DefaultLabelType.defaultFavorite.toString(), member);
         dataNode.addLabel(label);
     }
     public void detachFavorite(DataNode dataNode, Member member) {
-        Label label = labelRepository.findByNameAndOwner(defaultLabelType.defaultFavorite.toString(), member);
+        Label label = labelRepository.findByNameAndOwner(DefaultLabelType.defaultFavorite.toString(), member);
         dataNode.deleteLabel(label);
     }
     public void attachDraft(DataNode dataNode, Member member) {
-        Label label = labelRepository.findByNameAndOwner(defaultLabelType.defaultDraft.toString(), member);
+        Label label = labelRepository.findByNameAndOwner(DefaultLabelType.defaultDraft.toString(), member);
         dataNode.addLabel(label);
     }
     public void detachDraft(DataNode dataNode, Member member) {
-        Label label = labelRepository.findByNameAndOwner(defaultLabelType.defaultDraft.toString(), member);
+        Label label = labelRepository.findByNameAndOwner(DefaultLabelType.defaultDraft.toString(), member);
         dataNode.deleteLabel(label);
     }
     public void attachExpiration(DataNode dataNode, Member member) {
-        Label label = labelRepository.findByNameAndOwner(defaultLabelType.defaultExpiration.toString(), member);
+        Label label = labelRepository.findByNameAndOwner(DefaultLabelType.defaultExpiration.toString(), member);
         dataNode.addLabel(label);
     }
     public void detachExpiration(DataNode dataNode, Member member) {
-        Label label = labelRepository.findByNameAndOwner(defaultLabelType.defaultExpiration.toString(), member);
+        Label label = labelRepository.findByNameAndOwner(DefaultLabelType.defaultExpiration.toString(), member);
         dataNode.deleteLabel(label);
     }
     public void attachFinal(DataNode dataNode, Member member) {
-        Label label = labelRepository.findByNameAndOwner(defaultLabelType.defaultFinal.toString(), member);
+        Label label = labelRepository.findByNameAndOwner(DefaultLabelType.defaultFinal.toString(), member);
         dataNode.addLabel(label);
     }
     public void detachFinal(DataNode dataNode, Member member) {
-        Label label = labelRepository.findByNameAndOwner(defaultLabelType.defaultFinal.toString(), member);
+        Label label = labelRepository.findByNameAndOwner(DefaultLabelType.defaultFinal.toString(), member);
         dataNode.deleteLabel(label);
     }
     public void attachSecurity(DataNode dataNode, Member member) {
-        Label label = labelRepository.findByNameAndOwner(defaultLabelType.defaultSecurity.toString(), member);
+        Label label = labelRepository.findByNameAndOwner(DefaultLabelType.defaultSecurity.toString(), member);
         dataNode.addLabel(label);
     }
     public void detachSecurity(DataNode dataNode, Member member) {
-        Label label = labelRepository.findByNameAndOwner(defaultLabelType.defaultSecurity.toString(), member);
+        Label label = labelRepository.findByNameAndOwner(DefaultLabelType.defaultSecurity.toString(), member);
         dataNode.deleteLabel(label);
     }
     public void attachPublic(DataNode dataNode, Member member) {
-        Label label = labelRepository.findByNameAndOwner(defaultLabelType.defaultPublic.toString(), member);
+        Label label = labelRepository.findByNameAndOwner(DefaultLabelType.defaultPublic.toString(), member);
         dataNode.addLabel(label);
     }
     public void detachPublic(DataNode dataNode, Member member) {
-        Label label = labelRepository.findByNameAndOwner(defaultLabelType.defaultPublic.toString(), member);
+        Label label = labelRepository.findByNameAndOwner(DefaultLabelType.defaultPublic.toString(), member);
         dataNode.deleteLabel(label);
     }
     public void attachSensitivity(DataNode dataNode, Member member) {
-        Label label = labelRepository.findByNameAndOwner(defaultLabelType.defaultSensitivity.toString(), member);
+        Label label = labelRepository.findByNameAndOwner(DefaultLabelType.defaultSensitivity.toString(), member);
         dataNode.addLabel(label);
     }
     public void detachSensitivity(DataNode dataNode, Member member) {
-        Label label = labelRepository.findByNameAndOwner(defaultLabelType.defaultSensitivity.toString(), member);
+        Label label = labelRepository.findByNameAndOwner(DefaultLabelType.defaultSensitivity.toString(), member);
         dataNode.deleteLabel(label);
     }
 }

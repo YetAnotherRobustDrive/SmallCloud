@@ -1,11 +1,9 @@
 package org.mint.smallcloud.label.domain;
 
-import lombok.AccessLevel;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
 
 @Getter
-public enum defaultLabelType {
+public enum DefaultLabelType {
     defaultTrash( "!$@*%&Trash"),
     defaultFavorite("!$@*%&Favorite"),
     defaultDraft("!$@*%&Draft"),
@@ -16,7 +14,7 @@ public enum defaultLabelType {
     defaultSensitivity("!$@*%&Sensitivity");
 
     private final String labelName;
-    defaultLabelType(String labelName) {
+    DefaultLabelType(String labelName) {
         this.labelName = labelName;
     }
 

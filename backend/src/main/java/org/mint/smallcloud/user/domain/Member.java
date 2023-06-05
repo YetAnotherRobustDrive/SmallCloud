@@ -37,7 +37,7 @@ public class Member {
     @Column(name = "CHANGED_PASSWORD_DATE")
     private LocalDateTime changedPasswordDate;
 
-    @Column(name = "lOCKED")
+    @Column(name = "LOCKED")
     private boolean locked = false;
 
     @Column(name = "PROFILE_IMAGE_LOCATION")
@@ -105,11 +105,11 @@ public class Member {
     }
 
     public void unlock() {
-        locked = false;
+        this.locked = false;
     }
 
     public void lock() {
-        locked = true;
+        this.locked = true;
     }
 
     public boolean hasGroup() {

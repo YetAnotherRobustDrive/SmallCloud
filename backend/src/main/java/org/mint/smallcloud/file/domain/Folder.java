@@ -72,4 +72,8 @@ public class Folder extends DataNode {
             .map(dataNode -> (File) dataNode)
             .collect(Collectors.toList());
     }
+
+    public boolean isRoot() {
+        return this.getName().equals(ROOT_NAME);
+    }
 }
