@@ -25,7 +25,6 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.config.web.servlet.FormLoginDsl;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -35,7 +34,6 @@ import javax.servlet.http.HttpServletRequest;
 import java.io.InputStream;
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
-import java.util.List;
 import java.util.Optional;
 
 @RestController
@@ -154,7 +152,7 @@ public class FileController {
 
     private String encode(String fileName) {
         try {
-            return URLEncoder.encode(fileName, StandardCharsets.UTF_8.toString());
+            return URLEncoder.encode(fileName, StandardCharsets.UTF_8);
         } catch(Exception e) {
             return fileName;
         }
