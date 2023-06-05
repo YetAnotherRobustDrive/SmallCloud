@@ -38,7 +38,7 @@ public class Member {
     private LocalDateTime changedPasswordDate;
 
     @Column(name = "LOCKED")
-    private boolean locked = true;
+    private boolean locked = false;
 
     @Column(name = "PROFILE_IMAGE_LOCATION")
     private FileLocation profileImageLocation = null;
