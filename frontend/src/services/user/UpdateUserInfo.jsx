@@ -50,7 +50,7 @@ export default async function UpdateUserInfo(value) {
 
         const userID = jwtDecode(accessToken).sub;
 
-        const res = await fetch(configData.API_SERVER + 'users', model);
+        const res = await fetch(configData.API_SERVER + 'users/' + userID + '/update', model);
         if (!res.ok) {
             const data = await res.json();
             throw data;
