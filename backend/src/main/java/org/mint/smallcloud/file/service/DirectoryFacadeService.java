@@ -64,7 +64,7 @@ public class DirectoryFacadeService {
 
     public List<DirectoryDto> activeSubDirectories(Long directoryId, String username) {
         Folder parentFolder = directoryThrowerService.getDirectoryById(directoryId);
-        if (parentFolder.isActive()) throw new ServiceException(ExceptionStatus.NO_PERMISSION);
+        if (!parentFolder.isActive()) throw new ServiceException(ExceptionStatus.NO_PERMISSION);
         directoryThrowerService.checkAccessRight(parentFolder, username);
         List<Folder> subFolders = parentFolder.getSubFolders();
         return subFolders.stream().filter(Folder::isActive).map(folderMapper::toDirectoryDto).collect(Collectors.toList());
@@ -103,7 +103,7 @@ public class DirectoryFacadeService {
 
     public List<FileDto> activeFiles(Long directoryId, String username) {
         Folder folder = directoryThrowerService.getDirectoryById(directoryId);
-        if (folder.isActive()) throw new ServiceException(ExceptionStatus.NO_PERMISSION);
+        if (!folder.isActive()) throw new ServiceException(ExceptionStatus.NO_PERMISSION);
         directoryThrowerService.checkAccessRight(folder, username);
         List<File> files = folder.getFiles();
         return files.stream().filter(File::isActive).map(fileMapper::toFileDto).collect(Collectors.toList());

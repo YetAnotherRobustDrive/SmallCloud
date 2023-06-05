@@ -460,7 +460,7 @@ class DirectoryControllerTest {
                 .roles(user1.getRole()).build());
             root = Folder.createRoot(user1);
             em.persist(root);
-            parent = (Folder) Folder.createFolder(root, "folder1", user1);
+            parent = Folder.createFolder(root, "folder1", user1);
             em.persist(parent);
             em.flush();
         }
@@ -471,6 +471,7 @@ class DirectoryControllerTest {
             mockMvc.perform(
                     TestSnippet.secured(get(url, root.getId()),
                         token1.getAccessToken()))
+                .andDo(print())
                 .andExpect(status().isOk())
                 .andDo(document(DOCUMENT_NAME,
                     pathParameters(

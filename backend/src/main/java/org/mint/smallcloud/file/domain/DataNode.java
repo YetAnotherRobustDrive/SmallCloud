@@ -134,8 +134,11 @@ public abstract class DataNode {
     }
 
     public boolean isActive() {
+        for (Label label : this.getLabels()) {
+            if (label.isTrash()) return false;
+        }
         for (Folder folder = parentFolder; folder != null; folder = folder.getParentFolder()) {
-            for (Label label : labels) {
+            for (Label label : folder.getLabels()) {
                 if (label.isTrash()) return false;
             }
         }
