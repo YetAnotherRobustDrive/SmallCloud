@@ -24,7 +24,7 @@ export default function AdminQuestionList() {
                 return;
             }
             setQuestions(res[1]);
-            setTimeout(() => setIsLoading(false), 1000);
+            setTimeout(() => setIsLoading(false), 250);
         }
         render();
     }, [])

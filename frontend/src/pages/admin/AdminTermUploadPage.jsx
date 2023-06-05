@@ -19,13 +19,13 @@ export default function AdminTermUploadPage() {
     useEffect(() => {
         const render = async () => {
             const res = await GetBoardListFrom("inquiries/board/created?boardType=terms&createdDate=0");
-            setTimeout(() => setIsLoading(false), 500);
+            setTimeout(() => setIsLoading(false), 250);
             if (!res[0]) {
                 setIsFail(true);
                 setMessage(res[1]);
                 return;
             }
-            if (res[1] === null) {
+            if (res[1] !== null) {
                 setCurr(res[1].content);                
             }
         };
