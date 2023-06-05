@@ -5,9 +5,7 @@ import Header from "../../component/header/Header";
 import ModalOk from '../../component/modal/ModalOk';
 import EditableColumn from "../../component/mypage/EditableColumn";
 import SidebarMypage from "../../component/sidebar/SidebarMypage";
-import configData from "../../config/config.json";
 import '../../css/mypage.css';
-import default_profile_img from '../../img/defalutProfile.png';
 import RefreshToken from "../../services/token/RefreshToken";
 import GetUserInfo from "../../services/user/GetUserInfo";
 import UpdateUserInfo from "../../services/user/UpdateUserInfo";
@@ -26,62 +24,30 @@ export default function PrivatePage() {
     const navigate = useNavigate();
 
     useEffect(() => {
-        const render = async () => {
-            const downloadImage = async () => {
-                const accessToken = localStorage.getItem('accessToken');
-                return new Promise((resolve, reject) => {
-                    const xhr = new XMLHttpRequest();
-                    xhr.responseType = 'blob';
-                    xhr.open('GET', configData.API_SERVER + 'users/profile-photo', true);
-                    xhr.onreadystatechange = () => {
-                        if (xhr.readyState === XMLHttpRequest.DONE) {
-                            const res = xhr.response;
-                            if (xhr.status !== 200) {
-                                resolve(res);
-                            }
-                            else {
-                                const tRes = {
-                                    "status": 200,
-                                    "data": res
-                                }
-                                resolve(tRes);
-                            }
-                        }
-                    }
-                    xhr.setRequestHeader("Authorization", "Bearer " + accessToken);
-                    xhr.send();
-                });
+        const getUserInfo = async () => {
+            await RefreshToken();
+
+            const res = await GetUserInfo();
+            if (!res[0]) {
+                setIsFetchFail(true);
             }
 
-            const getUserInfo = async () => {
-                await RefreshToken();
-
-                const res = await GetUserInfo();
-                if (!res) {
-                    setIsFetchFail(true);
-                }
-
-                //성공 후 처리
-                setUsername(res.username);
-                setNickname(res.nickname);
-                const joinDate = new Date(res.joinedDate);
-                const year = ("" + joinDate.getFullYear()).slice(2);
-                const month = ("0" + (1 + joinDate.getMonth())).slice(-2);
-                const day = ("0" + joinDate.getDate()).slice(-2);
-                const hour = ("0" + joinDate.getHours()).slice(-2);
-                const min = ("0" + joinDate.getMinutes()).slice(-2);
-                setJoined(year + "-" + month + "-" + day + ' ' + hour + ':' + min);
-                if (res.group !== null)
-                    setGroup(res.group);
-            }
-            const downloadRes = await downloadImage();
-            if (downloadRes.status !== 200) {
-                setImg(default_profile_img);
-            }
-            setImg(URL.createObjectURL(downloadRes.data));
-            getUserInfo();
+            //성공 후 처리
+            setUsername(res[1].username);
+            setNickname(res[1].nickname);
+            const joinDate = new Date(res[1].joinedDate);
+            const year = ("" + joinDate.getFullYear()).slice(2);
+            const month = ("0" + (1 + joinDate.getMonth())).slice(-2);
+            const day = ("0" + joinDate.getDate()).slice(-2);
+            const hour = ("0" + joinDate.getHours()).slice(-2);
+            const min = ("0" + joinDate.getMinutes()).slice(-2);
+            setJoined(year + "-" + month + "-" + day + ' ' + hour + ':' + min);
+            if (res[1].group !== null)
+                setGroup(res[1].group);
+            
+            setImg(res[2]);
         }
-        render();
+        getUserInfo();
     }, [])
 
 
@@ -146,7 +112,6 @@ export default function PrivatePage() {
                     />
                     <EditableColumn
                         title="GROUP"
-                        name="groupName"
                         value={group}
                         disabled={true}
                     />

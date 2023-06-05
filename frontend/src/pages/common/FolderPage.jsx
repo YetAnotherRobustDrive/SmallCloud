@@ -78,7 +78,7 @@ export default function FolderPage() {
         try {
             setIsLoading(true);
             render();
-            setTimeout(() => setIsLoading(false), 500);
+            setTimeout(() => setIsLoading(false), 250);
         } catch (error) {
             setIsFail(true);
             setMessage(error);
@@ -106,7 +106,7 @@ export default function FolderPage() {
             <BodyFrame hasContext={true}>
                 <BodyHeader text={name} addon={setIsGrid} view={isGrid} />
                 {isGrid &&
-                    (gridFiles.length === 0 ? <div style={{textAlign: "center", marginTop: "20px" }}>파일이 없습니다.</div> :
+                    (gridFiles.length === 0 ? <div style={{height:"calc(100vh - 137px)", textAlign: "center", marginTop: "20px" }}>파일이 없습니다.</div> :
                         <GridBox height="calc(100vh - 117px)">
                             {gridFiles}
                         </GridBox>)

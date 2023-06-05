@@ -62,7 +62,7 @@ export default function Filetree() {
   return (
     <div className="filetree">
       {datas.length === 0 ? 
-      <div style={{ textAlign: "center", marginTop: "20px" }}>파일이 없습니다.</div>  : datas}
+      <div style={{ textAlign: "center", marginTop: "20px" }}>폴더가 없습니다.</div>  : datas}
     </div>
   )
 }

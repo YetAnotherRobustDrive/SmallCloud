@@ -22,7 +22,7 @@ export default function FaqPage() {
                 return;
             }
             setDataList(res[1]);
-            setTimeout(() => setIsLoading(false),500);
+            setTimeout(() => setIsLoading(false),250);
         };
         render();
     }, [])

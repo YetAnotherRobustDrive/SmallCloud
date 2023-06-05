@@ -27,7 +27,7 @@ export default function ModalFileview(props) {
     const handleDownload = async (e) => {
         setIsNowDownload(true);
         const res = await GetDownloadFile(fileData.id, setPercentage, () => { }, fileData.name)
-        setTimeout(() => setIsNowDownload(false), 500);
+        setTimeout(() => setIsNowDownload(false), 250);
     }
 
     const handleLabelEdit = (e) => {
