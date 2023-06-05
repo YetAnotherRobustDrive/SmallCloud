@@ -27,7 +27,7 @@ export default function TermsPage() {
             setPrivacyData(privRes[1]);
         };
         render();
-        setTimeout(() => setIsLoading(false), 500);
+        setTimeout(() => setIsLoading(false), 250);
     }, [])
 
     return (

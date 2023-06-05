@@ -83,7 +83,7 @@ export default function MainPage() {
             )
         }
         render();
-        setTimeout(() => setIsLoading(false), 500);
+        setTimeout(() => setIsLoading(false), 250);
     }, [])
 
     useEffect(() => {

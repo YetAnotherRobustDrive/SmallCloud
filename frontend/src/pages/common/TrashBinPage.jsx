@@ -18,7 +18,7 @@ export default function TrashBinPage() {
     const [selected, setSelected] = useState();
 
     useEffect(() => {
-        setTimeout(() => setIsLoading(false), 500);
+        setTimeout(() => setIsLoading(false), 250);
     }, [])
 
     return (
