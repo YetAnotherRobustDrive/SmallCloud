@@ -78,7 +78,7 @@ export default function FolderPage() {
         try {
             setIsLoading(true);
             render();
-            setTimeout(() => setIsLoading(false), 500);
+            setTimeout(() => setIsLoading(false), 250);
         } catch (error) {
             setIsFail(true);
             setMessage(error);
