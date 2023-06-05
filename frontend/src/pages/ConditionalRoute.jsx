@@ -42,6 +42,8 @@ export default () => {
                 }
                 {isAdmin &&
                     <>
+                        <Route path='/login' element={<LoginPage />} />
+                        <Route path='/logout' element={<LogoutUser />} />
                         <Route path='/' element={<AdminConfigPage />} />
                         <Route path='/admin' element={<AdminConfigPage />} />
                         <Route path='/admin/rules' element={<AdminConfigPage />} />
