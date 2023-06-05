@@ -5,7 +5,7 @@ import PostNewDir from "../../services/directory/PostNewDir";
 import ModalGetString from "../modal/ModalGetString";
 import '../../css/context.css'
 
-export default function ContextBody(props) {
+export default function ContextBody() {
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [isFail, setIsFail] = useState();
     const [message, setMessage] = useState();
@@ -32,7 +32,7 @@ export default function ContextBody(props) {
             }
             window.location.reload();
         }
-        if (newName != undefined) {
+        if (newName !== undefined && newName !== "") {
             mkFile();
         }
     }, [newName])
@@ -45,12 +45,14 @@ export default function ContextBody(props) {
         <>
             {isModalOpen &&
                 <ModalGetString
+                    title={"폴더 생성"}
+                    placeholder={"폴더 이름"}
                     setter={setNewName}
                     isOpen={isModalOpen}
                     after={() => setIsModalOpen(false)}
                 />
             }
-            <div className="context">
+            <div className="context" onContextMenu={e => { e.preventDefault(); e.stopPropagation(); }}>
                 <ul className="optionList">
                     {options.map((option, idx) => (
                         <li className="option" key={idx} onClick={option.onClick}>

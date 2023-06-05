@@ -4,7 +4,7 @@ import jwtDecode from "jwt-decode";
 export default async function RefreshToken() {
     const time = Math.ceil(Date.now() / 1000);
     const accessToken = localStorage.getItem("accessToken");
-    if (accessToken == null) {
+    if (accessToken === null) {
         return false;
     }
     const accessTokenExp = jwtDecode(accessToken).exp;

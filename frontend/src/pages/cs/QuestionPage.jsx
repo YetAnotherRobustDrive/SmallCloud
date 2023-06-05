@@ -1,39 +1,64 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import BodyFrame from "../../component/Bodyframe";
 import ExtendBox from "../../component/cs/ExtendBox";
 import Header from "../../component/header/Header";
 import BodyHeader from "../../component/main/BodyHeader";
-import SidebarCS from "../../component/sidebar/SidebarCS";
-
 import ModalOk from "../../component/modal/ModalOk";
-import datas from "../../fakeJSON/FAQ.json";
-import GetUserInfo from "../../services/user/GetUserInfo";
-
+import SidebarCS from "../../component/sidebar/SidebarCS";
 import '../../css/cs.css';
 import PostBoard from "../../services/board/PostBoard";
+import GetUserInfo from "../../services/user/GetUserInfo";
+import GetBoardListFrom from "../../services/board/GetBoardListFrom";
 
 export default function QuestionPage() {
     const [isEmpty, setIsEmpty] = useState(false);
     const [isFail, setIsFail] = useState(false);
     const [isOK, setIsok] = useState(false);
     const [message, setMessage] = useState("일시적인 오류가 발생했습니다.");
+    const [myQuestion, setMyQuestion] = useState([]);
+
+    useEffect(() => {
+        const fetchMyQuestion = async () => {
+            const userRes = await GetUserInfo();
+            if (!userRes[0]) {
+                setIsFail(true);
+                setMessage(userRes[1]);
+                return;
+            }
+            const user = userRes[1];
+            const res = await GetBoardListFrom('inquiries/myQuestions?writer=' + user.nickname);
+            if (!res[0]) {
+                setIsFail(true);
+                setMessage(res[1]);
+                return;
+            }
+            setMyQuestion(res[1]);
+        }
+        fetchMyQuestion();
+    }, []);
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-        const user = await GetUserInfo();
+        const userRes = await GetUserInfo();
+        if (!userRes[0]) {
+            setIsFail(true);
+            setMessage(userRes[1]);
+            return;
+        }
+        const user = userRes[1];
 
         const inputData = new FormData(e.target);
         inputData.append("writer", user.nickname);
         inputData.append("contact", "등록된 유저입니다.");
         const value = Object.fromEntries(inputData.entries());
 
-        if (inputData.get("content") == "" || inputData.get("title") == "") {
+        if (inputData.get("content") === "" || inputData.get("title") === "") {
             setIsEmpty(true);
             return;
         }
         const res = await PostBoard(value);
         if (!res[0]) {
-            if (typeof res[1] == "object") {
+            if (typeof res[1] === "object") {
                 let tmpMessage = new String();
                 for (const [key, value] of Object.entries(res[1])) {
                     tmpMessage += value + '\n';
@@ -67,8 +92,8 @@ export default function QuestionPage() {
                 </form>
                 <BodyHeader text="내 문의 내역" />
                 <div style={{ overflow: "scroll", overflowX: "hidden", height: "calc(100vh - 579px)" }}>
-                    {
-                        datas.map((data) => {
+                    {myQuestion.length === 0 ? <div style={{ textAlign: "center", marginTop: "20px" }}>문의 내역이 없습니다.</div> :
+                        myQuestion.map((data) => {
                             return <ExtendBox key={data.id} title={data.title}>{data.content}</ExtendBox>
                         })
                     }

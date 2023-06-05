@@ -12,12 +12,26 @@ export default async function GetSubFileList(id) {
     };
 
     try {
-        const res = await fetch(configData.API_SERVER + "directory/" + id + '/files' , model);
+        const res = await fetch(configData.API_SERVER + "directory/" + id + '/files', model);
         const data = await res.json();
         data.forEach(e => {
+            const size = parseInt(e.size);
+            if (parseInt(size / Math.pow(10, 9)) > 0) {
+                e.size = (size / Math.pow(10, 9)).toFixed(1) + "GB";
+            }
+            else if (parseInt(size / Math.pow(10, 6)) > 0) {
+                e.size = (size / Math.pow(10, 6)).toFixed(1) + "MB";
+            }
+            else if (parseInt(size / Math.pow(10, 3)) > 0) {
+                e.size = (size / Math.pow(10, 3)).toFixed(1) + "KB";
+            }
+            else {
+                e.size = size + "B";
+            }
             e.type = "file"
         });
-        if (res.status == 200) {
+        
+        if (res.status === 200) {
             return [true, data];  //성공
         }
         else {

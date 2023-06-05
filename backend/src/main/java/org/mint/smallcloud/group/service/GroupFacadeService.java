@@ -25,22 +25,19 @@ public class GroupFacadeService {
     private final GroupRepository groupRepository;
     private final GroupThrowerService groupThrowerService;
     private final MemberThrowerService memberThrowerService;
+    private final GroupService groupService;
     private final UserMapper userMapper;
 
     public void create(GroupRequestDto groupRequestDto) {
-        groupThrowerService.checkDuplicateGroupName(groupRequestDto.getGroupName());
         if (groupRequestDto.getParentName() == null)
-            groupRepository.save(Group.of(groupRequestDto.getGroupName()));
-        else {
-            Group parent = groupThrowerService.getGroupByName(groupRequestDto.getParentName());
-            groupRepository.save(Group.of(groupRequestDto.getGroupName(), parent));
-        }
+            groupService.createRootGroup(groupRequestDto.getGroupName());
+        else
+            groupService.createSubGroup(groupRequestDto.getGroupName(), groupRequestDto.getParentName());
+
     }
 
     public void delete(String groupName) {
-        Group group = groupThrowerService.getGroupByName(groupName);
-        group.getMembers().forEach(Member::unsetGroup);
-        groupRepository.delete(group);
+        groupService.delete(groupName);
     }
 
     public void addUser(String groupId, String username) {
@@ -51,7 +48,7 @@ public class GroupFacadeService {
 
     public void update(String groupName, GroupRequestDto groupRequestDto) {
         Group group = groupThrowerService.getGroupByName(groupName);
-        if (groupRequestDto.getParentName() != null) {
+        if (groupRequestDto.getGroupName() != null) {
             groupThrowerService.checkDuplicateGroupName(groupRequestDto.getGroupName());
             group.setName(groupRequestDto.getGroupName());
         }
@@ -77,6 +74,7 @@ public class GroupFacadeService {
     }
 
     private List<GroupTreeDto> getSubGroups(Group group) {
+        System.out.println(group.getSubGroups().size());
         return group.getSubGroups().stream()
                 .map(subGroup -> GroupTreeDto.builder()
                         .name(subGroup.getName())
@@ -88,5 +86,9 @@ public class GroupFacadeService {
     public List<UserProfileResponseDto> getUserList(String groupName) {
         Group group = groupThrowerService.getGroupByName(groupName);
         return group.getMembers().stream().map(userMapper::toUserProfileResponseDto).collect(Collectors.toList());
+    }
+
+    public List<String> search(String q) {
+        return groupService.search(q);
     }
 }

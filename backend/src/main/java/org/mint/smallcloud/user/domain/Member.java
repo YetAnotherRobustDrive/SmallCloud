@@ -133,14 +133,17 @@ public class Member {
     }
 
     public void setGroup(Group group) {
-        if (getGroup() != null)
-            this.group.deleteMember(this);
-        if (group == null) {
-            this.group = null;
+        if (getGroup() == null) {
+            this.group = group;
+            if (this.group != null)
+                this.group.addMember(this);
             return;
         }
+        if (getGroup().equals(group)) return;
+        this.group.deleteMember(this);
         this.group = group;
-        this.group.addMember(this);
+        if (this.group != null)
+            this.group.addMember(this);
     }
 
     public void unsetGroup() {

@@ -19,13 +19,13 @@ export default function AdminTermUploadPage() {
     useEffect(() => {
         const render = async () => {
             const res = await GetBoardListFrom("inquiries/board/created?boardType=terms&createdDate=0");
-            setTimeout(() => setIsLoading(false), 500);
+            setTimeout(() => setIsLoading(false), 250);
             if (!res[0]) {
                 setIsFail(true);
                 setMessage(res[1]);
                 return;
             }
-            if (res[1].length != 0) {
+            if (res[1] !== null) {
                 setCurr(res[1].content);                
             }
         };
@@ -40,13 +40,13 @@ export default function AdminTermUploadPage() {
         inputData.append("boardType", "terms");
         const value = Object.fromEntries(inputData.entries());
 
-        if (inputData.get("content") == "") {
+        if (inputData.get("content") === "") {
             setIsEmpty(true);
             return;
         }
         const res = await PostBoardAdmin(value);
         if (!res[0]) {
-            if (typeof res[1] == "object") {
+            if (typeof res[1] === "object") {
                 let tmpMessage = new String();
                 for (const [key, value] of Object.entries(res[1])) {
                     tmpMessage += value + '\n';

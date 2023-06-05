@@ -8,7 +8,7 @@ export default function ListBox(props) {
     const navigate = useNavigate();
 
     const handleOnClick = () => {
-        if (data.type == "file") {
+        if (data.type === "file") {
             props.onClick();
             return;
         }
@@ -19,7 +19,7 @@ export default function ListBox(props) {
     return (
         <div className="listbox" onClick={handleOnClick}>
             <div className="icon">
-                {data.type == "file" ? <FcFile /> : <FcFolder />}
+                {data.type === "file" ? <FcFile /> : <FcFolder />}
             </div>
             <div className="name">{data.name}</div>
             <div className="size">{data.size}</div>

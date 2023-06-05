@@ -5,7 +5,7 @@ export default async function PostBoard(value) {
     await RefreshToken();
     const accessToken = localStorage.getItem("accessToken");
     let model;
-    if (accessToken == null) {
+    if (accessToken === null) {
         model = {
             method: "POST",
             headers: {

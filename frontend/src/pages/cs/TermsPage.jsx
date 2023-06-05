@@ -25,10 +25,9 @@ export default function TermsPage() {
             }
             setTermData(termRes[1]);
             setPrivacyData(privRes[1]);
-
-            setTimeout(() => setIsLoading(false), 500);
         };
         render();
+        setTimeout(() => setIsLoading(false), 250);
     }, [])
 
     return (
@@ -40,11 +39,11 @@ export default function TermsPage() {
             <BodyFrame>
                 <BodyHeader text="이용 약관" />
                 <div className="terms">
-                    <div className="inner">{termData.content}</div>
+                    <div className="inner">{termData === null ? "" : termData.content}</div>
                 </div>
                 <BodyHeader text="개인정보 처리 방침" />
                 <div className="terms">
-                    <div className="inner">{privacyData.content}</div>
+                    <div className="inner">{privacyData === null ? "" : privacyData.content}</div>
                 </div>
             </BodyFrame>
         </>

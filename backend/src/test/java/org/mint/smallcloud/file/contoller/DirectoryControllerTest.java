@@ -7,9 +7,6 @@ import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mint.smallcloud.TestSnippet;
-import org.mint.smallcloud.file.domain.DataNode;
-import org.mint.smallcloud.file.domain.FileLocation;
-import org.mint.smallcloud.file.domain.FileType;
 import org.mint.smallcloud.file.domain.Folder;
 import org.mint.smallcloud.file.dto.DirectoryCreateDto;
 import org.mint.smallcloud.file.dto.DirectoryMoveDto;
@@ -31,9 +28,6 @@ import org.springframework.web.filter.CharacterEncodingFilter;
 import javax.persistence.EntityManager;
 import javax.transaction.Transactional;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.documentationConfiguration;
@@ -41,7 +35,8 @@ import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuild
 import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.post;
 import static org.springframework.restdocs.payload.PayloadDocumentation.fieldWithPath;
 import static org.springframework.restdocs.payload.PayloadDocumentation.requestFields;
-import static org.springframework.restdocs.request.RequestDocumentation.*;
+import static org.springframework.restdocs.request.RequestDocumentation.parameterWithName;
+import static org.springframework.restdocs.request.RequestDocumentation.pathParameters;
 import static org.springframework.security.test.web.servlet.setup.SecurityMockMvcConfigurers.springSecurity;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -168,7 +163,7 @@ class DirectoryControllerTest {
             mockMvc.perform(
                     TestSnippet.secured(post(url, folder1.getId() + 1),
                         token1.getAccessToken(), objectMapper, dto1))
-                .andExpect(status().isForbidden())
+                .andExpect(status().isNotFound())
                 .andDo(document(DOCUMENT_NAME));
         }
 
@@ -263,7 +258,7 @@ class DirectoryControllerTest {
             mockMvc.perform(
                     TestSnippet.secured(post(url, folder1.getId() + 1),
                         token1.getAccessToken(), objectMapper, dto1))
-                .andExpect(status().isForbidden())
+                .andExpect(status().isNotFound())
                 .andDo(document(DOCUMENT_NAME));
         }
 
@@ -364,7 +359,7 @@ class DirectoryControllerTest {
             mockMvc.perform(
                     TestSnippet.secured(post(url, target.getId() + 100),
                         token1.getAccessToken(), objectMapper, dto1))
-                .andExpect(status().isForbidden())
+                .andExpect(status().isNotFound())
                 .andDo(document(DOCUMENT_NAME));
         }
 
@@ -377,7 +372,7 @@ class DirectoryControllerTest {
             mockMvc.perform(
                     TestSnippet.secured(post(url, target.getId()),
                         token1.getAccessToken(), objectMapper, dto1))
-                .andExpect(status().isForbidden())
+                .andExpect(status().isNotFound())
                 .andDo(document(DOCUMENT_NAME));
         }
 

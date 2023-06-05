@@ -9,7 +9,6 @@ export default function AdminPage() {
     const navigate = useNavigate();
     const render = async () => {
         const test = await TESTADMIN();
-        console.log(test);
         const isAdmin = await IsAdminToken();
         if (!isAdmin) { //fail
             navigate('/');

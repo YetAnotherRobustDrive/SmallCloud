@@ -14,4 +14,7 @@ public interface GroupRepository extends JpaRepository<Group, Long> {
     boolean existsByName(String name);
 
     List<Group> findAllByParentGroup(Group group);
+
+
+    List<Group> findByNameLike(String s);
 }

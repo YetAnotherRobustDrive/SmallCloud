@@ -5,12 +5,14 @@ import ReactFlow, {
 } from 'reactflow';
 
 import 'reactflow/dist/style.css';
-import PostGroup from './PostGroup';
-import GetGroup from './GetGroup';
+import PostCreateGroup from './PostCreateGroup';
+import GetGroupTree from './GetGroupTree';
+import PostDeleteGroup from './PostDeleteGroup';
 
 export default function Flow(props) {
     const [nodes, setNodes] = useState([]);
     const [edges, setEdges] = useState([]);
+    const [prevEdges, setPrevEdges] = useState([]);
 
     const [isRootExist, setIsRootExist] = useState(false);
 
@@ -25,51 +27,58 @@ export default function Flow(props) {
 
     useEffect(() => {
         const init = async () => {
-            const res = await GetGroup();
-            const tmpRes = JSON.parse(JSON.stringify(res));
-            tmpRes.forEach(e => {
-                e.type = "step";
-                e.id = "reactflow__edge-" + e.source + '-' + e.target;
-                delete e.x;
-                delete e.y;
+            let tmpNodes = [];
+            const res = await GetGroupTree();
+            res.find(elem => {
+                if (elem.source === "__ROOT__") {
+                    tmpNodes = [{
+                        id: elem.target,
+                        type: 'customRootNode',
+                        position: { x: 150, y: 0 },
+                        data: {
+                            label: elem.target,
+                        },
+                        dragHandle: "none"
+                    }];
+                    setIsRootExist(true);
+                }
+            });
+
+            const tmpRes = JSON.parse(JSON.stringify(res.filter(elem => elem.source !== "__ROOT__")));
+            const tmpResForNode = JSON.parse(JSON.stringify(res.filter(elem => elem.source !== "__ROOT__")));
+
+            tmpRes.forEach((item, index, object) => {
+                if (item.source === "__ROOT__") {
+                    object.splice(index, 1);
+                    return;
+                }
+                item.type = "step";
+                item.id = "reactflow__edge-" + item.source + '-' + item.target;
+                delete item.x;
+                delete item.y;
             });
             setEdges(tmpRes);
-            let tmp = [];
-            for (let index = 0; index < res.length; index++) {
-                const elem = res[index];
-                tmp = tmp.concat({
+            setPrevEdges(tmpRes);
+
+            for (let index = 0; index < tmpResForNode.length; index++) {
+                const elem = tmpResForNode[index];
+                tmpNodes = [...tmpNodes, {
                     id: elem.target,
                     type: 'customNode',
                     position: { x: elem.x, y: elem.y },
                     data: {
                         label: elem.target,
                     }
-                })
+                }]
             }
-
-            res.map((elem) => {
-                const exist = tmp.find((e) => e.id === elem.source);
-                if (exist === undefined) {
-                    tmp = tmp.concat({
-                        id: elem.source,
-                        type: 'customRootNode',
-                        position: { x: 250, y: 0 },
-                        data: {
-                            label: elem.source,
-                        },
-                        dragHandle: "none"
-                    })
-                    return;
-                }
-            })
-            setNodes(tmp);
-        };
+            setNodes(tmpNodes);
+        }
         init();
     }, [])
 
     const onConnect = useCallback((params) => {
         const exist = edgeRef.current.find((e) => e.target === params.target);
-        if (exist != undefined) {
+        if (exist !== undefined) {
             return false;
         }
         return setEdges((eds) => addEdge({ source: params.source, target: params.target, type: "step" }, eds));
@@ -78,7 +87,7 @@ export default function Flow(props) {
     const onEdgesChange = useCallback((changes) => setEdges((eds) => applyNodeChanges(changes, eds)), []);
     const onNodesDelete = useCallback(
         (deleted) => {
-            if (deleted[0].type == "customRootNode") {
+            if (deleted[0].type === "customRootNode") {
                 setIsRootExist(false);
             }
             setEdges(
@@ -114,13 +123,18 @@ export default function Flow(props) {
     }, []);
 
     const handleClickAdd = () => {
-        const name = window.prompt("새 그룹의 이름을 입력해주세요.");
+        const rawName = window.prompt("새 그룹의 이름을 입력해주세요.");
+        const reg = /[\{\}\[\]\/?.,;:|\)*~`!^\-_+<>@\#$%&\\\=\(\'\"]/gi;
+        const name = rawName.replace(reg, '');
+        if (name === null || name === "") {
+            return;
+        }
         const exist = nodeRef.current.find((e) => e.id === name);
-        if (exist != undefined) {
+        if (exist !== undefined) {
             return;
         }
 
-        if (isRootExistRef.current == true) {
+        if (isRootExistRef.current === true) {
             const newNode = nodes.concat({
                 id: name,
                 type: 'customNode',
@@ -150,17 +164,36 @@ export default function Flow(props) {
 
     const handleClickSave = async () => {
         const tmpEdge = JSON.parse(JSON.stringify(edgeRef.current));
-        const tmpNode = JSON.parse(JSON.stringify(nodeRef.current));
-        const position = tmpNode.map((a) => [a.id, a.position.x, a.position.y]);
-        
-        tmpEdge.forEach(e => {
-            const pos = position.find((elem) => elem[0] === e.target);
-            e.x = pos[1];
-            e.y = pos[2];
-            delete e.type;
-            delete e.id;
+
+        const rootNode = nodeRef.current.find((e) => e.type === "customRootNode");
+        if (rootNode === undefined) {
+            return;
+        }
+        await PostCreateGroup(rootNode.data.label, "__ROOT__");
+
+        const createList = tmpEdge.filter(e => {
+            if (prevEdges.find(elem => (elem.source === e.source && elem.target === e.target)) === undefined) {
+                return true;
+            }
+            return false;
         })
-        await PostGroup(tmpEdge);//XY mapping
+        for (let index = 0; index < createList.length; index++) {
+            const element = createList[index];
+            await PostCreateGroup(element.target, element.source);
+        }
+
+        const deleteList = prevEdges.filter(e => {
+            if (tmpEdge.find(elem => (elem.source === e.source && elem.target === e.target)) === undefined) {
+                return true;
+            }
+            return false;
+        })
+        for (let index = 0; index < deleteList.length; index++) {
+            const element = deleteList[index];
+            await PostDeleteGroup(element.target);
+        }
+        alert("저장되었습니다.");
+        window.location.reload();
     }
 
     return (

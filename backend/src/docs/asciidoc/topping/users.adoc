@@ -89,3 +89,11 @@ IMPORTANT: 유저를 찾을 수 없을 때
 operation::User/Profile/wrongFormat[snippets='http-response']
 
 IMPORTANT: payload가 올바르지 않을 때
+
+=== 유저 검색 (search)
+
+operation::User/Search/ok[snippets='http-request,request-parameters']
+
+==== 성공
+
+operation::User/Search/ok[snippets='http-response']

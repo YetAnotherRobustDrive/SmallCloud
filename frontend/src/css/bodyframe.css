@@ -70,7 +70,6 @@
 
 .bodyframe .contextMenu {
     position: absolute;
-    z-index: 99;
+    z-index: 1100;
     width: 100px;
-    height: 100px;
 }

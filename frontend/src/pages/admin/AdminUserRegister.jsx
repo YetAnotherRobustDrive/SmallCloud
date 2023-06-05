@@ -32,11 +32,11 @@ export default function AdminUserRegister() {
         e.preventDefault();
 
         const inputData = new FormData(e.target);
-        if (inputData.get("name") == "" || inputData.get("id") == "" || inputData.get("password") == "" || inputData.get("password_chk") == "") {
+        if (inputData.get("name") === "" || inputData.get("id") === "" || inputData.get("password") === "" || inputData.get("password_chk") === "") {
             setIsEmpty(true);
             return;
         }
-        else if (inputData.get("password_chk") != inputData.get("password")) {
+        else if (inputData.get("password_chk") !== inputData.get("password")) {
             setIsChkWrong(true);
             return;
         }

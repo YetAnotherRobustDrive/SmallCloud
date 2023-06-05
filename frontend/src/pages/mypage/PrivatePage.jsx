@@ -6,7 +6,6 @@ import ModalOk from '../../component/modal/ModalOk';
 import EditableColumn from "../../component/mypage/EditableColumn";
 import SidebarMypage from "../../component/sidebar/SidebarMypage";
 import '../../css/mypage.css';
-import default_profile_img from '../../img/defalutProfile.png';
 import RefreshToken from "../../services/token/RefreshToken";
 import GetUserInfo from "../../services/user/GetUserInfo";
 import UpdateUserInfo from "../../services/user/UpdateUserInfo";
@@ -29,25 +28,24 @@ export default function PrivatePage() {
             await RefreshToken();
 
             const res = await GetUserInfo();
-            if (!res) {
+            if (!res[0]) {
                 setIsFetchFail(true);
             }
 
             //성공 후 처리
-            setUsername(res.username);
-            setNickname(res.nickname);
-            const joinDate = new Date(res.joinedDate);
+            setUsername(res[1].username);
+            setNickname(res[1].nickname);
+            const joinDate = new Date(res[1].joinedDate);
             const year = ("" + joinDate.getFullYear()).slice(2);
             const month = ("0" + (1 + joinDate.getMonth())).slice(-2);
             const day = ("0" + joinDate.getDate()).slice(-2);
             const hour = ("0" + joinDate.getHours()).slice(-2);
             const min = ("0" + joinDate.getMinutes()).slice(-2);
             setJoined(year + "-" + month + "-" + day + ' ' + hour + ':' + min);
-            if (res.group != null)
-                setGroup(res.group);
-            if (img === null) {
-                setImg(default_profile_img);
-            }
+            if (res[1].group !== null)
+                setGroup(res[1].group);
+            
+            setImg(res[2]);
         }
         getUserInfo();
     }, [])
@@ -71,9 +69,9 @@ export default function PrivatePage() {
         console.log("asdfasdf");
     }
 
-    const reader = new FileReader();
     const handleImgChange = (e) => {
         const file = e.target.files[0];
+        const reader = new FileReader();
         reader.readAsDataURL(file);
 
         return new Promise((resolve) => {
@@ -86,14 +84,14 @@ export default function PrivatePage() {
 
     return (
         <>
-            {isSuccess && <ModalOk close={()=>{window.location.reload()}}>{"변경되었습니다."}</ModalOk>}
+            {isSuccess && <ModalOk close={() => { window.location.reload() }}>{"변경되었습니다."}</ModalOk>}
             {isFail && <ModalOk close={() => setIsFail(false)}>{message}</ModalOk>}
             {isFetchFail && <ModalOk close={() => { setIsFail(false); navigate('/'); }}>{"일시적인 오류가 발생했습니다."}</ModalOk>}
             <Header />
             <SidebarMypage />
             <BodyFrame>
                 <form className="private-profile" onSubmit={handleSubmit}>
-                    <img src={img}/>
+                    <img src={img} />
                     <label htmlFor="file">프로필 변경하기</label>
                     <input
                         onChange={handleImgChange}
@@ -114,7 +112,6 @@ export default function PrivatePage() {
                     />
                     <EditableColumn
                         title="GROUP"
-                        name="groupName"
                         value={group}
                         disabled={true}
                     />
