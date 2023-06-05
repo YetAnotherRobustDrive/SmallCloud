@@ -8,7 +8,7 @@ operation::Group/Create/ok[snippets='http-response']
 
 === 그룹 삭제
 
-operation::Group/Delete/ok[snippets='http-response,path-parameters']
+operation::Group/Delete/ok[snippets='http-request,path-parameters']
 
 ==== 성공
 
