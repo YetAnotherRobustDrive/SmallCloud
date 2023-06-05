@@ -10,7 +10,7 @@ import PostCreateShare from "../../services/share/PostCreateShare";
 export default function ModalAddShare(props) {
 
     const [searched, setSearched] = useState([]);
-    const [candidate, setCandidate] = useState(props.current);
+    const [candidate, setCandidate] = useState([]);
 
     const modalStyle = {
         content: {
