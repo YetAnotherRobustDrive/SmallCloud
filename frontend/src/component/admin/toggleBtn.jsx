@@ -4,18 +4,23 @@ import {BsToggleOff, BsToggleOn} from 'react-icons/bs'
 
 export default function ToggleBtn(props) {
 
-    const [isOff, setIsOff] = useState(true);
-    const [icon, setIcon] = useState(<BsToggleOff/>);
+    const [isLocked, setIsLocked] = useState(props.default === undefined ? true : props.default);
+    const [icon, setIcon] = useState(props.default ? <BsToggleOn/> : <BsToggleOff/>);
+    console.log("props", props.default);
 
     const testTT = (()=>{
-        isOff ? setIsOff(false):setIsOff(true);
-        isOff ? setIcon(<BsToggleOn/>):setIcon(<BsToggleOff/>);
+        setIsLocked(!isLocked);
+        if (isLocked) {
+            setIcon(<BsToggleOn/>);
+        } else {
+            setIcon(<BsToggleOff/>);
+        }
         props.onClick();
     })
 
     return (
         <div onClick={testTT} className="tgBtn">
-            <div className="stateText">{isOff ? "OFF" : "ON"}</div>
+            <div className="stateText">{!isLocked ? "OFF" : "ON"}</div>
             {icon}
         </div>
     )

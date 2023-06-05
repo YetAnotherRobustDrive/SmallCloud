@@ -52,7 +52,6 @@ export default function Flow(props) {
                     object.splice(index, 1);
                     return;
                 }
-                item.type = "step";
                 item.id = "reactflow__edge-" + item.source + '-' + item.target;
                 delete item.x;
                 delete item.y;
@@ -81,7 +80,7 @@ export default function Flow(props) {
         if (exist !== undefined) {
             return false;
         }
-        return setEdges((eds) => addEdge({ source: params.source, target: params.target, type: "step" }, eds));
+        return setEdges((eds) => addEdge({ source: params.source, target: params.target }, eds));
     }, [setEdges]);
     const onNodesChange = useCallback((changes) => setNodes((nds) => applyNodeChanges(changes, nds)), []);
     const onEdgesChange = useCallback((changes) => setEdges((eds) => applyNodeChanges(changes, eds)), []);
@@ -99,7 +98,7 @@ export default function Flow(props) {
                     const remainingEdges = acc.filter((edge) => !connectedEdges.includes(edge));
 
                     const createdEdges = incomers.flatMap(({ id: source }) =>
-                        outgoers.map(({ id: target }) => ({ source, target, type: "step" }))
+                        outgoers.map(({ id: target }) => ({ source, target }))
                     );
 
                     return [...remainingEdges, ...createdEdges];

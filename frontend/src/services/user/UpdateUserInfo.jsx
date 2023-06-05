@@ -2,7 +2,7 @@ import jwtDecode from "jwt-decode";
 import RefreshToken from "../token/RefreshToken";
 import configData from "../../config/config.json"
 
-export default async function UpdateUserInfo(value) {
+export default async function UpdateUserInfo(value, isImgChanged) {
     await RefreshToken();
     const accessToken = localStorage.getItem("accessToken");
 
@@ -35,6 +35,7 @@ export default async function UpdateUserInfo(value) {
         method: "POST",
         headers: {
             "Authorization": "Bearer " + accessToken,
+            "Content-Type": "application/json"
         },
         body: JSON.stringify({
             "name": value.nickname,
@@ -43,9 +44,11 @@ export default async function UpdateUserInfo(value) {
     };
 
     try {
-        const imgRes = await uploadImage();
-        if (imgRes.status !== 200) {
-            throw imgRes;
+        if (isImgChanged) {
+            const imgRes = await uploadImage();
+            if (imgRes.status !== 200) {
+                throw imgRes;
+            }
         }
 
         const userID = jwtDecode(accessToken).sub;
@@ -59,4 +62,4 @@ export default async function UpdateUserInfo(value) {
     } catch (e) {
         return [false, e.message];
     }
- }
+}

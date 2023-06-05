@@ -41,6 +41,7 @@ export default async function GetGroupTree() {
         }
         //루트가 있는 경우 dfs
         const visited = [];
+        const nodesInDepth = {};
         const dfs = async (parent, depth) => {
             visited.push(parent);
             const checkChildren = await getChildren(parent);
@@ -55,10 +56,11 @@ export default async function GetGroupTree() {
                     continue;
                 }
                 const tmp = await dfs(child, depth + 1);
+                nodesInDepth[depth] = nodesInDepth[depth] ? nodesInDepth[depth] + 1 : 1;
                 res.push({
                     "source": parent,
                     "target": child,
-                    "x": (index + 1) * 150,
+                    "x": nodesInDepth[depth] * 150,
                     "y": depth * 150,
                 });
                 res.push(...tmp);
