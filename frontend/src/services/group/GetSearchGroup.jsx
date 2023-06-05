@@ -17,7 +17,8 @@ export default async function GetSearchGroup(str) {
         if (!res.ok) {
             throw data;
         }
-        return [true, data];
+        const withoutRoot = data.result.filter((d) => d !== "__ROOT__");
+        return [true, withoutRoot];
     } catch (data) {
         return [false, data.message];
     }
