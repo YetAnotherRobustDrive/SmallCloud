@@ -65,11 +65,11 @@ public class ShareService {
             default:
                 throw new ServiceException(ExceptionStatus.INVALID_PARAMETER);
         }
-        members.forEach(member ->
+        members.forEach(m ->
             applicationEventPublisher.publishEvent(
                 NoticeEventAfterCommit.builder()
                     .content(String.format("\"%s\"을(를) 공유 받았습니다.", file.getName()))
-                    .owner(member)
+                    .owner(m)
                     .build()));
         }
 
@@ -92,11 +92,11 @@ public class ShareService {
             default:
                 throw new ServiceException(ExceptionStatus.INVALID_PARAMETER);
         }
-        members.forEach(member ->
+        members.forEach(m ->
             applicationEventPublisher.publishEvent(
                 NoticeEventAfterCommit.builder()
                     .content(String.format("\"%s\"을(를) 공유 해제했습니다", file.getName()))
-                    .owner(member)
+                    .owner(m)
                     .build()));
     }
 
