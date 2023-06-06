@@ -5,11 +5,12 @@ import lombok.extern.slf4j.Slf4j;
 import org.mint.smallcloud.group.domain.Group;
 import org.mint.smallcloud.group.dto.GroupRequestDto;
 import org.mint.smallcloud.group.dto.GroupTreeDto;
-import org.mint.smallcloud.group.repository.GroupRepository;
+import org.mint.smallcloud.notification.event.NoticeEventAfterCommit;
 import org.mint.smallcloud.user.domain.Member;
 import org.mint.smallcloud.user.dto.UserProfileResponseDto;
 import org.mint.smallcloud.user.mapper.UserMapper;
 import org.mint.smallcloud.user.service.MemberThrowerService;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
@@ -22,11 +23,11 @@ import java.util.stream.Collectors;
 @Transactional
 public class GroupFacadeService {
 
-    private final GroupRepository groupRepository;
     private final GroupThrowerService groupThrowerService;
     private final MemberThrowerService memberThrowerService;
     private final GroupService groupService;
     private final UserMapper userMapper;
+    private final ApplicationEventPublisher applicationEventPublisher;
 
     public void create(GroupRequestDto groupRequestDto) {
         if (groupRequestDto.getParentName() == null)
@@ -42,6 +43,13 @@ public class GroupFacadeService {
 
     public void addUser(String groupId, String username) {
         Group group = groupThrowerService.getGroupByName(groupId);
+        group.getMembers().forEach(member -> {
+            applicationEventPublisher.publishEvent(
+                NoticeEventAfterCommit.builder()
+                    .owner(member)
+                    .content(String.format("\"%s\" 그룹에 \"%s\"님이 추가되었습니다.", group.getName(), username))
+            );
+        });
         Member member = memberThrowerService.getMemberByUsername(username);
         member.setGroup(group);
     }
@@ -61,8 +69,14 @@ public class GroupFacadeService {
     public void deleteUser(String groupName, String username) {
         Group group = groupThrowerService.getGroupByName(groupName);
         Member member = memberThrowerService.getMemberByUsername(username);
-        if (member.getGroup().equals(group))
+        if (member.getGroup().equals(group)) {
+            applicationEventPublisher.publishEvent(
+                NoticeEventAfterCommit.builder()
+                    .owner(member)
+                    .content(String.format("\"%s\" 그룹에서 \"%s\"님이 탈퇴되었습니다.", group.getName(), username))
+            );
             member.unsetGroup();
+        }
     }
 
     public GroupTreeDto readGroupTree(String groupName) {
