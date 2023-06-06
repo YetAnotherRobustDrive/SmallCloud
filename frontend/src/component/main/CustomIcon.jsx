@@ -2,7 +2,6 @@ import React, { useEffect, useState } from "react";
 import { FcFile, FcFolder } from 'react-icons/fc';
 import { useNavigate } from "react-router-dom";
 import '../../css/customIcon.css';
-import ContextFile from "../contextMenu/ContextFile";
 import ContextFolder from "../contextMenu/ContextFolder";
 
 export default function CustomIcon(props) {
@@ -59,7 +58,7 @@ export default function CustomIcon(props) {
         context.style.top = (e.clientY + context.offsetHeight < window.innerHeight ? newY : newY - context.offsetHeight) + "px";
     }
 
-    const contextMenu = (props.type == "file" ? <ContextFile fileID={props.id} /> : <ContextFolder folderID={props.id} />);
+    const contextMenu = (props.type == "file" ? <></> : <ContextFolder folderID={props.id} />);
 
     return (
         <>
