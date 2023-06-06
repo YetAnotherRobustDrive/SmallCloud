@@ -13,9 +13,9 @@ import Sidebar from "../../component/sidebar/Sidebar";
 import GetRootDir from "../../services/directory/GetRootDir";
 import GetSubDirList from "../../services/directory/GetSubDirList";
 import GetSubFileList from "../../services/directory/GetSubFileList";
-import PostNewFile from "../../services/file/PostNewFile";
-import PostNewDir from "../../services/directory/PostNewDir";
 import PostMoveDir from "../../services/directory/PostMoveDir";
+import GetShareFolderList from "../../services/share/GetShareFolderList";
+import GetShareFileList from "../../services/share/GetShareFileList";
 
 export default function MainPage() {
 
@@ -29,6 +29,7 @@ export default function MainPage() {
     const [source, setSource] = useState(0);
     const [gridFiles, setGridFiles] = useState([]);
     const [listFiles, setListFiles] = useState([]);
+    const [shareFiles, setShareFiles] = useState([]);
 
     useEffect(() => {
         const render = async () => {
@@ -66,9 +67,7 @@ export default function MainPage() {
                         key={data.id}
                         id={data.id}
                         name={data.name}
-                        type={data.type}
-                        stage={data.writingStage}
-                        secu={data.securityLevel} />
+                        type={data.type}/>
                 })
             )
             setListFiles(
@@ -79,6 +78,36 @@ export default function MainPage() {
                             setIsFileView(true);
                         }}
                         data={data} />
+                })
+            )
+
+            const shareFileRes = await GetShareFileList();
+            if (!shareFileRes[0]) {
+                setIsFail(true);
+                setMessage(shareFileRes[1]);
+                return;
+            }
+            const shareDirRes = await GetShareFolderList();
+            if (!shareDirRes[0]) {
+                setIsFail(true);
+                setMessage(shareDirRes[1]);
+                return;
+            }
+            const shareFiles = [...shareDirRes[1], ...shareFileRes[1]];
+            setShareFiles(
+                shareFiles.map((data) => {
+                    return <CustomIcon
+                        onClick={() => {
+                            setSelected(data);
+                            setIsFileView(true);
+                        }}
+                        targetSetter={setTarget}
+                        sourceSetter={setSource}
+                        key={data.id}
+                        id={data.id}
+                        name={data.name}
+                        type={data.type}
+                        noContext={true}/>
                 })
             )
         }
@@ -119,11 +148,10 @@ export default function MainPage() {
                     </>
                 }
                 <UploadBtn />
-
-                <BodyHeader text="공유 파일" />
-                {gridFiles.length === 0 ? <div style={{ textAlign: "center", marginTop: "20px" }}>파일이 없습니다.</div> :
+                <BodyHeader text="공유받은 파일" />
+                {shareFiles.length === 0 ? <div style={{ textAlign: "center", marginTop: "20px" }}>파일이 없습니다.</div> :
                     <NarrowBox>
-                        {gridFiles}
+                        {shareFiles}
                     </NarrowBox>
                 }
             </BodyFrame>

@@ -10,12 +10,11 @@ import UploadBtn from "../../component/main/UploadBtn";
 import ModalFileview from "../../component/modal/ModalFileview";
 import ModalLoading from "../../component/modal/ModalLoading";
 import Sidebar from "../../component/sidebar/Sidebar";
-import GetSubDirList from "../../services/directory/GetSubDirList";
-import GetSubFileList from "../../services/directory/GetSubFileList";
-import GetDirInfo from "../../services/directory/GetDirInfo";
 import PostMoveDir from "../../services/directory/PostMoveDir";
+import GetShareFileList from "../../services/share/GetShareFileList";
+import GetShareFolderList from "../../services/share/GetShareFolderList";
 
-export default function FolderPage() {
+export default function SharePage() {
 
     const [isGrid, setIsGrid] = useState(true);
     const [isFileView, setIsFileView] = useState(false);
@@ -32,20 +31,19 @@ export default function FolderPage() {
 
     useEffect(() => {
         const render = async () => {
-            const infoRes = await GetDirInfo(params.fileID);
-            if (!infoRes[0]) {
-                throw infoRes[1];
+            const shareFileRes = await GetShareFileList();
+            if (!shareFileRes[0]) {
+                setIsFail(true);
+                setMessage(shareFileRes[1]);
+                return;
             }
-            setName(infoRes[1].name);
-            const subFileRes = await GetSubFileList(params.fileID);
-            if (!subFileRes[0]) {
-                throw subFileRes[1];
+            const shareDirRes = await GetShareFolderList();
+            if (!shareDirRes[0]) {
+                setIsFail(true);
+                setMessage(shareDirRes[1]);
+                return;
             }
-            const subDirRes = await GetSubDirList(params.fileID);
-            if (!subDirRes[0]) {
-                throw subDirRes[1];
-            }
-            const files = [...subDirRes[1], ...subFileRes[1]];
+            const files = [...shareDirRes[1], ...shareFileRes[1]];
             setGridFiles(
                 files.map((data) => {
                     return <CustomIcon
@@ -102,7 +100,7 @@ export default function FolderPage() {
             <Header />
             <Sidebar />
             <BodyFrame hasContext={true}>
-                <BodyHeader text={name} addon={setIsGrid} view={isGrid} />
+                <BodyHeader text={"공유받은 파일"} addon={setIsGrid} view={isGrid} />
                 {isGrid &&
                     (gridFiles.length === 0 ? <div style={{height:"calc(100vh - 137px)", textAlign: "center", marginTop: "20px" }}>파일이 없습니다.</div> :
                         <GridBox height="calc(100vh - 117px)">

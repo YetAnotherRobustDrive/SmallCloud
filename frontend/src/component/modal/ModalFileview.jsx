@@ -141,8 +141,8 @@ export default function ModalFileview(props) {
                         {!isGeneralSelected && //공유
                             <>
                                 <div className='share-icon' onClick={handleShare}><BsFillShareFill /></div>
-                                <div style={{ margin: "10px" }}>
-                                    <span>현재 공유 상태</span>
+                                <div className="shareBody">
+                                    <span>현재 공유</span>
                                     <div className="shareList">
                                         {fileData.shares.length === 0 ?
                                             "현재 공유대상이 없습니다." :

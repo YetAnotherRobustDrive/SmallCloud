@@ -2,26 +2,23 @@ import React, { useEffect, useState } from "react";
 import { FcFile, FcFolder } from 'react-icons/fc';
 import { useNavigate } from "react-router-dom";
 import '../../css/customIcon.css';
-import ContextFile from "../contextMenu/ContextFile";
 import ContextFolder from "../contextMenu/ContextFolder";
 
 export default function CustomIcon(props) {
 
     const [icon, setIcon] = useState(null);
-    const [left, setLeft] = useState(null);
-    const [right, setRight] = useState(null);
     const [isContextOpen, setIsContextOpen] = useState(false);
 
     const navigate = useNavigate();
 
     const handleOnClick = (e) => {
         e.preventDefault();
-        if (props.type === "file") {
-            props.onClick();
+        if (props.type === "folder") {
+            navigate("/folder/" + props.id);
             return;
         }
         else {
-            navigate("/files/" + props.id);
+            props.onClick();
             return;
         }
     }
@@ -30,30 +27,6 @@ export default function CustomIcon(props) {
         setIcon(
             props.type === "file" ? <FcFile /> : <FcFolder />
         )
-        setLeft(() => {
-            switch (props.stage) {
-                case "DRAFT":
-                    return "초안";
-                case "EXPIRED":
-                    return "만료";
-                case "FINAL":
-                    return "최종";
-                default:
-                    return "";
-            }
-        })
-        setRight(() => {
-            switch (props.secu) {
-                case "CONFIDENTIAL":
-                    return "기밀";
-                case "PUBLIC":
-                    return "공개";
-                case "SENSITIVE":
-                    return "민감";
-                default:
-                    return "";
-            }
-        })
     }, [])
 
     const handelDrop = (e) => {
@@ -85,7 +58,7 @@ export default function CustomIcon(props) {
         context.style.top = (e.clientY + context.offsetHeight < window.innerHeight ? newY : newY - context.offsetHeight) + "px";
     }
 
-    const contextMenu = (props.type == "file" ? <ContextFile fileID={props.id} /> : <ContextFolder folderID={props.id} />);
+    const contextMenu = (props.type == "file" ? <></> : <ContextFolder folderID={props.id} />);
 
     return (
         <>
@@ -107,10 +80,6 @@ export default function CustomIcon(props) {
                 <div className="icon">
                     <div className="real" name={props.type}>
                         {icon}
-                    </div>
-                    <div className="labels">
-                        <div className="left">{left}</div>
-                        <div className="right">{right}</div>
                     </div>
                 </div>
                 <span className="name">{props.name}</span>

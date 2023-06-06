@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Background, Handle, Position } from 'reactflow';
+import { Handle, Position } from 'reactflow';
 import "../../css/node.css";
 
 export default function CustomRootNode({ data, isConnectable }) {

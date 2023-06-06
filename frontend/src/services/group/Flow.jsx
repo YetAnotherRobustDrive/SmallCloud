@@ -1,12 +1,14 @@
 import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { BiAddToQueue, BiSave } from 'react-icons/bi';
 import ReactFlow, {
-    addEdge, applyNodeChanges, ControlButton, Controls, getConnectedEdges, getIncomers, getOutgoers, getRectOfNodes, updateEdge
+    ControlButton, Controls,
+    addEdge, applyNodeChanges,
+    updateEdge
 } from 'reactflow';
 
 import 'reactflow/dist/style.css';
-import PostCreateGroup from './PostCreateGroup';
 import GetGroupTree from './GetGroupTree';
+import PostCreateGroup from './PostCreateGroup';
 import PostDeleteGroup from './PostDeleteGroup';
 
 export default function Flow(props) {
@@ -37,8 +39,7 @@ export default function Flow(props) {
                         position: { x: 150, y: 0 },
                         data: {
                             label: elem.target,
-                        },
-                        dragHandle: "none"
+                        }
                     }];
                     setIsRootExist(true);
                 }
@@ -77,6 +78,9 @@ export default function Flow(props) {
 
     const onConnect = useCallback((params) => {
         const exist = edgeRef.current.find((e) => e.target === params.target);
+        if (params.source === params.target) {
+            return false;
+        }
         if (exist !== undefined) {
             return false;
         }
@@ -89,21 +93,6 @@ export default function Flow(props) {
             if (deleted[0].type === "customRootNode") {
                 setIsRootExist(false);
             }
-            setEdges(
-                deleted.reduce((acc, node) => {
-                    const incomers = getIncomers(node, nodes, edges);
-                    const outgoers = getOutgoers(node, nodes, edges);
-                    const connectedEdges = getConnectedEdges([node], edges);
-
-                    const remainingEdges = acc.filter((edge) => !connectedEdges.includes(edge));
-
-                    const createdEdges = incomers.flatMap(({ id: source }) =>
-                        outgoers.map(({ id: target }) => ({ source, target }))
-                    );
-
-                    return [...remainingEdges, ...createdEdges];
-                }, edges)
-            );
         },
         [nodes, edges]
     );
@@ -130,6 +119,7 @@ export default function Flow(props) {
         }
         const exist = nodeRef.current.find((e) => e.id === name);
         if (exist !== undefined) {
+            alert("이미 존재하는 그룹입니다.");
             return;
         }
 
@@ -152,8 +142,7 @@ export default function Flow(props) {
                 position: { x: 250, y: 0 },
                 data: {
                     label: name,
-                },
-                dragHandle: "none"
+                }
             })
             setIsRootExist(true);
             setNodes(newNode);
@@ -166,6 +155,7 @@ export default function Flow(props) {
 
         const rootNode = nodeRef.current.find((e) => e.type === "customRootNode");
         if (rootNode === undefined) {
+            alert("루트 그룹이 존재하지 않습니다.");
             return;
         }
         await PostCreateGroup(rootNode.data.label, "__ROOT__");
