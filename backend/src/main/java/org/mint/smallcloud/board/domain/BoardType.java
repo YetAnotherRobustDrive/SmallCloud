@@ -12,7 +12,19 @@ public enum BoardType {
      * privacy - 개인정보처리방침(얘도 2개 가져와야 함)
      */
 
-        faq, announcement, terms, privacy
-
-
+        faq, announcement, terms, privacy;
+    public String getMessage() {
+        switch (this) {
+            case faq:
+                return "FAQ";
+            case terms:
+                return "약관";
+            case privacy:
+                return "개인정보처리방침";
+            case announcement:
+                return "공지사항";
+            default:
+                return "게시글";
+        }
+    }
 }
