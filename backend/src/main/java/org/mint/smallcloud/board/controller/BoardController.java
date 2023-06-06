@@ -4,7 +4,6 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.mint.smallcloud.ResponseDto;
 import org.mint.smallcloud.board.domain.BoardType;
-import org.mint.smallcloud.board.domain.Question;
 import org.mint.smallcloud.board.dto.BoardDto;
 import org.mint.smallcloud.board.dto.QuestionDto;
 import org.mint.smallcloud.board.dto.RequestDto;

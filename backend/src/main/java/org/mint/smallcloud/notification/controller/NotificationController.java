@@ -4,15 +4,13 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.mint.smallcloud.exception.ExceptionStatus;
 import org.mint.smallcloud.exception.ServiceException;
+import org.mint.smallcloud.notification.dto.NotificationCountDto;
 import org.mint.smallcloud.notification.service.NotificationService;
 import org.mint.smallcloud.security.UserDetailsProvider;
 import org.mint.smallcloud.user.domain.Roles;
 import org.springframework.security.access.annotation.Secured;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/notifications")
@@ -34,6 +32,9 @@ public class NotificationController {
     }
 
     // 알림 확인
-
-    // 알림 확인 여부
+    @Secured({Roles.S_COMMON})
+    @GetMapping("/{userName}/confirm")
+    public NotificationCountDto check(@PathVariable("userName") String userName) {
+        return notificationService.check(userName);
+    }
 }

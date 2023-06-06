@@ -10,6 +10,7 @@ import org.mint.smallcloud.TestSnippet;
 import org.mint.smallcloud.file.domain.*;
 import org.mint.smallcloud.file.dto.LabelUpdateDto;
 import org.mint.smallcloud.file.repository.FileRepository;
+import org.mint.smallcloud.label.domain.DefaultLabelType;
 import org.mint.smallcloud.label.domain.Label;
 import org.mint.smallcloud.label.repository.LabelRepository;
 import org.mint.smallcloud.security.dto.UserDetailsDto;
@@ -22,6 +23,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.restdocs.RestDocumentationContextProvider;
 import org.springframework.restdocs.RestDocumentationExtension;
 import org.springframework.restdocs.payload.RequestFieldsSnippet;
+import org.springframework.restdocs.request.PathParametersSnippet;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
@@ -40,6 +42,8 @@ import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.docu
 import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.post;
 import static org.springframework.restdocs.payload.PayloadDocumentation.fieldWithPath;
 import static org.springframework.restdocs.payload.PayloadDocumentation.requestFields;
+import static org.springframework.restdocs.request.RequestDocumentation.parameterWithName;
+import static org.springframework.restdocs.request.RequestDocumentation.pathParameters;
 import static org.springframework.security.test.web.servlet.setup.SecurityMockMvcConfigurers.springSecurity;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -231,6 +235,58 @@ class FileControllerTest {
                             "testWrongToken", objectMapper, labelUpdateDto))
                     .andExpect(status().isForbidden())
                     .andDo(document(DOCUMENT_NAME));
+        }
+    }
+
+    @Nested
+    @DisplayName("/files/{fileId}/delete docs")
+    class restore {
+        String url = URL_PREFIX + "/{fileId}/delete";
+        private Folder parent;
+        private DataNode dataNode;
+        private DataNode dataNode1;
+        private Label label;
+        private Label trashLabel;
+
+        @BeforeEach
+        public void boot() {
+            em.persist(rootFolder);
+            parent = (Folder) Folder.createFolder(rootFolder, "folder1", member);
+            em.persist(parent);
+
+
+            label = Label.of("testLabel1", member);
+            em.persist(label);
+
+
+            trashLabel = Label.of(DefaultLabelType.defaultTrash.getLabelName(), member);
+            em.persist(trashLabel);
+
+
+            dataNode = DataNode.createFile(rootFolder, fileType, fileLocation, 100L, member);
+            em.persist(dataNode);
+            dataNode1 = DataNode.createFile(parent, fileType, fileLocation, 100L, member);
+            dataNode1.addLabel(label);
+            em.persist(dataNode1);
+            em.flush();
+        }
+
+        @Test
+        @DisplayName("정상 요청(라벨이 하나도 없을 때)")
+        void okNoLabel() throws Exception {
+            PathParametersSnippet payload = pathParameters(
+                    parameterWithName("fileId").description("복구할 파일의 id를 담고 있습니다."));
+
+            mockMvc.perform(
+                            TestSnippet.secured(post(url, dataNode.getId()), memberToken.getAccessToken()))
+                    .andExpect(status().isOk())
+                    .andDo(print())
+                    .andExpect((rst) -> {
+                        File file = fileRepository.findById(dataNode.getId()).orElseThrow();
+                        assertThat(file.getLabels().size()).isEqualTo(1);
+                        assertThat(file.getLabels().contains(trashLabel)).isTrue();
+                    })
+                    .andDo(document(DOCUMENT_NAME, payload));
         }
     }
 }

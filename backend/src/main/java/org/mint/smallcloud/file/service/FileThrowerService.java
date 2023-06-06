@@ -18,4 +18,10 @@ public class FileThrowerService {
         return fileRepository.findById(id)
             .orElseThrow(() -> new ServiceException(ExceptionStatus.FILE_NOT_FOUND));
     }
+
+    public void checkAccessRight(File file, String username) {
+        if (!file.canAccessUser(username)) {
+            throw new ServiceException(ExceptionStatus.NO_PERMISSION);
+        }
+    }
 }
