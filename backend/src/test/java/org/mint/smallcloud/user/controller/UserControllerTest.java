@@ -12,10 +12,7 @@ import org.mint.smallcloud.security.dto.UserDetailsDto;
 import org.mint.smallcloud.security.jwt.dto.JwtTokenDto;
 import org.mint.smallcloud.security.jwt.tokenprovider.JwtTokenProvider;
 import org.mint.smallcloud.user.domain.Member;
-import org.mint.smallcloud.user.dto.PasswordUpdateRequestDto;
-import org.mint.smallcloud.user.dto.RegisterDto;
-import org.mint.smallcloud.user.dto.UserProfileRequestDto;
-import org.mint.smallcloud.user.dto.UserProfileResponseDto;
+import org.mint.smallcloud.user.dto.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -29,9 +26,9 @@ import org.springframework.web.filter.CharacterEncodingFilter;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.transaction.Transactional;
+import java.time.LocalDateTime;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.*;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.documentationConfiguration;
 import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.get;
@@ -144,14 +141,15 @@ class UserControllerTest {
     @DisplayName("/users docs")
     class Register {
         private final String url = URL_PREFIX;
-        private RegisterDto registerDto;
+        private RegisterFromAdminDto registerDto;
 
         @BeforeEach
         public void boot() {
-            registerDto = RegisterDto.builder()
+            registerDto = RegisterFromAdminDto.builder()
                 .id("user2")
                 .password("pw2")
                 .name("name")
+                .expiredDate(null)
                 .build();
         }
 
@@ -164,7 +162,8 @@ class UserControllerTest {
                 .andDo(document(DOCUMENT_NAME, requestFields(
                     fieldWithPath("id").description("user id"),
                     fieldWithPath("name").description("user nickname"),
-                    fieldWithPath("password").description("user password"))));
+                    fieldWithPath("password").description("user password"),
+                    fieldWithPath("expiredDate").description("user expired date"))));
         }
 
         @DisplayName("유저가 잘못된 접근")
@@ -178,7 +177,7 @@ class UserControllerTest {
         @DisplayName("잘못된 요청 포멧")
         @Test
         public void wrongFormat() throws Exception {
-            registerDto = RegisterDto.builder()
+            registerDto = RegisterFromAdminDto.builder()
                 .name("fdsajklfjkldsajklfjslkdjfaklj")
                 .password("fldajsklfjdsklajflkdsajflkdsajfldsj")
                 .id("아아아아아아")
@@ -191,7 +190,7 @@ class UserControllerTest {
         @DisplayName("존재하는 유저 등록 요청")
         @Test
         public void duplicated() throws Exception {
-            registerDto = RegisterDto.builder()
+            registerDto = RegisterFromAdminDto.builder()
                 .name(member1.getNickname())
                 .id(member1.getUsername())
                 .password(member1.getPassword())
@@ -413,6 +412,31 @@ class UserControllerTest {
             mockMvc.perform(TestSnippet.secured(post(url), memberToken.getAccessToken(), objectMapper, passwordRequestDto))
                 .andExpect(status().isBadRequest())
                 .andDo(document(DOCUMENT_NAME));
+        }
+    }
+
+    @Nested
+    @DisplayName("/users/update-expired")
+    class UpdateExpired {
+        String url = URL_PREFIX + "/update-expired";
+        @DisplayName("정상 요청")
+        @Test
+        void ok() throws Exception {
+            UpdateExpiredDto dto = UpdateExpiredDto.builder()
+                .username(member1.getUsername())
+                .expiredDate(LocalDateTime.now().plusDays(1))
+                .build();
+            mockMvc.perform(TestSnippet.secured(TestSnippet.post(url, objectMapper, dto), adminToken.getAccessToken()))
+                .andExpect(status().isOk())
+                .andExpect((rst) -> {
+                    Member member = em.find(Member.class, member1.getId());
+                    assertTrue(member.getExpiredDate().isAfter(LocalDateTime.now()));
+                })
+                .andDo(document(DOCUMENT_NAME,
+                    requestFields(
+                        fieldWithPath("username").description("업데이트할 유저의 username"),
+                        fieldWithPath("expiredDate").description("업데이트할 유저의 만료일")
+                    )));
         }
     }
 }
