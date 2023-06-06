@@ -43,7 +43,7 @@ export default function AdminConfigPage() {
         <>
             {isAdminNeedChangePassword &&
                 <ModalGetPW
-                    title="관리자 비밀번호 변경"
+                    title="관리자 기본 비밀번호 변경"
                     isOpen={isAdminNeedChangePassword}
                     after={() => setIsAdminNeedChangePassword(false)}
                 />}

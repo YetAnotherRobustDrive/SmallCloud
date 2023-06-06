@@ -2,9 +2,11 @@ import React, { useEffect, useState } from "react";
 import '../../css/context.css';
 import PostNewDirName from "../../services/directory/PostNewDirName";
 import ModalGetString from "../modal/ModalGetString";
+import ModalFolderShare from "../modal/ModalFolderShare";
 
 export default function ContextFolder(props) {
     const [isModalOpen, setIsModalOpen] = useState(false);
+    const [isShareOpen, setIsShareOpen] = useState(false);
     const [isFail, setIsFail] = useState();
     const [message, setMessage] = useState();
     const [newName, setNewName] = useState();
@@ -25,7 +27,8 @@ export default function ContextFolder(props) {
     }, [newName])
 
     const options = [
-        { label: "이름 변경", onClick: () => { setIsModalOpen(true) } },
+        { label: "이름변경", onClick: () => { setIsModalOpen(true) } },
+        { label: "공유하기", onClick: () => { setIsShareOpen(true) } },
     ];
 
     return (
@@ -37,6 +40,13 @@ export default function ContextFolder(props) {
                     setter={setNewName}
                     isOpen={isModalOpen}
                     after={() => setIsModalOpen(false)}
+                />
+            }
+            {isShareOpen &&
+                <ModalFolderShare
+                    folderID={props.folderID}
+                    isOpen={isShareOpen}
+                    after={() => setIsShareOpen(false)}
                 />
             }
             <div className="context" onContextMenu={e => { e.preventDefault(); e.stopPropagation(); }}>

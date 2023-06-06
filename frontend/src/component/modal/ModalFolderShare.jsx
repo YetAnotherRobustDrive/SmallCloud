@@ -1,16 +1,19 @@
-import React, { useState } from "react";
-import Modal from 'react-modal';
+import React, { useEffect, useState } from "react";
 import { AiOutlineClose } from 'react-icons/ai';
-import { MdPerson, MdGroups } from 'react-icons/md';
+import { MdGroups, MdPerson } from 'react-icons/md';
+import Modal from 'react-modal';
 import '../../css/modal.css';
-import GetSearchUser from "../../services/user/GetSearchUser";
+import GetDirInfo from "../../services/directory/GetDirInfo";
 import GetSearchGroup from "../../services/group/GetSearchGroup";
 import PostCreateShare from "../../services/share/PostCreateShare";
+import PostDeleteShare from "../../services/share/PostDeleteShare";
+import GetSearchUser from "../../services/user/GetSearchUser";
 
-export default function ModalAddShare(props) {
+export default function ModalFolderShare(props) {
 
     const [searched, setSearched] = useState([]);
     const [candidate, setCandidate] = useState([]);
+    const [original, setOriginal] = useState([]);
 
     const modalStyle = {
         content: {
@@ -22,6 +25,27 @@ export default function ModalAddShare(props) {
             transform: 'translate(-50%, -50%)',
         },
     }
+
+    useEffect(() => {
+        const getShare = async () => {
+            const res = await GetDirInfo(props.folderID);
+            if (!res[0]) {
+                alert(res[1]);
+                return;
+            }
+            const shares = res[1].shares;
+            const tmp = shares.map((d) => {
+                return {
+                    "targetName": d.targetName,
+                    "type": d.type === "MemberShare" ? "MEMBER" : "GROUP",
+                }
+            }
+            )
+            setCandidate(tmp);
+            setOriginal(tmp);
+        }
+        getShare();
+    }, [])
 
     const handleClose = () => {
         props.after();
@@ -87,20 +111,38 @@ export default function ModalAddShare(props) {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-        candidate.forEach(async (d) => {
+        const delList = original.filter((d) => {
+            const res = candidate.find((e) => e.targetName === d.targetName);
+            if (res === undefined) {
+                return true;
+            }
+            return false;
+        })
+        const newList = candidate.filter((d) => {
+            const res = original.find((e) => e.targetName === d.targetName);
+            if (res === undefined) {
+                return true;
+            }
+            return false;
+        })
+        delList.forEach(async (d) => {
             const data = {
-                "fileId": props.fileID,
+                "fileId": props.folderID,
                 "targetName": d.targetName,
                 "type": d.type
             }
-            const res = await PostCreateShare(data);
-            if (!res[0]) {
-                alert(res[1]);
-                return;
-            }
-            alert("공유가 추가되었습니다.");
-            window.location.reload();
+            await PostDeleteShare(data);
         })
+        newList.forEach(async (d) => {
+            const data = {
+                "fileId": props.folderID,
+                "targetName": d.targetName,
+                "type": d.type
+            }
+            await PostCreateShare(data);
+        })
+        alert("공유가 적용되었습니다.");
+        props.after();
     }
 
     Modal.setAppElement("#root");
@@ -108,7 +150,7 @@ export default function ModalAddShare(props) {
         <Modal isOpen={props.isOpen} style={modalStyle}>
             <div className="modalOuter" >
                 <div className="modalShareHeader">
-                    <span className="title">공유 추가하기</span>
+                    <span className="title">공유 관리하기</span>
                     <div className="close" onClick={handleClose}><AiOutlineClose /></div>
                 </div>
                 <div className="modalShareBody">
@@ -145,7 +187,7 @@ export default function ModalAddShare(props) {
                             })}
                     </div>
                 </div>
-                <button onClick={handleSubmit}>추가하기</button>
+                <button onClick={handleSubmit}>적용하기</button>
             </div>
         </Modal>
     )

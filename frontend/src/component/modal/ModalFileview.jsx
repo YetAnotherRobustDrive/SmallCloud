@@ -177,12 +177,6 @@ export default function ModalFileview(props) {
             }
             {isShareOpen &&
                 <ModalAddShare
-                    candidate={fileData.shares.map((item) => {
-                        return {
-                            "targetName": item.targetName,
-                            "type": item.type === "MemberShare" ? "MEMBER" : "GROUP"
-                        }
-                    })}
                     fileID={fileData.id}
                     isOpen={isShareOpen}
                     after={() => setIsShareOpen(false)}
