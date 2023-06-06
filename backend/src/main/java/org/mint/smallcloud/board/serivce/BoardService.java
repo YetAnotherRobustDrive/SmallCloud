@@ -10,8 +10,8 @@ import org.mint.smallcloud.board.repository.BoardRepository;
 import org.mint.smallcloud.notification.event.NoticeAllEventAfterCommit;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
-import javax.transaction.Transactional;
 import java.util.List;
 import java.util.stream.Collectors;
 
