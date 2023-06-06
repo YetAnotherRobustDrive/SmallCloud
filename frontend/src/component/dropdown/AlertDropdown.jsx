@@ -1,20 +1,23 @@
 import React, { useEffect, useState } from "react";
 import '../../css/dropdown.css'
 import { BsBell } from "react-icons/bs"
+import GetFiveAlarm from "../../services/alarm/GetFiveAlarm";
 export default function AlertDropdown() {
 
     const [alarms, setAlarms] = useState([]);
-    const [count, setCount] = useState(1000);
+    const [count, setCount] = useState(0);
 
     useEffect(() => {
-
-        setAlarms([ //replace with fetched data
-            { label: "알림테스트", date: "2021-05-01" },
-            { label: "222222222222222222222222", date: "2021-05-01" },
-            { label: "222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222", date: "2021-05-01" },
-            { label: "222222222222222222222222", date: "2021-05-01" },
-            { label: "222222222222222222222222", date: "2021-05-01" },
-        ]);
+        const getAlarm = async () => {
+            const res = await GetFiveAlarm();
+            if (!res[0]) {
+                alert(res[1]);
+                return;
+            }
+            setAlarms(res[1].notificationDtoList);
+            setCount(res[1].count);
+        }
+        getAlarm();
     }, []);
 
     const [isOpen, setIsOpen] = useState(false);
@@ -33,7 +36,9 @@ export default function AlertDropdown() {
     return (
         <div className="dropdown">
             <div className="dropdown-header" onClick={() => setIsOpen(!isOpen)}>
-                <span className="count">{count > 99 ? "99+" : count}</span>
+                {count !== 0 &&
+                    <span className="count">{count > 99 ? "99+" : count}</span>
+                }
                 <BsBell />
                 {isOpen && (
                     <ul className="dropdown-options">
