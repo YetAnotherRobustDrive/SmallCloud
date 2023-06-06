@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import '../../css/dropdown.css'
 import { BsBell } from "react-icons/bs"
 import GetFiveAlarm from "../../services/alarm/GetFiveAlarm";
+import PostDeleteAlarm from "../../services/alarm/PostDeleteAlarm";
 export default function AlertDropdown() {
 
     const [alarms, setAlarms] = useState([]);
@@ -18,7 +19,7 @@ export default function AlertDropdown() {
             setCount(res[1].count);
         }
         getAlarm();
-    }, []);
+    }, [count]);
 
     const [isOpen, setIsOpen] = useState(false);
 
@@ -30,7 +31,16 @@ export default function AlertDropdown() {
     const handleRemoveClick = (e) => {
         e.preventDefault();
         e.stopPropagation();
-        setIsOpen(false);
+        const rmAlarm = async () => {
+            const res = await PostDeleteAlarm(e.target.id);
+            if (!res[0]) {
+                alert(res[1]);
+                return;
+            }
+            setIsOpen(!isOpen);
+            setCount(count - 1);
+        }
+        rmAlarm();
     };
 
     return (
@@ -53,7 +63,7 @@ export default function AlertDropdown() {
                                 </span></p>
                                 <div className="date">
                                     {option.date}
-                                    <div className="close" onClick={handleRemoveClick}>읽음</div>
+                                    <div id={option.id} className="close" onClick={handleRemoveClick}>읽음</div>
                                 </div>
                             </li>
                         ))}

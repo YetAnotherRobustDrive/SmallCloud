@@ -12,7 +12,7 @@ export default async function PostDeleteAlarm(id) {
     };
 
     try {
-        const res = await fetch(configData.API_SERVER + 'notifications/' + id + '/confirm', model);
+        const res = await fetch(configData.API_SERVER + 'notifications/' + id + '/delete', model);
         if (res.status === 200) {
             return [true, ''];  //성공
         }

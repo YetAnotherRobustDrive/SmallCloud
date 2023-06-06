@@ -29,6 +29,8 @@ export default async function GetFiveAlarm() {
                 const min = ("0" + joinDate.getMinutes()).slice(-2);
                 data.date = (year + "-" + month + "-" + day + ' ' + hour + ':' + min);
                 delete data.localDateTime;
+                data.label = data.content;
+                delete data.content;
             });
             return [true, data];  //성공
         }
