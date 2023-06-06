@@ -15,9 +15,11 @@ import org.mint.smallcloud.file.domain.Folder;
 import org.mint.smallcloud.file.dto.LabelUpdateDto;
 import org.mint.smallcloud.file.repository.FileRepository;
 import org.mint.smallcloud.file.repository.FolderRepository;
+import org.mint.smallcloud.file.service.FileFacadeService;
 import org.mint.smallcloud.label.service.LabelService;
 import org.mint.smallcloud.security.UserDetailsProvider;
 import org.mint.smallcloud.user.domain.Member;
+import org.mint.smallcloud.user.domain.Roles;
 import org.mint.smallcloud.user.repository.MemberRepository;
 import org.springframework.core.io.InputStreamResource;
 import org.springframework.core.io.Resource;
@@ -25,6 +27,7 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.annotation.Secured;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -47,6 +50,7 @@ public class FileController {
     private final UserDetailsProvider userDetailsProvider;
     private final MemberRepository memberRepository;
     private final LabelService labelService;
+    private final FileFacadeService fileFacadeService;
 
     @Builder
     @Getter
@@ -148,6 +152,20 @@ public class FileController {
                 .getUserDetails().orElseThrow(() -> new ServiceException(ExceptionStatus.NO_PERMISSION)).getUsername();
         labelService.updateFile(labelUpdateDto, userName);
         return  ResponseEntity.ok().build();
+    }
+
+    @Secured(Roles.S_COMMON)
+    @RequestMapping(method = {RequestMethod.GET, RequestMethod.POST}, value = "/{fileId}/restore")
+    public void restore(@PathVariable("fileId") Long fileId) {
+        UserDetails user = getLoginUser();
+        fileFacadeService.restore(fileId, user.getUsername());
+    }
+
+    @Secured(Roles.S_COMMON)
+    @RequestMapping(method = {RequestMethod.GET, RequestMethod.POST}, value = "/{fileId}/delete")
+    public void delete(@PathVariable("fileId") Long fileId) {
+        UserDetails user = getLoginUser();
+        fileFacadeService.delete(fileId, user.getUsername());
     }
 
     private String encode(String fileName) {

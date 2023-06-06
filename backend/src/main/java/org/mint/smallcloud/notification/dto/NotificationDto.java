@@ -15,5 +15,5 @@ public class NotificationDto {
     @Size(min = 1, max = 50, message = "1자 이상 50자 이하로 입력해주세요.")
     @NotBlank
     String content;
-    LocalDateTime createdDate;
+    LocalDateTime localDateTime;
 }

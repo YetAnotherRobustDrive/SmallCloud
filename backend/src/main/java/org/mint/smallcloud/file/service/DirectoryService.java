@@ -60,6 +60,6 @@ public class DirectoryService {
     }
 
     public void restoreDirectory(Folder folder, Member user) {
-        labelService.attachTrash(folder, user);
+        labelService.detachTrash(folder, user);
     }
 }

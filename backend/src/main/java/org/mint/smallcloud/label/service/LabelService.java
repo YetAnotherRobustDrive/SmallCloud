@@ -79,14 +79,14 @@ public class LabelService {
 
     public void createDefaultLabels(Member member) {
         List<String> initLabels = new ArrayList<>();
-        initLabels.add(DefaultLabelType.defaultFavorite.toString());
-        initLabels.add(DefaultLabelType.defaultFinal.toString());
-        initLabels.add(DefaultLabelType.defaultDraft.toString());
-        initLabels.add(DefaultLabelType.defaultExpiration.toString());
-        initLabels.add(DefaultLabelType.defaultPublic.toString());
-        initLabels.add(DefaultLabelType.defaultSecurity.toString());
-        initLabels.add(DefaultLabelType.defaultTrash.toString());
-        initLabels.add(DefaultLabelType.defaultSensitivity.toString());
+        initLabels.add(DefaultLabelType.defaultFavorite.getLabelName());
+        initLabels.add(DefaultLabelType.defaultFinal.getLabelName());
+        initLabels.add(DefaultLabelType.defaultDraft.getLabelName());
+        initLabels.add(DefaultLabelType.defaultExpiration.getLabelName());
+        initLabels.add(DefaultLabelType.defaultPublic.getLabelName());
+        initLabels.add(DefaultLabelType.defaultSecurity.getLabelName());
+        initLabels.add(DefaultLabelType.defaultTrash.getLabelName());
+        initLabels.add(DefaultLabelType.defaultSensitivity.getLabelName());
 
         initLabels.forEach(e -> {
             Label label = Label.of(e, member);
@@ -95,67 +95,67 @@ public class LabelService {
     }
 
     public void attachTrash(DataNode dataNode, Member member) {
-        Label label = labelRepository.findByNameAndOwner(DefaultLabelType.defaultTrash.toString(), member);
+        Label label = labelRepository.findByNameAndOwner(DefaultLabelType.defaultTrash.getLabelName(), member);
         dataNode.addLabel(label);
     }
     public void detachTrash(DataNode dataNode, Member member) {
-        Label label = labelRepository.findByNameAndOwner(DefaultLabelType.defaultTrash.toString(), member);
+        Label label = labelRepository.findByNameAndOwner(DefaultLabelType.defaultTrash.getLabelName(), member);
         dataNode.deleteLabel(label);
     }
     public void attachFavorite(DataNode dataNode, Member member) {
-        Label label = labelRepository.findByNameAndOwner(DefaultLabelType.defaultFavorite.toString(), member);
+        Label label = labelRepository.findByNameAndOwner(DefaultLabelType.defaultFavorite.getLabelName(), member);
         dataNode.addLabel(label);
     }
     public void detachFavorite(DataNode dataNode, Member member) {
-        Label label = labelRepository.findByNameAndOwner(DefaultLabelType.defaultFavorite.toString(), member);
+        Label label = labelRepository.findByNameAndOwner(DefaultLabelType.defaultFavorite.getLabelName(), member);
         dataNode.deleteLabel(label);
     }
     public void attachDraft(DataNode dataNode, Member member) {
-        Label label = labelRepository.findByNameAndOwner(DefaultLabelType.defaultDraft.toString(), member);
+        Label label = labelRepository.findByNameAndOwner(DefaultLabelType.defaultDraft.getLabelName(), member);
         dataNode.addLabel(label);
     }
     public void detachDraft(DataNode dataNode, Member member) {
-        Label label = labelRepository.findByNameAndOwner(DefaultLabelType.defaultDraft.toString(), member);
+        Label label = labelRepository.findByNameAndOwner(DefaultLabelType.defaultDraft.getLabelName(), member);
         dataNode.deleteLabel(label);
     }
     public void attachExpiration(DataNode dataNode, Member member) {
-        Label label = labelRepository.findByNameAndOwner(DefaultLabelType.defaultExpiration.toString(), member);
+        Label label = labelRepository.findByNameAndOwner(DefaultLabelType.defaultExpiration.getLabelName(), member);
         dataNode.addLabel(label);
     }
     public void detachExpiration(DataNode dataNode, Member member) {
-        Label label = labelRepository.findByNameAndOwner(DefaultLabelType.defaultExpiration.toString(), member);
+        Label label = labelRepository.findByNameAndOwner(DefaultLabelType.defaultExpiration.getLabelName(), member);
         dataNode.deleteLabel(label);
     }
     public void attachFinal(DataNode dataNode, Member member) {
-        Label label = labelRepository.findByNameAndOwner(DefaultLabelType.defaultFinal.toString(), member);
+        Label label = labelRepository.findByNameAndOwner(DefaultLabelType.defaultFinal.getLabelName(), member);
         dataNode.addLabel(label);
     }
     public void detachFinal(DataNode dataNode, Member member) {
-        Label label = labelRepository.findByNameAndOwner(DefaultLabelType.defaultFinal.toString(), member);
+        Label label = labelRepository.findByNameAndOwner(DefaultLabelType.defaultFinal.getLabelName(), member);
         dataNode.deleteLabel(label);
     }
     public void attachSecurity(DataNode dataNode, Member member) {
-        Label label = labelRepository.findByNameAndOwner(DefaultLabelType.defaultSecurity.toString(), member);
+        Label label = labelRepository.findByNameAndOwner(DefaultLabelType.defaultSecurity.getLabelName(), member);
         dataNode.addLabel(label);
     }
     public void detachSecurity(DataNode dataNode, Member member) {
-        Label label = labelRepository.findByNameAndOwner(DefaultLabelType.defaultSecurity.toString(), member);
+        Label label = labelRepository.findByNameAndOwner(DefaultLabelType.defaultSecurity.getLabelName(), member);
         dataNode.deleteLabel(label);
     }
     public void attachPublic(DataNode dataNode, Member member) {
-        Label label = labelRepository.findByNameAndOwner(DefaultLabelType.defaultPublic.toString(), member);
+        Label label = labelRepository.findByNameAndOwner(DefaultLabelType.defaultPublic.getLabelName(), member);
         dataNode.addLabel(label);
     }
     public void detachPublic(DataNode dataNode, Member member) {
-        Label label = labelRepository.findByNameAndOwner(DefaultLabelType.defaultPublic.toString(), member);
+        Label label = labelRepository.findByNameAndOwner(DefaultLabelType.defaultPublic.getLabelName(), member);
         dataNode.deleteLabel(label);
     }
     public void attachSensitivity(DataNode dataNode, Member member) {
-        Label label = labelRepository.findByNameAndOwner(DefaultLabelType.defaultSensitivity.toString(), member);
+        Label label = labelRepository.findByNameAndOwner(DefaultLabelType.defaultSensitivity.getLabelName(), member);
         dataNode.addLabel(label);
     }
     public void detachSensitivity(DataNode dataNode, Member member) {
-        Label label = labelRepository.findByNameAndOwner(DefaultLabelType.defaultSensitivity.toString(), member);
+        Label label = labelRepository.findByNameAndOwner(DefaultLabelType.defaultSensitivity.getLabelName(), member);
         dataNode.deleteLabel(label);
     }
 }
