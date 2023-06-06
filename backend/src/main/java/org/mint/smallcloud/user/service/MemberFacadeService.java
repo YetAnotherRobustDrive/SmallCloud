@@ -32,6 +32,10 @@ public class MemberFacadeService {
         memberService.registerCommon(registerDto);
     }
 
+    public void register(RegisterFromAdminDto registerDto) {
+        memberService.registerCommon(registerDto);
+    }
+
     public void update(String username, UserProfileRequestDto userProfileDto) {
         Member member = memberThrowerService.getMemberByUsername(username);
         try {
@@ -80,5 +84,10 @@ public class MemberFacadeService {
             memberService.updatePassword(member, dto.getNewPassword());
         else
             throw new ServiceException(ExceptionStatus.WRONG_PASSWORD);
+    }
+
+    public void setExpired(UpdateExpiredDto setExpiredDto) {
+        Member member = memberThrowerService.getMemberByUsername(setExpiredDto.getUsername());
+        member.setExpiredDate(setExpiredDto.getExpiredDate());
     }
 }

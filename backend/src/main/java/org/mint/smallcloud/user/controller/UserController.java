@@ -41,8 +41,14 @@ public class UserController {
 
     @Secured({Roles.S_ADMIN})
     @PostMapping
-    public void register(@Valid @RequestBody RegisterDto registerDto) {
+    public void register(@Valid @RequestBody RegisterFromAdminDto registerDto) {
         memberFacadeService.register(registerDto);
+    }
+
+    @Secured({Roles.S_ADMIN})
+    @PostMapping("/update-expired")
+    public void setExpired(@Valid @RequestBody UpdateExpiredDto setExpiredDto) {
+        memberFacadeService.setExpired(setExpiredDto);
     }
 
     @Secured({Roles.S_ADMIN, Roles.S_PRIVILEGE})

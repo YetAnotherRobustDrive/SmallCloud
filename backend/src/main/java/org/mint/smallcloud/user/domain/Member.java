@@ -37,6 +37,9 @@ public class Member {
     @Column(name = "CHANGED_PASSWORD_DATE")
     private LocalDateTime changedPasswordDate;
 
+    @Column(name = "EXPIRED_DATE")
+    private LocalDateTime expiredDate = null;
+
     @Column(name = "LOCKED")
     private boolean locked = false;
 
@@ -159,5 +162,13 @@ public class Member {
     public void addShare(MemberShare share) {
         if (!shares.contains(share))
             shares.add(share);
+    }
+
+    public void setExpiredDate(LocalDateTime expiredDate) {
+        this.expiredDate = expiredDate;
+    }
+
+    public boolean canLogin() {
+        return !locked && (expiredDate == null || expiredDate.isAfter(LocalDateTime.now()));
     }
 }
