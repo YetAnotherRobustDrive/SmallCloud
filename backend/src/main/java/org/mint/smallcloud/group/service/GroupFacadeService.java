@@ -43,15 +43,15 @@ public class GroupFacadeService {
 
     public void addUser(String groupId, String username) {
         Group group = groupThrowerService.getGroupByName(groupId);
-        group.getMembers().forEach(member -> {
-            applicationEventPublisher.publishEvent(
-                NoticeEventAfterCommit.builder()
-                    .owner(member)
-                    .content(String.format("\"%s\" 그룹에 \"%s\"님이 추가되었습니다.", group.getName(), username))
-            );
-        });
         Member member = memberThrowerService.getMemberByUsername(username);
         member.setGroup(group);
+        group.getMembers().forEach(m -> {
+            applicationEventPublisher.publishEvent(
+                    NoticeEventAfterCommit.builder()
+                            .owner(m)
+                            .content(String.format("\"%s\" 그룹에 \"%s\"님이 추가되었습니다.", group.getName(), username))
+            );
+        });
     }
 
     public void update(String groupName, GroupRequestDto groupRequestDto) {
