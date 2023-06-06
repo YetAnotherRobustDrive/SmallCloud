@@ -28,13 +28,13 @@ public class Notification {
     @Column(name = "LOCAL_DATE_TIME")
     private LocalDateTime localDateTime;
 
-    protected Notification(String content, Member owner) {
+    protected Notification(String content, Member owner, LocalDateTime localDateTime) {
         this.content = content;
         this.owner = owner;
-        this.localDateTime = LocalDateTime.now();
+        this.localDateTime = localDateTime;
     }
 
-    public static Notification of(String content, Member owner) {
-        return new Notification(content, owner);
+    public static Notification of(String content, Member owner, LocalDateTime localDateTime) {
+        return new Notification(content, owner, localDateTime);
     }
 }
