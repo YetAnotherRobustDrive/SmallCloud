@@ -14,7 +14,7 @@ export default function NarrowBox(props) {
             key={99}
             id={99}
             name={"전체 리스트"}
-            type={"folder"} 
+            type={"special"} 
             noContext={true}/>,
         ...props.children]
     return (

@@ -68,7 +68,7 @@ export default () => {
                                 <Route path='/trash' element={<TrashBinPage />} />
                                 <Route path='/share' element={<SharePage />} />
 
-                                <Route path='/files/:fileID' element={<FolderPage />} />
+                                <Route path='/folder/:fileID' element={<FolderPage />} />
 
                                 <Route path='/mypage' element={isPrivileged ? <PrivatePage /> : <MyPage />} />
                                 <Route path='/mypage/service' element={isPrivileged ? <ServiceInfoPage /> : <MyPage />} />

@@ -13,12 +13,12 @@ export default function CustomIcon(props) {
 
     const handleOnClick = (e) => {
         e.preventDefault();
-        if (props.type === "file") {
-            props.onClick();
+        if (props.type === "folder") {
+            navigate("/folder/" + props.id);
             return;
         }
         else {
-            navigate("/files/" + props.id);
+            props.onClick();
             return;
         }
     }
