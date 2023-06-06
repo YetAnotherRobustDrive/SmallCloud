@@ -80,7 +80,7 @@ export default function ModalFolderShare(props) {
     const addCandidate = (name, type) => {
         window.document.getElementById("shareInput").value = "";
         setSearched([]);
-        const res = candidate.find((e) => e.name === name);
+        const res = candidate.find((e) => e.targetName === name);
         if (res === undefined) {
             setCandidate([
                 ...candidate,
