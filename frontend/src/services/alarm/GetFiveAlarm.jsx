@@ -20,6 +20,16 @@ export default async function GetFiveAlarm() {
         const res = await fetch(configData.API_SERVER + 'notifications/' + username + '/confirm', model);
         const data = await res.json();
         if (res.status === 200) {
+            data.notificationDtoList.forEach((data) => {
+                const joinDate = new Date(data.localDateTime);
+                const year = ("" + joinDate.getFullYear()).slice(2);
+                const month = ("0" + (1 + joinDate.getMonth())).slice(-2);
+                const day = ("0" + joinDate.getDate()).slice(-2);
+                const hour = ("0" + joinDate.getHours()).slice(-2);
+                const min = ("0" + joinDate.getMinutes()).slice(-2);
+                data.date = (year + "-" + month + "-" + day + ' ' + hour + ':' + min);
+                delete data.localDateTime;
+            });
             return [true, data];  //성공
         }
         else {
