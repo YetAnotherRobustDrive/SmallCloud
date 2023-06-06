@@ -173,14 +173,20 @@
     margin-top: auto;
 }
 
-.fileview .body .shareList {
+.fileview .body .shareBody{
+    margin: 10px;
+    height: 80%;
+}
+
+.fileview .body .shareBody .shareList {
     width: calc(100% - 20px);
     padding: 5px;
     margin: 5px;
     display: flex;
     flex-direction: column;
-    justify-content: center;
     border: 1px solid black;
+    overflow-y: scroll;
+    max-height: calc(100% - 20px);
 }
 
 .fileview .body .shareList .shareItem {

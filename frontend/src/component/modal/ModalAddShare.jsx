@@ -1,8 +1,8 @@
 import React, { useState } from "react";
 import Modal from 'react-modal';
-import { AiOutlineClose } from 'react-icons/ai'
-import { MdPerson, MdGroups } from 'react-icons/md'
-import '../../css/modal.css'
+import { AiOutlineClose } from 'react-icons/ai';
+import { MdPerson, MdGroups } from 'react-icons/md';
+import '../../css/modal.css';
 import GetSearchUser from "../../services/user/GetSearchUser";
 import GetSearchGroup from "../../services/group/GetSearchGroup";
 import PostCreateShare from "../../services/share/PostCreateShare";
@@ -10,7 +10,7 @@ import PostCreateShare from "../../services/share/PostCreateShare";
 export default function ModalAddShare(props) {
 
     const [searched, setSearched] = useState([]);
-    const [candidate, setCandidate] = useState([]);
+    const [candidate, setCandidate] = useState(props.candidate);
 
     const modalStyle = {
         content: {
@@ -61,7 +61,7 @@ export default function ModalAddShare(props) {
             setCandidate([
                 ...candidate,
                 {
-                    "name": name,
+                    "targetName": name,
                     "type": type,
                 }
             ]);            
@@ -90,7 +90,7 @@ export default function ModalAddShare(props) {
         candidate.forEach(async (d) => {
             const data = {
                 "fileId": props.fileID,
-                "targetName": d.name,
+                "targetName": d.targetName,
                 "type": d.type
             }
             const res = await PostCreateShare(data);
@@ -138,7 +138,7 @@ export default function ModalAddShare(props) {
                                 return (
                                     <div className="resultItem" key={index}>
                                         <div className="icon">{item.type === "MEMBER" ? <MdPerson /> : <MdGroups />}</div>
-                                        <span className="name">{item.name}</span>
+                                        <span className="name">{item.targetName}</span>
                                         <div id={index} className="close" onClick={handleClick}><AiOutlineClose /></div>
                                     </div>
                                 )
