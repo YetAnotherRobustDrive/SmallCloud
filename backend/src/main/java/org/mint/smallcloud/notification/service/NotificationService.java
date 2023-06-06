@@ -31,7 +31,7 @@ public class NotificationService {
         Member member = memberThrowerService.getMemberByUsername(userName);
         List<Notification> notifications = notificationThrowerService.findTop5ByOwnerOrderByLocalDateTimeDesc(member);
         return NotificationCountDto.builder()
-                .notificationDtoList(notifications.stream().map(notificationMapper::toNotificationDto).collect(Collectors.toList()))
+                .notificationDtoList(notifications.stream().map(notificationMapper::toNotificationResponseDto).collect(Collectors.toList()))
                 .count(notificationRepository.countByOwner(member))
                 .build();
     }
