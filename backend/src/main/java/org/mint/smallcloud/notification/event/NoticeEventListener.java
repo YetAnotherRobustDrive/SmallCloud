@@ -9,7 +9,6 @@ import org.mint.smallcloud.user.domain.Role;
 import org.mint.smallcloud.user.repository.MemberRepository;
 import org.springframework.context.event.EventListener;
 import org.springframework.stereotype.Component;
-import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
@@ -23,13 +22,13 @@ public class NoticeEventListener {
     private final MemberRepository memberRepository;
 
     @EventListener
-    @Transactional(propagation = Propagation.REQUIRES_NEW)
+    @Transactional
     public void handleNoticeEvent(NoticeEventAfterCommit event) {
         notificationRepository.save(Notification.of(event.getContent(), event.getOwner(), LocalDateTime.now()));
     }
 
     @EventListener
-    @Transactional(propagation = Propagation.REQUIRES_NEW)
+    @Transactional
     public void handleNoticeAllEvent(NoticeAllEventAfterCommit event) {
         List<Member> members = memberRepository.findMembersByRole(Role.COMMON);
         members.forEach(member ->
