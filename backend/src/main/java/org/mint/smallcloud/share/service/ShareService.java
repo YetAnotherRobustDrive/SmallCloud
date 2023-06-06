@@ -6,6 +6,12 @@ import lombok.extern.slf4j.Slf4j;
 import org.mint.smallcloud.exception.ExceptionStatus;
 import org.mint.smallcloud.exception.ServiceException;
 import org.mint.smallcloud.file.domain.DataNode;
+import org.mint.smallcloud.file.domain.File;
+import org.mint.smallcloud.file.domain.Folder;
+import org.mint.smallcloud.file.dto.DirectoryDto;
+import org.mint.smallcloud.file.dto.FileDto;
+import org.mint.smallcloud.file.mapper.FileMapper;
+import org.mint.smallcloud.file.mapper.FolderMapper;
 import org.mint.smallcloud.file.repository.DataNodeRepository;
 import org.mint.smallcloud.group.domain.Group;
 import org.mint.smallcloud.group.service.GroupThrowerService;
@@ -19,6 +25,8 @@ import org.mint.smallcloud.user.service.MemberThrowerService;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -31,6 +39,8 @@ public class ShareService {
     private final MemberThrowerService memberThrowerService;
     private final GroupThrowerService groupThrowerService;
     private final DataNodeRepository dataNodeRepository;
+    private final FileMapper fileMapper;
+    private final FolderMapper folderMapper;
     public void create(String loginUsername, ShareRequestDto dto) {
         Member accessor = memberThrowerService.getMemberByUsername(loginUsername);
         DataNode file = dataNodeRepository.findById(dto.getFileId())
@@ -76,5 +86,39 @@ public class ShareService {
         if (memberShareRepository.existsByFileIdAndTarget_Username(file.getId(), target.getUsername()))
             return;
         memberShareRepository.save(MemberShare.of(target, file));
+    }
+
+    public List<FileDto> getFileList(String username) {
+        Member member = memberThrowerService.getMemberByUsername(username);
+        Group group = member.getGroup();
+        List<MemberShare> shares = member.getShares();
+        List<FileDto> files = shares.stream()
+            .filter(share -> share.getFile().isFile())
+            .map(share -> fileMapper.toFileDto((File) share.getFile())).collect(Collectors.toList());
+        if (group != null) {
+            List<GroupShare> groupShares = group.getShares();
+            files.addAll(groupShares.stream()
+                .filter(share -> share.getFile().isFile())
+                .map(share -> fileMapper.toFileDto((File) share.getFile()))
+                .collect(Collectors.toList()));
+        }
+        return files;
+    }
+
+    public List<DirectoryDto> getDirectoryList(String username) {
+        Member member = memberThrowerService.getMemberByUsername(username);
+        Group group = member.getGroup();
+        List<MemberShare> shares = member.getShares();
+        List<DirectoryDto> files = shares.stream()
+            .filter(share -> share.getFile().isFolder())
+            .map(share -> folderMapper.toDirectoryDto((Folder) share.getFile())).collect(Collectors.toList());
+        if (group != null) {
+            List<GroupShare> groupShares = group.getShares();
+            files.addAll(groupShares.stream()
+                .filter(share -> share.getFile().isFolder())
+                .map(share -> folderMapper.toDirectoryDto((Folder) share.getFile()))
+                .collect(Collectors.toList()));
+        }
+        return files;
     }
 }

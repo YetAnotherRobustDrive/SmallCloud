@@ -144,4 +144,12 @@ public abstract class DataNode {
         }
         return true;
     }
+
+    public boolean isFile() {
+        return this instanceof File;
+    }
+
+    public boolean isFolder() {
+        return this instanceof Folder;
+    }
 }
