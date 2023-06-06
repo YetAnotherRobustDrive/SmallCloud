@@ -13,6 +13,7 @@ import org.mint.smallcloud.security.dto.UserDetailsDto;
 import org.mint.smallcloud.user.domain.Member;
 import org.mint.smallcloud.user.domain.Role;
 import org.mint.smallcloud.user.dto.RegisterDto;
+import org.mint.smallcloud.user.dto.RegisterFromAdminDto;
 import org.mint.smallcloud.user.dto.UserProfileRequestDto;
 import org.mint.smallcloud.user.dto.UserProfileResponseDto;
 import org.mint.smallcloud.user.mapper.UserMapper;
@@ -53,6 +54,17 @@ public class MemberService {
             registerDto.getId(),
             registerDto.getPassword(),
             registerDto.getName());
+        memberRepository.save(member);
+        directoryService.createRootDirectory(member);
+    }
+
+    public void registerCommon(RegisterFromAdminDto dto) {
+        memberThrowerService.checkExistsByUsername(dto.getId());
+        Member member = Member.of(
+            dto.getId(),
+            dto.getPassword(),
+            dto.getName());
+        member.setExpiredDate(dto.getExpiredDate());
         memberRepository.save(member);
         directoryService.createRootDirectory(member);
     }
@@ -110,7 +122,7 @@ public class MemberService {
 
     public void validLogin(LoginDto login) {
         Member member = memberThrowerService.getMemberByUsername(login.getId());
-        if (member.isLocked())
+        if (!member.canLogin())
             throw new ServiceException(ExceptionStatus.USER_LOCKED);
         checkPassword(login);
     }
