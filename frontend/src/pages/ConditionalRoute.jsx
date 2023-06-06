@@ -27,6 +27,7 @@ import MyPage from './mypage/MyPage';
 import PrivatePage from './mypage/PrivatePage';
 import SecurityInfoPage from './mypage/SecurityInfoPage';
 import ServiceInfoPage from './mypage/ServiceInfoPage';
+import SharePage from './common/SharePage';
 
 export default () => {
     const isPrivileged = useSelector(state => state.token.isPrivileged);
@@ -65,6 +66,7 @@ export default () => {
                                 <Route path='/logout' element={<LogoutUser />} />
                                 <Route path='/favorites' element={<FavoritesPage />} />
                                 <Route path='/trash' element={<TrashBinPage />} />
+                                <Route path='/share' element={<SharePage />} />
 
                                 <Route path='/files/:fileID' element={<FolderPage />} />
 

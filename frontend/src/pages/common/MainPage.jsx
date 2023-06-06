@@ -67,9 +67,7 @@ export default function MainPage() {
                         key={data.id}
                         id={data.id}
                         name={data.name}
-                        type={data.type}
-                        stage={data.writingStage}
-                        secu={data.securityLevel} />
+                        type={data.type}/>
                 })
             )
             setListFiles(
@@ -109,8 +107,7 @@ export default function MainPage() {
                         id={data.id}
                         name={data.name}
                         type={data.type}
-                        stage={data.writingStage}
-                        secu={data.securityLevel} />
+                        noContext={true}/>
                 })
             )
         }
@@ -151,8 +148,7 @@ export default function MainPage() {
                     </>
                 }
                 <UploadBtn />
-
-                <BodyHeader text="공유 파일" />
+                <BodyHeader text="공유받은 파일" />
                 {shareFiles.length === 0 ? <div style={{ textAlign: "center", marginTop: "20px" }}>파일이 없습니다.</div> :
                     <NarrowBox>
                         {shareFiles}
