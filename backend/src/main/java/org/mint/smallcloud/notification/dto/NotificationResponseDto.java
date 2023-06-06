@@ -4,12 +4,13 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 
-import java.util.List;
+import java.time.LocalDateTime;
 
 @Getter
 @AllArgsConstructor
 @Builder
-public class NotificationCountDto {
-    List<NotificationResponseDto> notificationDtoList;
-    Long count;
+public class NotificationResponseDto {
+    Long id;
+    String content;
+    LocalDateTime localDateTime;
 }
