@@ -110,12 +110,12 @@ public class ShareService {
         Group group = member.getGroup();
         List<MemberShare> shares = member.getShares();
         List<DirectoryDto> files = shares.stream()
-            .filter(share -> !share.getFile().isFolder())
+            .filter(share -> share.getFile().isFolder())
             .map(share -> folderMapper.toDirectoryDto((Folder) share.getFile())).collect(Collectors.toList());
         if (group != null) {
             List<GroupShare> groupShares = group.getShares();
             files.addAll(groupShares.stream()
-                .filter(share -> !share.getFile().isFolder())
+                .filter(share -> share.getFile().isFolder())
                 .map(share -> folderMapper.toDirectoryDto((Folder) share.getFile()))
                 .collect(Collectors.toList()));
         }
