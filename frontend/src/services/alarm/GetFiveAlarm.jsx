@@ -14,6 +14,9 @@ export default async function GetFiveAlarm() {
 
     try {
         const username = jwtDecode(localStorage.getItem("accessToken")).sub;
+        if (username === "root") {
+            return [true, { notificationDtoList: [], count: 0 }];
+        }
         const res = await fetch(configData.API_SERVER + 'notifications/' + username + '/confirm', model);
         const data = await res.json();
         if (res.status === 200) {
