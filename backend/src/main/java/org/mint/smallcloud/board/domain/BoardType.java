@@ -23,6 +23,8 @@ public enum BoardType {
                 return "개인정보처리방침";
             case announcement:
                 return "공지사항";
+            default:
+                return "게시글";
         }
     }
 }
