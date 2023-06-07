@@ -162,3 +162,7 @@
     border-top: 2px solid black;
     top: 100%;
 }
+
+.ruleInput .new input[type="submit"] {
+    margin: 6px;
+}

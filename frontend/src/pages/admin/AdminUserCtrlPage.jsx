@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from "react";
 import BodyFrame from "../../component/Bodyframe";
 import RuleBox from "../../component/admin/ruleBox";
-import RuleInput from "../../component/admin/ruleInput";
 import TitledBox from "../../component/admin/titledBox";
 import ToggleBtn from "../../component/admin/toggleBtn";
 import Header from "../../component/header/Header";
@@ -15,6 +14,7 @@ import ModalGetString from "../../component/modal/ModalGetString";
 import AdminInitUserPw from "../../services/admin/AdminInitUserPw";
 import AdminDeactivateUser from "../../services/admin/AdminDeactivateUser";
 import AdminActivateUser from "../../services/admin/AdminActivateUser";
+import AdminExpireUser from "../../services/admin/AdminExpireUser";
 
 
 export default function AdminUserCtrlPage() {
@@ -67,6 +67,9 @@ export default function AdminUserCtrlPage() {
     }
 
     const handleUserSelect = async (e) => {
+        if (e.target.firstChild.innerHTML === undefined) {
+            return;
+        }
         const res = await AdminGetUserInfo(e.target.firstChild.innerHTML);
         document.getElementById("searchUser").value = "";
         setSearched([]);
@@ -110,6 +113,25 @@ export default function AdminUserCtrlPage() {
         else {
             setSearched([]);
         }
+    }
+
+    const handleExpire = async (e) => {
+        e.preventDefault();
+        const inputData = new FormData(e.target);
+        if (inputData.get("newExpireDate") === "" || inputData.get("newExpireDate") === null) {
+            alert("만료일을 입력해주세요.");
+            return;
+        }
+        const value = {
+            "username": user.username,
+            "expireDate": inputData.get("newExpireDate") + "T23:59:59.000000",
+        }        
+        const res = await AdminExpireUser(value);
+        if (!res[0]) {
+            alert(res[1]);
+            return;
+        }
+        alert("적용되었습니다.");
     }
 
     return (
@@ -168,7 +190,7 @@ export default function AdminUserCtrlPage() {
                             <RuleBox
                                 title="사용자 계정 비활성화"
                                 desc="계정을 비활성화합니다.">
-                                <ToggleBtn onClick={user.locked ? handleActivate : handleDeactivate} default={user.locked}/>
+                                <ToggleBtn onClick={user.locked ? handleActivate : handleDeactivate} default={user.locked} />
                             </RuleBox>
                             <RuleBox
                                 title="비밀번호 초기화"
@@ -178,7 +200,17 @@ export default function AdminUserCtrlPage() {
                             <RuleBox
                                 title="계정 만료일 설정"
                                 desc="계정의 만료일을 설정하여 임시 계정으로 전환합니다.">
-                                <RuleInput desc="만료일" />
+                                <form className="ruleInput" onSubmit={handleExpire}>
+                                    <div className="curr">
+                                        <span>현재 만료일: </span>
+                                        <span>{0}</span>
+                                    </div>
+                                    <div className="new">
+                                        <span>새 만료일 : </span>
+                                        <input type="date" name="newExpireDate"></input>
+                                        <input type="submit" value={"적용"}/>
+                                    </div>
+                                </form>
                             </RuleBox>
                         </TitledBox>
                     </>}
