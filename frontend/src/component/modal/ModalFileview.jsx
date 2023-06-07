@@ -22,7 +22,7 @@ export default function ModalFileview(props) {
     const [isGeneralSelected, setIsGeneralSelected] = useState(true);
     const [isNowDownload, setIsNowDownload] = useState(false);
     const [percentage, setPercentage] = useState(0);
-    const fileData = props.file;
+    const fileData = props.fileData;
 
     const handleDownload = async (e) => {
         setIsNowDownload(true);
@@ -45,10 +45,10 @@ export default function ModalFileview(props) {
     const handleShareDelete = async (e) => {
         e.stopPropagation();
         e.preventDefault();
-        const fileID = fileData.id;
+        const fileId = fileData.id;
         const targetName = fileData.shares[e.currentTarget.id].targetName;
         const type = fileData.shares[e.currentTarget.id].type === "MemberShare" ? "MEMBER" : "GROUP";
-        const res = await PostDeleteShare(fileID, targetName, type);
+        const res = await PostDeleteShare(fileId, targetName, type);
         if (!res[0]) {
             alert(res[1]);
             return;

@@ -42,9 +42,11 @@ export default function AdminUserRegister() {
         }
         inputData.delete("password_chk");
         const value = Object.fromEntries(inputData.entries());
+        if (value["expiredDate"] !== undefined) {
+            value["expiredDate"] = value["expiredDate"] + "T23:59:59.000000";
+        }
 
         const res = await AdminRegisterUser(value);
-
         if (!res[0]) {
             setIsFail(true);
             setMessage(res[1]);
@@ -53,6 +55,15 @@ export default function AdminUserRegister() {
         setIsSuccess(true);
     }
 
+    const handleActivate = (e) => {
+        const date = document.getElementsByName("expiredDate")[0];
+        if (e.target.checked) {
+            date.disabled = false;
+        }
+        else {
+            date.disabled = true;
+        }
+    }
 
     return (
         <>
@@ -67,6 +78,14 @@ export default function AdminUserRegister() {
                     <input name="password" type="password" placeholder="PW" />
                     <input name="password_chk" type="password" placeholder="PW Check" />
                     <input name="name" type="text" placeholder="Nickname" />
+                    <div className="expire">
+                        <div>
+                            <p/>
+                            <span>계정 만료일 설정</span>
+                            <input type="checkbox" onClick={handleActivate} />
+                        </div>
+                        <input name="expiredDate" type="date" placeholder="만료일" style={{width:"267px"}} disabled />
+                    </div>
                     <div className="buttons">
                         <button type="" className="link">등록</button>
                     </div>

@@ -136,3 +136,7 @@ button:focus {
     margin-left: auto;
     float: right;
 }
+
+.modalGroup {
+    height: 150px;
+}

@@ -1,20 +1,23 @@
 import React, { useEffect, useState } from "react";
+import { TbEdit } from "react-icons/tb";
 import BodyFrame from "../../component/Bodyframe";
 import RuleBox from "../../component/admin/ruleBox";
-import RuleInput from "../../component/admin/ruleInput";
 import TitledBox from "../../component/admin/titledBox";
 import ToggleBtn from "../../component/admin/toggleBtn";
 import Header from "../../component/header/Header";
+import BodyHeader from "../../component/main/BodyHeader";
+import ModalGetString from "../../component/modal/ModalGetString";
 import SidebarAdmin from "../../component/sidebar/SidebarAdmin";
 import '../../css/admin.css';
 import default_profile_img from '../../img/defalutProfile.png';
-import AdminGetUserInfo from "../../services/admin/AdminGetUserInfo";
-import GetSearchUser from "../../services/user/GetSearchUser";
-import BodyHeader from "../../component/main/BodyHeader";
-import ModalGetString from "../../component/modal/ModalGetString";
-import AdminInitUserPw from "../../services/admin/AdminInitUserPw";
-import AdminDeactivateUser from "../../services/admin/AdminDeactivateUser";
 import AdminActivateUser from "../../services/admin/AdminActivateUser";
+import AdminDeactivateUser from "../../services/admin/AdminDeactivateUser";
+import AdminExpireUser from "../../services/admin/AdminExpireUser";
+import AdminGetUserInfo from "../../services/admin/AdminGetUserInfo";
+import AdminInitUserPw from "../../services/admin/AdminInitUserPw";
+import GetSearchUser from "../../services/user/GetSearchUser";
+import ModalGroupConfig from "../../component/modal/ModalGroupConfig";
+import AdminGroupAdd from "../../services/admin/AdminGroupAdd";
 
 
 export default function AdminUserCtrlPage() {
@@ -24,7 +27,9 @@ export default function AdminUserCtrlPage() {
     const [joined, setJoined] = useState(null);
     const [searched, setSearched] = useState([]);
     const [newPw, setNewPw] = useState("");
+    const [newGroup, setNewGroup] = useState("");
     const [isModalOpen, setIsModalOpen] = useState(false);
+    const [isGroupModalOpen, setIsGroupModalOpen] = useState(false);
 
     useEffect(() => {
         const initPw = async () => {
@@ -33,14 +38,34 @@ export default function AdminUserCtrlPage() {
             }
             const res = await AdminInitUserPw(user.username, newPw);
             if (!res[0]) {
-                alert("비밀번호 초기화에 실패했습니다.");
+                alert("비밀번호 재설정에 실패했습니다.");
                 return;
             }
-            alert("비밀번호 초기화에 성공했습니다.");
+            alert("비밀번호 재설정에 성공했습니다.");
+            setNewPw("");
         }
         initPw();
-
     }, [newPw]);
+
+    useEffect(() => {
+        const setGroup = async () => {
+            if (newGroup === "") {
+                return;
+            }
+            const res = await AdminGroupAdd(user.username, newGroup);
+            if (!res[0]) {
+                alert("그룹 설정에 실패했습니다.");
+                return;
+            }
+            alert("그룹 설정에 성공했습니다.");
+            setNewGroup("");
+            setUser({
+                ...user,
+                groupName: newGroup,
+            })
+        }
+        setGroup();
+    }, [newGroup]);
 
     const handleDeactivate = async () => {
         const res = await AdminDeactivateUser(user.username);
@@ -49,7 +74,10 @@ export default function AdminUserCtrlPage() {
             return;
         }
         alert("사용자 계정 비활성화에 성공했습니다.");
-        setUser(null);
+        setUser({
+            ...user,
+            locked: true,
+        })
     }
 
     const handleActivate = async () => {
@@ -59,7 +87,10 @@ export default function AdminUserCtrlPage() {
             return;
         }
         alert("사용자 계정 활성화에 성공했습니다.");
-        setUser(null);
+        setUser({
+            ...user,
+            locked: false,
+        })
     }
 
     const handlePwInit = async () => {
@@ -67,6 +98,9 @@ export default function AdminUserCtrlPage() {
     }
 
     const handleUserSelect = async (e) => {
+        if (e.target.firstChild.innerHTML === undefined) {
+            return;
+        }
         const res = await AdminGetUserInfo(e.target.firstChild.innerHTML);
         document.getElementById("searchUser").value = "";
         setSearched([]);
@@ -112,14 +146,41 @@ export default function AdminUserCtrlPage() {
         }
     }
 
+    const handleExpire = async (e) => {
+        e.preventDefault();
+        const inputData = new FormData(e.target);
+        if (inputData.get("newExpireDate") === "" || inputData.get("newExpireDate") === null) {
+            alert("만료일을 입력해주세요.");
+            return;
+        }
+        const value = {
+            "username": user.username,
+            "expireDate": inputData.get("newExpireDate") + "T23:59:59.000000",
+        }
+        const res = await AdminExpireUser(value);
+        if (!res[0]) {
+            alert(res[1]);
+            return;
+        }
+        alert("적용되었습니다.");
+    }
+
     return (
         <>
+            {isGroupModalOpen &&
+                <ModalGroupConfig
+                    setter={setNewGroup}
+                    title={"그룹 설정"}
+                    isOpen={isGroupModalOpen}
+                    after={() => { setIsGroupModalOpen(false); }}
+                />
+            }
             {isModalOpen &&
                 <ModalGetString
                     title={"변경할 비밀번호를 입력하세요."}
                     setter={setNewPw}
                     isOpen={isModalOpen}
-                    after={() => { setIsModalOpen(false); setUser(null); setNewPw(""); }}
+                    after={() => { setIsModalOpen(false); }}
                 />
             }
             <Header />
@@ -144,7 +205,7 @@ export default function AdminUserCtrlPage() {
                             })}
                         </div>}
                 </div>
-                {user === null ? <></> :
+                {user !== null &&
                     <>
                         <div className="profile">
                             <img src={img} />
@@ -167,18 +228,34 @@ export default function AdminUserCtrlPage() {
                         <TitledBox>
                             <RuleBox
                                 title="사용자 계정 비활성화"
-                                desc="계정을 비활성화합니다.">
-                                <ToggleBtn onClick={user.locked ? handleActivate : handleDeactivate} default={user.locked}/>
+                                desc="비활성화된 계정은 로그인이 불가능합니다.">
+                                <ToggleBtn onClick={user.locked ? handleActivate : handleDeactivate} default={user.locked} />
                             </RuleBox>
                             <RuleBox
-                                title="비밀번호 초기화"
-                                desc="비밀번호를 초기화합니다.">
+                                title="비밀번호 재설정"
+                                desc="비밀번호를 강제로 재설정합니다.">
                                 <button className="initBtn" onClick={handlePwInit}>초기화</button>
+                            </RuleBox>
+                            <RuleBox
+                                title="그룹 설정"
+                                desc="하나의 그룹에만 속할 수 있습니다.">
+                                <span className="currGroup">현재 그룹: {user.groupName === null ? "없음" : user.groupName}</span>
+                                <div className="editGroup" onClick={() => setIsGroupModalOpen(true)}><TbEdit/></div>
                             </RuleBox>
                             <RuleBox
                                 title="계정 만료일 설정"
                                 desc="계정의 만료일을 설정하여 임시 계정으로 전환합니다.">
-                                <RuleInput desc="만료일" />
+                                <form className="ruleInput" onSubmit={handleExpire}>
+                                    <div className="curr">
+                                        <span>현재 만료일: </span>
+                                        <span>{user.expiredDate}</span>
+                                    </div>
+                                    <div className="new">
+                                        <span>새 만료일 : </span>
+                                        <input type="date" name="newExpireDate"></input>
+                                        <input type="submit" value={"적용"} />
+                                    </div>
+                                </form>
                             </RuleBox>
                         </TitledBox>
                     </>}
