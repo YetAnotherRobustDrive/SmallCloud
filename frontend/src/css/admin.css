@@ -1,4 +1,4 @@
-.rulebox{
+.rulebox {
     width: 100%;
     background-color: #ececec;
     margin-bottom: 2px;
@@ -32,7 +32,7 @@
     flex-direction: column;
 }
 
-.titledBox .head{
+.titledBox .head {
     float: left;
     width: fit-content;
     display: flex;
@@ -82,13 +82,13 @@
     width: fit-content;
 }
 
-.ruleInput .new{
+.ruleInput .new {
     width: fit-content;
     padding: 0;
     margin: 0;
 }
 
-.ruleInput .new input{
+.ruleInput .new input {
     border-radius: 3px;
     border: 1px solid black;
 }
@@ -111,17 +111,17 @@
     min-width: 160px;
 }
 
-.profile .userinfo .text{
+.profile .userinfo .text {
     border-bottom: 1px solid #666666;
     margin-bottom: 10px;
     min-width: 400px;
 }
 
-.profile .userinfo .text .title{
+.profile .userinfo .text .title {
     font-size: larger;
 }
 
-.profile .userinfo .text .value{
+.profile .userinfo .text .value {
     font-size: medium;
     float: right;
 }
@@ -165,4 +165,18 @@
 
 .ruleInput .new input[type="submit"] {
     margin: 6px;
+}
+
+.editGroup {
+    float: right;
+    font-size: 30px;
+    margin: 0;
+    padding: 0;
+}
+
+.currGroup {
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }

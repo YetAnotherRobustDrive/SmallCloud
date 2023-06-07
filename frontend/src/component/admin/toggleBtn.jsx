@@ -4,7 +4,7 @@ import {BsToggleOff, BsToggleOn} from 'react-icons/bs'
 
 export default function ToggleBtn(props) {
 
-    const [isLocked, setIsLocked] = useState(props.default === undefined ? true : props.default);
+    const [isLocked, setIsLocked] = useState(props.default === undefined ? false : props.default);
 
     const handleOnClick = (()=>{
         setIsLocked(!isLocked);
