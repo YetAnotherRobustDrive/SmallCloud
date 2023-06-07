@@ -96,18 +96,26 @@ public class LabelService {
 
     public void attachTrash(DataNode dataNode, Member member) {
         Label label = labelRepository.findByNameAndOwner(DefaultLabelType.defaultTrash.getLabelName(), member);
+        if(dataNode.getLabels().contains(label))
+            throw new ServiceException(ExceptionStatus.ALREADY_EXISTS_LABEL);
         dataNode.addLabel(label);
     }
     public void detachTrash(DataNode dataNode, Member member) {
         Label label = labelRepository.findByNameAndOwner(DefaultLabelType.defaultTrash.getLabelName(), member);
+        if(!dataNode.getLabels().contains(label))
+            throw new ServiceException(ExceptionStatus.NOT_FOUND_LABEL);
         dataNode.deleteLabel(label);
     }
     public void attachFavorite(DataNode dataNode, Member member) {
         Label label = labelRepository.findByNameAndOwner(DefaultLabelType.defaultFavorite.getLabelName(), member);
+        if(dataNode.getLabels().contains(label))
+            throw new ServiceException(ExceptionStatus.ALREADY_EXISTS_LABEL);
         dataNode.addLabel(label);
     }
     public void detachFavorite(DataNode dataNode, Member member) {
         Label label = labelRepository.findByNameAndOwner(DefaultLabelType.defaultFavorite.getLabelName(), member);
+        if(!dataNode.getLabels().contains(label))
+            throw new ServiceException(ExceptionStatus.NOT_FOUND_LABEL);
         dataNode.deleteLabel(label);
     }
     public void attachDraft(DataNode dataNode, Member member) {

@@ -1,4 +1,4 @@
-=== 라벨 업데이트 (labelUpdate)
+=== 파일 라벨 업데이트 (labelUpdate)
 
 operation::file/labelUpdate/okNoLabels[snippets='http-request']
 
@@ -19,5 +19,33 @@ operation::file/labelUpdate/noFile[snippets='http-response']
 IMPORTANT: 파일이 없을 때
 
 operation::file/labelUpdate/wrongToken[snippets='http-response']
+
+IMPORTANT: 잘못된 토큰
+
+=== 파일 삭제 (delete)
+
+operation::file/delete/okNoLabel[snippets='http-request,path-parameters']
+
+==== 성공
+
+operation::file/delete/okNoLabel[snippets='http-response']
+
+IMPORTANT: 파일에 라벨이 하나도 붙어있지 않을 때
+
+operation::file/delete/okLabel[snippets='http-response']
+
+IMPORTANT: 파일에 라벨이 붙어있을 때
+
+==== 실패
+
+operation::file/delete/existLabel[snippets='http-response']
+
+IMPORTANT: 파일에 라벨이 붙어있을 때
+
+operation::file/delete/noFile[snippets='http-response']
+
+IMPORTANT: 파일이 없을 때
+
+operation::file/delete/wrongToken[snippets='http-response']
 
 IMPORTANT: 잘못된 토큰
