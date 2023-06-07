@@ -3,6 +3,7 @@ import '../../css/context.css';
 import PostNewDirName from "../../services/directory/PostNewDirName";
 import ModalGetString from "../modal/ModalGetString";
 import ModalFolderShare from "../modal/ModalFolderShare";
+import PostPurgeFolder from "../../services/directory/PostPurgeFolder";
 
 export default function ContextFolder(props) {
     const [isModalOpen, setIsModalOpen] = useState(false);
@@ -26,9 +27,24 @@ export default function ContextFolder(props) {
         }
     }, [newName])
 
+    const handleDelete = async () => {
+        const confirm = window.confirm("정말로 삭제하시겠습니까?");
+        if (!confirm) {
+            return;
+        }
+        const res = await PostPurgeFolder(props.folderID);
+        if (!res[0]) {
+            setIsFail(true);
+            setMessage(res[1]);
+            return;
+        }
+        window.location.reload();
+    }
+
     const options = [
         { label: "이름변경", onClick: () => { setIsModalOpen(true) } },
         { label: "공유하기", onClick: () => { setIsShareOpen(true) } },
+        { label: "삭제하기", onClick: () => { handleDelete(true) } },
     ];
 
     return (
