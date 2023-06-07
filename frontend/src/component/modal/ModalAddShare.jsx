@@ -98,9 +98,8 @@ export default function ModalAddShare(props) {
                 alert(res[1]);
                 return;
             }
-            alert("공유가 추가되었습니다.");
-            window.location.reload();
         })
+        alert("공유가 추가되었습니다.");
     }
 
     Modal.setAppElement("#root");
