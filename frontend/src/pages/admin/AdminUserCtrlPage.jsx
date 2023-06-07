@@ -49,7 +49,10 @@ export default function AdminUserCtrlPage() {
             return;
         }
         alert("사용자 계정 비활성화에 성공했습니다.");
-        setUser(null);
+        setUser({
+            ...user,
+            locked: true,
+        })
     }
 
     const handleActivate = async () => {
@@ -59,7 +62,10 @@ export default function AdminUserCtrlPage() {
             return;
         }
         alert("사용자 계정 활성화에 성공했습니다.");
-        setUser(null);
+        setUser({
+            ...user,
+            locked: false,
+        })
     }
 
     const handlePwInit = async () => {
@@ -166,7 +172,7 @@ export default function AdminUserCtrlPage() {
                             })}
                         </div>}
                 </div>
-                {user === null ? <></> :
+                {user !== null &&
                     <>
                         <div className="profile">
                             <img src={img} />
