@@ -178,6 +178,13 @@ public class FileController {
         fileFacadeService.move(fileId, directoryMoveDtoDto, user.getUsername());
     }
 
+    @Secured(Roles.S_COMMON)
+    @PostMapping("/{fileId}/purge")
+    public void purge(@PathVariable("fileId") Long fileId) {
+        UserDetails userDetails = getLoginUser();
+        fileFacadeService.purge(fileId, userDetails.getUsername());
+    }
+
     private String encode(String fileName) {
         try {
             return URLEncoder.encode(fileName, StandardCharsets.UTF_8);

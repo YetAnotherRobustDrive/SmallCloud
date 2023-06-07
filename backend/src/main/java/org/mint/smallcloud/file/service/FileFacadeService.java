@@ -2,9 +2,12 @@ package org.mint.smallcloud.file.service;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.mint.smallcloud.exception.ExceptionStatus;
+import org.mint.smallcloud.exception.ServiceException;
 import org.mint.smallcloud.file.domain.File;
 import org.mint.smallcloud.file.domain.Folder;
 import org.mint.smallcloud.file.dto.DirectoryMoveDto;
+import org.mint.smallcloud.file.repository.FileRepository;
 import org.mint.smallcloud.user.domain.Member;
 import org.mint.smallcloud.user.service.MemberThrowerService;
 import org.springframework.stereotype.Service;
@@ -20,6 +23,7 @@ public class FileFacadeService {
     private final FileThrowerService fileThrowerService;
     private final MemberThrowerService memberThrowerService;
     private final FileService fileService;
+    private final FileRepository fileRepository;
 
     public void delete(Long fileId, String username) {
         File file = fileThrowerService.getFileById(fileId);
@@ -41,5 +45,12 @@ public class FileFacadeService {
         fileThrowerService.checkAccessRight(targetFile, username);
         directoryThrowerService.checkAccessRight(destFolder, username);
         fileService.moveFile(targetFile, destFolder);
+    }
+
+    public void purge(Long fileId, String username) {
+        File targetFile = fileThrowerService.getFileById(fileId);
+        if (targetFile.canAccessUser(username))
+            fileRepository.delete(targetFile);
+        throw new ServiceException(ExceptionStatus.NO_PERMISSION);
     }
 }
