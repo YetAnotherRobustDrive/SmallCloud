@@ -43,7 +43,7 @@ export default function AdminUserRegister() {
         inputData.delete("password_chk");
         const value = Object.fromEntries(inputData.entries());
         if (value["expiredDate"] !== undefined) {
-            value["expiredDate"] = value["expiredDate"] + "T00:00:00.000000";            
+            value["expiredDate"] = value["expiredDate"] + "T00:00:00.000000";            ㅇ
         }
 
         const res = await AdminRegisterUser(value);
