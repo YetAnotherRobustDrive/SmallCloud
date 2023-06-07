@@ -12,6 +12,7 @@ import org.mint.smallcloud.file.domain.File;
 import org.mint.smallcloud.file.domain.FileLocation;
 import org.mint.smallcloud.file.domain.FileType;
 import org.mint.smallcloud.file.domain.Folder;
+import org.mint.smallcloud.file.dto.DirectoryMoveDto;
 import org.mint.smallcloud.file.dto.LabelUpdateDto;
 import org.mint.smallcloud.file.repository.FileRepository;
 import org.mint.smallcloud.file.repository.FolderRepository;
@@ -34,6 +35,7 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.server.ResponseStatusException;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.validation.Valid;
 import java.io.InputStream;
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
@@ -166,6 +168,14 @@ public class FileController {
     public void delete(@PathVariable("fileId") Long fileId) {
         UserDetails user = getLoginUser();
         fileFacadeService.delete(fileId, user.getUsername());
+    }
+
+    @Secured(Roles.S_COMMON)
+    @PostMapping("/{fileId}/move")
+    public void move(@PathVariable("fileId") Long fileId,
+                     @Valid @RequestBody DirectoryMoveDto directoryMoveDtoDto) {
+        UserDetails user = getLoginUser();
+        fileFacadeService.move(fileId, directoryMoveDtoDto, user.getUsername());
     }
 
     private String encode(String fileName) {

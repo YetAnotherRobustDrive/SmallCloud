@@ -3,6 +3,7 @@ package org.mint.smallcloud.file.service;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.mint.smallcloud.file.domain.File;
+import org.mint.smallcloud.file.domain.Folder;
 import org.mint.smallcloud.file.repository.FileRepository;
 import org.mint.smallcloud.label.service.LabelService;
 import org.mint.smallcloud.user.domain.Member;
@@ -19,11 +20,6 @@ import java.util.List;
 public class FileService {
     private final LabelService labelService;
     private final FileRepository fileRepository;
-
-//    @Autowired
-//    public FileService(FileRepository fileRepository) {
-//        this.fileRepository = fileRepository;
-//    }
 
     public boolean isPathExist(List<String> folders) {
         return true;
@@ -58,6 +54,9 @@ public class FileService {
     }
     public void restoreFile(File file, Member user) {
         labelService.detachTrash(file, user);
+    }
+    public void moveFile(File targetFile, Folder destFolder) {
+        targetFile.setParentFolder(destFolder);
     }
 
 }

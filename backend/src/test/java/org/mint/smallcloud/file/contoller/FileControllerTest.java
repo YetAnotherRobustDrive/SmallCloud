@@ -8,6 +8,7 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mint.smallcloud.TestSnippet;
 import org.mint.smallcloud.file.domain.*;
+import org.mint.smallcloud.file.dto.DirectoryMoveDto;
 import org.mint.smallcloud.file.dto.LabelUpdateDto;
 import org.mint.smallcloud.file.repository.FileRepository;
 import org.mint.smallcloud.label.domain.DefaultLabelType;
@@ -72,7 +73,7 @@ class FileControllerTest {
     private Folder rootFolder;
     private DataNode dataNode;
     private LabelUpdateDto labelUpdateDto;
-    private LabelUpdateDto labelUpdateDto1;
+
     private LabelUpdateDto labelUpdateDto2;
     private List<String> labels = new ArrayList<>();
     private List<String> labels1 = new ArrayList<>();
@@ -132,6 +133,7 @@ class FileControllerTest {
         private DataNode dataNode1;
         private Label label;
         private Label label1;
+        private LabelUpdateDto labelUpdateDto1;
 
         @BeforeEach
         public void boot() {
@@ -162,7 +164,7 @@ class FileControllerTest {
                     .build();
 
             labelUpdateDto1 = LabelUpdateDto.builder()
-                    .fileId(100L)
+                    .fileId(999999999999999L)
                     .labels(labels)
                     .build();
 
@@ -224,8 +226,8 @@ class FileControllerTest {
         void noFile() throws Exception {
             mockMvc.perform(TestSnippet.secured(post(url),
                             memberToken.getAccessToken(), objectMapper, labelUpdateDto1))
-                    .andExpect(status().isNotFound())
                     .andDo(print())
+                    .andExpect(status().isNotFound())
                     .andDo(document(DOCUMENT_NAME));
         }
         @Test
@@ -447,6 +449,113 @@ class FileControllerTest {
                             TestSnippet.secured(post(url, dataNode.getId()), "testWrongToken"))
                     .andExpect(status().isBadRequest())
                     .andDo(print())
+                    .andDo(document(DOCUMENT_NAME));
+        }
+    }
+
+    @Nested
+    @DisplayName("/files/{fileId}/labels docs")
+    class move {
+        private final String url = URL_PREFIX + "/{fileId}/move";
+        private Member user1;
+        private Folder root;
+        private Folder parent;
+        private File target;
+        private JwtTokenDto token1;
+        private FileType fileType;
+        private FileLocation fileLocation;
+
+        @BeforeEach
+        void boot() {
+            Member user1 = Member.of("user1", "test", "nick");
+            em.persist(user1);
+            token1 = jwtTokenProvider.generateTokenDto(UserDetailsDto
+                    .builder()
+                    .username(user1.getUsername())
+                    .password(user1.getPassword())
+                    .roles(user1.getRole()).build());
+            root = Folder.createRoot(user1);
+            em.persist(root);
+            em.flush();
+            parent = (Folder) Folder.createFolder(root, "folder1", user1);
+            em.persist(parent);
+            em.flush();
+
+            fileType = FileType.of("testName", "testType");
+            fileLocation = FileLocation.of("testLocation");
+
+            target = (File) File.createFile(root, fileType, fileLocation, 100L, user1);
+            em.persist(target);
+            em.flush();
+        }
+
+        @DisplayName("정상 요청")
+        @Test
+        void ok() throws Exception {
+            DirectoryMoveDto dto1 = DirectoryMoveDto.builder()
+                    .directoryId(parent.getId())
+                    .build();
+            mockMvc.perform(TestSnippet.secured(post(url, target.getId()),
+                                    token1.getAccessToken(), objectMapper, dto1))
+                    .andExpect(status().isOk())
+                    .andExpect((rst) ->
+                            fileRepository
+                                    .findByFileType_NameAndParentFolder_Id(target.getName(), parent.getId())
+                                    .orElseThrow(Exception::new)
+                    )
+                    .andDo(document(DOCUMENT_NAME,
+                            requestFields(
+                                    fieldWithPath("directoryId").description("이동할 목적지 디렉터리 id")
+                            ),
+                            pathParameters(
+                                    parameterWithName("fileId").description("이동시킬 파일 id")
+                            )));
+        }
+
+        @DisplayName("옮길 파일이 없는 경우")
+        @Test
+        void fileNotFound() throws Exception {
+            DirectoryMoveDto dto1 = DirectoryMoveDto.builder()
+                    .directoryId(parent.getId())
+                    .build();
+            mockMvc.perform(
+                            TestSnippet.secured(post(url, target.getId() + 100),
+                                    token1.getAccessToken(), objectMapper, dto1))
+                    .andExpect(status().isNotFound())
+                    .andDo(document(DOCUMENT_NAME));
+        }
+
+        @DisplayName("목적지 디렉토리가 없는 경우")
+        @Test
+        void destNotFound() throws Exception {
+            DirectoryMoveDto dto1 = DirectoryMoveDto.builder()
+                    .directoryId(parent.getId() + 100)
+                    .build();
+            mockMvc.perform(
+                            TestSnippet.secured(post(url, target.getId()),
+                                    token1.getAccessToken(), objectMapper, dto1))
+                    .andExpect(status().isNotFound())
+                    .andDo(document(DOCUMENT_NAME));
+        }
+
+        @DisplayName("접근 권한이 없는 경우")
+        @Test
+        void noAccessRight() throws Exception {
+            Member member2 = Member.of("user2", "test", "nick1");
+            em.persist(member2);
+            em.flush();
+            JwtTokenDto token = jwtTokenProvider.generateTokenDto(UserDetailsDto
+                    .builder()
+                    .username(member2.getUsername())
+                    .password(member2.getPassword())
+                    .roles(member2.getRole()).build());
+            DirectoryMoveDto dto1 = DirectoryMoveDto.builder()
+                    .directoryId(parent.getId())
+                    .build();
+            mockMvc.perform(
+                            TestSnippet.secured(post(url, target.getId()),
+                                    token.getAccessToken(), objectMapper, dto1))
+                    .andExpect(status().isForbidden())
                     .andDo(document(DOCUMENT_NAME));
         }
     }
