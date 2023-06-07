@@ -13,8 +13,8 @@ export default function ToggleBtn(props) {
 
     return (
         <div onClick={handleOnClick} className="tgBtn">
-            <div className="stateText">{isLocked ? "OFF" : "ON"}</div>
-            {isLocked ? <BsToggleOff /> : <BsToggleOn />}
+            <div className="stateText">{!isLocked ? "OFF" : "ON"}</div>
+            {!isLocked ? <BsToggleOff /> : <BsToggleOn />}
         </div>
     )
 }
