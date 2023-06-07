@@ -27,19 +27,20 @@ export default function AdminUserCtrlPage() {
     const [isModalOpen, setIsModalOpen] = useState(false);
 
     useEffect(() => {
+        console.log(newPw);
         const initPw = async () => {
             if (newPw === "") {
                 return;
             }
             const res = await AdminInitUserPw(user.username, newPw);
             if (!res[0]) {
-                alert("비밀번호 초기화에 실패했습니다.");
+                alert("비밀번호 재설정에 실패했습니다.");
                 return;
             }
-            alert("비밀번호 초기화에 성공했습니다.");
+            alert("비밀번호 재설정에 성공했습니다.");
+            setNewPw("");
         }
         initPw();
-
     }, [newPw]);
 
     const handleDeactivate = async () => {
@@ -147,7 +148,7 @@ export default function AdminUserCtrlPage() {
                     title={"변경할 비밀번호를 입력하세요."}
                     setter={setNewPw}
                     isOpen={isModalOpen}
-                    after={() => { setIsModalOpen(false); setUser(null); setNewPw(""); }}
+                    after={() => { setIsModalOpen(false); }}
                 />
             }
             <Header />
@@ -199,8 +200,8 @@ export default function AdminUserCtrlPage() {
                                 <ToggleBtn onClick={user.locked ? handleActivate : handleDeactivate} default={user.locked} />
                             </RuleBox>
                             <RuleBox
-                                title="비밀번호 초기화"
-                                desc="비밀번호를 초기화합니다.">
+                                title="비밀번호 재설정"
+                                desc="비밀번호를 강제로 재설정합니다.">
                                 <button className="initBtn" onClick={handlePwInit}>초기화</button>
                             </RuleBox>
                             <RuleBox
