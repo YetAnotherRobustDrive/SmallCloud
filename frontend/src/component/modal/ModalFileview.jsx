@@ -22,7 +22,7 @@ export default function ModalFileview(props) {
     const [isGeneralSelected, setIsGeneralSelected] = useState(true);
     const [isNowDownload, setIsNowDownload] = useState(false);
     const [percentage, setPercentage] = useState(0);
-    const fileData = props.fileData;
+    const fileData = props.file;
 
     const handleDownload = async (e) => {
         setIsNowDownload(true);
