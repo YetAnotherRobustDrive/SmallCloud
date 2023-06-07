@@ -248,7 +248,7 @@ export default function AdminUserCtrlPage() {
                                 <form className="ruleInput" onSubmit={handleExpire}>
                                     <div className="curr">
                                         <span>현재 만료일: </span>
-                                        <span>{0}</span>
+                                        <span>{user.expiredDate}</span>
                                     </div>
                                     <div className="new">
                                         <span>새 만료일 : </span>
