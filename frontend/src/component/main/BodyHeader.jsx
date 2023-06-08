@@ -10,10 +10,9 @@ export default function BodyHeader(props) {
             <div className="text">
                 {props.text}
             </div>
-            {props.addon && (
+            {props.isSortable !== undefined && (
                 <div className="options">
                     <div className="option"><SortDropdown /></div>
-                    <div className="option" onClick={() => props.addon(!props.view)}>{props.view ? <TfiViewListAlt /> : <TfiViewGrid />}</div>
                 </div>)
             }
         </div>

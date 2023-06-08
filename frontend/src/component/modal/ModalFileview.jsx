@@ -78,21 +78,27 @@ export default function ModalFileview(props) {
         e.stopPropagation();
         e.preventDefault();
         if (fileData.isFavorite) {
-            const res = await PostFavoriteFile(fileData.id);
-            if (!res[0]) {
-                alert(res[1]);
-                return;
-            }
-        }
-        else {
             const res = await PostUnfavoriteFile(fileData.id);
             if (!res[0]) {
                 alert(res[1]);
                 return;
             }
         }
+        else {
+            const res = await PostFavoriteFile(fileData.id);
+            if (!res[0]) {
+                alert(res[1]);
+                return;
+            }
+        }
         fileData.isFavorite = !fileData.isFavorite;
-        alert("즐겨찾기 설정되었습니다.");
+        if (fileData.isFavorite) {
+            alert("즐겨찾기 설정되었습니다.");            
+        }
+        else {
+            alert("즐겨찾기 해제되었습니다.");
+        }
+        window.location.reload();
     }
 
     useEffect(() => {
@@ -223,7 +229,7 @@ export default function ModalFileview(props) {
                 <ModalAddShare
                     fileID={fileData.id}
                     isOpen={isShareOpen}
-                    after={() => setIsShareOpen(false)}
+                    after={() => {setIsShareOpen(false); window.location.reload();}}
                 />
             }
             {isLabelEditOpen &&

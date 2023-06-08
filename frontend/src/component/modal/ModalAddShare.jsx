@@ -100,6 +100,7 @@ export default function ModalAddShare(props) {
             }
         })
         alert("공유가 추가되었습니다.");
+        props.after();
     }
 
     Modal.setAppElement("#root");

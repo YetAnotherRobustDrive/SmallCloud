@@ -22,6 +22,7 @@ export default function Flow(props) {
     const edgeRef = useRef();
     const nodeRef = useRef();
     const isRootExistRef = useRef();
+    const tempRef = useRef();
 
     isRootExistRef.current = isRootExist;
     edgeRef.current = edges;
@@ -86,8 +87,28 @@ export default function Flow(props) {
         }
         return setEdges((eds) => addEdge({ source: params.source, target: params.target }, eds));
     }, [setEdges]);
-    const onNodesChange = useCallback((changes) => setNodes((nds) => applyNodeChanges(changes, nds)), []);
-    const onEdgesChange = useCallback((changes) => setEdges((eds) => applyNodeChanges(changes, eds)), []);
+    const onNodesChange = useCallback((changes) => {
+        if (tempRef.current === true) {
+            tempRef.current = false;
+            return;
+        }
+        else {
+            tempRef.current = false;
+        }
+        setNodes((nds) => applyNodeChanges(changes, nds))
+    }, []);
+    const onEdgesChange = useCallback((changes) => {
+        if (changes[0].type === "remove") {
+            if (!window.confirm("그룹을 삭제하시겠습니까?")) {
+                tempRef.current = true;
+                return;
+            }
+        }
+        else {
+            tempRef.current = false;
+        }
+        setEdges((eds) => applyNodeChanges(changes, eds))
+    }, []);
     const onNodesDelete = useCallback(
         (deleted) => {
             if (deleted[0].type === "customRootNode") {

@@ -30,8 +30,8 @@ export default async function GetTrashFileList() {
                 e.size = size + "B";
             }
             e.type = "file"
-            e.isFavorite = e.labels.includes("!$@*%&Favorite");
-            e.labels = e.labels.filter(e => e !== "!$@*%&Favorite");
+            e.isFavorite = e.labels.find(e => e.name === "!$@*%&Favorite") !== undefined;
+            e.labels = e.labels.filter(e => e.name.startsWith("!$@*%&") === false);
         });
         
         if (res.status === 200) {
