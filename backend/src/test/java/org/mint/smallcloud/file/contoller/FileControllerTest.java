@@ -630,7 +630,7 @@ class FileControllerTest {
         @DisplayName("정상 요청(라벨이 하나도 없을 때)")
         void okNoLabel() throws Exception {
             PathParametersSnippet payload = pathParameters(
-                    parameterWithName("fileId").description("삭제할 파일의 id를 담고 있습니다."));
+                    parameterWithName("fileId").description("즐겨찾기 추가할 파일의 id를 담고 있습니다."));
 
             mockMvc.perform(
                             TestSnippet.secured(post(url, dataNode.getId()), memberToken.getAccessToken()))
@@ -734,7 +734,7 @@ class FileControllerTest {
         @DisplayName("정상 요청(즐겨찾기 라벨만 있을 때)")
         void ok() throws Exception {
             PathParametersSnippet payload = pathParameters(
-                    parameterWithName("fileId").description("복구할 파일의 id를 담고 있습니다."));
+                    parameterWithName("fileId").description("즐겨찾기 제거할 파일의 id를 담고 있습니다."));
 
             mockMvc.perform(
                             TestSnippet.secured(post(url, dataNode.getId()), memberToken.getAccessToken()))

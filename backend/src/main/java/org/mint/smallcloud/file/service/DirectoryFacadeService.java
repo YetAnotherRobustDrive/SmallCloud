@@ -108,4 +108,18 @@ public class DirectoryFacadeService {
         List<File> files = folder.getFiles();
         return files.stream().filter(File::isActive).map(fileMapper::toFileDto).collect(Collectors.toList());
     }
+
+    public void favorite(Long directoryId, String username) {
+        Folder folder = directoryThrowerService.getDirectoryById(directoryId);
+        Member user = memberThrowerService.getMemberByUsername(username);
+        directoryThrowerService.checkAccessRight(folder, username);
+        directoryService.favoriteDirectory(folder, user);
+    }
+
+    public void unFavorite(Long directoryId, String username) {
+        Folder folder = directoryThrowerService.getDirectoryById(directoryId);
+        Member user = memberThrowerService.getMemberByUsername(username);
+        directoryThrowerService.checkAccessRight(folder, username);
+        directoryService.unFavoriteDirectory(folder, user);
+    }
 }

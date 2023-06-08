@@ -11,6 +11,8 @@ import org.mint.smallcloud.file.domain.Folder;
 import org.mint.smallcloud.file.dto.DirectoryCreateDto;
 import org.mint.smallcloud.file.dto.DirectoryMoveDto;
 import org.mint.smallcloud.file.repository.FolderRepository;
+import org.mint.smallcloud.label.domain.DefaultLabelType;
+import org.mint.smallcloud.label.domain.Label;
 import org.mint.smallcloud.security.dto.UserDetailsDto;
 import org.mint.smallcloud.security.jwt.dto.JwtTokenDto;
 import org.mint.smallcloud.security.jwt.tokenprovider.JwtTokenProvider;
@@ -28,6 +30,7 @@ import org.springframework.web.filter.CharacterEncodingFilter;
 import javax.persistence.EntityManager;
 import javax.transaction.Transactional;
 
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
@@ -561,4 +564,67 @@ class DirectoryControllerTest {
         }
     }
 
+    @Nested
+    @DisplayName("/directory/{directoryId}/favorite docs")
+    class favorite {
+        String url = URL_PREFIX + "/{directoryId}/favorite";
+        Folder root;
+        Member user1;
+        Folder directory;
+        Folder directory1;
+        JwtTokenDto user1Token;
+        Label favoriteLabel;
+        Label label;
+        @BeforeEach
+        public void boot() {
+            user1 = Member.of("user1", "test", "nick");
+            em.persist(user1);
+            root = Folder.createRoot(user1);
+            em.persist(root);
+            favoriteLabel = Label.of(DefaultLabelType.defaultFavorite.getLabelName(), user1);
+            em.persist(favoriteLabel);
+            label = Label.of("label", user1);
+            em.persist(label);
+            directory = Folder.createFolder(root, "folder1", user1);
+            em.persist(directory);
+            directory1 = Folder.createFolder(root, "folder2", user1);
+            directory1.addLabel(label);
+            em.persist(directory1);
+            user1Token = jwtTokenProvider.generateTokenDto(UserDetailsDto
+                .builder()
+                .username(user1.getUsername())
+                .password(user1.getPassword())
+                .roles(user1.getRole()).build());
+            }
+
+        @DisplayName("정상 요청")
+        @Test
+        void ok() throws Exception {
+            mockMvc.perform(
+                    TestSnippet.secured(post(url, directory.getId()), user1Token.getAccessToken()))
+                .andDo(print())
+                .andExpect((rst) -> {
+                    Folder folder = folderRepository.findById(directory.getId()).orElse(null);
+                    assertThat(folder.getLabels().size()).isEqualTo(1);
+                    assertThat(folder.getLabels().contains(favoriteLabel)).isTrue();
+                })
+                .andExpect(status().isOk())
+                .andDo(document(DOCUMENT_NAME));
+        }
+
+        @Test
+        @DisplayName("정상 요청(다른 라벨이 붙어 있을 때)")
+        void okLabel() throws Exception {
+            mockMvc.perform(
+                            TestSnippet.secured(post(url, directory1.getId()), user1Token.getAccessToken()))
+                    .andDo(print())
+                    .andExpect((rst) -> {
+                        Folder folder = folderRepository.findById(directory1.getId()).orElse(null);
+                        assertThat(folder.getLabels().size()).isEqualTo(2);
+                        assertThat(folder.getLabels().contains(favoriteLabel)).isTrue();
+                    })
+                    .andExpect(status().isOk())
+                    .andDo(document(DOCUMENT_NAME));
+        }
+    }
 }
