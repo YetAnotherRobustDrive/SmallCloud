@@ -1,5 +1,5 @@
+import configData from "../../config/config.json";
 import RefreshToken from "../token/RefreshToken";
-import configData from "../../config/config.json"
 
 export default async function GetSubFileList(id) {
     await RefreshToken();
@@ -28,11 +28,11 @@ export default async function GetSubFileList(id) {
             else {
                 e.size = size + "B";
             }
-            e.type = "file"
-            e.isFavorite = e.labels.find("!$@*%&Favorite");
-            e.labels = e.labels.filter(e => e !== "!$@*%&Favorite");
+            e.type = "file";
+            e.isFavorite = e.labels.includes("!$@*%&Favorite");
+            e.labels = e.labels.filter(e => e.startsWith("!$@*%&") === false);
         });
-        
+
         if (res.status === 200) {
             return [true, data];  //성공
         }

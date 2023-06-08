@@ -31,6 +31,9 @@ export default function CustomIcon(props) {
 
     const handelDrop = (e) => {
         e.preventDefault();
+        if (props.targetSetter === undefined) {
+            return;
+        }
         if (props.type === "folder") {
             props.targetSetter(props.id);
         }
@@ -38,6 +41,9 @@ export default function CustomIcon(props) {
 
     const handelDragEnd = (e) => {
         e.preventDefault();
+        if (props.sourceSetter === undefined) {
+            return;
+        }
         props.sourceSetter({ type: props.type, id: props.id });
     }
     const handelDragOver = (e) => {

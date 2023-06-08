@@ -34,7 +34,7 @@ export default function MainPage() {
         const render = async () => {
             const rootIDRes = await GetRootDir();
             if (!rootIDRes[0]) {
-                alert("오류가 발생했습니다.");
+                alert(rootIDRes[1])
                 return;
             }
 
@@ -42,12 +42,12 @@ export default function MainPage() {
 
             const subFileRes = await GetSubFileList(rootID);
             if (!subFileRes[0]) {
-                alert("오류가 발생했습니다.");
+                alert(subFileRes[1]);
                 return;
             }
             const subDirRes = await GetSubDirList(rootID);
             if (!subDirRes[0]) {
-                alert("오류가 발생했습니다.");
+                alert(subDirRes[1]);
                 return;
             }
             const files = [...subDirRes[1], ...subFileRes[1]];
@@ -79,12 +79,12 @@ export default function MainPage() {
 
             const shareFileRes = await GetShareFileList();
             if (!shareFileRes[0]) {
-                alert("오류가 발생했습니다.");
+                alert(shareFileRes[1])
                 return;
             }
             const shareDirRes = await GetShareFolderList();
             if (!shareDirRes[0]) {
-                alert("오류가 발생했습니다.");
+                alert(shareDirRes[1])
                 return;
             }
             const shareFiles = [...shareDirRes[1], ...shareFileRes[1]];

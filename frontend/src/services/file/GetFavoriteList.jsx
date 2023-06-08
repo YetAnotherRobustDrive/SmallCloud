@@ -1,7 +1,7 @@
+import configData from "../../config/config.json";
 import RefreshToken from "../token/RefreshToken";
-import configData from "../../config/config.json"
 
-export default async function GetTrashFavoriteList(id) {
+export default async function GetFavoriteList() {
     await RefreshToken();
     const accessToken = localStorage.getItem("accessToken");
     const model = {
@@ -12,9 +12,10 @@ export default async function GetTrashFavoriteList(id) {
     };
 
     try {
-        const res = await fetch(configData.API_SERVER + "files/" + id + '/files', model);
+        const res = await fetch(configData.API_SERVER + 'labels/favorite', model);
         const data = await res.json();
-        data.forEach(e => {
+        const files = [...data.files];
+        files.forEach(e => {
             const size = parseInt(e.size);
             if (parseInt(size / Math.pow(10, 9)) > 0) {
                 e.size = (size / Math.pow(10, 9)).toFixed(1) + "GB";
@@ -29,12 +30,11 @@ export default async function GetTrashFavoriteList(id) {
                 e.size = size + "B";
             }
             e.type = "file"
-            e.isFavorite = e.labels.find("!$@*%&Favorite");
-            e.labels = e.labels.filter(e => e !== "!$@*%&Favorite");
+            e.isFavorite = e.labels.includes("!$@*%&Favorite");
+            e.labels = e.labels.filter(e => e.startsWith("!$@*%&") === false );
         });
-        
         if (res.status === 200) {
-            return [true, data];  //성공
+            return [true, files];  //성공
         }
         else {
             throw data; //실패

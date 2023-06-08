@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { AiOutlineClose, AiOutlineStar, AiFillStar} from "react-icons/ai";
+import { AiOutlineClose, AiOutlineStar, AiFillStar } from "react-icons/ai";
 import { BsFillShareFill, BsFillTrashFill } from 'react-icons/bs';
 import { GoCloudDownload } from 'react-icons/go';
 import { MdGroups, MdOpenInFull, MdPerson } from 'react-icons/md';
@@ -64,7 +64,7 @@ export default function ModalFileview(props) {
         e.stopPropagation();
         e.preventDefault();
         if (window.confirm("정말로 파일을 삭제하시겠습니까?")) {
-            const res = await PostDeleteFile(fileData.id);           
+            const res = await PostDeleteFile(fileData.id);
             if (!res[0]) {
                 alert(res[1]);
                 return;
@@ -121,7 +121,7 @@ export default function ModalFileview(props) {
                     </div>
                     <div className='head'>
                         <div className="fileBtn">
-                            <div className='icon' onClick={handleFavorite}>{fileData.isFavorite ? <AiFillStar /> : <AiOutlineStar/>}</div>
+                            <div className='icon' onClick={handleFavorite}>{fileData.isFavorite ? <AiFillStar /> : <AiOutlineStar />}</div>
                             <div className='icon' onClick={handleDownload}><GoCloudDownload /></div>
                             <div className='icon' onClick={() => setIsFileOpen(true)}><MdOpenInFull /></div>
                             <div className='icon' onClick={() => props.after()}><AiOutlineClose /></div>
@@ -134,11 +134,13 @@ export default function ModalFileview(props) {
                                 onClick={() => setIsGeneralSelected(true)}>
                                 일반
                             </span>
-                            <span
-                                style={!isGeneralSelected ? { textDecoration: "underline" } : {}}
-                                onClick={() => setIsGeneralSelected(false)}>
-                                공유
-                            </span>
+                            {props.isDeleted !== true &&
+                                <span
+                                    style={!isGeneralSelected ? { textDecoration: "underline" } : {}}
+                                    onClick={() => setIsGeneralSelected(false)}>
+                                    공유
+                                </span>
+                            }
                         </div>
                         {isGeneralSelected && //일반
                             <>
@@ -176,11 +178,11 @@ export default function ModalFileview(props) {
                                     </div>
                                 </div>
                                 <div className="removeFile" onClick={handleFileRemove}>
-                                        <span><BsFillTrashFill/></span>
+                                    <span><BsFillTrashFill /></span>
                                 </div>
                             </>
                         }
-                        {!isGeneralSelected && //공유
+                        {(!isGeneralSelected && props.isDeleted !== true) && //공유
                             <>
                                 <div className='share-icon' onClick={handleShare}><BsFillShareFill /></div>
                                 <div className="shareBody">
