@@ -38,7 +38,7 @@ export default function CustomIcon(props) {
 
     const handelDragEnd = (e) => {
         e.preventDefault();
-        props.sourceSetter(props.id);
+        props.sourceSetter({ type: props.type, id: props.id });
     }
     const handelDragOver = (e) => {
         e.preventDefault();

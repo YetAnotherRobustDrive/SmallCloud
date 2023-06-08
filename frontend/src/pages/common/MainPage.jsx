@@ -16,17 +16,16 @@ import GetSubFileList from "../../services/directory/GetSubFileList";
 import PostMoveDir from "../../services/directory/PostMoveDir";
 import GetShareFolderList from "../../services/share/GetShareFolderList";
 import GetShareFileList from "../../services/share/GetShareFileList";
+import PostMoveFile from "../../services/file/PostMoveFile";
 
 export default function MainPage() {
 
     const [isGrid, setIsGrid] = useState(true);
     const [isFileView, setIsFileView] = useState(false);
     const [selected, setSelected] = useState();
-    const [isFail, setIsFail] = useState();
     const [isLoading, setIsLoading] = useState(true);
-    const [message, setMessage] = useState();
     const [target, setTarget] = useState(0);
-    const [source, setSource] = useState(0);
+    const [source, setSource] = useState({ type: "", id: 0 });
     const [gridFiles, setGridFiles] = useState([]);
     const [listFiles, setListFiles] = useState([]);
     const [shareFiles, setShareFiles] = useState([]);
@@ -35,8 +34,7 @@ export default function MainPage() {
         const render = async () => {
             const rootIDRes = await GetRootDir();
             if (!rootIDRes[0]) {
-                setIsFail(true);
-                setMessage(rootIDRes[1]);
+                alert("오류가 발생했습니다.");
                 return;
             }
 
@@ -44,14 +42,12 @@ export default function MainPage() {
 
             const subFileRes = await GetSubFileList(rootID);
             if (!subFileRes[0]) {
-                setIsFail(true);
-                setMessage(subFileRes[1]);
+                alert("오류가 발생했습니다.");
                 return;
             }
             const subDirRes = await GetSubDirList(rootID);
             if (!subDirRes[0]) {
-                setIsFail(true);
-                setMessage(subDirRes[1]);
+                alert("오류가 발생했습니다.");
                 return;
             }
             const files = [...subDirRes[1], ...subFileRes[1]];
@@ -67,7 +63,7 @@ export default function MainPage() {
                         key={data.id}
                         id={data.id}
                         name={data.name}
-                        type={data.type}/>
+                        type={data.type} />
                 })
             )
             setListFiles(
@@ -83,14 +79,12 @@ export default function MainPage() {
 
             const shareFileRes = await GetShareFileList();
             if (!shareFileRes[0]) {
-                setIsFail(true);
-                setMessage(shareFileRes[1]);
+                alert("오류가 발생했습니다.");
                 return;
             }
             const shareDirRes = await GetShareFolderList();
             if (!shareDirRes[0]) {
-                setIsFail(true);
-                setMessage(shareDirRes[1]);
+                alert("오류가 발생했습니다.");
                 return;
             }
             const shareFiles = [...shareDirRes[1], ...shareFileRes[1]];
@@ -107,7 +101,7 @@ export default function MainPage() {
                         id={data.id}
                         name={data.name}
                         type={data.type}
-                        noContext={true}/>
+                        noContext={true} />
                 })
             )
         }
@@ -117,12 +111,25 @@ export default function MainPage() {
 
     useEffect(() => {
         const move = async () => {
-            const res = await PostMoveDir(source, target);
+            if (source.type === "file") {
+                const res = await PostMoveFile(source.id, target);
+                if (!res[0]) {
+                    alert("오류가 발생했습니다.");
+                    return;
+                }
+            }
+            else if (source.type === "folder") {
+                const res = await PostMoveDir(source.id, target);
+                if (!res[0]) {
+                    alert("오류가 발생했습니다.");
+                    return;
+                }
+            }
             setTarget(0);
-            setSource(0);
+            setSource({ type: "", id: 0 });
             window.location.reload();
         }
-        if (target !== 0 && source !== 0 && target !== source) {
+        if (target !== 0 && source.id !== 0 && target !== source.id) {
             move();
         }
     }, [target, source])
