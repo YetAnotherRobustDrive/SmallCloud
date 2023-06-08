@@ -19,6 +19,9 @@ export default function SidebarCS() {
       <div className="menuBox">
         <Link className="link" to="/cs/notice" >공지사항</Link>
       </div>
+      <div className="menuBox">
+        <Link className="link" to="/cs/groups" >조직도</Link>
+      </div>
       <div className="filetree" style={{overflow:"hidden"}}/>
       <Footer />
     </div>

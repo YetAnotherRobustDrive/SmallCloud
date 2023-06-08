@@ -28,6 +28,7 @@ import PrivatePage from './mypage/PrivatePage';
 import SecurityInfoPage from './mypage/SecurityInfoPage';
 import ServiceInfoPage from './mypage/ServiceInfoPage';
 import SharePage from './common/SharePage';
+import Groups from './cs/Groups';
 
 export default () => {
     const isPrivileged = useSelector(state => state.token.isPrivileged);
@@ -78,6 +79,7 @@ export default () => {
                                 <Route path='/cs/terms' element={<TermsPage />} />
                                 <Route path='/cs/faq' element={<FaqPage />} />
                                 <Route path='/cs/question' element={<QuestionPage />} />
+                                <Route path='/cs/groups' element={<Groups />} />
 
                             </>
                         }
