@@ -29,6 +29,8 @@ export default async function GetSubFileList(id) {
                 e.size = size + "B";
             }
             e.type = "file"
+            e.isFavorite = e.labels.find("!$@*%&Favorite");
+            e.labels = e.labels.filter(e => e !== "!$@*%&Favorite");
         });
         
         if (res.status === 200) {

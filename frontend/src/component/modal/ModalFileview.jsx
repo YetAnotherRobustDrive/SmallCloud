@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { AiOutlineClose } from "react-icons/ai";
+import { AiOutlineClose, AiOutlineStar, AiFillStar} from "react-icons/ai";
 import { BsFillShareFill, BsFillTrashFill } from 'react-icons/bs';
 import { GoCloudDownload } from 'react-icons/go';
 import { MdGroups, MdOpenInFull, MdPerson } from 'react-icons/md';
@@ -14,6 +14,8 @@ import ModalAddShare from "./ModalAddShare";
 import ModalEmpty from "./ModalEmpty";
 import ModalFileopen from "./ModalFileopen";
 import ModalGetString from "./ModalGetString";
+import PostFavoriteFile from "../../services/file/PostFavoriteFile";
+import PostUnfavoriteFile from "../../services/file/PostUnfavoriteFile";
 
 export default function ModalFileview(props) {
     const [isFileOpen, setIsFileOpen] = useState(false);
@@ -27,7 +29,7 @@ export default function ModalFileview(props) {
 
     const handleDownload = async (e) => {
         setIsNowDownload(true);
-        const res = await GetDownloadFile(fileData.id, setPercentage, () => { }, fileData.name)
+        await GetDownloadFile(fileData.id, setPercentage, () => { }, fileData.name)
         setTimeout(() => setIsNowDownload(false), 250);
     }
 
@@ -72,6 +74,27 @@ export default function ModalFileview(props) {
         }
     }
 
+    const handleFavorite = async (e) => {
+        e.stopPropagation();
+        e.preventDefault();
+        if (fileData.isFavorite) {
+            const res = await PostFavoriteFile(fileData.id);
+            if (!res[0]) {
+                alert(res[1]);
+                return;
+            }
+        }
+        else {
+            const res = await PostUnfavoriteFile(fileData.id);
+            if (!res[0]) {
+                alert(res[1]);
+                return;
+            }
+        }
+        fileData.isFavorite = !fileData.isFavorite;
+        alert("즐겨찾기 설정되었습니다.");
+    }
+
     useEffect(() => {
         const editLabel = async () => {
             let labelsForPost = [];
@@ -98,6 +121,7 @@ export default function ModalFileview(props) {
                     </div>
                     <div className='head'>
                         <div className="fileBtn">
+                            <div className='icon' onClick={handleFavorite}>{fileData.isFavorite ? <AiFillStar /> : <AiOutlineStar/>}</div>
                             <div className='icon' onClick={handleDownload}><GoCloudDownload /></div>
                             <div className='icon' onClick={() => setIsFileOpen(true)}><MdOpenInFull /></div>
                             <div className='icon' onClick={() => props.after()}><AiOutlineClose /></div>
