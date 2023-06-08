@@ -75,6 +75,26 @@ public class LabelService {
                 .files(dataNode.stream().map(dataNodeMapper::toDataNodeDto).collect(Collectors.toList()))
                 .build();
     }
+    public LabelFilesDto trash(String userName) {
+        Member member = memberThrowerService.getMemberByUsername(userName);
+        labelThrowerService.findByNameAndOwner(DefaultLabelType.defaultTrash.getLabelName(), member);
+        List<DataNode> dataNode = dataNodeRepository.findDataNodeByLabelName(DefaultLabelType.defaultTrash.getLabelName());
+        return LabelFilesDto.builder()
+                .name(DefaultLabelType.defaultTrash.getLabelName())
+                .files(dataNode.stream().map(dataNodeMapper::toDataNodeDto).collect(Collectors.toList()))
+                .build();
+    }
+
+    public LabelFilesDto favorite(String userName) {
+        Member member = memberThrowerService.getMemberByUsername(userName);
+        labelThrowerService.findByNameAndOwner(DefaultLabelType.defaultFavorite.getLabelName(), member);
+        List<DataNode> dataNode = dataNodeRepository.findDataNodeByLabelName(DefaultLabelType.defaultFavorite.getLabelName());
+        return LabelFilesDto.builder()
+                .name(DefaultLabelType.defaultFavorite.getLabelName())
+                .files(dataNode.stream().map(dataNodeMapper::toDataNodeDto).collect(Collectors.toList()))
+                .build();
+    }
+
 
     public void createDefaultLabels(Member member) {
         List<String> initLabels = new ArrayList<>();

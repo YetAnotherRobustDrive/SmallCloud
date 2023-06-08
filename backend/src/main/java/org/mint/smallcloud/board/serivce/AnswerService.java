@@ -42,7 +42,7 @@ public class AnswerService {
                 applicationEventPublisher.publishEvent(
                         NoticeAllEventAfterCommit
                                 .builder()
-                                .content(String.format("%s 문의의 답변이(가) 업데이트 되었습니다.", question.getTitle()))
+                                .content(String.format("%s 문의의 답변이(가) 등록되었습니다.", question.getTitle()))
                                 .build()
                 );
         }
