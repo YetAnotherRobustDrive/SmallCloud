@@ -35,7 +35,7 @@ public class AnswerService {
         Answer answer = Answer.answer(requestDto.getContent(), question);
         answerRepository.save(answer);
 
-        if(question != null) {
+        if(question.getWriter() != null) {
             Member member = memberRepository.findByUsername(question.getWriter())
                     .orElseThrow(() -> new ServiceException(ExceptionStatus.NOT_FOUND_MEMBER));
             if (member.canLogin())
