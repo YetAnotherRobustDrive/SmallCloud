@@ -48,6 +48,7 @@ import static org.springframework.restdocs.payload.PayloadDocumentation.fieldWit
 import static org.springframework.restdocs.payload.PayloadDocumentation.requestFields;
 import static org.springframework.restdocs.request.RequestDocumentation.*;
 import static org.springframework.security.test.web.servlet.setup.SecurityMockMvcConfigurers.springSecurity;
+import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 
@@ -270,29 +271,37 @@ class BoardControllerTest {
     @DisplayName("/inquiries/ 문의 답변 테스트")
     class answer {
         private RequestDto requestDto;
-
+        Question question;
+        Answer answer;
+        Member member;
         @BeforeEach
         void boot() {
             requestDto = RequestDto.builder()
                 .content("testContent")
                 .questionId(1L)
                 .build();
+            member = Member.createCommon("testWriter", "testPassword", "testNickname");
+            em.persist(member);
+            question = Question.question("testTitle", "testContent", "testContact", "testWriter", null);
+            em.persist(question);
+            answer = Answer.answer("testContent1", question);
+            em.persist(answer);
+            em.flush();
         }
+
 
         final String url = URL_PREFIX + "/answer";
 
         @DisplayName("정상적 1:1 문의 답변 저장")
         @Test
         void okOneToOneAnswer() throws Exception {
-            Question question = Question.question("testTitle", "testContent", "testContact", "testWriter", null);
-            questionRepository.save(question);
-            Answer answer = Answer.answer("testContent1", question);
-            answerRepository.save(answer);
+
             requestDto = RequestDto.builder()
                 .content("testContent1")
                 .questionId(question.getId())
                 .build();
             mockMvc.perform(TestSnippet.securePost(url, adminToken.getAccessToken(), objectMapper, requestDto))
+                    .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(content().json("{result: true}"))
                 .andDo(document(DOCUMENT_NAME));
