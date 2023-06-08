@@ -4,7 +4,6 @@ import Header from "../../component/header/Header";
 import BodyHeader from "../../component/main/BodyHeader";
 import CustomIcon from "../../component/main/CustomIcon";
 import GridBox from "../../component/main/GridBox";
-import ListBox from "../../component/main/ListBox";
 import NarrowBox from "../../component/main/NarrowBox";
 import UploadBtn from "../../component/main/UploadBtn";
 import ModalFileview from "../../component/modal/ModalFileview";
@@ -14,9 +13,9 @@ import GetRootDir from "../../services/directory/GetRootDir";
 import GetSubDirList from "../../services/directory/GetSubDirList";
 import GetSubFileList from "../../services/directory/GetSubFileList";
 import PostMoveDir from "../../services/directory/PostMoveDir";
-import GetShareFolderList from "../../services/share/GetShareFolderList";
-import GetShareFileList from "../../services/share/GetShareFileList";
 import PostMoveFile from "../../services/file/PostMoveFile";
+import GetShareFileList from "../../services/share/GetShareFileList";
+import GetShareFolderList from "../../services/share/GetShareFolderList";
 
 export default function MainPage() {
 
