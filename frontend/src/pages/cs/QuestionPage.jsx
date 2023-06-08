@@ -1,3 +1,4 @@
+import jwtDecode from "jwt-decode";
 import React, { useEffect, useState } from "react";
 import BodyFrame from "../../component/Bodyframe";
 import ExtendBox from "../../component/cs/ExtendBox";
@@ -6,9 +7,9 @@ import BodyHeader from "../../component/main/BodyHeader";
 import ModalOk from "../../component/modal/ModalOk";
 import SidebarCS from "../../component/sidebar/SidebarCS";
 import '../../css/cs.css';
+import GetBoardListFrom from "../../services/board/GetBoardListFrom";
 import PostBoard from "../../services/board/PostBoard";
 import GetUserInfo from "../../services/user/GetUserInfo";
-import GetBoardListFrom from "../../services/board/GetBoardListFrom";
 
 export default function QuestionPage() {
     const [isEmpty, setIsEmpty] = useState(false);
@@ -19,14 +20,8 @@ export default function QuestionPage() {
 
     useEffect(() => {
         const fetchMyQuestion = async () => {
-            const userRes = await GetUserInfo();
-            if (!userRes[0]) {
-                setIsFail(true);
-                setMessage(userRes[1]);
-                return;
-            }
-            const user = userRes[1];
-            const res = await GetBoardListFrom('inquiries/myQuestions?writer=' + user.nickname);
+            const userName = jwtDecode(localStorage.getItem("accessToken")).sub;
+            const res = await GetBoardListFrom('inquiries/myQuestions?writer=' + userName);
             if (!res[0]) {
                 setIsFail(true);
                 setMessage(res[1]);
@@ -39,16 +34,9 @@ export default function QuestionPage() {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-        const userRes = await GetUserInfo();
-        if (!userRes[0]) {
-            setIsFail(true);
-            setMessage(userRes[1]);
-            return;
-        }
-        const user = userRes[1];
-
+        const userName = jwtDecode(localStorage.getItem("accessToken")).sub;
         const inputData = new FormData(e.target);
-        inputData.append("writer", user.nickname);
+        inputData.append("writer", userName);
         inputData.append("contact", "등록된 유저입니다.");
         const value = Object.fromEntries(inputData.entries());
 

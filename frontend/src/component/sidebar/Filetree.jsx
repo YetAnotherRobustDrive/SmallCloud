@@ -43,7 +43,7 @@ export default function Filetree() {
       if (d.type === 'folder') {
         const subChildren = await parseTree(d.id, depth + 1);
         return (
-          <div key={d.id} id={d.id} className="folder" onClick={(e) => {e.preventDefault(); e.stopPropagation(); navigate("/files/" + e.currentTarget.id)}}>
+          <div key={d.id} id={d.id} className="folder" onClick={(e) => {e.preventDefault(); e.stopPropagation(); navigate("/folder/" + e.currentTarget.id)}}>
             <span>{taps}<FcFolder />{d.name}</span>
             {subChildren}
           </div>

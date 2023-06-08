@@ -1,7 +1,7 @@
 import RefreshToken from "../token/RefreshToken";
 import configData from "../../config/config.json"
 
-export default async function PostDeleteFile(fileID) {
+export default async function PostUnfavoriteFile(fileID) {
     await RefreshToken();
     const accessToken = localStorage.getItem("accessToken");
     const model = {
@@ -12,7 +12,7 @@ export default async function PostDeleteFile(fileID) {
     };
 
     try {
-        const res = await fetch(configData.API_SERVER + 'files/' + fileID + '/delete', model);
+        const res = await fetch(configData.API_SERVER + 'files/' + fileID + '/unfavorite', model);
         if (res.status === 200) {
             return [true, ''];  //성공
         }

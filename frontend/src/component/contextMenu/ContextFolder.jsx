@@ -3,20 +3,19 @@ import '../../css/context.css';
 import PostNewDirName from "../../services/directory/PostNewDirName";
 import ModalGetString from "../modal/ModalGetString";
 import ModalFolderShare from "../modal/ModalFolderShare";
+import PostPurgeFolder from "../../services/directory/PostPurgeFolder";
+import PostFavoriteFolder from "../../services/directory/PostFavoriteFolder";
 
 export default function ContextFolder(props) {
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [isShareOpen, setIsShareOpen] = useState(false);
-    const [isFail, setIsFail] = useState();
-    const [message, setMessage] = useState();
     const [newName, setNewName] = useState();
 
     useEffect(() => {
         const rename = async () => {
             const res = await PostNewDirName(props.folderID, newName);
             if (!res[0]) {
-                setIsFail(true);
-                setMessage(res[1]);
+                alert(res[1]);
                 return;
             }
             window.location.reload();
@@ -26,9 +25,33 @@ export default function ContextFolder(props) {
         }
     }, [newName])
 
+    const handleDelete = async () => {
+        const confirm = window.confirm("정말로 삭제하시겠습니까?");
+        if (!confirm) {
+            return;
+        }
+        const res = await PostPurgeFolder(props.folderID);
+        if (!res[0]) {
+            alert(res[1]);
+            return;
+        }
+        window.location.reload();
+    }
+
+    const handleFavorite = async () => {
+        const res = await PostFavoriteFolder(props.folderID);
+        if (!res[0]) {
+            alert(res[1]);
+            return;
+        }
+        alert("즐겨찾기에 추가되었습니다.");
+    }
+
     const options = [
-        { label: "이름변경", onClick: () => { setIsModalOpen(true) } },
-        { label: "공유하기", onClick: () => { setIsShareOpen(true) } },
+        { label: "즐겨찾기에 추가", onClick: () => { handleFavorite() } },
+        { label: "이름 변경", onClick: () => { setIsModalOpen(true) } },
+        { label: "공유 관리", onClick: () => { setIsShareOpen(true) } },
+        { label: "폴더 삭제", onClick: () => { handleDelete() } },
     ];
 
     return (
