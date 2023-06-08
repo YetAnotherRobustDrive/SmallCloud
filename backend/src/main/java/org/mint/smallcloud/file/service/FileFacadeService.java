@@ -51,6 +51,7 @@ public class FileFacadeService {
         File targetFile = fileThrowerService.getFileById(fileId);
         if (targetFile.canAccessUser(username))
             fileRepository.delete(targetFile);
-        throw new ServiceException(ExceptionStatus.NO_PERMISSION);
+        else
+            throw new ServiceException(ExceptionStatus.NO_PERMISSION);
     }
 }

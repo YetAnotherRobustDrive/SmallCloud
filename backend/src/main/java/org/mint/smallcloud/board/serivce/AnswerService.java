@@ -9,6 +9,10 @@ import org.mint.smallcloud.board.repository.AnswerRepository;
 import org.mint.smallcloud.board.repository.QuestionRepository;
 import org.mint.smallcloud.exception.ExceptionStatus;
 import org.mint.smallcloud.exception.ServiceException;
+import org.mint.smallcloud.notification.event.NoticeAllEventAfterCommit;
+import org.mint.smallcloud.user.domain.Member;
+import org.mint.smallcloud.user.repository.MemberRepository;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
@@ -20,6 +24,8 @@ public class AnswerService {
 
     private final AnswerRepository answerRepository;
     private final QuestionRepository questionRepository;
+    private final MemberRepository memberRepository;
+    private final ApplicationEventPublisher applicationEventPublisher;
 
     @Transactional
     public boolean registerAnswer(RequestDto requestDto) {
@@ -28,6 +34,18 @@ public class AnswerService {
             .orElseThrow(() -> new ServiceException(ExceptionStatus.NOT_FOUND_QUESTION));
         Answer answer = Answer.answer(requestDto.getContent(), question);
         answerRepository.save(answer);
+
+        if(question != null) {
+            Member member = memberRepository.findByUsername(question.getWriter())
+                    .orElseThrow(() -> new ServiceException(ExceptionStatus.NOT_FOUND_MEMBER));
+            if (member.canLogin())
+                applicationEventPublisher.publishEvent(
+                        NoticeAllEventAfterCommit
+                                .builder()
+                                .content(String.format("%s 문의의 답변이(가) 업데이트 되었습니다.", question.getTitle()))
+                                .build()
+                );
+        }
         return true;
     }
 }
