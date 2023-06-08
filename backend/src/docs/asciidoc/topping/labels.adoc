@@ -15,3 +15,27 @@ IMPORTANT: 등록되지 않은 라벨을 검색했을 때
 operation::Labels/search/wrongToken[snippets='http-response']
 
 IMPORTANT: 잘못된 토큰을 사용했을 때
+
+=== 휴지통 라벨 검색 (trash)
+
+operation::Labels/trash/ok[snippets='http-request']
+
+==== 성공
+
+operation::Labels/trash/ok[snippets='http-response']
+
+==== 실패
+
+operation::Labels/trash/wrongToken[snippets='http-response']
+
+=== 즐겨찾기 라벨 검색 (favorite)
+
+operation::Labels/favorite/ok[snippets='http-request']
+
+==== 성공
+
+operation::Labels/favorite/ok[snippets='http-response']
+
+==== 실패
+
+operation::Labels/favorite/wrongToken[snippets='http-response']

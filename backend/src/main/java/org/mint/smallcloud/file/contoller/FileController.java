@@ -163,18 +163,18 @@ public class FileController {
         fileFacadeService.restore(fileId, user.getUsername());
     }
 
-//    @Secured(Roles.S_COMMON)
-//    @RequestMapping(method = {RequestMethod.GET, RequestMethod.POST}, value = "/{fileId}/favorite")
-//    public void favorite(@PathVariable("fileId") Long fileId) {
-//        UserDetails user = getLoginUser();
-//        fileFacadeService.favorite(fileId, user.getUsername());
-//    }
-//    @Secured(Roles.S_COMMON)
-//    @RequestMapping(method = {RequestMethod.GET, RequestMethod.POST}, value = "/{fileId}/unfavorite")
-//    public void unFavorite(@PathVariable("fileId") Long fileId) {
-//        UserDetails user = getLoginUser();
-//        fileFacadeService.unFavorite(fileId, user.getUsername());
-//    }
+    @Secured(Roles.S_COMMON)
+    @RequestMapping(method = {RequestMethod.GET, RequestMethod.POST}, value = "/{fileId}/favorite")
+    public void favorite(@PathVariable("fileId") Long fileId) {
+        UserDetails user = getLoginUser();
+        fileFacadeService.favorite(fileId, user.getUsername());
+    }
+    @Secured(Roles.S_COMMON)
+    @RequestMapping(method = {RequestMethod.GET, RequestMethod.POST}, value = "/{fileId}/unfavorite")
+    public void unFavorite(@PathVariable("fileId") Long fileId) {
+        UserDetails user = getLoginUser();
+        fileFacadeService.unFavorite(fileId, user.getUsername());
+    }
 
     @Secured(Roles.S_COMMON)
     @RequestMapping(method = {RequestMethod.GET, RequestMethod.POST}, value = "/{fileId}/delete")

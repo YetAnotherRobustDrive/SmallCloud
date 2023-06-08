@@ -58,5 +58,11 @@ public class FileService {
     public void moveFile(File targetFile, Folder destFolder) {
         targetFile.setParentFolder(destFolder);
     }
+    public void favoriteFile(File file, Member user) {
+        labelService.attachFavorite(file, user);
+    }
+    public void unFavoriteFile(File file, Member user) {
+        labelService.detachFavorite(file, user);
+    }
 
 }
