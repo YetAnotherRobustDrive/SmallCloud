@@ -36,6 +36,10 @@ export default function FolderPage() {
             if (!infoRes[0]) {
                 throw infoRes[1];
             }
+            if (infoRes[1].name === "_ROOT_") {
+                navigate("/");
+                return;
+            }
             setName(infoRes[1].name);
             const subFileRes = await GetSubFileList(params.fileID);
             if (!subFileRes[0]) {
@@ -55,11 +59,6 @@ export default function FolderPage() {
 
             setGridFiles([
                 <CustomIcon
-                        onClick={() => {
-                            isUnderRoot ?
-                                navigate('/') :
-                                navigate('/folder/' + parentRes[1].id)
-                        }}
                         targetSetter={setTarget}
                         sourceSetter={setSource}
                         key={parentRes[1].id}
