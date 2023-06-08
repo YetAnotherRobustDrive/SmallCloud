@@ -199,7 +199,7 @@ class LabelControllerTest {
         }
     }
     @Nested
-    @DisplayName("/labels/trash 휴지통 라벨 검색 테스트")
+    @DisplayName("/labels/trash 즐겨찾기 라벨 검색 테스트")
     class favorite {
         private final String url = URL_PREFIX + "/favorite";
         Label favoritelabel;

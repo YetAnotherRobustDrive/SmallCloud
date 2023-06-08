@@ -54,4 +54,18 @@ public class FileFacadeService {
         else
             throw new ServiceException(ExceptionStatus.NO_PERMISSION);
     }
+
+    public void favorite(Long fileId, String username) {
+        File targetFile = fileThrowerService.getFileById(fileId);
+        Member user = memberThrowerService.getMemberByUsername(username);
+        fileThrowerService.checkAccessRight(targetFile, username);
+        fileService.favoriteFile(targetFile, user);
+    }
+
+    public void unFavorite(Long fileId, String username) {
+        File targetFile = fileThrowerService.getFileById(fileId);
+        Member user = memberThrowerService.getMemberByUsername(username);
+        fileThrowerService.checkAccessRight(targetFile, username);
+        fileService.unFavoriteFile(targetFile, user);
+    }
 }
