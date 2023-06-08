@@ -36,7 +36,6 @@ public class LabelService {
     public Label register(Label label) {
         if(!labelRepository.existsByNameAndOwner(label.getName(), label.getOwner())) {
             labelRepository.save(label);
-            labelRepository.flush();
         }
         return labelRepository.findByNameAndOwner(label.getName(), label.getOwner());
     }
