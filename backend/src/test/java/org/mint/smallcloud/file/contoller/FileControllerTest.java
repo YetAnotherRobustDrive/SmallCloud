@@ -454,7 +454,7 @@ class FileControllerTest {
     }
 
     @Nested
-    @DisplayName("/files/{fileId}/labels docs")
+    @DisplayName("/files/{fileId}/move docs")
     class move {
         private final String url = URL_PREFIX + "/{fileId}/move";
         private Member user1;
@@ -557,6 +557,38 @@ class FileControllerTest {
                                     token.getAccessToken(), objectMapper, dto1))
                     .andExpect(status().isForbidden())
                     .andDo(document(DOCUMENT_NAME));
+        }
+    }
+
+    @Nested
+    @DisplayName("/files/{fileId}/purge docs")
+    class purge {
+        private final String url = URL_PREFIX + "/{fileId}/purge";
+        private Folder parent;
+        private Label label;
+        @BeforeEach
+        public void boot() {
+            em.persist(rootFolder);
+            parent = (Folder) Folder.createFolder(rootFolder, "folder1", member);
+            em.persist(parent);
+
+            label = Label.of("testLabel1", member);
+            em.persist(label);
+
+            dataNode = DataNode.createFile(rootFolder, fileType, fileLocation, 100L, member);
+            em.persist(dataNode);
+            em.flush();
+        }
+
+        @Test
+        @DisplayName("정상 요청")
+        void ok() throws Exception {
+            mockMvc.perform(TestSnippet.secured(post(url, dataNode.getId()), memberToken.getAccessToken()))
+                    .andDo(print())
+                    .andExpect(status().isOk())
+                    .andDo(document(DOCUMENT_NAME, pathParameters(
+                            parameterWithName("fileId").description("완전 삭제할 파일 id")
+                    )));
         }
     }
 }

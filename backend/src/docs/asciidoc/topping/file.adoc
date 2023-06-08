@@ -84,22 +84,30 @@ IMPORTANT: 잘못된 토큰
 
 === 파일 이동 (move)
 
-operation::file/Move/ok[snippets='http-request,request-fields,path-parameters']
+operation::file/move/ok[snippets='http-request,request-fields,path-parameters']
 
 ==== 성공
 
-operation::file/Move/ok[snippets='http-response']
+operation::file/move/ok[snippets='http-response']
 
 IMPORTANT: 정상 요청
 
-operation::file/Move/fileNotFound[snippets='http-response']
+operation::file/move/fileNotFound[snippets='http-response']
 
 IMPORTANT: 파일이 없을 때
 
-operation::file/Move/destNotFound[snippets='http-response']
+operation::file/move/destNotFound[snippets='http-response']
 
 IMPORTANT: 이동할 폴더가 없을 때
 
-operation::file/Move/noAccessRight[snippets='http-response']
+operation::file/move/noAccessRight[snippets='http-response']
 
 IMPORTANT: 권한이 없을 때
+
+=== 파일 완전 삭제 (purge)
+
+operation::file/purge/ok[snippets='http-request,path-parameters']
+
+==== 성공
+
+operation::file/purge/ok[snippets='http-response']

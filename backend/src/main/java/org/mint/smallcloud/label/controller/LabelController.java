@@ -32,4 +32,22 @@ public class LabelController {
                 .orElseThrow(() -> new ServiceException(ExceptionStatus.NO_PERMISSION)).getUsername();
         return labelService.search(labelName, userName);
     }
+
+    // 휴지통 라벨 리스트 검색
+    @Secured({Roles.S_COMMON})
+    @GetMapping("/trash")
+    public LabelFilesDto trash() {
+        String userName = userDetailsProvider.getUserDetails()
+                .orElseThrow(() -> new ServiceException(ExceptionStatus.NO_PERMISSION)).getUsername();
+        return labelService.trash(userName);
+    }
+
+    // 즐겨찾기 라벨 리스트 검색
+    @Secured({Roles.S_COMMON})
+    @GetMapping("/favorite")
+    public LabelFilesDto favorite() {
+        String userName = userDetailsProvider.getUserDetails()
+                .orElseThrow(() -> new ServiceException(ExceptionStatus.NO_PERMISSION)).getUsername();
+        return labelService.favorite(userName);
+    }
 }

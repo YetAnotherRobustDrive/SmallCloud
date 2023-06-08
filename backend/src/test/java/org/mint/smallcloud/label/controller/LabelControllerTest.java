@@ -11,6 +11,7 @@ import org.mint.smallcloud.file.domain.DataNode;
 import org.mint.smallcloud.file.domain.FileLocation;
 import org.mint.smallcloud.file.domain.FileType;
 import org.mint.smallcloud.file.domain.Folder;
+import org.mint.smallcloud.label.domain.DefaultLabelType;
 import org.mint.smallcloud.label.domain.Label;
 import org.mint.smallcloud.label.repository.LabelRepository;
 import org.mint.smallcloud.security.dto.UserDetailsDto;
@@ -156,6 +157,88 @@ class LabelControllerTest {
         }
     }
 
+    @Nested
+    @DisplayName("/labels/trash 휴지통 라벨 검색 테스트")
+    class trash {
+        private final String url = URL_PREFIX + "/trash";
+        Label trashLabel;
+        @BeforeEach
+        void boot() {
+            trashLabel = Label.of(DefaultLabelType.defaultTrash.getLabelName(), member);
+            em.persist(trashLabel);
+            dataNode.addLabel(trashLabel);
+            em.persist(dataNode);
+            dataNode1.addLabel(trashLabel);
+            em.persist(dataNode1);
+            em.flush();
+        }
+
+        @DisplayName("정상적인 라벨 검색")
+        @Test
+        void ok() throws Exception {
+            mockMvc.perform(TestSnippet.secured(get(url), memberToken.getAccessToken()))
+                    .andDo(print())
+                    .andExpect(status().isOk())
+                    .andExpect((rst) -> {
+                        Label label1 = labelRepository.findByNameAndOwner(trashLabel.getName(), member);
+                        List<DataNode> files = label1.getFiles();
+                        assertThat(files.size()).isEqualTo(2);
+                        assertThat(files.contains(dataNode)).isTrue();
+                        assertThat(files.contains(dataNode1)).isTrue();
+                    })
+                    .andDo(document(DOCUMENT_NAME));
+        }
+
+        @DisplayName("잘못된 토큰")
+        @Test
+        void wrongToken() throws Exception {
+            mockMvc.perform(TestSnippet.secured(get(url), "testToken"))
+                    .andDo(print())
+                    .andExpect(status().isBadRequest())
+                    .andDo(document(DOCUMENT_NAME));
+        }
+    }
+    @Nested
+    @DisplayName("/labels/trash 휴지통 라벨 검색 테스트")
+    class favorite {
+        private final String url = URL_PREFIX + "/favorite";
+        Label favoritelabel;
+        @BeforeEach
+        void boot() {
+            favoritelabel = Label.of(DefaultLabelType.defaultFavorite.getLabelName(), member);
+            em.persist(favoritelabel);
+            dataNode.addLabel(favoritelabel);
+            em.persist(dataNode);
+            dataNode1.addLabel(favoritelabel);
+            em.persist(dataNode1);
+            em.flush();
+        }
+
+        @DisplayName("정상적인 라벨 검색")
+        @Test
+        void ok() throws Exception {
+            mockMvc.perform(TestSnippet.secured(get(url), memberToken.getAccessToken()))
+                    .andDo(print())
+                    .andExpect(status().isOk())
+                    .andExpect((rst) -> {
+                        Label label1 = labelRepository.findByNameAndOwner(favoritelabel.getName(), member);
+                        List<DataNode> files = label1.getFiles();
+                        assertThat(files.size()).isEqualTo(2);
+                        assertThat(files.contains(dataNode)).isTrue();
+                        assertThat(files.contains(dataNode1)).isTrue();
+                    })
+                    .andDo(document(DOCUMENT_NAME));
+        }
+
+        @DisplayName("잘못된 토큰")
+        @Test
+        void wrongToken() throws Exception {
+            mockMvc.perform(TestSnippet.secured(get(url), "testToken"))
+                    .andDo(print())
+                    .andExpect(status().isBadRequest())
+                    .andDo(document(DOCUMENT_NAME));
+        }
+    }
 
 
 }

@@ -163,6 +163,19 @@ public class FileController {
         fileFacadeService.restore(fileId, user.getUsername());
     }
 
+//    @Secured(Roles.S_COMMON)
+//    @RequestMapping(method = {RequestMethod.GET, RequestMethod.POST}, value = "/{fileId}/favorite")
+//    public void favorite(@PathVariable("fileId") Long fileId) {
+//        UserDetails user = getLoginUser();
+//        fileFacadeService.favorite(fileId, user.getUsername());
+//    }
+//    @Secured(Roles.S_COMMON)
+//    @RequestMapping(method = {RequestMethod.GET, RequestMethod.POST}, value = "/{fileId}/unfavorite")
+//    public void unFavorite(@PathVariable("fileId") Long fileId) {
+//        UserDetails user = getLoginUser();
+//        fileFacadeService.unFavorite(fileId, user.getUsername());
+//    }
+
     @Secured(Roles.S_COMMON)
     @RequestMapping(method = {RequestMethod.GET, RequestMethod.POST}, value = "/{fileId}/delete")
     public void delete(@PathVariable("fileId") Long fileId) {
@@ -170,12 +183,20 @@ public class FileController {
         fileFacadeService.delete(fileId, user.getUsername());
     }
 
+
     @Secured(Roles.S_COMMON)
     @PostMapping("/{fileId}/move")
     public void move(@PathVariable("fileId") Long fileId,
                      @Valid @RequestBody DirectoryMoveDto directoryMoveDtoDto) {
         UserDetails user = getLoginUser();
         fileFacadeService.move(fileId, directoryMoveDtoDto, user.getUsername());
+    }
+
+    @Secured(Roles.S_COMMON)
+    @PostMapping("/{fileId}/purge")
+    public void purge(@PathVariable("fileId") Long fileId) {
+        UserDetails userDetails = getLoginUser();
+        fileFacadeService.purge(fileId, userDetails.getUsername());
     }
 
     private String encode(String fileName) {
