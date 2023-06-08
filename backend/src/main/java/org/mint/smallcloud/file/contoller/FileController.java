@@ -164,25 +164,11 @@ public class FileController {
     }
 
     @Secured(Roles.S_COMMON)
-    @RequestMapping(method = {RequestMethod.GET, RequestMethod.POST}, value = "/{fileId}/favorite")
-    public void favorite(@PathVariable("fileId") Long fileId) {
-        UserDetails user = getLoginUser();
-        fileFacadeService.favorite(fileId, user.getUsername());
-    }
-    @Secured(Roles.S_COMMON)
-    @RequestMapping(method = {RequestMethod.GET, RequestMethod.POST}, value = "/{fileId}/unfavorite")
-    public void unFavorite(@PathVariable("fileId") Long fileId) {
-        UserDetails user = getLoginUser();
-        fileFacadeService.unFavorite(fileId, user.getUsername());
-    }
-
-    @Secured(Roles.S_COMMON)
     @RequestMapping(method = {RequestMethod.GET, RequestMethod.POST}, value = "/{fileId}/delete")
     public void delete(@PathVariable("fileId") Long fileId) {
         UserDetails user = getLoginUser();
         fileFacadeService.delete(fileId, user.getUsername());
     }
-
 
     @Secured(Roles.S_COMMON)
     @PostMapping("/{fileId}/move")
@@ -199,6 +185,20 @@ public class FileController {
         fileFacadeService.purge(fileId, userDetails.getUsername());
     }
 
+    @Secured(Roles.S_COMMON)
+    @RequestMapping(method = {RequestMethod.GET, RequestMethod.POST}, value = "/{fileId}/favorite")
+    public void favorite(@PathVariable("fileId") Long fileId) {
+        UserDetails user = getLoginUser();
+        fileFacadeService.favorite(fileId, user.getUsername());
+    }
+
+    @Secured(Roles.S_COMMON)
+    @RequestMapping(method = {RequestMethod.GET, RequestMethod.POST}, value = "/{fileId}/unfavorite")
+    public void unFavorite(@PathVariable("fileId") Long fileId) {
+        UserDetails user = getLoginUser();
+        fileFacadeService.unFavorite(fileId, user.getUsername());
+    }
+
     private String encode(String fileName) {
         try {
             return URLEncoder.encode(fileName, StandardCharsets.UTF_8);
@@ -206,7 +206,6 @@ public class FileController {
             return fileName;
         }
     }
-
     
     private UserDetails getLoginUser() {
         return userDetailsProvider.getUserDetails()
