@@ -20,14 +20,12 @@ import PostMoveFile from "../../services/file/PostMoveFile";
 
 export default function MainPage() {
 
-    const [isGrid, setIsGrid] = useState(true);
     const [isFileView, setIsFileView] = useState(false);
     const [selected, setSelected] = useState();
     const [isLoading, setIsLoading] = useState(true);
     const [target, setTarget] = useState(0);
     const [source, setSource] = useState({ type: "", id: 0 });
     const [gridFiles, setGridFiles] = useState([]);
-    const [listFiles, setListFiles] = useState([]);
     const [shareFiles, setShareFiles] = useState([]);
 
     useEffect(() => {
@@ -64,16 +62,6 @@ export default function MainPage() {
                         id={data.id}
                         name={data.name}
                         type={data.type} />
-                })
-            )
-            setListFiles(
-                files.map((data) => {
-                    return <ListBox key={data.id}
-                        onClick={() => {
-                            setSelected(data);
-                            setIsFileView(true);
-                        }}
-                        data={data} />
                 })
             )
 
@@ -127,7 +115,9 @@ export default function MainPage() {
             }
             setTarget(0);
             setSource({ type: "", id: 0 });
-            window.location.reload();
+            setGridFiles([
+                ...gridFiles.filter((data) => data.props.id !== source.id),
+            ])
         }
         if (target !== 0 && source.id !== 0 && target !== source.id) {
             move();
@@ -140,19 +130,12 @@ export default function MainPage() {
             <Header />
             <Sidebar />
             <BodyFrame hasContext={true}>
-                <BodyHeader text="내 파일" addon={setIsGrid} view={isGrid} />
-                {isGrid &&
-                    (gridFiles.length === 0 ? <div style={{ height: "calc(100vh - 299px)", textAlign: "center", marginTop: "20px" }}>파일이 없습니다.</div> :
+                <BodyHeader text="내 파일" isSortable/>
+                {
+                    gridFiles.length === 0 ? <div style={{ height: "calc(100vh - 299px)", textAlign: "center", marginTop: "20px" }}>파일이 없습니다.</div> :
                         <GridBox height="calc(100vh - 299px)">
                             {gridFiles}
-                        </GridBox>)
-                }
-                {!isGrid &&
-                    <>
-                        <div className="listscroll" style={{ height: "calc(100vh - 299px)" }}>
-                            {listFiles.length === 0 ? <div style={{ textAlign: "center", marginTop: "20px" }}>파일이 없습니다.</div> : listFiles}
-                        </div>
-                    </>
+                        </GridBox>
                 }
                 <UploadBtn />
                 <BodyHeader text="공유받은 파일" />

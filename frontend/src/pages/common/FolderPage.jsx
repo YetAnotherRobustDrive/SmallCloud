@@ -18,7 +18,6 @@ import PostMoveFile from "../../services/file/PostMoveFile";
 
 export default function FolderPage() {
 
-    const [isGrid, setIsGrid] = useState(true);
     const [isFileView, setIsFileView] = useState(false);
     const [isLoading, setIsLoading] = useState(true);
     const [selected, setSelected] = useState();
@@ -26,7 +25,6 @@ export default function FolderPage() {
     const [target, setTarget] = useState(0);
     const [source, setSource] = useState({ type: "", id: 0 });
     const [gridFiles, setGridFiles] = useState([]);
-    const [listFiles, setListFiles] = useState([]);
     const params = useParams();
     const navigate = useNavigate();
 
@@ -55,17 +53,16 @@ export default function FolderPage() {
             if (!parentRes[0]) {
                 throw parentRes[1];
             }
-            const isUnderRoot = (parentRes[1].name === "_ROOT_" ? true : false);
 
             setGridFiles([
                 <CustomIcon
-                        targetSetter={setTarget}
-                        sourceSetter={setSource}
-                        key={parentRes[1].id}
-                        id={parentRes[1].id}
-                        name={"..."}
-                        type={"folder"} 
-                        noContext={true}
+                    targetSetter={setTarget}
+                    sourceSetter={setSource}
+                    key={parentRes[1].id}
+                    id={parentRes[1].id}
+                    name={"..."}
+                    type={"folder"}
+                    noContext={true}
                 />,
                 files.map((data) => {
                     return <CustomIcon
@@ -81,17 +78,6 @@ export default function FolderPage() {
                         type={data.type} />
                 })
             ]
-            );
-            setListFiles(
-                files.map((data) => {
-                    return <ListBox
-                        key={data.id}
-                        onClick={() => {
-                            setSelected(data);
-                            setIsFileView(true);
-                        }}
-                        data={data} />
-                })
             );
         }
         try {
@@ -136,17 +122,12 @@ export default function FolderPage() {
             <Header />
             <Sidebar />
             <BodyFrame hasContext={true}>
-                <BodyHeader text={name} addon={setIsGrid} view={isGrid} />
-                {isGrid &&
-                    (gridFiles.length === 0 ? <div style={{ height: "calc(100vh - 137px)", textAlign: "center", marginTop: "20px" }}>파일이 없습니다.</div> :
+                <BodyHeader text={name} isSortable />
+                {
+                    gridFiles.length === 0 ? <div style={{ height: "calc(100vh - 137px)", textAlign: "center", marginTop: "20px" }}>파일이 없습니다.</div> :
                         <GridBox height="calc(100vh - 117px)">
                             {gridFiles}
-                        </GridBox>)
-                }
-                {!isGrid &&
-                    <div className="listscroll" style={{ height: "calc(100vh - 299px)" }}>
-                        {listFiles.length === 0 ? <div style={{ textAlign: "center", marginTop: "20px" }}>파일이 없습니다.</div> : listFiles}
-                    </div>
+                        </GridBox>
                 }
                 <UploadBtn />
             </BodyFrame>
