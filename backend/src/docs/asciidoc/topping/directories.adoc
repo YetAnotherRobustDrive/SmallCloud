@@ -86,11 +86,30 @@ operation::Directory/Files/ok[snippets='http-request,path-parameters']
 
 operation::Directory/Files/ok[snippets='http-response']
 
-=== 삭제 (purge)
+=== 완전삭제 (purge)
 
 operation::Directory/Purge/ok[snippets='http-request,path-parameters']
 
 ==== 성공
 
 operation::Directory/Purge/ok[snippets='http-response']
+
+=== 삭제 (delete)
+
+operation::Directory/Delete/ok[snippets='http-request,path-parameters']
+
+==== 성공
+
+operation::Directory/Delete/ok[snippets='http-response']
+
+=== 복구 (restore)
+
+operation::Directory/Restore/ok[snippets='http-request,path-parameters']
+
+==== 성공
+
+operation::Directory/Restore/ok[snippets='http-response']
+
+
+
 

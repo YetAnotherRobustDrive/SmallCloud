@@ -11,6 +11,8 @@ import org.mint.smallcloud.file.domain.Folder;
 import org.mint.smallcloud.file.dto.DirectoryCreateDto;
 import org.mint.smallcloud.file.dto.DirectoryMoveDto;
 import org.mint.smallcloud.file.repository.FolderRepository;
+import org.mint.smallcloud.label.domain.DefaultLabelType;
+import org.mint.smallcloud.label.domain.Label;
 import org.mint.smallcloud.security.dto.UserDetailsDto;
 import org.mint.smallcloud.security.jwt.dto.JwtTokenDto;
 import org.mint.smallcloud.security.jwt.tokenprovider.JwtTokenProvider;
@@ -28,8 +30,7 @@ import org.springframework.web.filter.CharacterEncodingFilter;
 import javax.persistence.EntityManager;
 import javax.transaction.Transactional;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.*;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.documentationConfiguration;
 import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.get;
@@ -552,6 +553,105 @@ class DirectoryControllerTest {
                 .andDo(print())
                 .andExpect((rst) -> {
                     assertNull(folderRepository.findById(directory.getId()).orElse(null));
+                })
+                .andExpect(status().isOk())
+                .andDo(document(DOCUMENT_NAME,
+                    pathParameters(
+                        parameterWithName("directoryId").description("디렉터리 id")
+                    )));
+        }
+    }
+
+    @Nested
+    @DisplayName("/directory/{directoryId}/restore docs")
+    class Restore {
+        String url = URL_PREFIX + "/{directoryId}/restore";
+        String delete = URL_PREFIX + "/{directoryId}/delete";
+        Folder root;
+        Member user1;
+        Folder directory;
+        JwtTokenDto user1Token;
+        @BeforeEach
+        public void boot() {
+            user1 = Member.of("user1", "test", "nick");
+            em.persist(user1);
+            root = Folder.createRoot(user1);
+            em.persist(root);
+            directory = Folder.createFolder(root, "folder1", user1);
+            em.persist(directory);
+            em.persist(Label.of(DefaultLabelType.defaultTrash.getLabelName(), user1));
+            user1Token = jwtTokenProvider.generateTokenDto(UserDetailsDto
+                .builder()
+                .username(user1.getUsername())
+                .password(user1.getPassword())
+                .roles(user1.getRole()).build());
+        }
+
+        @DisplayName("정상 요청")
+        @Test
+        void ok() throws Exception {
+            mockMvc.perform(
+                    TestSnippet.secured(post(delete, directory.getId()),
+                        user1Token.getAccessToken()))
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andExpect((rst) -> {
+                    assertFalse(em.createQuery("select f from Folder f where f.id = :id", Folder.class)
+                        .setParameter("id", directory.getId())
+                        .getSingleResult().isActive());
+                });
+            mockMvc.perform(
+                    TestSnippet.secured(post(url, directory.getId()),
+                        user1Token.getAccessToken()))
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andExpect((rst) -> {
+                    assertTrue(em.createQuery("select f from Folder f where f.id = :id", Folder.class)
+                        .setParameter("id", directory.getId())
+                        .getSingleResult().isActive());
+                })
+                .andDo(document(DOCUMENT_NAME,
+                    pathParameters(
+                        parameterWithName("directoryId").description("디렉터리 id")
+                    )));
+        }
+    }
+
+    @Nested
+    @DisplayName("/directory/{directoryId}/delete docs")
+    class Delete {
+        String url = URL_PREFIX + "/{directoryId}/delete";
+        Folder root;
+        Member user1;
+        Folder directory;
+        JwtTokenDto user1Token;
+        @BeforeEach
+        public void boot() {
+            user1 = Member.of("user1", "test", "nick");
+            em.persist(user1);
+            root = Folder.createRoot(user1);
+            em.persist(root);
+            directory = Folder.createFolder(root, "folder1", user1);
+            em.persist(directory);
+            em.persist(Label.of(DefaultLabelType.defaultTrash.getLabelName(), user1));
+            user1Token = jwtTokenProvider.generateTokenDto(UserDetailsDto
+                .builder()
+                .username(user1.getUsername())
+                .password(user1.getPassword())
+                .roles(user1.getRole()).build());
+        }
+
+        @DisplayName("정상 요청")
+        @Test
+        void ok() throws Exception {
+            mockMvc.perform(
+                    TestSnippet.secured(post(url, directory.getId()),
+                        user1Token.getAccessToken()))
+                .andDo(print())
+                .andExpect((rst) -> {
+                    assertFalse(em.createQuery("select f from Folder f where f.id = :id", Folder.class)
+                        .setParameter("id", directory.getId())
+                        .getSingleResult().isActive());
                 })
                 .andExpect(status().isOk())
                 .andDo(document(DOCUMENT_NAME,
