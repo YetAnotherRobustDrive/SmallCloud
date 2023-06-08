@@ -4,6 +4,8 @@ import { MdGroups } from 'react-icons/md';
 import Modal from 'react-modal';
 import '../../css/modal.css';
 import GetSearchGroup from "../../services/group/GetSearchGroup";
+import AdminGroupRm from "../../services/admin/AdminGroupRm";
+import jwtDecode from "jwt-decode";
 
 export default function ModalGroupConfig(props) {
 
@@ -50,6 +52,22 @@ export default function ModalGroupConfig(props) {
         }
     }
 
+    const handleRemove = async () => {
+        if (props.curr === null || props.curr === "없음") {
+            alert("소속된 그룹이 없습니다.");
+            return;
+        } 
+
+        const res = await AdminGroupRm(props.curr, props.userName);
+        if (!res[0]) {
+            alert(res[1]);
+            return;
+        }
+        alert("그룹이 제거되었습니다.");
+        props.setter("없음");
+        props.after();
+    }
+
     const handleClick = (e) => {
         const name = e.currentTarget.querySelector(".name").innerText;
         props.setter(name);
@@ -85,6 +103,7 @@ export default function ModalGroupConfig(props) {
                         </div>
                     }
                 </div>
+                <button onClick={handleRemove}>그룹 제거하기</button>
             </div>
         </Modal>
     )

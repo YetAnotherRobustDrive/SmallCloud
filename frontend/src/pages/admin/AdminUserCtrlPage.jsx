@@ -52,7 +52,15 @@ export default function AdminUserCtrlPage() {
             if (newGroup === "") {
                 return;
             }
-            const res = await AdminGroupAdd(user.username, newGroup);
+            else if (newGroup === "없음") {
+                setNewGroup("");
+                setUser({
+                    ...user,
+                    groupName: newGroup,
+                })
+                return;
+            }
+            const res = await AdminGroupAdd(newGroup, user.username);
             if (!res[0]) {
                 alert("그룹 설정에 실패했습니다.");
                 return;
@@ -169,6 +177,8 @@ export default function AdminUserCtrlPage() {
         <>
             {isGroupModalOpen &&
                 <ModalGroupConfig
+                    curr={user.groupName}
+                    userName={user.username}
                     setter={setNewGroup}
                     title={"그룹 설정"}
                     isOpen={isGroupModalOpen}
