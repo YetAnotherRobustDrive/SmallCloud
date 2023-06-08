@@ -1,6 +1,7 @@
 package org.mint.smallcloud.log.user;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.annotation.AfterReturning;
 import org.aspectj.lang.annotation.Aspect;
@@ -19,6 +20,7 @@ import java.util.Optional;
 @Component
 @Aspect
 @RequiredArgsConstructor
+@Slf4j
 public class UserLogAop {
     private final UserLogRepository userLogRepository;
     private final MemberRepository memberRepository;
