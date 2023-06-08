@@ -1,12 +1,13 @@
 import React, { useEffect, useState } from "react";
 import { AiOutlineClose } from "react-icons/ai";
-import { BsFillShareFill } from 'react-icons/bs';
+import { BsFillShareFill, BsFillTrashFill } from 'react-icons/bs';
 import { GoCloudDownload } from 'react-icons/go';
 import { MdGroups, MdOpenInFull, MdPerson } from 'react-icons/md';
 import { TbEdit } from 'react-icons/tb';
 import ProgressBar from "../../component/updown/ProgressBar";
 import '../../css/fileview.css';
 import GetDownloadFile from "../../services/file/GetDownloadFile";
+import PostDeleteFile from "../../services/file/PostDeleteFile";
 import PostLabelFile from "../../services/file/PostLabelFile";
 import PostDeleteShare from "../../services/share/PostDeleteShare";
 import ModalAddShare from "./ModalAddShare";
@@ -55,6 +56,20 @@ export default function ModalFileview(props) {
         }
         alert("공유가 해제되었습니다.");
         window.location.reload();
+    }
+
+    const handleFileRemove = async (e) => {
+        e.stopPropagation();
+        e.preventDefault();
+        if (window.confirm("정말로 파일을 삭제하시겠습니까?")) {
+            const res = await PostDeleteFile(fileData.id);           
+            if (!res[0]) {
+                alert(res[1]);
+                return;
+            }
+            alert("파일이 삭제되었습니다.");
+            window.location.reload();
+        }
     }
 
     useEffect(() => {
@@ -135,6 +150,9 @@ export default function ModalFileview(props) {
                                     <div className="value">
                                         {fileData.createdDate.substring(0, fileData.createdDate.indexOf("T")).replace(/-/g, ".")}
                                     </div>
+                                </div>
+                                <div className="removeFile" onClick={handleFileRemove}>
+                                        <span><BsFillTrashFill/></span>
                                 </div>
                             </>
                         }

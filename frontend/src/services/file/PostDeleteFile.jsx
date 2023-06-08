@@ -1,23 +1,18 @@
 import RefreshToken from "../token/RefreshToken";
 import configData from "../../config/config.json"
 
-export default async function PostLabelFile(fileID) {
+export default async function PostDeleteFile(fileID) {
     await RefreshToken();
     const accessToken = localStorage.getItem("accessToken");
     const model = {
         method: "POST",
         headers: {
             "Authorization": "Bearer " + accessToken,
-            "Content-Type": "application/json"
         },
-        body: JSON.stringify({
-            "fileId" : fileID,
-            "labels" : value,
-        }),
     };
 
     try {
-        const res = await fetch(configData.API_SERVER + 'files/update/label', model);
+        const res = await fetch(configData.API_SERVER + 'files/' + fileID + '/delete', model);
         if (res.status === 200) {
             return [true, ''];  //성공
         }
