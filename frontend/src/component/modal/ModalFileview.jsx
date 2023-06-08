@@ -229,7 +229,7 @@ export default function ModalFileview(props) {
                 <ModalAddShare
                     fileID={fileData.id}
                     isOpen={isShareOpen}
-                    after={() => setIsShareOpen(false)}
+                    after={() => {setIsShareOpen(false); window.location.reload();}}
                 />
             }
             {isLabelEditOpen &&
