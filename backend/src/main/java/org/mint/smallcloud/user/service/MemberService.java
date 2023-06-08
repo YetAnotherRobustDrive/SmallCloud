@@ -8,6 +8,7 @@ import org.mint.smallcloud.exception.ExceptionStatus;
 import org.mint.smallcloud.exception.ServiceException;
 import org.mint.smallcloud.file.domain.FileLocation;
 import org.mint.smallcloud.file.service.DirectoryService;
+import org.mint.smallcloud.label.service.LabelService;
 import org.mint.smallcloud.security.dto.LoginDto;
 import org.mint.smallcloud.security.dto.UserDetailsDto;
 import org.mint.smallcloud.user.domain.Member;
@@ -37,6 +38,7 @@ public class MemberService {
     private final UserMapper userMapper;
     private final StorageService storageService;
     private final DirectoryService directoryService;
+    private final LabelService labelService;
 
     public UserDetailsDto getUserDetails(String username) {
         Member member = memberThrowerService.getMemberByUsername(username);
@@ -54,8 +56,7 @@ public class MemberService {
             registerDto.getId(),
             registerDto.getPassword(),
             registerDto.getName());
-        memberRepository.save(member);
-        directoryService.createRootDirectory(member);
+        saveCommon(member);
     }
 
     public void registerCommon(RegisterFromAdminDto dto) {
@@ -65,8 +66,13 @@ public class MemberService {
             dto.getPassword(),
             dto.getName());
         member.setExpiredDate(dto.getExpiredDate());
+        saveCommon(member);
+    }
+
+    private void saveCommon(Member member) {
         memberRepository.save(member);
         directoryService.createRootDirectory(member);
+        labelService.createDefaultLabels(member);
     }
 
     public void deregisterCommon(String username) {
