@@ -10,7 +10,7 @@ import javax.transaction.Transactional;
 @Slf4j
 @Transactional
 public class PingService {
-    @UserBehaviorLogging("ping")
+    @UserBehaviorLogging
     public String ping() {
         return "pong";
     }

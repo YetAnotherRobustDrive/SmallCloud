@@ -28,6 +28,9 @@ public class UserLog {
     @Column(name = "ACTION")
     private String action;
 
+    @Column(name = "ID_ADDR")
+    private String ipAddr;
+
     @Override
     public boolean equals(Object obj) {
         if (obj == this) return true;
@@ -36,14 +39,15 @@ public class UserLog {
             && ((org.mint.smallcloud.share.domain.GroupShare) obj).getId().equals(this.getId());
     }
 
-    protected UserLog(Member member, LocalDateTime time, String action) {
+    protected UserLog(Member member, LocalDateTime time, String action, String ipAddr) {
         this.member = member;
         this.time = time;
         this.action = action;
+        this.ipAddr = ipAddr;
     }
 
-    public static UserLog of(Member member, LocalDateTime time, String action) {
-        return new UserLog(member, time, action);
+    public static UserLog of(Member member, LocalDateTime time, String action, String ipAddr) {
+        return new UserLog(member, time, action, ipAddr);
     }
 
     @Override
