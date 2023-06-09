@@ -6,10 +6,13 @@ import org.mint.smallcloud.exception.ExceptionStatus;
 import org.mint.smallcloud.exception.ServiceException;
 import org.mint.smallcloud.file.domain.DataNode;
 import org.mint.smallcloud.file.domain.File;
+import org.mint.smallcloud.file.domain.Folder;
 import org.mint.smallcloud.file.dto.LabelUpdateDto;
 import org.mint.smallcloud.file.mapper.FileMapper;
+import org.mint.smallcloud.file.mapper.FolderMapper;
 import org.mint.smallcloud.file.repository.DataNodeRepository;
 import org.mint.smallcloud.file.repository.FileRepository;
+import org.mint.smallcloud.file.repository.FolderRepository;
 import org.mint.smallcloud.label.domain.DefaultLabelType;
 import org.mint.smallcloud.label.domain.Label;
 import org.mint.smallcloud.label.dto.LabelFilesDto;
@@ -32,8 +35,10 @@ public class LabelService {
     private final LabelRepository labelRepository;
     private final DataNodeRepository dataNodeRepository;
     private final FileRepository fileRepository;
+    private final FolderRepository folderRepository;
     private final MemberThrowerService memberThrowerService;
     private final FileMapper fileMapper;
+    private final FolderMapper folderMapper;
 
     public Label register(Label label) {
         if(!labelRepository.existsByNameAndOwner(label.getName(), label.getOwner())) {
@@ -76,9 +81,11 @@ public class LabelService {
         if(!labelRepository.existsByNameAndOwner(labelName, member))
             throw new ServiceException(ExceptionStatus.NOT_FOUND_LABEL);
         List<File> files = fileRepository.findDataNodeByLabelNameAndOwner(labelName, userName);
+        List<Folder> folders = folderRepository.findDataNodeByLabelNameAndOwner(labelName, userName);
         return LabelFilesDto.builder()
                 .name(labelName)
                 .files(files.stream().map(fileMapper::toFileDto).collect(Collectors.toList()))
+                .folders(folders.stream().map(folderMapper::toDirectoryDto).collect(Collectors.toList()))
                 .build();
     }
     public LabelFilesDto trash(String userName) {
@@ -86,9 +93,11 @@ public class LabelService {
         if(!labelRepository.existsByNameAndOwner(DefaultLabelType.defaultTrash.getLabelName(), member))
             throw new ServiceException(ExceptionStatus.NOT_FOUND_LABEL);
         List<File> files = fileRepository.findDataNodeByLabelNameAndOwner(DefaultLabelType.defaultTrash.getLabelName(), userName);
+        List<Folder> folders = folderRepository.findDataNodeByLabelNameAndOwner(DefaultLabelType.defaultTrash.getLabelName(), userName);
         return LabelFilesDto.builder()
                 .name(DefaultLabelType.defaultTrash.getLabelName())
                 .files(files.stream().map(fileMapper::toFileDto).collect(Collectors.toList()))
+                .folders(folders.stream().map(folderMapper::toDirectoryDto).collect(Collectors.toList()))
                 .build();
     }
 
@@ -97,9 +106,11 @@ public class LabelService {
         if(!labelRepository.existsByNameAndOwner(DefaultLabelType.defaultFavorite.getLabelName(), member))
             throw new ServiceException(ExceptionStatus.NOT_FOUND_LABEL);
         List<File> files = fileRepository.findDataNodeByLabelNameAndOwner(DefaultLabelType.defaultFavorite.getLabelName(), userName);
+        List<Folder> folders = folderRepository.findDataNodeByLabelNameAndOwner(DefaultLabelType.defaultTrash.getLabelName(), userName);
         return LabelFilesDto.builder()
                 .name(DefaultLabelType.defaultFavorite.getLabelName())
                 .files(files.stream().map(fileMapper::toFileDto).collect(Collectors.toList()))
+                .folders(folders.stream().map(folderMapper::toDirectoryDto).collect(Collectors.toList()))
                 .build();
     }
 
