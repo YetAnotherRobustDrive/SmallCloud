@@ -111,3 +111,66 @@ operation::file/purge/ok[snippets='http-request,path-parameters']
 ==== 성공
 
 operation::file/purge/ok[snippets='http-response']
+
+=== 즐겨찾기 추가 (favorite)
+
+operation::file/favorite/okNoLabel[snippets='http-request,path-parameters']
+
+==== 성공
+
+operation::file/favorite/okNoLabel[snippets='http-response']
+
+IMPORTANT: 파일에 라벨이 하나도 붙어있지 않을 때
+
+operation::file/favorite/okLabel[snippets='http-response']
+
+IMPORTANT: 파일에 라벨이 붙어있을 때
+
+==== 실패
+
+operation::file/favorite/existLabel[snippets='http-response']
+
+IMPORTANT: 파일에 즐겨찾기 라벨이 붙어있을 때
+
+operation::file/favorite/noFile[snippets='http-response']
+
+IMPORTANT: 파일이 없을 때
+
+operation::file/favorite/wrongToken[snippets='http-response']
+
+IMPORTANT: 잘못된 토큰
+
+=== 즐겨찾기 삭제 (unfavorite)
+
+operation::file/unFavorite/ok[snippets='http-request,path-parameters']
+
+==== 성공
+
+operation::file/unFavorite/ok[snippets='http-response']
+
+IMPORTANT: 파일에 즐겨찾기 라벨만 붙어 있을 때
+
+operation::file/unFavorite/okOther[snippets='http-response']
+
+IMPORTANT: 파일에 즐겨찾기 라벨과 다른 라벨이 붙어 있을 때
+
+==== 실패
+
+operation::file/unFavorite/noLabels[snippets='http-response']
+
+IMPORTANT: 파일에 라벨이 하나도 붙어 있지 않을 때
+
+operation::file/unFavorite/noFavorite[snippets='http-response']
+
+IMPORTANT: 파일에 즐겨찾기 라벨이 붙어 있지 않을 때
+
+operation::file/unFavorite/noFile[snippets='http-response']
+
+IMPORTANT: 파일이 없을 때
+
+operation::file/unFavorite/wrongToken[snippets='http-response']
+
+IMPORTANT: 잘못된 토큰
+
+
+

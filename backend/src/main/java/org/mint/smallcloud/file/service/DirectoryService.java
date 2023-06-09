@@ -6,7 +6,6 @@ import org.mint.smallcloud.exception.ExceptionStatus;
 import org.mint.smallcloud.exception.ServiceException;
 import org.mint.smallcloud.file.domain.FileNamePolicy;
 import org.mint.smallcloud.file.domain.Folder;
-import org.mint.smallcloud.file.repository.DataNodeRepository;
 import org.mint.smallcloud.file.repository.FolderRepository;
 import org.mint.smallcloud.label.service.LabelService;
 import org.mint.smallcloud.user.domain.Member;
@@ -20,7 +19,6 @@ import javax.transaction.Transactional;
 @Transactional
 public class DirectoryService {
     private final FolderRepository folderRepository;
-    private final DataNodeRepository dataNodeRepository;
     private final LabelService labelService;
     private final FileNamePolicy fileNamePolicy;
 

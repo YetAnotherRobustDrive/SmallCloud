@@ -772,7 +772,7 @@ class FileControllerTest {
         }
         @Test
         @DisplayName("즐겨찾기 라벨이 붙어있지 않을 때")
-        void noTrash() throws Exception {
+        void noFavorite() throws Exception {
             mockMvc.perform(
                             TestSnippet.secured(post(url, dataNode3.getId()), memberToken.getAccessToken()))
                     .andExpect(status().isNotFound())
