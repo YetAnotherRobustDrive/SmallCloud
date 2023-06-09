@@ -1,4 +1,4 @@
-.bodyframe{
+.bodyframe {
     border: none;
     position: absolute;
     top: 75px;
@@ -7,15 +7,20 @@
     z-index: -100;
 }
 
+.bodyframeWithoutSide {
+    left: 0;
+    width: 100%
+}
+
 .narrow {
     height: 140px;
     display: flex;
-    overflow-x:scroll;
+    overflow-x: scroll;
     overflow-y: hidden;
     position: relative;
 }
 
-.gridscroll{
+.gridscroll {
     overflow-y: scroll;
     overflow-x: hidden;
 }
@@ -26,7 +31,7 @@
     place-items: center;
 }
 
-.listscroll{
+.listscroll {
     overflow-y: scroll;
     height: calc(100vh - 299px);
 }
@@ -59,7 +64,7 @@
     text-align: start;
 }
 
-.listbox .size{
+.listbox .size {
     align-items: center;
     justify-content: center;
     display: flex;
