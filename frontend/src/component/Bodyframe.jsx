@@ -31,7 +31,7 @@ export default function BodyFrame(props) {
 
     return (
         <>
-            <div className="bodyframe" onContextMenu={handleContext}>
+            <div className={"bodyframe" + (props.innerWidth <= 786 ? " bodyframeWithoutSide" : "")} onContextMenu={handleContext}>
                 {hasContext &&
                     <div id="context" className="contextMenu" onMouseLeave={() => setIsContextOpen(false)} >
                         {isContextOpen && <ContextBody />}
