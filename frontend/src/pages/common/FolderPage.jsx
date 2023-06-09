@@ -99,7 +99,9 @@ export default function FolderPage() {
             }
             setTarget(0);
             setSource({ type: "", id: 0 });
-            window.location.reload();
+            setGridFiles([
+                ...gridFiles.filter((data) => data.props.data.id !== source.id),
+            ])
         }
         if (target !== 0 && source.id !== 0 && target !== source.id) {
             move();

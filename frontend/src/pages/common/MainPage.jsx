@@ -80,8 +80,6 @@ export default function MainPage() {
                             setSelected(data);
                             setIsFileView(true);
                         }}
-                        targetSetter={setTarget}
-                        sourceSetter={setSource}
                         key={data.id}
                         data={data}
                         noContext={true} />

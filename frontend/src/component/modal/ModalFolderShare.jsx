@@ -112,14 +112,14 @@ export default function ModalFolderShare(props) {
     const handleSubmit = async (e) => {
         e.preventDefault();
         const delList = original.filter((d) => {
-            const res = candidate.find((e) => e.targetName === d.targetName);
+            const res = candidate.find((e) => (e.targetName === d.targetName) && (e.type === d.type));
             if (res === undefined) {
                 return true;
             }
             return false;
         })
         const newList = candidate.filter((d) => {
-            const res = original.find((e) => e.targetName === d.targetName);
+            const res = original.find((e) => (e.targetName === d.targetName && e.type === d.type));
             if (res === undefined) {
                 return true;
             }
@@ -143,6 +143,9 @@ export default function ModalFolderShare(props) {
         })
         alert("공유가 적용되었습니다.");
         props.after();
+        setTimeout(() => {
+            window.location.reload();
+        }, 250);
     }
 
     Modal.setAppElement("#root");

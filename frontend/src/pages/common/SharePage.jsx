@@ -9,7 +9,6 @@ import UploadBtn from "../../component/main/UploadBtn";
 import ModalFileview from "../../component/modal/ModalFileview";
 import ModalLoading from "../../component/modal/ModalLoading";
 import Sidebar from "../../component/sidebar/Sidebar";
-import PostMoveDir from "../../services/directory/PostMoveDir";
 import GetShareFileList from "../../services/share/GetShareFileList";
 import GetShareFolderList from "../../services/share/GetShareFolderList";
 
@@ -18,8 +17,6 @@ export default function SharePage() {
     const [isFileView, setIsFileView] = useState(false);
     const [isLoading, setIsLoading] = useState(true);
     const [selected, setSelected] = useState();
-    const [target, setTarget] = useState(0);
-    const [source, setSource] = useState(0);
     const [gridFiles, setGridFiles] = useState([]);
     const params = useParams();
     const [sort, setSort] = useState("name_asc");
@@ -44,8 +41,6 @@ export default function SharePage() {
                             setSelected(data);
                             setIsFileView(true);
                         }}
-                        targetSetter={setTarget}
-                        sourceSetter={setSource}
                         key={data.id}
                         data={data}/>
                 })
@@ -60,26 +55,6 @@ export default function SharePage() {
             setIsLoading(false);
         }
     }, [params.fileID])
-
-    useEffect(() => {
-        const move = async () => {
-            const res = await PostMoveDir(source, target);
-            if (!res[0]) {
-                alert(res[1]);
-                return;
-            }
-            setTarget(0);
-            setSource(0);
-            setGridFiles([
-                ...gridFiles.filter((data) => {
-                    return data.props.data.id !== source.id;
-                }),
-            ]);
-        }
-        if (target !== 0 && source !== 0 && target !== source) {
-            move();
-        }
-    }, [target, source])
 
     useEffect(() => {
         setGridFiles([...

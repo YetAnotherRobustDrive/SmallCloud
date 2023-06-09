@@ -38,8 +38,8 @@ export default async function UpdateUserInfo(value, isImgChanged) {
             "Content-Type": "application/json"
         },
         body: JSON.stringify({
-            "name": value.nickname,
-            "id": value.username,
+            "nickname": value.nickname,
+            "username": value.username,
         })
     };
 

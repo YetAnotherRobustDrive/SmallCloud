@@ -92,7 +92,6 @@ export default function ContextFolder(props) {
         window.location.reload();
     }
 
-    console.log(props.isFavorite);
     let options = [];
     if (props.isFavorite === false) {
         options = [
