@@ -136,8 +136,6 @@ export default function MainPage() {
                 return b.props.data.createdDate.localeCompare(a.props.data.createdDate);
             }
         })])
-        console.log(gridFiles);
-        console.log(sort);
     }, [sort])
 
     return (
