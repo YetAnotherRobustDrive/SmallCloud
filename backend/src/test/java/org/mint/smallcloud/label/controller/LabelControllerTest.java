@@ -113,6 +113,8 @@ class LabelControllerTest {
         private final String url = URL_PREFIX + "/search?labelName={labelName}";
         @BeforeEach
         void boot() {
+            rootFolder.addLabel(label);
+            em.persist(rootFolder);
             dataNode.addLabel(label);
             dataNode1.addLabel(label);
             em.persist(dataNode);
@@ -129,9 +131,10 @@ class LabelControllerTest {
                     .andExpect((rst) -> {
                         Label label1 = labelRepository.findByNameAndOwner(label.getName(), member);
                         List<DataNode> files = label1.getFiles();
-                        assertThat(files.size()).isEqualTo(2);
+                        assertThat(files.size()).isEqualTo(3);
                         assertThat(files.contains(dataNode)).isTrue();
                         assertThat(files.contains(dataNode1)).isTrue();
+                        assertThat(files.contains(rootFolder)).isTrue();
                     })
                     .andDo(document(DOCUMENT_NAME,  requestParameters(
                             parameterWithName("labelName").description("라벨의 이름를 담고 있습니다."))));
@@ -165,10 +168,13 @@ class LabelControllerTest {
         Label label;
         @BeforeEach
         void boot() {
+
             trashLabel = Label.of(DefaultLabelType.defaultTrash.getLabelName(), member);
             em.persist(trashLabel);
             label = Label.of("testLabel", member);
             em.persist(label);
+            rootFolder.addLabel(trashLabel);
+            em.persist(rootFolder);
             dataNode.addLabel(trashLabel);
             dataNode.addLabel(label);
             em.persist(dataNode);
@@ -186,13 +192,10 @@ class LabelControllerTest {
                     .andExpect((rst) -> {
                         Label label1 = labelRepository.findByNameAndOwner(trashLabel.getName(), member);
                         List<DataNode> files = label1.getFiles();
-                        System.out.println(files.get(0));
-                        System.out.println(files.get(0).getLabels());
-                        System.out.println(files.get(1));
-                        System.out.println(files.get(1).getLabels());
-                        assertThat(files.size()).isEqualTo(2);
+                        assertThat(files.size()).isEqualTo(3);
                         assertThat(files.contains(dataNode)).isTrue();
                         assertThat(files.contains(dataNode1)).isTrue();
+                        assertThat(files.contains(rootFolder)).isTrue();
                     })
                     .andDo(document(DOCUMENT_NAME));
         }
@@ -215,6 +218,8 @@ class LabelControllerTest {
         void boot() {
             favoritelabel = Label.of(DefaultLabelType.defaultFavorite.getLabelName(), member);
             em.persist(favoritelabel);
+            rootFolder.addLabel(favoritelabel);
+            em.persist(rootFolder);
             dataNode.addLabel(favoritelabel);
             em.persist(dataNode);
             dataNode1.addLabel(favoritelabel);
@@ -231,9 +236,10 @@ class LabelControllerTest {
                     .andExpect((rst) -> {
                         Label label1 = labelRepository.findByNameAndOwner(favoritelabel.getName(), member);
                         List<DataNode> files = label1.getFiles();
-                        assertThat(files.size()).isEqualTo(2);
+                        assertThat(files.size()).isEqualTo(3);
                         assertThat(files.contains(dataNode)).isTrue();
                         assertThat(files.contains(dataNode1)).isTrue();
+                        assertThat(files.contains(rootFolder)).isTrue();
                     })
                     .andDo(document(DOCUMENT_NAME));
         }

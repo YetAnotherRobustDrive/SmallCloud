@@ -3,6 +3,7 @@ package org.mint.smallcloud.label.dto;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
+import org.mint.smallcloud.file.dto.DirectoryDto;
 import org.mint.smallcloud.file.dto.FileDto;
 
 import javax.validation.constraints.NotBlank;
@@ -17,4 +18,5 @@ public class LabelFilesDto {
     @NotBlank
     private final String name;
     private final List<FileDto> files;
+    private final List<DirectoryDto> folders;
 }
