@@ -51,9 +51,7 @@ export default function SharePage() {
                         targetSetter={setTarget}
                         sourceSetter={setSource}
                         key={data.id}
-                        id={data.id}
-                        name={data.name}
-                        type={data.type} />
+                        data={data}/>
                 })
             );
         }

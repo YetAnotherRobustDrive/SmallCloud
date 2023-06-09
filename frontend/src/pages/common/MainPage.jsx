@@ -26,6 +26,7 @@ export default function MainPage() {
     const [source, setSource] = useState({ type: "", id: 0 });
     const [gridFiles, setGridFiles] = useState([]);
     const [shareFiles, setShareFiles] = useState([]);
+    const [sort, setSort] = useState("name_asc");
 
     useEffect(() => {
         const render = async () => {
@@ -58,9 +59,7 @@ export default function MainPage() {
                         targetSetter={setTarget}
                         sourceSetter={setSource}
                         key={data.id}
-                        id={data.id}
-                        name={data.name}
-                        type={data.type} />
+                        data={data}/>
                 })
             )
 
@@ -85,9 +84,7 @@ export default function MainPage() {
                         targetSetter={setTarget}
                         sourceSetter={setSource}
                         key={data.id}
-                        id={data.id}
-                        name={data.name}
-                        type={data.type}
+                        data={data}
                         noContext={true} />
                 })
             )
@@ -123,13 +120,62 @@ export default function MainPage() {
         }
     }, [target, source])
 
+    useEffect(() => {
+        gridFiles.sort((a, b) => {
+            if (sort === "name_asc") {
+                if (a.props.name < b.props.name) {
+                    return -1;
+                }
+                else if (a.props.name > b.props.name) {
+                    return 1;
+                }
+                else {
+                    return 0;
+                }
+            }
+            else if (sort === "name_desc") {
+                if (a.props.name < b.props.name) {
+                    return 1;
+                }
+                else if (a.props.name > b.props.name) {
+                    return -1;
+                }
+                else {
+                    return 0;
+                }
+            }
+            else if (sort === "time_asc") {
+                if (a.props.id < b.props.id) {
+                    return -1;
+                }
+                else if (a.props.id > b.props.id) {
+                    return 1;
+                }
+                else {
+                    return 0;
+                }
+            }
+            else if (sort === "time_desc") {
+                if (a.props.id < b.props.id) {
+                    return 1;
+                }
+                else if (a.props.id > b.props.id) {
+                    return -1;
+                }
+                else {
+                    return 0;
+                }
+            }
+        })
+    }, [sort])
+
     return (
         <>
             {isLoading && <ModalLoading isOpen={isLoading} />}
             <Header />
             <Sidebar />
             <BodyFrame hasContext={true}>
-                <BodyHeader text="내 파일" isSortable/>
+                <BodyHeader text="내 파일" isSortable setter={setSort}/>
                 {
                     gridFiles.length === 0 ? <div style={{ height: "calc(100vh - 299px)", textAlign: "center", marginTop: "20px" }}>파일이 없습니다.</div> :
                         <GridBox height="calc(100vh - 299px)">

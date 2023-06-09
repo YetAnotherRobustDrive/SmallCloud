@@ -58,9 +58,13 @@ export default function FolderPage() {
                     targetSetter={setTarget}
                     sourceSetter={setSource}
                     key={parentRes[1].id}
-                    id={parentRes[1].id}
-                    name={"..."}
-                    type={"folder"}
+                    data={
+                        {
+                            id: parentRes[1].id,
+                            name: "...",
+                            type: "folder"
+                        }
+                    }
                     noContext={true}
                 />,
                 files.map((data) => {
@@ -72,9 +76,7 @@ export default function FolderPage() {
                         targetSetter={setTarget}
                         sourceSetter={setSource}
                         key={data.id}
-                        id={data.id}
-                        name={data.name}
-                        type={data.type} />
+                        data={data} />
                 })
             ]
             );

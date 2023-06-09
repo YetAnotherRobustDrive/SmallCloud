@@ -1,5 +1,4 @@
 import React from "react";
-import { TfiViewGrid, TfiViewListAlt } from 'react-icons/tfi';
 import '../../css/body.css';
 import SortDropdown from "../dropdown/SortDropdown";
 
@@ -12,7 +11,7 @@ export default function BodyHeader(props) {
             </div>
             {props.isSortable !== undefined && (
                 <div className="options">
-                    <div className="option"><SortDropdown /></div>
+                    <div className="option" ><SortDropdown setter={props.setter}/></div>
                 </div>)
             }
         </div>

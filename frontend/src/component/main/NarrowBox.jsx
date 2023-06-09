@@ -11,10 +11,14 @@ export default function NarrowBox(props) {
             onClick={() => {
                 navigate("/share");
             }}
+            data={
+                {
+                    id: 99,
+                    name: "전체보기",
+                    type: "special"
+                }
+            }
             key={99}
-            id={99}
-            name={"전체 리스트"}
-            type={"special"} 
             noContext={true}/>,
         ...props.children]
     return (
