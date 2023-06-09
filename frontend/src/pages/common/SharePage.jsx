@@ -18,26 +18,22 @@ export default function SharePage() {
     const [isFileView, setIsFileView] = useState(false);
     const [isLoading, setIsLoading] = useState(true);
     const [selected, setSelected] = useState();
-    const [isFail, setIsFail] = useState();
-    const [message, setMessage] = useState();
-    const [name, setName] = useState([]);
     const [target, setTarget] = useState(0);
     const [source, setSource] = useState(0);
     const [gridFiles, setGridFiles] = useState([]);
     const params = useParams();
+    const [sort, setSort] = useState("name_asc");
 
     useEffect(() => {
         const render = async () => {
             const shareFileRes = await GetShareFileList();
             if (!shareFileRes[0]) {
-                setIsFail(true);
-                setMessage(shareFileRes[1]);
+                alert(shareFileRes[1]);
                 return;
             }
             const shareDirRes = await GetShareFolderList();
             if (!shareDirRes[0]) {
-                setIsFail(true);
-                setMessage(shareDirRes[1]);
+                alert(shareDirRes[1]);
                 return;
             }
             const files = [...shareDirRes[1], ...shareFileRes[1]];
@@ -60,8 +56,7 @@ export default function SharePage() {
             render();
             setTimeout(() => setIsLoading(false), 250);
         } catch (error) {
-            setIsFail(true);
-            setMessage(error);
+            alert(error);
             setIsLoading(false);
         }
     }, [params.fileID])
@@ -69,14 +64,40 @@ export default function SharePage() {
     useEffect(() => {
         const move = async () => {
             const res = await PostMoveDir(source, target);
+            if (!res[0]) {
+                alert(res[1]);
+                return;
+            }
             setTarget(0);
             setSource(0);
-            window.location.reload();
+            setGridFiles([
+                ...gridFiles.filter((data) => {
+                    return data.props.data.id !== source.id;
+                }),
+            ]);
         }
         if (target !== 0 && source !== 0 && target !== source) {
             move();
         }
     }, [target, source])
+
+    useEffect(() => {
+        setGridFiles([...
+        gridFiles.sort((a, b) => {
+            if (sort === "name_asc") {
+                return a.props.data.name.localeCompare(b.props.data.name);
+            }
+            else if (sort === "name_desc") {
+                return b.props.data.name.localeCompare(a.props.data.name);
+            }
+            else if (sort === "time_asc") {
+                return a.props.data.createdDate.localeCompare(b.props.data.createdDate);
+            }
+            else if (sort === "time_desc") {
+                return b.props.data.createdDate.localeCompare(a.props.data.createdDate);
+            }
+        })])
+    }, [sort])
 
     return (
         <>
@@ -84,7 +105,7 @@ export default function SharePage() {
             <Header />
             <Sidebar />
             <BodyFrame hasContext={true}>
-                <BodyHeader text={"공유받은 파일"} isSortable />
+                <BodyHeader text={"공유받은 파일"} isSortable setter={setSort}/>
                 {
                     gridFiles.length === 0 ? <div style={{ height: "calc(100vh - 137px)", textAlign: "center", marginTop: "20px" }}>파일이 없습니다.</div> :
                         <GridBox height="calc(100vh - 117px)">

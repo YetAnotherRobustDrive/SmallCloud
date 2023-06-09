@@ -112,7 +112,7 @@ export default function MainPage() {
             setTarget(0);
             setSource({ type: "", id: 0 });
             setGridFiles([
-                ...gridFiles.filter((data) => data.props.id !== source.id),
+                ...gridFiles.filter((data) => data.props.data.id !== source.id),
             ])
         }
         if (target !== 0 && source.id !== 0 && target !== source.id) {
@@ -121,52 +121,23 @@ export default function MainPage() {
     }, [target, source])
 
     useEffect(() => {
+        setGridFiles([...
         gridFiles.sort((a, b) => {
             if (sort === "name_asc") {
-                if (a.props.name < b.props.name) {
-                    return -1;
-                }
-                else if (a.props.name > b.props.name) {
-                    return 1;
-                }
-                else {
-                    return 0;
-                }
+                return a.props.data.name.localeCompare(b.props.data.name);
             }
             else if (sort === "name_desc") {
-                if (a.props.name < b.props.name) {
-                    return 1;
-                }
-                else if (a.props.name > b.props.name) {
-                    return -1;
-                }
-                else {
-                    return 0;
-                }
+                return b.props.data.name.localeCompare(a.props.data.name);
             }
             else if (sort === "time_asc") {
-                if (a.props.id < b.props.id) {
-                    return -1;
-                }
-                else if (a.props.id > b.props.id) {
-                    return 1;
-                }
-                else {
-                    return 0;
-                }
+                return a.props.data.createdDate.localeCompare(b.props.data.createdDate);
             }
             else if (sort === "time_desc") {
-                if (a.props.id < b.props.id) {
-                    return 1;
-                }
-                else if (a.props.id > b.props.id) {
-                    return -1;
-                }
-                else {
-                    return 0;
-                }
+                return b.props.data.createdDate.localeCompare(a.props.data.createdDate);
             }
-        })
+        })])
+        console.log(gridFiles);
+        console.log(sort);
     }, [sort])
 
     return (
