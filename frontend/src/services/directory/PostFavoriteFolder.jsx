@@ -12,7 +12,7 @@ export default async function PostFavoriteFolder(folderID) {
     };
 
     try {
-        const res = await fetch(configData.API_SERVER + 'folder/' + folderID + '/favorite', model);
+        const res = await fetch(configData.API_SERVER + 'directory/' + folderID + '/favorite', model);
         if (res.status === 200) {
             return [true, ''];  //성공
         }
