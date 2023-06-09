@@ -25,12 +25,6 @@ export default function TrashBinPage() {
                 alert(fileRes[1]);
                 return;
             }
-            // const folderRes = await GetTrashFolderList();
-            // if (!folderRes[0]) {
-            //     alert(folderRes[1]);
-            //     return;
-            // }
-            //const files = [...folderRes[1], ...fileRes[1]];
             const files = [...fileRes[1]];
             setGridFiles(
                 files.map((data) => {

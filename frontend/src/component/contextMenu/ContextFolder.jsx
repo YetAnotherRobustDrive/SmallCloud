@@ -43,6 +43,7 @@ export default function ContextFolder(props) {
         if (!res[0]) {
             if (res[1] === "이미 존재하는 라벨입니다.") {
                 alert("이미 즐겨찾기에 추가되어 있습니다.");
+                return;
             }
             alert(res[1]);
             return;
