@@ -16,6 +16,7 @@ import PostMoveDir from "../../services/directory/PostMoveDir";
 import PostMoveFile from "../../services/file/PostMoveFile";
 import GetShareFileList from "../../services/share/GetShareFileList";
 import GetShareFolderList from "../../services/share/GetShareFolderList";
+import Upbar from "../../component/sidebar/Upbar";
 
 export default function MainPage() {
 
@@ -150,6 +151,7 @@ export default function MainPage() {
             {isLoading && <ModalLoading isOpen={isLoading} />}
             <Header />
             {innerWidth > 768 && <Sidebar />}
+            {innerWidth <= 768 && <Upbar />}
             <BodyFrame hasContext={true} innerWidth={innerWidth}>
                 <BodyHeader text="내 파일" isSortable setter={setSort}/>
                 {
