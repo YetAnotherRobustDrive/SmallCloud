@@ -98,4 +98,18 @@ public class DirectoryController {
         return userDetailsProvider.getUserDetails()
             .orElseThrow(() -> new ServiceException(ExceptionStatus.NO_PERMISSION));
     }
+
+    @Secured(Roles.S_COMMON)
+    @RequestMapping(method = {RequestMethod.GET, RequestMethod.POST}, value = "/{directoryId}/favorite")
+    public void favorite(@PathVariable("directoryId") Long directoryId) {
+        UserDetails user = getLoginUser();
+        directoryFacadeService.favorite(directoryId, user.getUsername());
+    }
+
+    @Secured(Roles.S_COMMON)
+    @RequestMapping(method = {RequestMethod.GET, RequestMethod.POST}, value = "/{directoryId}/unfavorite")
+    public void unFavorite(@PathVariable("directoryId") Long directoryId) {
+        UserDetails user = getLoginUser();
+        directoryFacadeService.unFavorite(directoryId, user.getUsername());
+    }
 }

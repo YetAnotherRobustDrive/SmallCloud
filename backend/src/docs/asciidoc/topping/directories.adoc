@@ -110,6 +110,33 @@ operation::Directory/Restore/ok[snippets='http-request,path-parameters']
 
 operation::Directory/Restore/ok[snippets='http-response']
 
+=== 즐겨찾기 추가 (favorite)
+
+operation::Directory/favorite/ok[snippets='http-request,path-parameters']
+
+==== 성공
+
+operation::Directory/favorite/ok[snippets='http-response']
+
+IMPORTANT: 어떤 라벨도 붙어있지 않을 때
+
+operation::Directory/favorite/okLabel[snippets='http-response']
+
+IMPORTANT: 다른 라벨이 붙어있을 때
+
+=== 즐겨찾기 삭제 (unfavorite)
+
+operation::Directory/unFavorite/ok[snippets='http-request,path-parameters']
+
+==== 성공
+
+operation::Directory/unFavorite/ok[snippets='http-response']
+
+IMPORTANT: 즐겨찾기 라벨만 붙어있을 때
+
+operation::Directory/unFavorite/okOther[snippets='http-response']
+
+IMPORTANT: 다른 라벨이 붙어있을 때
 
 
 

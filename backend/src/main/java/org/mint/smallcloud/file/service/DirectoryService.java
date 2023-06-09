@@ -60,4 +60,12 @@ public class DirectoryService {
     public void restoreDirectory(Folder folder, Member user) {
         labelService.detachTrash(folder, user);
     }
+
+    public void favoriteDirectory(Folder folder, Member user) {
+        labelService.attachFavorite(folder, user);
+    }
+
+    public void unFavoriteDirectory(Folder folder, Member user) {
+        labelService.detachFavorite(folder, user);
+    }
 }

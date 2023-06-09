@@ -591,4 +591,212 @@ class FileControllerTest {
                     )));
         }
     }
+
+    @Nested
+    @DisplayName("/files/{fileId}/favorite docs")
+    class favorite {
+        String url = URL_PREFIX + "/{fileId}/favorite";
+        private Folder parent;
+        private DataNode dataNode;
+        private DataNode dataNode1;
+        private DataNode dataNode2;
+        private Label label;
+        private Label favoriteLabel;
+
+        @BeforeEach
+        public void boot() {
+            em.persist(rootFolder);
+            parent = (Folder) Folder.createFolder(rootFolder, "folder1", member);
+            em.persist(parent);
+
+            label = Label.of("testLabel1", member);
+            em.persist(label);
+
+            favoriteLabel = Label.of(DefaultLabelType.defaultFavorite.getLabelName(), member);
+            em.persist(favoriteLabel);
+
+            dataNode = DataNode.createFile(rootFolder, fileType, fileLocation, 100L, member);
+            em.persist(dataNode);
+            dataNode1 = DataNode.createFile(parent, fileType, fileLocation, 100L, member);
+            dataNode1.addLabel(label);
+            em.persist(dataNode1);
+            dataNode2 = DataNode.createFile(parent, fileType, fileLocation, 100L, member);
+            dataNode2.addLabel(favoriteLabel);
+            em.persist(dataNode2);
+            em.flush();
+        }
+
+        @Test
+        @DisplayName("정상 요청(라벨이 하나도 없을 때)")
+        void okNoLabel() throws Exception {
+            PathParametersSnippet payload = pathParameters(
+                    parameterWithName("fileId").description("즐겨찾기 추가할 파일의 id를 담고 있습니다."));
+
+            mockMvc.perform(
+                            TestSnippet.secured(post(url, dataNode.getId()), memberToken.getAccessToken()))
+                    .andExpect(status().isOk())
+                    .andDo(print())
+                    .andExpect((rst) -> {
+                        File file = fileRepository.findById(dataNode.getId()).orElseThrow();
+                        assertThat(file.getLabels().size()).isEqualTo(1);
+                        assertThat(file.getLabels().contains(favoriteLabel)).isTrue();
+                    })
+                    .andDo(document(DOCUMENT_NAME, payload));
+        }
+        @Test
+        @DisplayName("정상 요청(라벨이 붙어있을 때)")
+        void okLabel() throws Exception {
+            mockMvc.perform(
+                            TestSnippet.secured(post(url, dataNode1.getId()), memberToken.getAccessToken()))
+                    .andExpect(status().isOk())
+                    .andDo(print())
+                    .andExpect((rst) -> {
+                        File file = fileRepository.findById(dataNode1.getId()).orElseThrow();
+                        assertThat(file.getLabels().size()).isEqualTo(2);
+                        assertThat(file.getLabels().contains(favoriteLabel)).isTrue();
+                    })
+                    .andDo(document(DOCUMENT_NAME));
+        }
+        @Test
+        @DisplayName("이미 라벨이 붙어 있을 때")
+        void existLabel() throws Exception {
+            mockMvc.perform(
+                            TestSnippet.secured(post(url, dataNode2.getId()), memberToken.getAccessToken()))
+                    .andExpect(status().isForbidden())
+                    .andDo(print())
+                    .andExpect((rst) -> {
+                        File file = fileRepository.findById(dataNode2.getId()).orElseThrow();
+                        assertThat(file.getLabels().size()).isEqualTo(1);
+                        assertThat(file.getLabels().contains(favoriteLabel)).isTrue();
+                    })
+                    .andDo(document(DOCUMENT_NAME));
+        }
+        @Test
+        @DisplayName("파일이 존재하지 않을 때")
+        void noFile() throws Exception {
+            mockMvc.perform(
+                            TestSnippet.secured(post(url, 100), memberToken.getAccessToken()))
+                    .andExpect(status().isNotFound())
+                    .andDo(print())
+                    .andDo(document(DOCUMENT_NAME));
+        }
+        @Test
+        @DisplayName("잘못된 토큰")
+        void wrongToken() throws Exception {
+            mockMvc.perform(
+                            TestSnippet.secured(post(url, dataNode.getId()), "testWrongToken"))
+                    .andExpect(status().isBadRequest())
+                    .andDo(print())
+                    .andDo(document(DOCUMENT_NAME));
+        }
+    }
+
+    @Nested
+    @DisplayName("/files/{fileId}/unfavorite docs")
+    class unFavorite {
+        String url = URL_PREFIX + "/{fileId}/unfavorite";
+        private Folder parent;
+        private DataNode dataNode;
+        private DataNode dataNode1;
+        private DataNode dataNode2;
+        private DataNode dataNode3;
+        private Label label;
+        private Label favoriteLabel;
+
+        @BeforeEach
+        public void boot() {
+            em.persist(rootFolder);
+            parent = (Folder) Folder.createFolder(rootFolder, "folder1", member);
+            em.persist(parent);
+
+            label = Label.of("testLabel1", member);
+            em.persist(label);
+
+            favoriteLabel = Label.of(DefaultLabelType.defaultFavorite.getLabelName(), member);
+            em.persist(favoriteLabel);
+
+            dataNode = DataNode.createFile(rootFolder, fileType, fileLocation, 100L, member);
+            dataNode.addLabel(favoriteLabel);
+            em.persist(dataNode);
+            dataNode1 = DataNode.createFile(parent, fileType, fileLocation, 100L, member);
+            dataNode1.addLabel(label);
+            dataNode1.addLabel(favoriteLabel);
+            em.persist(dataNode1);
+            dataNode2 = DataNode.createFile(parent, fileType, fileLocation, 100L, member);
+            em.persist(dataNode2);
+            dataNode3 = DataNode.createFile(parent, fileType, fileLocation, 100L, member);
+            dataNode3.addLabel(label);
+            em.persist(dataNode3);
+            em.flush();
+        }
+
+        @Test
+        @DisplayName("정상 요청(즐겨찾기 라벨만 있을 때)")
+        void ok() throws Exception {
+            PathParametersSnippet payload = pathParameters(
+                    parameterWithName("fileId").description("즐겨찾기 제거할 파일의 id를 담고 있습니다."));
+
+            mockMvc.perform(
+                            TestSnippet.secured(post(url, dataNode.getId()), memberToken.getAccessToken()))
+                    .andExpect(status().isOk())
+                    .andDo(print())
+                    .andExpect((rst) -> {
+                        File file = fileRepository.findById(dataNode.getId()).orElseThrow();
+                        assertThat(file.getLabels().size()).isEqualTo(0);
+                        assertThat(file.getLabels().contains(favoriteLabel)).isFalse();
+                    })
+                    .andDo(document(DOCUMENT_NAME, payload));
+        }
+        @Test
+        @DisplayName("정상 요청(즐겨찾기 라벨과 다른 라벨이 함께있을 때)")
+        void okOther() throws Exception {
+            mockMvc.perform(
+                            TestSnippet.secured(post(url, dataNode1.getId()), memberToken.getAccessToken()))
+                    .andExpect(status().isOk())
+                    .andDo(print())
+                    .andExpect((rst) -> {
+                        File file = fileRepository.findById(dataNode1.getId()).orElseThrow();
+                        assertThat(file.getLabels().size()).isEqualTo(1);
+                        assertThat(file.getLabels().contains(favoriteLabel)).isFalse();
+                    })
+                    .andDo(document(DOCUMENT_NAME));
+        }
+        @Test
+        @DisplayName("어떤 라벨도 붙어있지 않을 때")
+        void noLabels() throws Exception {
+            mockMvc.perform(
+                            TestSnippet.secured(post(url, dataNode2.getId()), memberToken.getAccessToken()))
+                    .andExpect(status().isNotFound())
+                    .andDo(print())
+                    .andDo(document(DOCUMENT_NAME));
+        }
+        @Test
+        @DisplayName("즐겨찾기 라벨이 붙어있지 않을 때")
+        void noFavorite() throws Exception {
+            mockMvc.perform(
+                            TestSnippet.secured(post(url, dataNode3.getId()), memberToken.getAccessToken()))
+                    .andExpect(status().isNotFound())
+                    .andDo(print())
+                    .andDo(document(DOCUMENT_NAME));
+        }
+        @Test
+        @DisplayName("파일이 존재하지 않을 때")
+        void noFile() throws Exception {
+            mockMvc.perform(
+                            TestSnippet.secured(post(url, 100), memberToken.getAccessToken()))
+                    .andExpect(status().isNotFound())
+                    .andDo(print())
+                    .andDo(document(DOCUMENT_NAME));
+        }
+        @Test
+        @DisplayName("잘못된 토큰")
+        void wrongToken() throws Exception {
+            mockMvc.perform(
+                            TestSnippet.secured(post(url, dataNode.getId()), "testWrongToken"))
+                    .andExpect(status().isBadRequest())
+                    .andDo(print())
+                    .andDo(document(DOCUMENT_NAME));
+        }
+    }
+
 }
