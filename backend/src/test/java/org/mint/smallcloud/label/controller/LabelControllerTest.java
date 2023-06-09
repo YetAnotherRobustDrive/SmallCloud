@@ -11,6 +11,7 @@ import org.mint.smallcloud.file.domain.DataNode;
 import org.mint.smallcloud.file.domain.FileLocation;
 import org.mint.smallcloud.file.domain.FileType;
 import org.mint.smallcloud.file.domain.Folder;
+import org.mint.smallcloud.file.repository.DataNodeRepository;
 import org.mint.smallcloud.label.domain.DefaultLabelType;
 import org.mint.smallcloud.label.domain.Label;
 import org.mint.smallcloud.label.repository.LabelRepository;
@@ -58,6 +59,8 @@ class LabelControllerTest {
     private EntityManager em;
     @Autowired
     private LabelRepository labelRepository;
+    @Autowired
+    private DataNodeRepository dataNodeRepository;
     private MockMvc mockMvc;
     private final String URL_PREFIX = "/labels";
     private final String DOCUMENT_NAME = "Labels/{ClassName}/{methodName}";
@@ -71,6 +74,8 @@ class LabelControllerTest {
     DataNode dataNode;
     DataNode dataNode1;
     DataNode dataNode2;
+    DataNode dataNode3;
+    DataNode dataNode4;
     @BeforeEach
     void setUp(WebApplicationContext webApplicationContext, RestDocumentationContextProvider restDocumentation) {
         this.mockMvc = MockMvcBuilders
@@ -104,6 +109,10 @@ class LabelControllerTest {
         em.persist(dataNode1);
         dataNode2 = DataNode.createFile(rootFolder, fileType, fileLocation, 100L, member);
         em.persist(dataNode2);
+        dataNode3 = DataNode.createFolder(rootFolder, "testFolder", member);
+        em.persist(dataNode3);
+        dataNode4 = DataNode.createFolder(rootFolder, "testFolder2", member);
+        em.persist(dataNode4);
         em.flush();
     }
 
@@ -168,18 +177,19 @@ class LabelControllerTest {
         Label label;
         @BeforeEach
         void boot() {
-
             trashLabel = Label.of(DefaultLabelType.defaultTrash.getLabelName(), member);
             em.persist(trashLabel);
             label = Label.of("testLabel", member);
             em.persist(label);
-            rootFolder.addLabel(trashLabel);
-            em.persist(rootFolder);
             dataNode.addLabel(trashLabel);
             dataNode.addLabel(label);
             em.persist(dataNode);
             dataNode1.addLabel(trashLabel);
             em.persist(dataNode1);
+            dataNode3.addLabel(trashLabel);
+            em.persist(dataNode3);
+            dataNode4.addLabel(trashLabel);
+            em.persist(dataNode4);
             em.flush();
         }
 
@@ -192,10 +202,11 @@ class LabelControllerTest {
                     .andExpect((rst) -> {
                         Label label1 = labelRepository.findByNameAndOwner(trashLabel.getName(), member);
                         List<DataNode> files = label1.getFiles();
-                        assertThat(files.size()).isEqualTo(3);
+                        assertThat(files.size()).isEqualTo(4);
                         assertThat(files.contains(dataNode)).isTrue();
                         assertThat(files.contains(dataNode1)).isTrue();
-                        assertThat(files.contains(rootFolder)).isTrue();
+                        assertThat(files.contains(dataNode3)).isTrue();
+                        assertThat(files.contains(dataNode4)).isTrue();
                     })
                     .andDo(document(DOCUMENT_NAME));
         }
@@ -210,7 +221,7 @@ class LabelControllerTest {
         }
     }
     @Nested
-    @DisplayName("/labels/trash 즐겨찾기 라벨 검색 테스트")
+    @DisplayName("/labels/favorite 즐겨찾기 라벨 검색 테스트")
     class favorite {
         private final String url = URL_PREFIX + "/favorite";
         Label favoritelabel;
@@ -218,12 +229,14 @@ class LabelControllerTest {
         void boot() {
             favoritelabel = Label.of(DefaultLabelType.defaultFavorite.getLabelName(), member);
             em.persist(favoritelabel);
-            rootFolder.addLabel(favoritelabel);
-            em.persist(rootFolder);
             dataNode.addLabel(favoritelabel);
             em.persist(dataNode);
             dataNode1.addLabel(favoritelabel);
             em.persist(dataNode1);
+            dataNode3.addLabel(favoritelabel);
+            em.persist(dataNode3);
+            dataNode4.addLabel(favoritelabel);
+            em.persist(dataNode4);
             em.flush();
         }
 
@@ -236,10 +249,11 @@ class LabelControllerTest {
                     .andExpect((rst) -> {
                         Label label1 = labelRepository.findByNameAndOwner(favoritelabel.getName(), member);
                         List<DataNode> files = label1.getFiles();
-                        assertThat(files.size()).isEqualTo(3);
+                        assertThat(files.size()).isEqualTo(4);
                         assertThat(files.contains(dataNode)).isTrue();
                         assertThat(files.contains(dataNode1)).isTrue();
-                        assertThat(files.contains(rootFolder)).isTrue();
+                        assertThat(files.contains(dataNode3)).isTrue();
+                        assertThat(files.contains(dataNode4)).isTrue();
                     })
                     .andDo(document(DOCUMENT_NAME));
         }
