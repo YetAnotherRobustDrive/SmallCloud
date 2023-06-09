@@ -20,7 +20,7 @@ public class    Board {
     @Column(name = "TITLE")
     private String title;
 
-    @Column(name = "CONTENT")
+    @Column(name = "CONTENT", length = 5000)
     private String content;
 
     @Column(name = "CREATED_DATE")
