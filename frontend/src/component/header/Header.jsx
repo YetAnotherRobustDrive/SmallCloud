@@ -10,7 +10,7 @@ export default function Header(props) {
   return (
     <div className="header">
       <Link to='/' style={{textDecoration: "none", color:"black"}}>
-        <Logo width={props.innerWidth}/>
+        <Logo />
       </Link>
       <SearchBar />
       <AlertAndMy />

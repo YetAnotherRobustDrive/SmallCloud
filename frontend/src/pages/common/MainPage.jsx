@@ -150,7 +150,7 @@ export default function MainPage() {
             {isLoading && <ModalLoading isOpen={isLoading} />}
             <Header />
             {innerWidth > 768 && <Sidebar />}
-            <BodyFrame hasContext={true} innerWidth>
+            <BodyFrame hasContext={true} innerWidth={innerWidth}>
                 <BodyHeader text="내 파일" isSortable setter={setSort}/>
                 {
                     gridFiles.length === 0 ? <div style={{ height: "calc(100vh - 299px)", textAlign: "center", marginTop: "20px" }}>파일이 없습니다.</div> :
