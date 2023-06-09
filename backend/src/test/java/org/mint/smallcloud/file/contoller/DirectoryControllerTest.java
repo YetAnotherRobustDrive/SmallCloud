@@ -22,6 +22,7 @@ import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMock
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.restdocs.RestDocumentationContextProvider;
 import org.springframework.restdocs.RestDocumentationExtension;
+import org.springframework.restdocs.request.PathParametersSnippet;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
@@ -698,6 +699,9 @@ class DirectoryControllerTest {
         @DisplayName("정상 요청")
         @Test
         void ok() throws Exception {
+            PathParametersSnippet payload = pathParameters(
+                    parameterWithName("directoryId").description("즐겨찾기 추가할 폴더의 id를 담고 있습니다."));
+
             mockMvc.perform(
                             TestSnippet.secured(post(url, directory.getId()), user1Token.getAccessToken()))
                     .andDo(print())
@@ -707,7 +711,7 @@ class DirectoryControllerTest {
                         assertThat(folder.getLabels().contains(favoriteLabel)).isTrue();
                     })
                     .andExpect(status().isOk())
-                    .andDo(document(DOCUMENT_NAME));
+                    .andDo(document(DOCUMENT_NAME, payload));
         }
 
         @Test
@@ -726,4 +730,72 @@ class DirectoryControllerTest {
         }
     }
 
+    @Nested
+    @DisplayName("/directory/{directoryId}/unfavorite docs")
+    class unFavorite {
+        String url = URL_PREFIX + "/{directoryId}/unfavorite";
+        Folder root;
+        Member user1;
+        Folder directory;
+        Folder directory1;
+        JwtTokenDto user1Token;
+        Label favoriteLabel;
+        Label label;
+        @BeforeEach
+        public void boot() {
+            user1 = Member.of("user1", "test", "nick");
+            em.persist(user1);
+            root = Folder.createRoot(user1);
+            em.persist(root);
+            favoriteLabel = Label.of(DefaultLabelType.defaultFavorite.getLabelName(), user1);
+            em.persist(favoriteLabel);
+            label = Label.of("label", user1);
+            em.persist(label);
+
+            directory = Folder.createFolder(root, "folder1", user1);
+            directory.addLabel(favoriteLabel);
+            em.persist(directory);
+            directory1 = Folder.createFolder(root, "folder2", user1);
+            directory1.addLabel(label);
+            directory1.addLabel(favoriteLabel);
+            em.persist(directory1);
+            user1Token = jwtTokenProvider.generateTokenDto(UserDetailsDto
+                    .builder()
+                    .username(user1.getUsername())
+                    .password(user1.getPassword())
+                    .roles(user1.getRole()).build());
+        }
+        @DisplayName("정상 요청(즐겨찾기 라벨만 있을 때)")
+        @Test
+        void ok() throws Exception {
+            PathParametersSnippet payload = pathParameters(
+                    parameterWithName("directoryId").description("즐겨찾기 제거할 폴더의 id를 담고 있습니다."));
+
+            mockMvc.perform(
+                            TestSnippet.secured(post(url, directory.getId()), user1Token.getAccessToken()))
+                    .andDo(print())
+                    .andExpect((rst) -> {
+                        Folder folder = folderRepository.findById(directory.getId()).orElse(null);
+                        assertThat(folder.getLabels().size()).isEqualTo(0);
+                        assertThat(folder.getLabels().contains(favoriteLabel)).isFalse();
+                    })
+                    .andExpect(status().isOk())
+                    .andDo(document(DOCUMENT_NAME, payload));
+        }
+
+        @DisplayName("정상 요청(즐겨찾기 라벨과 다른 라벨이 함께 있을 때)")
+        @Test
+        void okOther() throws Exception {
+            mockMvc.perform(
+                            TestSnippet.secured(post(url, directory1.getId()), user1Token.getAccessToken()))
+                    .andDo(print())
+                    .andExpect((rst) -> {
+                        Folder folder = folderRepository.findById(directory1.getId()).orElse(null);
+                        assertThat(folder.getLabels().size()).isEqualTo(1);
+                        assertThat(folder.getLabels().contains(favoriteLabel)).isFalse();
+                    })
+                    .andExpect(status().isOk())
+                    .andDo(document(DOCUMENT_NAME));
+        }
+    }
 }
