@@ -40,7 +40,7 @@ export default async function GetFavoriteList() {
             e.labels = e.labels.filter(e => e.name.startsWith("!$@*%&") === false);
         });
         if (res.status === 200) {
-            return [true, [folders, files]];  //성공
+            return [true, [...folders, ...files]];  //성공
         }
         else {
             throw data; //실패

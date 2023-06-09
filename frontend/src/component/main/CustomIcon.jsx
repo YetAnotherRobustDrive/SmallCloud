@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { FcFile, FcFolder } from 'react-icons/fc';
+import { AiFillStar } from 'react-icons/ai';
 import { useNavigate } from "react-router-dom";
 import '../../css/customIcon.css';
 import ContextFolder from "../contextMenu/ContextFolder";
@@ -13,7 +14,10 @@ export default function CustomIcon(props) {
 
     const handleOnClick = (e) => {
         e.preventDefault();
-        if (props.data.type === "folder") {
+        if (props.isDeleted === true) {
+            return;
+        }
+        if (props.data.type === "folder" ) {
             navigate("/folder/" + props.data.id);
             return;
         }
@@ -52,7 +56,7 @@ export default function CustomIcon(props) {
 
     const handleOnContextMenu = (e) => {
         e.preventDefault();
-        e.stopPropagation(); 
+        e.stopPropagation();
         isContextOpen ? setIsContextOpen(false) : setIsContextOpen(true);
         const context = window.document.getElementById("context" + props.data.id);
         const newX = (e.clientX - 220 - 5);
@@ -64,7 +68,7 @@ export default function CustomIcon(props) {
         context.style.top = (e.clientY + context.offsetHeight < window.innerHeight ? newY : newY - context.offsetHeight) + "px";
     }
 
-    const contextMenu = (props.data.type == "file" ? <></> : <ContextFolder folderID={props.data.id} />);
+    const contextMenu = (props.data.type == "file" ? <></> : <ContextFolder folderID={props.data.id} isDeleted={props.data.isDeleted} isFavorite={props.data.isFavorite} />);
 
     return (
         <>
@@ -83,6 +87,9 @@ export default function CustomIcon(props) {
                     onDragEnd={handelDragEnd}
                     onDragOver={handelDragOver}
                     onDrop={handelDrop} draggable />
+                {props.data.isFavorite &&
+                    <div className="star"><AiFillStar /></div>
+                }
                 <div className="icon">
                     <div className="real" name={props.data.type}>
                         {icon}

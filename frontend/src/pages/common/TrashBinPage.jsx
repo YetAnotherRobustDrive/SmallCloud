@@ -25,9 +25,8 @@ export default function TrashBinPage() {
                 alert(fileRes[1]);
                 return;
             }
-            const files = [...fileRes[1]];
             setGridFiles(
-                files.map((data) => {
+                fileRes[1].map((data) => {
                     return <CustomIcon
                         onClick={() => {
                             setSelected(data);
@@ -35,7 +34,8 @@ export default function TrashBinPage() {
                         }}
                         key={data.id}
                         data={data} 
-                        noContext={true}/>
+                        isDeleted={true}
+                        />
                 })
             );
         }

@@ -30,18 +30,18 @@ export default async function GetTrashFileList() {
                 e.size = size + "B";
             }
             e.type = "file"
-            e.isFavorite = e.labels.find(e => e.name === "!$@*%&Favorite") !== undefined;
+            e.isDeleted = e.labels.find(e => e.name === "!$@*%&Trash") !== undefined;
             e.labels = e.labels.filter(e => e.name.startsWith("!$@*%&") === false);
         });
         const folders = [...data.folders];
         folders.forEach(e => {
             e.type = "folder";
-            e.isFavorite = e.labels.find(e => e.name === "!$@*%&Favorite") !== undefined;
+            e.isDeleted = e.labels.find(e => e.name === "!$@*%&Trash") !== undefined;
             e.labels = e.labels.filter(e => e.name.startsWith("!$@*%&") === false);
         });
         
         if (res.status === 200) {
-            return [true, [folders, files]];  //성공
+            return [true, [...folders, ...files]];  //성공
         }
         else {
             throw data; //실패
