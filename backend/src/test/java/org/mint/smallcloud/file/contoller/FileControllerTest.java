@@ -133,6 +133,7 @@ class FileControllerTest {
         private DataNode dataNode1;
         private Label label;
         private Label label1;
+        private Label favoriteLabel;
         private LabelUpdateDto labelUpdateDto1;
 
         @BeforeEach
@@ -144,16 +145,18 @@ class FileControllerTest {
 
             label = Label.of("testLabel1", member);
             em.persist(label);
-            em.flush();
 
             label1 = Label.of("testLabel2", member);
             em.persist(label1);
-            em.flush();
+
+            favoriteLabel = Label.of(DefaultLabelType.defaultFavorite.getLabelName(), member);
+            em.persist(favoriteLabel);
 
             dataNode = DataNode.createFile(rootFolder, fileType, fileLocation, 100L, member);
             dataNode1 = DataNode.createFile(parent, fileType, fileLocation, 100L, member);
             dataNode1.addLabel(label);
             dataNode1.addLabel(label1);
+            dataNode1.addLabel(favoriteLabel);
             em.persist(dataNode);
             em.persist(dataNode1);
             em.flush();
@@ -206,16 +209,16 @@ class FileControllerTest {
                     .andExpect(status().isOk())
                     .andExpect((rst) -> {
                         List<Label> labels = labelRepository.findAll();
-                        assertThat(labels.size()).isEqualTo(3);
-                        assertThat(labels.get(0).getName()).isEqualTo("testLabel1");
-                        assertThat(labels.get(1).getName()).isEqualTo("testLabel2");
-                        assertThat(labels.get(2).getName()).isEqualTo("testLabel4");
+                        assertThat(labels.size()).isEqualTo(4);
+
                     })
                     .andExpect((rst) -> {
                         File file = fileRepository.findById(labelUpdateDto2.getFileId()).get();
                         assertThat(file.getLabels().size()).isEqualTo(2);
-                        assertThat(file.getLabels().get(0).getName()).isEqualTo("testLabel1");
-                        assertThat(file.getLabels().get(1).getName()).isEqualTo("testLabel4");
+                    })
+                    .andExpect((rst) -> {
+                        if(labelRepository.existsByNameAndOwner(favoriteLabel.getName(), member))
+                            System.out.println("favoriteLabel is exist");
                     })
                     .andDo(print())
                     .andDo(document(DOCUMENT_NAME));

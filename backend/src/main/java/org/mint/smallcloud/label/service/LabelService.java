@@ -72,9 +72,9 @@ public class LabelService {
                     Label labelSaved = register(Label.of(label, member));
                     labelSaved.addFile(dataNode);
                 });
-        Label addFavorite = labelRepository.findByNameAndOwner(DefaultLabelType.defaultFavorite.getLabelName(), member);
-        if(labels.contains(addFavorite))
-            register(addFavorite);
+        Label favoriteLabel = Label.of(DefaultLabelType.defaultFavorite.name(), member);
+        if(labels.contains(favoriteLabel))
+            dataNode.addLabel(favoriteLabel);
     }
     public LabelFilesDto search(String labelName, String userName) {
         Member member = memberThrowerService.getMemberByUsername(userName);
