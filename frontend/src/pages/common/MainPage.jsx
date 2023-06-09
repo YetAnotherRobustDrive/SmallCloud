@@ -62,7 +62,6 @@ export default function MainPage() {
                         data={data}/>
                 })
             )
-
             const shareFileRes = await GetShareFileList();
             if (!shareFileRes[0]) {
                 alert(shareFileRes[1])

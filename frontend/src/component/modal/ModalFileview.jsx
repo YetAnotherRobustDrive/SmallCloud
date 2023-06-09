@@ -1,21 +1,23 @@
 import React, { useEffect, useState } from "react";
-import { AiOutlineClose, AiOutlineStar, AiFillStar } from "react-icons/ai";
+import { AiFillStar, AiOutlineClose, AiOutlineStar } from "react-icons/ai";
 import { BsFillShareFill, BsFillTrashFill } from 'react-icons/bs';
 import { GoCloudDownload } from 'react-icons/go';
 import { MdGroups, MdOpenInFull, MdPerson } from 'react-icons/md';
+import { RiArrowGoBackLine } from 'react-icons/ri';
 import { TbEdit } from 'react-icons/tb';
 import ProgressBar from "../../component/updown/ProgressBar";
 import '../../css/fileview.css';
 import GetDownloadFile from "../../services/file/GetDownloadFile";
 import PostDeleteFile from "../../services/file/PostDeleteFile";
+import PostFavoriteFile from "../../services/file/PostFavoriteFile";
 import PostLabelFile from "../../services/file/PostLabelFile";
+import PostRestoreFile from "../../services/file/PostRestoreFile";
+import PostUnfavoriteFile from "../../services/file/PostUnfavoriteFile";
 import PostDeleteShare from "../../services/share/PostDeleteShare";
 import ModalAddShare from "./ModalAddShare";
 import ModalEmpty from "./ModalEmpty";
 import ModalFileopen from "./ModalFileopen";
 import ModalGetString from "./ModalGetString";
-import PostFavoriteFile from "../../services/file/PostFavoriteFile";
-import PostUnfavoriteFile from "../../services/file/PostUnfavoriteFile";
 
 export default function ModalFileview(props) {
     const [isFileOpen, setIsFileOpen] = useState(false);
@@ -74,6 +76,20 @@ export default function ModalFileview(props) {
         }
     }
 
+    const handleFileRestore = async (e) => {
+        e.stopPropagation();
+        e.preventDefault();
+        if (window.confirm("정말로 파일을 복구하시겠습니까?")) {
+            const res = await PostRestoreFile(fileData.id);
+            if (!res[0]) {
+                alert(res[1]);
+                return;
+            }
+            alert("파일이 복구되었습니다.");
+            window.location.reload();
+        }
+    }
+
     const handleFavorite = async (e) => {
         e.stopPropagation();
         e.preventDefault();
@@ -93,7 +109,7 @@ export default function ModalFileview(props) {
         }
         fileData.isFavorite = !fileData.isFavorite;
         if (fileData.isFavorite) {
-            alert("즐겨찾기 설정되었습니다.");            
+            alert("즐겨찾기 설정되었습니다.");
         }
         else {
             alert("즐겨찾기 해제되었습니다.");
@@ -127,8 +143,10 @@ export default function ModalFileview(props) {
                     </div>
                     <div className='head'>
                         <div className="fileBtn">
-                            <div className='icon' onClick={handleFavorite}>{fileData.isFavorite ? <AiFillStar /> : <AiOutlineStar />}</div>
-                            <div className='icon' onClick={handleDownload}><GoCloudDownload /></div>
+                            {props.isDeleted !== true && <>
+                                <div className='icon' onClick={handleFavorite}>{fileData.isFavorite ? <AiFillStar /> : <AiOutlineStar />}</div>
+                                <div className='icon' onClick={handleDownload}><GoCloudDownload /></div>
+                            </>}
                             <div className='icon' onClick={() => setIsFileOpen(true)}><MdOpenInFull /></div>
                             <div className='icon' onClick={() => props.after()}><AiOutlineClose /></div>
                         </div>
@@ -152,7 +170,9 @@ export default function ModalFileview(props) {
                             <>
                                 <div className="labels">
                                     <span>라벨</span>
-                                    <button onClick={handleLabelEdit} className="icon" ><TbEdit /></button>
+                                    {props.isDeleted !== true &&
+                                        <button onClick={handleLabelEdit} className="icon" ><TbEdit /></button>
+                                    }
                                     <div className="label">
                                         {fileData.labels.length === 0 ? "없음" : fileData.labels.map((label, index) => {
                                             return ("#" + label.name + " ");
@@ -183,9 +203,16 @@ export default function ModalFileview(props) {
                                         {fileData.createdDate.substring(0, fileData.createdDate.indexOf("T")).replace(/-/g, ".")}
                                     </div>
                                 </div>
-                                <div className="removeFile" onClick={handleFileRemove}>
-                                    <span><BsFillTrashFill /></span>
-                                </div>
+                                {props.isDeleted !== true &&
+                                    <div className="removeFile" onClick={handleFileRemove}>
+                                        <span><BsFillTrashFill /></span>
+                                    </div>
+                                }
+                                {props.isDeleted === true &&
+                                    <div className="removeFile" onClick={handleFileRestore}>
+                                        <span><RiArrowGoBackLine /></span>
+                                    </div>
+                                }
                             </>
                         }
                         {(!isGeneralSelected && props.isDeleted !== true) && //공유
@@ -229,7 +256,7 @@ export default function ModalFileview(props) {
                 <ModalAddShare
                     fileID={fileData.id}
                     isOpen={isShareOpen}
-                    after={() => {setIsShareOpen(false); window.location.reload();}}
+                    after={() => { setIsShareOpen(false); window.location.reload(); }}
                 />
             }
             {isLabelEditOpen &&
