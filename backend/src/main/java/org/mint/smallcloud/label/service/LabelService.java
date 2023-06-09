@@ -106,7 +106,7 @@ public class LabelService {
         if(!labelRepository.existsByNameAndOwner(DefaultLabelType.defaultFavorite.getLabelName(), member))
             throw new ServiceException(ExceptionStatus.NOT_FOUND_LABEL);
         List<File> files = fileRepository.findDataNodeByLabelNameAndOwner(DefaultLabelType.defaultFavorite.getLabelName(), userName);
-        List<Folder> folders = folderRepository.findDataNodeByLabelNameAndOwner(DefaultLabelType.defaultTrash.getLabelName(), userName);
+        List<Folder> folders = folderRepository.findDataNodeByLabelNameAndOwner(DefaultLabelType.defaultFavorite.getLabelName(), userName);
         return LabelFilesDto.builder()
                 .name(DefaultLabelType.defaultFavorite.getLabelName())
                 .files(files.stream().map(fileMapper::toFileDto).collect(Collectors.toList()))

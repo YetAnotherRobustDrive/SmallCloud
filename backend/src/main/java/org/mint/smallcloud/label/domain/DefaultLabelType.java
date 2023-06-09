@@ -5,13 +5,7 @@ import lombok.Getter;
 @Getter
 public enum DefaultLabelType {
     defaultTrash( "!$@*%&Trash"),
-    defaultFavorite("!$@*%&Favorite"),
-    defaultDraft("!$@*%&Draft"),
-    defaultExpiration("!$@*%&Expiration"),
-    defaultFinal("!$@*%&Final"),
-    defaultSecurity("!$@*%&Security"),
-    defaultPublic("!$@*%&Public"),
-    defaultSensitivity("!$@*%&Sensitivity");
+    defaultFavorite("!$@*%&Favorite");
 
     private final String labelName;
     DefaultLabelType(String labelName) {
