@@ -162,11 +162,15 @@ class LabelControllerTest {
     class trash {
         private final String url = URL_PREFIX + "/trash";
         Label trashLabel;
+        Label label;
         @BeforeEach
         void boot() {
             trashLabel = Label.of(DefaultLabelType.defaultTrash.getLabelName(), member);
             em.persist(trashLabel);
+            label = Label.of("testLabel", member);
+            em.persist(label);
             dataNode.addLabel(trashLabel);
+            dataNode.addLabel(label);
             em.persist(dataNode);
             dataNode1.addLabel(trashLabel);
             em.persist(dataNode1);
@@ -182,6 +186,10 @@ class LabelControllerTest {
                     .andExpect((rst) -> {
                         Label label1 = labelRepository.findByNameAndOwner(trashLabel.getName(), member);
                         List<DataNode> files = label1.getFiles();
+                        System.out.println(files.get(0));
+                        System.out.println(files.get(0).getLabels());
+                        System.out.println(files.get(1));
+                        System.out.println(files.get(1).getLabels());
                         assertThat(files.size()).isEqualTo(2);
                         assertThat(files.contains(dataNode)).isTrue();
                         assertThat(files.contains(dataNode1)).isTrue();
