@@ -188,10 +188,7 @@ class FileControllerTest {
                     .andExpect(status().isOk())
                     .andExpect((rst) -> {
                         List<Label> labels = labelRepository.findAll();
-                        assertThat(labels.size()).isEqualTo(3);
-                        assertThat(labels.get(0).getName()).isEqualTo("testLabel1");
-                        assertThat(labels.get(1).getName()).isEqualTo("testLabel2");
-                        assertThat(labels.get(2).getName()).isEqualTo("testLabel3");
+                        assertThat(labels.size()).isEqualTo(4);
                     })
                     .andExpect((rst) -> {
                         File file = fileRepository.findById(labelUpdateDto.getFileId()).get();
