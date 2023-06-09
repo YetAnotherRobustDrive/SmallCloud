@@ -13,8 +13,8 @@ export default function CustomIcon(props) {
 
     const handleOnClick = (e) => {
         e.preventDefault();
-        if (props.type === "folder") {
-            navigate("/folder/" + props.id);
+        if (props.data.type === "folder") {
+            navigate("/folder/" + props.data.id);
             return;
         }
         else {
@@ -25,7 +25,7 @@ export default function CustomIcon(props) {
 
     useEffect(() => {
         setIcon(
-            props.type === "file" ? <FcFile /> : <FcFolder />
+            props.data.type === "file" ? <FcFile /> : <FcFolder />
         )
     }, [])
 
@@ -34,8 +34,8 @@ export default function CustomIcon(props) {
         if (props.targetSetter === undefined) {
             return;
         }
-        if (props.type === "folder") {
-            props.targetSetter(props.id);
+        if (props.data.type === "folder") {
+            props.targetSetter(props.data.id);
         }
     }
 
@@ -44,7 +44,7 @@ export default function CustomIcon(props) {
         if (props.sourceSetter === undefined) {
             return;
         }
-        props.sourceSetter({ type: props.type, id: props.id });
+        props.sourceSetter({ type: props.data.type, id: props.data.id });
     }
     const handelDragOver = (e) => {
         e.preventDefault();
@@ -54,7 +54,7 @@ export default function CustomIcon(props) {
         e.preventDefault();
         e.stopPropagation(); 
         isContextOpen ? setIsContextOpen(false) : setIsContextOpen(true);
-        const context = window.document.getElementById("context" + props.id);
+        const context = window.document.getElementById("context" + props.data.id);
         const newX = (e.clientX - 220 - 5);
         const newY = (e.clientY - 75 - 5);
         context.style.width = "100px";
@@ -64,12 +64,12 @@ export default function CustomIcon(props) {
         context.style.top = (e.clientY + context.offsetHeight < window.innerHeight ? newY : newY - context.offsetHeight) + "px";
     }
 
-    const contextMenu = (props.type == "file" ? <></> : <ContextFolder folderID={props.id} />);
+    const contextMenu = (props.data.type == "file" ? <></> : <ContextFolder folderID={props.data.id} />);
 
     return (
         <>
             {props.noContext !== true &&
-                <div id={"context" + props.id} className="contextMenu" onMouseLeave={() => { setIsContextOpen(false) }}>
+                <div id={"context" + props.data.id} className="contextMenu" onMouseLeave={() => { setIsContextOpen(false) }}>
                     {isContextOpen &&
                         contextMenu
                     }
@@ -84,11 +84,11 @@ export default function CustomIcon(props) {
                     onDragOver={handelDragOver}
                     onDrop={handelDrop} draggable />
                 <div className="icon">
-                    <div className="real" name={props.type}>
+                    <div className="real" name={props.data.type}>
                         {icon}
                     </div>
                 </div>
-                <span className="name">{props.name}</span>
+                <span className="name">{props.data.name}</span>
             </div>
         </>
     )

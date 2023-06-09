@@ -41,6 +41,9 @@ export default function ContextFolder(props) {
     const handleFavorite = async () => {
         const res = await PostFavoriteFolder(props.folderID);
         if (!res[0]) {
+            if (res[1] === "이미 존재하는 라벨입니다.") {
+                alert("이미 즐겨찾기에 추가되어 있습니다.");
+            }
             alert(res[1]);
             return;
         }
@@ -48,7 +51,7 @@ export default function ContextFolder(props) {
     }
 
     const options = [
-        { label: "즐겨찾기에 추가", onClick: () => { handleFavorite() } },
+        { label: "즐겨찾기 추가", onClick: () => { handleFavorite() } },
         { label: "이름 변경", onClick: () => { setIsModalOpen(true) } },
         { label: "공유 관리", onClick: () => { setIsShareOpen(true) } },
         { label: "폴더 삭제", onClick: () => { handleDelete() } },

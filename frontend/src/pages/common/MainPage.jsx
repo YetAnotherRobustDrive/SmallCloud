@@ -26,6 +26,7 @@ export default function MainPage() {
     const [source, setSource] = useState({ type: "", id: 0 });
     const [gridFiles, setGridFiles] = useState([]);
     const [shareFiles, setShareFiles] = useState([]);
+    const [sort, setSort] = useState("name_asc");
 
     useEffect(() => {
         const render = async () => {
@@ -58,9 +59,7 @@ export default function MainPage() {
                         targetSetter={setTarget}
                         sourceSetter={setSource}
                         key={data.id}
-                        id={data.id}
-                        name={data.name}
-                        type={data.type} />
+                        data={data}/>
                 })
             )
 
@@ -85,9 +84,7 @@ export default function MainPage() {
                         targetSetter={setTarget}
                         sourceSetter={setSource}
                         key={data.id}
-                        id={data.id}
-                        name={data.name}
-                        type={data.type}
+                        data={data}
                         noContext={true} />
                 })
             )
@@ -115,7 +112,7 @@ export default function MainPage() {
             setTarget(0);
             setSource({ type: "", id: 0 });
             setGridFiles([
-                ...gridFiles.filter((data) => data.props.id !== source.id),
+                ...gridFiles.filter((data) => data.props.data.id !== source.id),
             ])
         }
         if (target !== 0 && source.id !== 0 && target !== source.id) {
@@ -123,13 +120,31 @@ export default function MainPage() {
         }
     }, [target, source])
 
+    useEffect(() => {
+        setGridFiles([...
+        gridFiles.sort((a, b) => {
+            if (sort === "name_asc") {
+                return a.props.data.name.localeCompare(b.props.data.name);
+            }
+            else if (sort === "name_desc") {
+                return b.props.data.name.localeCompare(a.props.data.name);
+            }
+            else if (sort === "time_asc") {
+                return a.props.data.createdDate.localeCompare(b.props.data.createdDate);
+            }
+            else if (sort === "time_desc") {
+                return b.props.data.createdDate.localeCompare(a.props.data.createdDate);
+            }
+        })])
+    }, [sort])
+
     return (
         <>
             {isLoading && <ModalLoading isOpen={isLoading} />}
             <Header />
             <Sidebar />
             <BodyFrame hasContext={true}>
-                <BodyHeader text="내 파일" isSortable/>
+                <BodyHeader text="내 파일" isSortable setter={setSort}/>
                 {
                     gridFiles.length === 0 ? <div style={{ height: "calc(100vh - 299px)", textAlign: "center", marginTop: "20px" }}>파일이 없습니다.</div> :
                         <GridBox height="calc(100vh - 299px)">

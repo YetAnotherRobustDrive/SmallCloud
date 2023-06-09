@@ -1,19 +1,20 @@
-import React, { useEffect, useState } from "react";
-import '../../css/dropdown.css'
+import React, { useState } from "react";
+import '../../css/dropdown.css';
 
-export default function SortDropdown() {
+export default function SortDropdown(props) {
 
     const options = [
         { value: "name_asc", label: "이름 ↑" },
         { value: "name_desc", label: "이름 ↓" },
-        { value: "time_asc", label: "시간 ↑" },
-        { value: "time_desc", label: "시간 ↓" }
+        { value: "time_asc", label: "등록순" },
+        { value: "time_desc", label: "최신순" }
     ];
 
     const [isOpen, setIsOpen] = useState(false);
     const [selected, setSelected] = useState(options[0]);
 
     const handleOptionClick = (option) => {
+        props.setter(option.value);
         setSelected(option);
         setIsOpen(false);
     };

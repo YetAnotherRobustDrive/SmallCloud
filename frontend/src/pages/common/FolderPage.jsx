@@ -24,6 +24,8 @@ export default function FolderPage() {
     const [target, setTarget] = useState(0);
     const [source, setSource] = useState({ type: "", id: 0 });
     const [gridFiles, setGridFiles] = useState([]);
+    const [sort, setSort] = useState("name_asc");
+    const [parentRes, setParentRes] = useState({});
     const params = useParams();
     const navigate = useNavigate();
 
@@ -52,17 +54,9 @@ export default function FolderPage() {
             if (!parentRes[0]) {
                 throw parentRes[1];
             }
+            setParentRes(parentRes[1]);
 
-            setGridFiles([
-                <CustomIcon
-                    targetSetter={setTarget}
-                    sourceSetter={setSource}
-                    key={parentRes[1].id}
-                    id={parentRes[1].id}
-                    name={"..."}
-                    type={"folder"}
-                    noContext={true}
-                />,
+            setGridFiles(
                 files.map((data) => {
                     return <CustomIcon
                         onClick={() => {
@@ -72,11 +66,9 @@ export default function FolderPage() {
                         targetSetter={setTarget}
                         sourceSetter={setSource}
                         key={data.id}
-                        id={data.id}
-                        name={data.name}
-                        type={data.type} />
+                        data={data} />
                 })
-            ]
+
             );
         }
         try {
@@ -114,6 +106,23 @@ export default function FolderPage() {
         }
     }, [target, source])
 
+    useEffect(() => {
+        setGridFiles([...
+            gridFiles.sort((a, b) => {
+                if (sort === "name_asc") {
+                    return a.props.data.name.localeCompare(b.props.data.name);
+                }
+                else if (sort === "name_desc") {
+                    return b.props.data.name.localeCompare(a.props.data.name);
+                }
+                else if (sort === "time_asc") {
+                    return a.props.data.createdDate.localeCompare(b.props.data.createdDate);
+                }
+                else if (sort === "time_desc") {
+                    return b.props.data.createdDate.localeCompare(a.props.data.createdDate);
+                }
+            })])
+    }, [sort])
 
     return (
         <>
@@ -121,10 +130,23 @@ export default function FolderPage() {
             <Header />
             <Sidebar />
             <BodyFrame hasContext={true}>
-                <BodyHeader text={name} isSortable />
+                <BodyHeader text={name} isSortable setter={setSort} />
                 {
                     gridFiles.length === 0 ? <div style={{ height: "calc(100vh - 137px)", textAlign: "center", marginTop: "20px" }}>파일이 없습니다.</div> :
                         <GridBox height="calc(100vh - 117px)">
+                            <CustomIcon
+                                targetSetter={setTarget}
+                                sourceSetter={setSource}
+                                key={parentRes.id}
+                                data={
+                                    {
+                                        id: parentRes.id,
+                                        name: "...",
+                                        type: "folder",
+                                    }
+                                }
+                                noContext={true}
+                            />
                             {gridFiles}
                         </GridBox>
                 }

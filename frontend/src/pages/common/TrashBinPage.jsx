@@ -16,6 +16,7 @@ export default function TrashBinPage() {
     const [isLoading, setIsLoading] = useState(true);
     const [selected, setSelected] = useState();
     const [gridFiles, setGridFiles] = useState([]);
+    const [sort, setSort] = useState("name_asc");
 
     useEffect(() => {
         const init = async () => {
@@ -39,9 +40,8 @@ export default function TrashBinPage() {
                             setIsFileView(true);
                         }}
                         key={data.id}
-                        id={data.id}
-                        name={data.name}
-                        type={data.type} />
+                        data={data} 
+                        noContext={true}/>
                 })
             );
         }
@@ -50,13 +50,31 @@ export default function TrashBinPage() {
     }, []);
 
 
+    useEffect(() => {
+        setGridFiles([...
+        gridFiles.sort((a, b) => {
+            if (sort === "name_asc") {
+                return a.props.data.name.localeCompare(b.props.data.name);
+            }
+            else if (sort === "name_desc") {
+                return b.props.data.name.localeCompare(a.props.data.name);
+            }
+            else if (sort === "time_asc") {
+                return a.props.data.createdDate.localeCompare(b.props.data.createdDate);
+            }
+            else if (sort === "time_desc") {
+                return b.props.data.createdDate.localeCompare(a.props.data.createdDate);
+            }
+        })])
+    }, [sort])
+
     return (
         <>
             {isLoading && <ModalLoading isOpen={isLoading} />}
             <Header />
             <Sidebar />
             <BodyFrame>
-                <BodyHeader text="Trash" isSortable />
+                <BodyHeader text="Trash" isSortable setter={setSort}/>
                 <GridBox height="calc(100vh - 117px)">
                     {gridFiles}
                 </GridBox>
