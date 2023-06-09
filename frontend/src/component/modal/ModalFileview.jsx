@@ -27,6 +27,7 @@ export default function ModalFileview(props) {
     const [isGeneralSelected, setIsGeneralSelected] = useState(true);
     const [isNowDownload, setIsNowDownload] = useState(false);
     const [percentage, setPercentage] = useState(0);
+    const [shares, setShares] = useState([]);
     const fileData = props.file;
 
     const handleDownload = async (e) => {
@@ -53,13 +54,18 @@ export default function ModalFileview(props) {
         const fileId = fileData.id;
         const targetName = fileData.shares[e.currentTarget.id].targetName;
         const type = fileData.shares[e.currentTarget.id].type === "MemberShare" ? "MEMBER" : "GROUP";
-        const res = await PostDeleteShare(fileId, targetName, type);
+        const value = {
+            fileId: fileId,
+            targetName: targetName,
+            type: type,
+        }
+        const res = await PostDeleteShare(value);
         if (!res[0]) {
             alert(res[1]);
             return;
         }
         alert("공유가 해제되었습니다.");
-        window.location.reload();
+        setTimeout(() => window.location.reload(), 250);
     }
 
     const handleFileRemove = async (e) => {
@@ -133,7 +139,9 @@ export default function ModalFileview(props) {
         editLabel();
     }, [newLables])
 
-
+    useEffect(() => {
+        setShares(fileData.shares);
+    }, [shares])
     return (
         <>
             {!isNowDownload &&
@@ -256,7 +264,7 @@ export default function ModalFileview(props) {
                 <ModalAddShare
                     fileID={fileData.id}
                     isOpen={isShareOpen}
-                    after={() => { setIsShareOpen(false); window.location.reload(); }}
+                    after={() => { setIsShareOpen(false); setTimeout(() => window.location.reload(), 250);}}
                 />
             }
             {isLabelEditOpen &&

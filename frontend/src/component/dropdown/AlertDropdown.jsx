@@ -37,7 +37,6 @@ export default function AlertDropdown() {
                 alert(res[1]);
                 return;
             }
-            setIsOpen(!isOpen);
             setCount(count - 1);
         }
         rmAlarm();
