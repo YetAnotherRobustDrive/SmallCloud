@@ -553,10 +553,10 @@ class DirectoryControllerTest {
                     TestSnippet.secured(post(url, directory.getId()),
                         user1Token.getAccessToken()))
                 .andDo(print())
+                .andExpect(status().isOk())
                 .andExpect((rst) -> {
                     assertNull(folderRepository.findById(directory.getId()).orElse(null));
                 })
-                .andExpect(status().isOk())
                 .andDo(document(DOCUMENT_NAME,
                     pathParameters(
                         parameterWithName("directoryId").description("디렉터리 id")
