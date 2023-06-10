@@ -29,6 +29,7 @@ import SecurityInfoPage from './mypage/SecurityInfoPage';
 import ServiceInfoPage from './mypage/ServiceInfoPage';
 import SharePage from './common/SharePage';
 import Groups from './cs/Groups';
+import SearchPage from './common/SearchPage';
 
 export default () => {
     const isPrivileged = useSelector(state => state.token.isPrivileged);
@@ -68,6 +69,7 @@ export default () => {
                                 <Route path='/favorites' element={<FavoritesPage />} />
                                 <Route path='/trash' element={<TrashBinPage />} />
                                 <Route path='/share' element={<SharePage />} />
+                                <Route path='/search' element={<SearchPage />} />
 
                                 <Route path='/folder/:fileID' element={<FolderPage />} />
 
