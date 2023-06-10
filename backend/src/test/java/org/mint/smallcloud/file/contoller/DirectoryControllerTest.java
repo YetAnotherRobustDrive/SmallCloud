@@ -39,8 +39,7 @@ import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuild
 import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.post;
 import static org.springframework.restdocs.payload.PayloadDocumentation.fieldWithPath;
 import static org.springframework.restdocs.payload.PayloadDocumentation.requestFields;
-import static org.springframework.restdocs.request.RequestDocumentation.parameterWithName;
-import static org.springframework.restdocs.request.RequestDocumentation.pathParameters;
+import static org.springframework.restdocs.request.RequestDocumentation.*;
 import static org.springframework.security.test.web.servlet.setup.SecurityMockMvcConfigurers.springSecurity;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -796,6 +795,60 @@ class DirectoryControllerTest {
                     })
                     .andExpect(status().isOk())
                     .andDo(document(DOCUMENT_NAME));
+        }
+    }
+
+    @Nested
+    @DisplayName("/directory/search docs")
+    class search {
+        String url = URL_PREFIX + "/search?q={q}";
+        Folder root;
+        Member user1;
+        Folder directory;
+        Folder directory1;
+        Folder direcrtory2;
+        Folder direcrtory3;
+        JwtTokenDto user1Token;
+        Label favoriteLabel;
+        Label label;
+        @BeforeEach
+        public void boot() {
+            user1 = Member.of("user1", "test", "nick");
+            em.persist(user1);
+            root = Folder.createRoot(user1);
+            em.persist(root);
+            favoriteLabel = Label.of(DefaultLabelType.defaultFavorite.getLabelName(), user1);
+            em.persist(favoriteLabel);
+            label = Label.of("label", user1);
+            em.persist(label);
+
+            directory = Folder.createFolder(root, "testFolder1", user1);
+            directory.addLabel(favoriteLabel);
+            em.persist(directory);
+            directory1 = Folder.createFolder(root, "Folder2", user1);
+            directory1.addLabel(label);
+            directory1.addLabel(favoriteLabel);
+            em.persist(directory1);
+            direcrtory2 = Folder.createFolder(root, "test3", user1);
+            em.persist(direcrtory2);
+            direcrtory3 = Folder.createFolder(root, "folder4", user1);
+            em.persist(direcrtory3);
+            user1Token = jwtTokenProvider.generateTokenDto(UserDetailsDto
+                    .builder()
+                    .username(user1.getUsername())
+                    .password(user1.getPassword())
+                    .roles(user1.getRole()).build());
+        }
+        @DisplayName("정상 요청")
+        @Test
+        void ok() throws Exception {
+            mockMvc.perform(
+                            TestSnippet.secured(get(url, "Folder"), user1Token.getAccessToken()))
+                    .andDo(print())
+                    .andExpect(status().isOk())
+                    .andDo(document(DOCUMENT_NAME, requestParameters(
+                                    parameterWithName("q").description("검색할 폴더 이름을 담고 있습니다.")
+                            )));
         }
     }
 }

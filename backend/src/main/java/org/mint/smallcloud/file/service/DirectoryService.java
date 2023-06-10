@@ -12,6 +12,7 @@ import org.mint.smallcloud.user.domain.Member;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
+import java.util.List;
 
 @Service
 @Slf4j
@@ -67,5 +68,11 @@ public class DirectoryService {
 
     public void unFavoriteDirectory(Folder folder, Member user) {
         labelService.detachFavorite(folder, user);
+    }
+
+    public List<Folder> search(String q, Member user) {
+        if (q.isBlank())
+            return List.<Folder>of();
+        return folderRepository.findByFileType_NameLikeAndOwner(q, user);
     }
 }

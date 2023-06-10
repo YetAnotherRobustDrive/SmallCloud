@@ -19,4 +19,7 @@ public interface FolderRepository extends JpaRepository<Folder, Long> {
 
     @Query("select f from Folder f join f.labels l where l.name = :labelName and l.owner.nickname = :ownerName")
     List<Folder> findDataNodeByLabelNameAndOwner(String labelName, String ownerName);
+
+    @Query("select f from Folder f where f.fileType.name like %:q% and f.author = :member")
+    List<Folder> findByFileType_NameLikeAndOwner(String q, Member member);
 }

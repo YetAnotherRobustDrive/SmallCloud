@@ -4,6 +4,7 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.mint.smallcloud.ResponseDto;
 import org.mint.smallcloud.bucket.dto.FileObjectDto;
 import org.mint.smallcloud.bucket.service.StorageService;
 import org.mint.smallcloud.exception.ExceptionStatus;
@@ -13,6 +14,7 @@ import org.mint.smallcloud.file.domain.FileLocation;
 import org.mint.smallcloud.file.domain.FileType;
 import org.mint.smallcloud.file.domain.Folder;
 import org.mint.smallcloud.file.dto.DirectoryMoveDto;
+import org.mint.smallcloud.file.dto.FileDto;
 import org.mint.smallcloud.file.dto.LabelUpdateDto;
 import org.mint.smallcloud.file.repository.FileRepository;
 import org.mint.smallcloud.file.repository.FolderRepository;
@@ -39,6 +41,7 @@ import javax.validation.Valid;
 import java.io.InputStream;
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
+import java.util.List;
 import java.util.Optional;
 
 @RestController
@@ -198,6 +201,17 @@ public class FileController {
         UserDetails user = getLoginUser();
         fileFacadeService.unFavorite(fileId, user.getUsername());
     }
+
+    @Secured(Roles.S_COMMON)
+    @GetMapping("/search")
+    public ResponseDto<List<FileDto>> search(@RequestParam("q") String q) {
+        UserDetails user = getLoginUser();
+        List<FileDto> files = fileFacadeService.search(q, user.getUsername());
+        return ResponseDto.<List<FileDto>>builder()
+                .result(files)
+                .build();
+    }
+
 
     private String encode(String fileName) {
         try {

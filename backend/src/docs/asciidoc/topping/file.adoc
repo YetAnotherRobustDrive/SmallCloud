@@ -172,5 +172,12 @@ operation::file/unFavorite/wrongToken[snippets='http-response']
 
 IMPORTANT: 잘못된 토큰
 
+=== 파일 검색
+
+operation::file/search/ok[snippets='http-request,request-parameters']
+
+==== 성공
+
+operation::file/search/ok[snippets='http-response']
 
 

@@ -40,11 +40,11 @@ import java.util.List;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.documentationConfiguration;
+import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.get;
 import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.post;
 import static org.springframework.restdocs.payload.PayloadDocumentation.fieldWithPath;
 import static org.springframework.restdocs.payload.PayloadDocumentation.requestFields;
-import static org.springframework.restdocs.request.RequestDocumentation.parameterWithName;
-import static org.springframework.restdocs.request.RequestDocumentation.pathParameters;
+import static org.springframework.restdocs.request.RequestDocumentation.*;
 import static org.springframework.security.test.web.servlet.setup.SecurityMockMvcConfigurers.springSecurity;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -799,4 +799,63 @@ class FileControllerTest {
         }
     }
 
+    @Nested
+    @DisplayName("/files/search docs")
+    class search {
+        String url = URL_PREFIX + "/search?q={q}";
+        private Folder parent;
+        private DataNode dataNode;
+        private DataNode dataNode1;
+        private DataNode dataNode2;
+        private DataNode dataNode3;
+        private Label label;
+        private Label favoriteLabel;
+        private FileType fileType1;
+        private FileType fileType2;
+        private FileType fileType3;
+
+
+        @BeforeEach
+        public void boot() {
+            em.persist(rootFolder);
+            parent = (Folder) Folder.createFolder(rootFolder, "folder1", member);
+            em.persist(parent);
+
+            label = Label.of("testLabel1", member);
+            em.persist(label);
+
+            fileType1 = FileType.of("testType1", "testType1");
+            fileType2 = FileType.of("Type2", "testType2");
+            fileType3 = FileType.of("test", "testType3");
+
+            favoriteLabel = Label.of(DefaultLabelType.defaultFavorite.getLabelName(), member);
+            em.persist(favoriteLabel);
+
+            dataNode = DataNode.createFile(rootFolder, fileType, fileLocation, 100L, member);
+            dataNode.addLabel(favoriteLabel);
+            em.persist(dataNode);
+            dataNode1 = DataNode.createFile(parent, fileType1, fileLocation, 100L, member);
+            dataNode1.addLabel(label);
+            dataNode1.addLabel(favoriteLabel);
+            em.persist(dataNode1);
+            dataNode2 = DataNode.createFile(parent, fileType2, fileLocation, 100L, member);
+            em.persist(dataNode2);
+            dataNode3 = DataNode.createFile(parent, fileType3, fileLocation, 100L, member);
+            dataNode3.addLabel(label);
+            em.persist(dataNode3);
+            em.flush();
+        }
+
+        @Test
+        @DisplayName("정상 요청(파일 이름으로 검색)")
+        void ok() throws Exception {
+            mockMvc.perform(
+                            TestSnippet.secured(get(url, "test"), memberToken.getAccessToken()))
+                    .andDo(print())
+                    .andExpect(status().isOk())
+                    .andDo(document(DOCUMENT_NAME, requestParameters(
+                            parameterWithName("q").description("검색할 파일 이름을 담고 있습니다.")
+                    )));
+        }
+    }
 }

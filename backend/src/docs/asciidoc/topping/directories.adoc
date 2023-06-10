@@ -138,5 +138,14 @@ operation::Directory/unFavorite/okOther[snippets='http-response']
 
 IMPORTANT: 다른 라벨이 붙어있을 때
 
+=== 폴더 검색
+
+operation::Directory/search/ok[snippets='http-request,request-parameters']
+
+==== 성공
+
+operation::Directory/search/ok[snippets='http-response']
+
+
 
 
