@@ -5,17 +5,9 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
-    "@electron/remote": "^2.0.10",
     "@material-ui/core": "^4.12.4",
     "@reduxjs/toolkit": "^1.9.3",
-    "@testing-library/jest-dom": "^5.16.5",
-    "@testing-library/react": "^13.4.0",
-    "@testing-library/user-event": "^14.4.3",
     "chart.js": "^4.2.1",
-    "concurrently": "^8.2.0",
-    "cross-env": "^7.0.3",
-    "electron": "^25.1.0",
-    "electron-is-dev": "^2.0.0",
     "jwt-decode": "^3.1.2",
     "react": "^18.2.0",
     "react-chartjs-2": "^5.2.0",
@@ -27,8 +19,19 @@
     "react-scripts": "5.0.1",
     "reactflow": "^11.7.1",
     "redux-persist": "^6.0.0",
-    "wait-on": "^7.0.1",
     "web-vitals": "^2.1.4"
+  },
+  "devDependencies": {
+    "cross-env": "^7.0.3",
+    "wait-on": "^7.0.1",
+    "@electron/remote": "^2.0.10",
+    "@testing-library/jest-dom": "^5.16.5",
+    "@testing-library/react": "^13.4.0",
+    "@testing-library/user-event": "^14.4.3",
+    "concurrently": "^8.2.0",
+    "electron": "^25.1.0",
+    "electron-is-dev": "^2.0.0",
+    "electron-builder": "^23.6.0"
   },
   "scripts": {
     "electron-serve": "concurrently -k \"cross-env BROWSER=none npm run start\" \"npm run electron-start\"",
@@ -37,7 +40,46 @@
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
-    "eject": "react-scripts eject"
+    "eject": "react-scripts eject",
+    "deploy:osx": "electron-builder --mac",
+    "deploy:win": "npm run deploy:win32 && npm run deploy:win64",
+    "deploy:win32": "electron-builder --win nsis:ia32",
+    "deploy:win64": "electron-builder --win nsis:x64"
+  },
+  "build": {
+    "productName": "YARD",
+    "appId": "org.mint.smallcloud",
+    "asar": true,
+    "mac": {
+      "target": [
+        "default"
+      ]
+    },
+    "dmg": {
+      "title": "Install YARD"
+    },
+    "win": {
+      "target": [
+        {
+          "target": "nsis",
+          "arch": [
+            "x64",
+            "ia32"
+          ]
+        }
+      ]
+    },
+    "nsis": {
+      "oneClick": false,
+      "allowToChangeInstallationDirectory": false,
+      "createDesktopShortcut": true
+    },
+    "directories": {
+      "buildResources": "./resources/installer/",
+      "output": "./dist/",
+      "app": "."
+    },
+    "extends": null
   },
   "eslintConfig": {
     "extends": [
