@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/ping")
 @RequiredArgsConstructor
 public class PingController {
-    private final PingService pingService;
+    private final PingFacadeService pingService;
 
     @GetMapping
     public String ping() {
