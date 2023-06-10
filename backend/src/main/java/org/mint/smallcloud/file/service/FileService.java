@@ -65,4 +65,9 @@ public class FileService {
         labelService.detachFavorite(file, user);
     }
 
+    public List<File> search(String q, Member user) {
+        if (q.isBlank())
+            return List.<File>of();
+        return fileRepository.findByFileType_NameLikeAndAuthor("%" + q + "%", user);
+    }
 }

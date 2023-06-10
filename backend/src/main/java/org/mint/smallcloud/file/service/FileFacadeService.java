@@ -13,6 +13,7 @@ import org.mint.smallcloud.user.service.MemberThrowerService;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
+import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -67,5 +68,10 @@ public class FileFacadeService {
         Member user = memberThrowerService.getMemberByUsername(username);
         fileThrowerService.checkAccessRight(targetFile, username);
         fileService.unFavoriteFile(targetFile, user);
+    }
+
+    public List<File> search(String q, String username) {
+        Member user = memberThrowerService.getMemberByUsername(username);
+        return fileService.search(q, user);
     }
 }

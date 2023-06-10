@@ -4,6 +4,7 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.mint.smallcloud.ResponseDto;
 import org.mint.smallcloud.bucket.dto.FileObjectDto;
 import org.mint.smallcloud.bucket.service.StorageService;
 import org.mint.smallcloud.exception.ExceptionStatus;
@@ -39,6 +40,7 @@ import javax.validation.Valid;
 import java.io.InputStream;
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
+import java.util.List;
 import java.util.Optional;
 
 @RestController
@@ -198,6 +200,17 @@ public class FileController {
         UserDetails user = getLoginUser();
         fileFacadeService.unFavorite(fileId, user.getUsername());
     }
+
+    @Secured(Roles.S_COMMON)
+    @GetMapping("/search")
+    public ResponseDto<List<File>> search(@RequestParam("q") String q) {
+        UserDetails user = getLoginUser();
+        List<File> files = fileFacadeService.search(q, user.getUsername());
+        return ResponseDto.<List<File>>builder()
+                .result(files)
+                .build();
+    }
+
 
     private String encode(String fileName) {
         try {
