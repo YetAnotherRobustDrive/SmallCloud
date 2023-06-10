@@ -68,6 +68,6 @@ public class FileService {
     public List<File> search(String q, Member user) {
         if (q.isBlank())
             return List.<File>of();
-        return fileRepository.findByFileType_NameLikeAndAuthor("%" + q + "%", user);
+        return fileRepository.findByFileType_NameLikeAndOwner(q, user);
     }
 }

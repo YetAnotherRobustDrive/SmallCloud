@@ -2,6 +2,7 @@ package org.mint.smallcloud.file.contoller;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.mint.smallcloud.ResponseDto;
 import org.mint.smallcloud.exception.ExceptionStatus;
 import org.mint.smallcloud.exception.ServiceException;
 import org.mint.smallcloud.file.dto.*;
@@ -111,5 +112,15 @@ public class DirectoryController {
     public void unFavorite(@PathVariable("directoryId") Long directoryId) {
         UserDetails user = getLoginUser();
         directoryFacadeService.unFavorite(directoryId, user.getUsername());
+    }
+
+    @Secured(Roles.S_COMMON)
+    @GetMapping("/search")
+    public ResponseDto<List<DirectoryDto>> search(@RequestParam("q") String q) {
+        UserDetails user = getLoginUser();
+        List<DirectoryDto> folders = directoryFacadeService.search(q, user.getUsername());
+        return ResponseDto.<List<DirectoryDto>>builder()
+                .result(folders)
+                .build();
     }
 }

@@ -7,6 +7,8 @@ import org.mint.smallcloud.exception.ServiceException;
 import org.mint.smallcloud.file.domain.File;
 import org.mint.smallcloud.file.domain.Folder;
 import org.mint.smallcloud.file.dto.DirectoryMoveDto;
+import org.mint.smallcloud.file.dto.FileDto;
+import org.mint.smallcloud.file.mapper.FileMapper;
 import org.mint.smallcloud.file.repository.FileRepository;
 import org.mint.smallcloud.user.domain.Member;
 import org.mint.smallcloud.user.service.MemberThrowerService;
@@ -14,6 +16,7 @@ import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -25,6 +28,7 @@ public class FileFacadeService {
     private final MemberThrowerService memberThrowerService;
     private final FileService fileService;
     private final FileRepository fileRepository;
+    private final FileMapper fileMapper;
 
     public void delete(Long fileId, String username) {
         File file = fileThrowerService.getFileById(fileId);
@@ -70,8 +74,8 @@ public class FileFacadeService {
         fileService.unFavoriteFile(targetFile, user);
     }
 
-    public List<File> search(String q, String username) {
+    public List<FileDto> search(String q, String username) {
         Member user = memberThrowerService.getMemberByUsername(username);
-        return fileService.search(q, user);
+        return fileService.search(q, user).stream().map(fileMapper::toFileDto).collect(Collectors.toList());
     }
 }

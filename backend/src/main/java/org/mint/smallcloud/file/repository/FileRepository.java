@@ -16,5 +16,6 @@ public interface FileRepository extends JpaRepository<File, Long> {
     @Query("select f from File f join f.labels l where l.name = :labelName and l.owner.nickname = :ownerName")
     List<File> findDataNodeByLabelNameAndOwner(String labelName, String ownerName);
 
-    List<File> findByFileType_NameLikeAndAuthor(String q, Member member);
+    @Query("select f from File f where f.fileType.name like %:q% and f.author = :member")
+    List<File> findByFileType_NameLikeAndOwner(String q, Member member);
 }

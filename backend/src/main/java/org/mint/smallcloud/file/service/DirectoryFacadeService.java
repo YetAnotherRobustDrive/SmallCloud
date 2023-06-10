@@ -122,4 +122,9 @@ public class DirectoryFacadeService {
         directoryThrowerService.checkAccessRight(folder, username);
         directoryService.unFavoriteDirectory(folder, user);
     }
+
+    public List<DirectoryDto> search(String q, String username) {
+        Member user = memberThrowerService.getMemberByUsername(username);
+        return directoryService.search(q, user).stream().map(folderMapper::toDirectoryDto).collect(Collectors.toList());
+    }
 }

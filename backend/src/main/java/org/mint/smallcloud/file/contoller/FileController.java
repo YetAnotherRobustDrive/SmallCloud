@@ -14,6 +14,7 @@ import org.mint.smallcloud.file.domain.FileLocation;
 import org.mint.smallcloud.file.domain.FileType;
 import org.mint.smallcloud.file.domain.Folder;
 import org.mint.smallcloud.file.dto.DirectoryMoveDto;
+import org.mint.smallcloud.file.dto.FileDto;
 import org.mint.smallcloud.file.dto.LabelUpdateDto;
 import org.mint.smallcloud.file.repository.FileRepository;
 import org.mint.smallcloud.file.repository.FolderRepository;
@@ -203,10 +204,10 @@ public class FileController {
 
     @Secured(Roles.S_COMMON)
     @GetMapping("/search")
-    public ResponseDto<List<File>> search(@RequestParam("q") String q) {
+    public ResponseDto<List<FileDto>> search(@RequestParam("q") String q) {
         UserDetails user = getLoginUser();
-        List<File> files = fileFacadeService.search(q, user.getUsername());
-        return ResponseDto.<List<File>>builder()
+        List<FileDto> files = fileFacadeService.search(q, user.getUsername());
+        return ResponseDto.<List<FileDto>>builder()
                 .result(files)
                 .build();
     }
