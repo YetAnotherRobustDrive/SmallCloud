@@ -8,7 +8,7 @@ import UploadBtn from "../../component/main/UploadBtn";
 import ModalFileview from "../../component/modal/ModalFileview";
 import ModalLoading from "../../component/modal/ModalLoading";
 import Sidebar from "../../component/sidebar/Sidebar";
-import GetFavoriteList from "../../services/file/GetFavoriteList";
+import GetFavoriteList from "../../services/label/GetFavoriteList";
 
 export default function FavoritesPage() {
     const [isFileView, setIsFileView] = useState(false);

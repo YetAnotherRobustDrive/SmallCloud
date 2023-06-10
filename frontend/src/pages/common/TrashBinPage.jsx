@@ -8,7 +8,7 @@ import UploadBtn from "../../component/main/UploadBtn";
 import ModalFileview from "../../component/modal/ModalFileview";
 import ModalLoading from "../../component/modal/ModalLoading";
 import Sidebar from "../../component/sidebar/Sidebar";
-import GetTrashFileList from "../../services/file/GetTrashFileList";
+import GetTrashFileList from "../../services/label/GetTrashFileList";
 
 export default function TrashBinPage() {
 
