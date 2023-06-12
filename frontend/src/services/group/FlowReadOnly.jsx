@@ -1,28 +1,20 @@
-import React, { useCallback, useEffect, useRef, useState } from 'react';
-import { BiAddToQueue, BiSave } from 'react-icons/bi';
+import React, { useEffect, useRef, useState } from 'react';
 import ReactFlow, {
-    ControlButton, Controls,
-    addEdge, applyNodeChanges,
-    updateEdge
+    Controls
 } from 'reactflow';
 
 import 'reactflow/dist/style.css';
 import GetGroupTree from './GetGroupTree';
-import PostCreateGroup from './PostCreateGroup';
-import PostDeleteGroup from './PostDeleteGroup';
 
 export default function Flow(props) {
     const [nodes, setNodes] = useState([]);
     const [edges, setEdges] = useState([]);
-    const [prevEdges, setPrevEdges] = useState([]);
 
     const [isRootExist, setIsRootExist] = useState(false);
 
-    const edgeUpdateSuccessful = useRef(true);
     const edgeRef = useRef();
     const nodeRef = useRef();
     const isRootExistRef = useRef();
-    const tempRef = useRef();
 
     isRootExistRef.current = isRootExist;
     edgeRef.current = edges;
@@ -31,7 +23,8 @@ export default function Flow(props) {
     useEffect(() => {
         const init = async () => {
             let tmpNodes = [];
-            const res = await GetGroupTree();
+            const res = await GetGroupTree(true);
+
             res.find(elem => {
                 if (elem.source === "__ROOT__") {
                     tmpNodes = [{
@@ -59,7 +52,6 @@ export default function Flow(props) {
                 delete item.y;
             });
             setEdges(tmpRes);
-            setPrevEdges(tmpRes);
 
             for (let index = 0; index < tmpResForNode.length; index++) {
                 const elem = tmpResForNode[index];

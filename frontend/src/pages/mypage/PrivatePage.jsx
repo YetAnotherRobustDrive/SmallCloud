@@ -62,7 +62,7 @@ export default function PrivatePage() {
         const res = await UpdateUserInfo(value, isImgChanged);
         if (!res[0]) {
             setIsFail(true);
-            setMessage(res[1]);
+            setMessage(res[1] === undefined ? "잘못된 값이 있습니다." : res[1]);
             return;
         }
         setIsSuccess(true);

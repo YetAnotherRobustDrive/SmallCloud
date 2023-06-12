@@ -2,7 +2,7 @@ import configData from "../../config/config.json"
 import RefreshToken from '../token/RefreshToken'
 import PostCreateGroup from "./PostCreateGroup";
 
-export default async function GetGroupTree() {
+export default async function GetGroupTree(isReadOnly = false) {
     const rootName = "__ROOT__"
     await RefreshToken();
     const accessToken = localStorage.getItem("accessToken");
@@ -32,7 +32,10 @@ export default async function GetGroupTree() {
     try {
         const findRootRes = await getChildren(rootName);
         //루트가 없으면 루트 생성
-        if (findRootRes === null) { 
+        if (findRootRes === null) {
+            if (isReadOnly) {
+                return [];
+            } 
             const rootCreateRes = await PostCreateGroup(rootName, null);
             if (rootCreateRes[0] === false) {
                 throw rootCreateRes[1];

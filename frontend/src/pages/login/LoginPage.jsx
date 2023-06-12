@@ -79,7 +79,7 @@ export default function LoginPage() {
         <form className="login" onLoad={getName} onSubmit={handleSubmit}>
             <img src={logo_img} alt="LOGO" />
             <span className="namespan">{name}</span>
-            <input name='id' type="text" placeholder="ID" />
+            <input name='id' type="text" placeholder="ID" autoFocus />
             <input name='password' type="password" placeholder="PW" />
             <div className="buttons">
                 <Link to='/register' className="link">회원가입</Link>
