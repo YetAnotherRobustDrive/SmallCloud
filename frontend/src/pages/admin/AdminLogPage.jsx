@@ -1,11 +1,24 @@
-import React from "react";
+import React, { useState } from "react";
 import BodyFrame from "../../component/Bodyframe";
 import Header from "../../component/header/Header";
 import SidebarAdmin from "../../component/sidebar/SidebarAdmin";
 import BodyHeader from "../../component/main/BodyHeader";
+import { IoIosArrowDown, IoIosArrowUp } from "react-icons/io";
+
 import "../../css/admin.css"
 
 export default function AdminLogPage() {
+
+    const [isOpen, setIsOpen] = useState(false);
+    const [log, setLog] = useState([
+        {
+            time: "2021-08-01 12:00:00",
+            user: "admin",
+            action: "로그인",
+            status: "성공",
+            ip: "111.111.111.111",
+        },
+    ]);
 
     const actionList = [
         {
@@ -122,41 +135,70 @@ export default function AdminLogPage() {
             <SidebarAdmin />
             <BodyFrame>
                 <BodyHeader text="시스템로그 확인" />
-                <form className="logOptionSelect">
-                    <span className="title" htmlFor="action">종류 및 결과</span>
-                    <div className="actionSelect">
-                        <select className="action" name="action">
-                            <option value="all">전체</option>
-                            {actionList.map((action, index) => (
-                                <optgroup key={index} label={action.title}>
-                                    {action.list.map((item, index) => (
-                                        <option key={index} value={item.value}>{item.name}</option>
+                <div className="logOptionOpen" onClick={() => setIsOpen(!isOpen)}>검색 옵션 {isOpen ? <IoIosArrowUp /> : <IoIosArrowDown />}
+                    {isOpen &&
+                        <form className="logOptionSelect">
+                            <span className="title" htmlFor="action">종류 및 결과</span>
+                            <div className="actionSelect">
+                                <select className="action" name="action">
+                                    <option value="all">전체</option>
+                                    {actionList.map((action, index) => (
+                                        <optgroup key={index} label={action.title}>
+                                            {action.list.map((item, index) => (
+                                                <option key={index} value={item.value}>{item.name}</option>
+                                            ))}
+                                        </optgroup>
                                     ))}
-                                </optgroup>
-                            ))}
-                        </select>
-                        <select className="status" name="status">
-                            <option value="all">전체</option>
-                            <option value="success">성공</option>
-                            <option value="fail">실패</option>
-                        </select>
-                    </div>
-                    <span className="title">시간</span>
-                    <div className="timeSelect">
-                        <input className="start" type="datetime-local" name="start" />
-                        <span className="between">~</span>
-                        <input className="end" type="datetime-local" name="end" />
-                    </div>
-                    <span className="title">닉네임</span>
-                    <div className="userSelect" >
-                        <input className="user" type="text" name="user" placeholder="사용자 닉네임을 입력하세요. (입력하지 않으면 전체 검색)"/>
-                    </div>
-                    <div className="searchButton">
-                        <button type="reset">초기화</button>
-                        <button type="submit">검색</button>
-                    </div>
-                </form>
-
+                                </select>
+                                <select className="status" name="status">
+                                    <option value="all">전체</option>
+                                    <option value="success">성공</option>
+                                    <option value="fail">실패</option>
+                                </select>
+                            </div>
+                            <span className="title">시간</span>
+                            <div className="timeSelect">
+                                <input className="start" type="datetime-local" name="start" />
+                                <span className="between">~</span>
+                                <input className="end" type="datetime-local" name="end" />
+                            </div>
+                            <span className="title">닉네임</span>
+                            <div className="userSelect" >
+                                <input className="user" type="text" name="user" placeholder="사용자 닉네임을 입력하세요. (입력하지 않으면 전체 검색)" />
+                            </div>
+                            <div className="searchButton">
+                                <button type="reset">초기화</button>
+                                <button type="submit">검색</button>
+                            </div>
+                        </form>
+                    }
+                </div>
+                <div className="logTable">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>시간</th>
+                                <th>닉네임</th>
+                                <th>종류</th>
+                                <th>결과</th>
+                                <th>IP</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {
+                                log.map((item, index) => (
+                                    <tr key={index}>
+                                        <td>{item.time}</td>
+                                        <td>{item.user}</td>
+                                        <td>{item.action}</td>
+                                        <td>{item.status}</td>
+                                        <td>{item.ip}</td>
+                                    </tr>
+                                ))
+                            }
+                        </tbody>
+                    </table>
+                </div>
             </BodyFrame>
         </>
     )

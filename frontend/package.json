@@ -37,7 +37,7 @@
     "electron-serve": "concurrently -k \"cross-env BROWSER=none npm run start\" \"npm run electron-start\"",
     "electron-build": "",
     "electron-start": "wait-on tcp:127.0.0.1:3000 && electron .",
-    "start": "react-scripts start",
+    "start": "WATCHPACK_POLLING=true react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
