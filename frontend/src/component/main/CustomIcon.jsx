@@ -14,10 +14,10 @@ export default function CustomIcon(props) {
 
     const handleOnClick = (e) => {
         e.preventDefault();
-        if (props.isDeleted === true) {
-            return;
-        }
         if (props.data.type === "folder" ) {
+            if (props.isDeleted === true) {
+                return;
+            }
             navigate("/folder/" + props.data.id);
             return;
         }
