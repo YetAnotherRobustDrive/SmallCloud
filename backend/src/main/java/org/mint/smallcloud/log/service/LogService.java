@@ -7,6 +7,9 @@ import org.mint.smallcloud.log.dto.ResponseLogDto;
 import org.mint.smallcloud.log.mapper.LogMapper;
 import org.mint.smallcloud.log.user.UserLog;
 import org.mint.smallcloud.log.user.UserLogRepository;
+import org.mint.smallcloud.user.domain.Member;
+import org.mint.smallcloud.user.repository.MemberRepository;
+import org.mint.smallcloud.user.service.MemberThrowerService;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -19,15 +22,12 @@ import java.util.stream.Collectors;
 @Transactional
 public class LogService {
     private final UserLogRepository userLogRepository;
+    private final MemberThrowerService memberThrowerService;
     private final LogMapper logMapper;
 
-    public List<ResponseLogDto> findLogs(RequestLogDto requestLogDto) {
-        List<UserLog> userLogs = userLogRepository.findLogs(
-                requestLogDto.getNickName(),
-                requestLogDto.getStartTime(),
-                requestLogDto.getEndTime(),
-                requestLogDto.getStatus(),
-                requestLogDto.getAction());
+    public List<ResponseLogDto> findLoginLogsByUser(String username) {
+        Member member = memberThrowerService.getMemberByUsername(username);
+        List<UserLog> userLogs = userLogRepository.findByActionStartsWithAndMember("/ping", member);
         return userLogs.stream()
                 .map(logMapper::toResponseLogDto)
                 .collect(Collectors.toList());
