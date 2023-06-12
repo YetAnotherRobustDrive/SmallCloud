@@ -37,9 +37,6 @@ export default function SidebarAdmin() {
       <div className="menuBox">
         <Link className="link">시스템 로그</Link>
       </div>
-      <div className="menuBox">
-        <Link className="link">보안 관리</Link>
-      </div>
       <div className="filetreeStub" />
       <Footer />
     </div>
