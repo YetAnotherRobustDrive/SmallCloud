@@ -35,7 +35,7 @@ export default function SidebarAdmin() {
         <Link className="link" to='/admin/user/register'>사용자 등록</Link>
       </div>
       <div className="menuBox">
-        <Link className="link">시스템 로그</Link>
+        <Link className="link" to='/admin/log' >시스템 로그</Link>
       </div>
       <div className="filetreeStub" />
       <Footer />
