@@ -20,6 +20,7 @@ export default async function GetLabelSearch(str) {
         const folders = data.folders.map(e => {
             e.type = "folder";
             e.isFavorite = e.labels.find(e => e.name === "!$@*%&Favorite") !== undefined;
+            e.isShareExist = e.shares.length !== 0;
             e.labels = e.labels.filter(e => e.name.startsWith("!$@*%&") === false);
             return e;
         });
@@ -39,6 +40,7 @@ export default async function GetLabelSearch(str) {
             }
             e.type = "file";
             e.isFavorite = e.labels.find(e => e.name === "!$@*%&Favorite") !== undefined;
+            e.isShareExist = e.shares.length !== 0;
             e.labels = e.labels.filter(e => e.name.startsWith("!$@*%&") === false);
             return e;
         });
