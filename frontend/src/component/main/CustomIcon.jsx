@@ -72,7 +72,7 @@ export default function CustomIcon(props) {
     }
 
     const contextMenu = (props.data.type == "file" ? <></> : <ContextFolder folderID={props.data.id} isDeleted={props.data.isDeleted} isFavorite={props.data.isFavorite} />);
-    console.log(props.data);
+
     return (
         <>
             {props.noContext !== true &&
