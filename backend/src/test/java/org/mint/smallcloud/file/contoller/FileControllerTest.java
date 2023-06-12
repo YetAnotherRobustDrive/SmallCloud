@@ -10,6 +10,7 @@ import org.mint.smallcloud.TestSnippet;
 import org.mint.smallcloud.file.domain.*;
 import org.mint.smallcloud.file.dto.DirectoryMoveDto;
 import org.mint.smallcloud.file.dto.LabelUpdateDto;
+import org.mint.smallcloud.file.dto.UsageDto;
 import org.mint.smallcloud.file.repository.FileRepository;
 import org.mint.smallcloud.label.domain.DefaultLabelType;
 import org.mint.smallcloud.label.domain.Label;
@@ -856,6 +857,59 @@ class FileControllerTest {
                     .andDo(document(DOCUMENT_NAME, requestParameters(
                             parameterWithName("q").description("검색할 파일 이름을 담고 있습니다.")
                     )));
+        }
+    }
+
+    @Nested
+    @DisplayName("/usage docs")
+    class usage {
+        String url = URL_PREFIX + "/usage";
+        private Folder parent;
+        private DataNode dataNode;
+        private DataNode dataNode1;
+        private DataNode dataNode2;
+        private DataNode dataNode3;
+
+        @BeforeEach
+        public void boot() {
+            em.persist(rootFolder);
+            parent = (Folder) Folder.createFolder(rootFolder, "folder1", member);
+            em.persist(parent);
+
+
+            dataNode = DataNode.createFile(rootFolder, fileType, fileLocation, 100L, member);
+            em.persist(dataNode);
+            dataNode1 = DataNode.createFile(parent, fileType, fileLocation, 200L, member);
+            em.persist(dataNode1);
+            dataNode2 = DataNode.createFile(parent, fileType, fileLocation, 300L, member);
+            em.persist(dataNode2);
+            dataNode3 = DataNode.createFile(parent, fileType, fileLocation, 120L, member);
+            em.persist(dataNode3);
+            em.flush();
+        }
+
+        @Test
+        @DisplayName("정상 요청")
+        void ok() throws Exception {
+            mockMvc.perform(
+                            TestSnippet.secured(get(url), memberToken.getAccessToken()))
+                    .andDo(print())
+                    .andExpect(status().isOk())
+                    .andExpect(result -> {
+                        UsageDto response = objectMapper.readValue(result.getResponse().getContentAsString(), UsageDto.class);
+                        assertThat(response.getUsed()).isEqualTo(820L); //setup 부분에 하나 더 있음.
+                    })
+                    .andDo(document(DOCUMENT_NAME));
+        }
+
+        @Test
+        @DisplayName("잘못된 토큰")
+        void wrongToken() throws Exception {
+            mockMvc.perform(
+                            TestSnippet.secured(get(url), "testWrongToken"))
+                    .andExpect(status().isBadRequest())
+                    .andDo(print())
+                    .andDo(document(DOCUMENT_NAME));
         }
     }
 }

@@ -18,4 +18,8 @@ public interface FileRepository extends JpaRepository<File, Long> {
 
     @Query("select f from File f where f.fileType.name like %:q% and f.author = :member")
     List<File> findByFileType_NameLikeAndOwner(String q, Member member);
+
+    @Query("select sum(f.size) from File f where f.author = :user")
+    Long sumSizeByOwner(Member user);
+
 }
