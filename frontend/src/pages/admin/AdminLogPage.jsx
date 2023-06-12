@@ -137,7 +137,7 @@ export default function AdminLogPage() {
                 <BodyHeader text="시스템로그 확인" />
                 <div className="logOptionOpen" onClick={() => setIsOpen(!isOpen)}>검색 옵션 {isOpen ? <IoIosArrowUp /> : <IoIosArrowDown />}
                     {isOpen &&
-                        <form className="logOptionSelect">
+                        <form className="logOptionSelect" onClick={e => e.stopPropagation()}>
                             <span className="title" htmlFor="action">종류 및 결과</span>
                             <div className="actionSelect">
                                 <select className="action" name="action">
