@@ -2,6 +2,8 @@ package org.mint.smallcloud.log.user;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
+import org.mint.smallcloud.user.domain.Member;
+import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
 import javax.persistence.EntityManager;
@@ -99,4 +101,6 @@ public class UserLogRepository {
         }
         return query.getResultList();
     }
+    
+    List<UserLog> findByActionStartsWithAndMember(String action, Member member);
 }
