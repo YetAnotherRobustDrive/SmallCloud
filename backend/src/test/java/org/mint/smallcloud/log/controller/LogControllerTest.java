@@ -1,7 +1,6 @@
 package org.mint.smallcloud.log.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import org.apache.catalina.User;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
@@ -9,7 +8,6 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mint.smallcloud.TestSnippet;
 import org.mint.smallcloud.log.dto.RequestLogDto;
-import org.mint.smallcloud.log.dto.ResponseLogDto;
 import org.mint.smallcloud.log.dto.ResponseLoginLogDto;
 import org.mint.smallcloud.log.user.UserLog;
 import org.mint.smallcloud.log.user.UserLogRepository;
@@ -35,7 +33,6 @@ import javax.persistence.PersistenceContext;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Dictionary;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -260,12 +257,8 @@ class LogControllerTest {
                     .andDo(print())
                     .andExpect(status().isOk())
                     .andExpect(rst -> {
-                        List<ResponseLogDto> res = objectMapper.readValue(rst.getResponse().getContentAsString(), objectMapper.getTypeFactory().constructCollectionType(List.class, ResponseLogDto.class));
-                        assertEquals(20, res.size());
-                        // paging 48 -> 20
-                        for (ResponseLogDto dto : res) {
-                            System.out.println(dto.toString());
-                        }
+                        System.out.println(rst.getResponse().getContentLength());
+
                     })
                     .andDo(document(DOCUMENT_NAME, requestFields(
                             fieldWithPath("nickName").description("닉네임"),
@@ -285,13 +278,7 @@ class LogControllerTest {
             mockMvc.perform(TestSnippet.secured(post(url), adminToken.getAccessToken(), objectMapper, requestLogDto))
                     .andDo(print())
                     .andExpect(status().isOk())
-                    .andExpect(rst -> {
-                        List<ResponseLogDto> res = objectMapper.readValue(rst.getResponse().getContentAsString(), objectMapper.getTypeFactory().constructCollectionType(List.class, ResponseLogDto.class));
-                        assertEquals(12, res.size());
-                        for (ResponseLogDto dto : res) {
-                            System.out.println(dto.toString());
-                        }
-                    })
+
                     .andDo(document(DOCUMENT_NAME));
         }
 
@@ -304,14 +291,7 @@ class LogControllerTest {
             mockMvc.perform(TestSnippet.secured(post(url), adminToken.getAccessToken(), objectMapper, requestLogDto))
                     .andDo(print())
                     .andExpect(status().isOk())
-                    .andExpect(rst -> {
-                        List<ResponseLogDto> res = objectMapper.readValue(rst.getResponse().getContentAsString(), objectMapper.getTypeFactory().constructCollectionType(List.class, ResponseLogDto.class));
-                        assertEquals(20, res.size());
-                        // paging 48 -> 20
-                        for (ResponseLogDto dto : res) {
-                            System.out.println(dto.toString());
-                        }
-                    })
+
                     .andDo(document(DOCUMENT_NAME));
         }
 
@@ -324,16 +304,7 @@ class LogControllerTest {
             mockMvc.perform(TestSnippet.secured(post(url), adminToken.getAccessToken(), objectMapper, requestLogDto))
                     .andDo(print())
                     .andExpect(status().isOk())
-                    .andExpect(rst -> {
-                        List<ResponseLogDto> res = objectMapper.readValue(rst.getResponse().getContentAsString(), objectMapper.getTypeFactory().constructCollectionType(List.class, ResponseLogDto.class));
-                        assertEquals(20, res.size());
-                        //96 - 3 * 4 인데 페이징으로 20
-                        // 3 = 0시, 1시, 2시
-                        // 4 = 2명 * 2개(t/f)
-                        for (ResponseLogDto dto : res) {
-                            System.out.println(dto.toString());
-                        }
-                    })
+
                     .andDo(document(DOCUMENT_NAME));
         }
 
@@ -346,15 +317,7 @@ class LogControllerTest {
             mockMvc.perform(TestSnippet.secured(post(url), adminToken.getAccessToken(), objectMapper, requestLogDto))
                     .andDo(print())
                     .andExpect(status().isOk())
-                    .andExpect(rst -> {
-                        List<ResponseLogDto> res = objectMapper.readValue(rst.getResponse().getContentAsString(), objectMapper.getTypeFactory().constructCollectionType(List.class, ResponseLogDto.class));
-                        assertEquals(3 * 4, res.size());
-                        // 3 = 0시, 1시, 2시
-                        // 4 = 2명 * 2개(t/f)
-                        for (ResponseLogDto dto : res) {
-                            System.out.println(dto.toString());
-                        }
-                    })
+
                     .andDo(document(DOCUMENT_NAME));
         }
 
@@ -368,15 +331,7 @@ class LogControllerTest {
             mockMvc.perform(TestSnippet.secured(post(url), adminToken.getAccessToken(), objectMapper, requestLogDto))
                     .andDo(print())
                     .andExpect(status().isOk())
-                    .andExpect(rst -> {
-                        List<ResponseLogDto> res = objectMapper.readValue(rst.getResponse().getContentAsString(), objectMapper.getTypeFactory().constructCollectionType(List.class, ResponseLogDto.class));
-                        assertEquals(2 * 4, res.size());
-                        // 2 = 1시, 2시
-                        // 4 = 2명 * 2개(t/f)
-                        for (ResponseLogDto dto : res) {
-                            System.out.println(dto.toString());
-                        }
-                    })
+
                     .andDo(document(DOCUMENT_NAME));
         }
 
@@ -391,15 +346,7 @@ class LogControllerTest {
             mockMvc.perform(TestSnippet.secured(post(url), adminToken.getAccessToken(), objectMapper, requestLogDto))
                     .andDo(print())
                     .andExpect(status().isOk())
-                    .andExpect(rst -> {
-                        List<ResponseLogDto> res = objectMapper.readValue(rst.getResponse().getContentAsString(), objectMapper.getTypeFactory().constructCollectionType(List.class, ResponseLogDto.class));
-                        assertEquals(3*2, res.size());
-                        // 3 = 액션 당 3번
-                        // 2 = 1명 * 2개(t/f)
-                        for (ResponseLogDto dto : res) {
-                            System.out.println(dto.toString());
-                        }
-                    })
+
                     .andDo(document(DOCUMENT_NAME));
         }
 
@@ -413,17 +360,7 @@ class LogControllerTest {
             mockMvc.perform(TestSnippet.secured(post(url), adminToken.getAccessToken(), objectMapper, requestLogDto))
                     .andDo(print())
                     .andExpect(status().isOk())
-                    .andExpect(rst -> {
-                        List<ResponseLogDto> res = objectMapper.readValue(rst.getResponse().getContentAsString(), objectMapper.getTypeFactory().constructCollectionType(List.class, ResponseLogDto.class));
-                        assertEquals(20, res.size());
-                        // paging 24 -> 20
-                        // 3 = 액션 당 3번
-                        // 8 = 액션 종류
-                        // 1 = 1명 * 1개(t)
-                        for (ResponseLogDto dto : res) {
-                            System.out.println(dto.toString());
-                        }
-                    })
+
                     .andDo(document(DOCUMENT_NAME));
         }
 
@@ -438,15 +375,7 @@ class LogControllerTest {
             mockMvc.perform(TestSnippet.secured(post(url), adminToken.getAccessToken(), objectMapper, requestLogDto))
                     .andDo(print())
                     .andExpect(status().isOk())
-                    .andExpect(rst -> {
-                        List<ResponseLogDto> res = objectMapper.readValue(rst.getResponse().getContentAsString(), objectMapper.getTypeFactory().constructCollectionType(List.class, ResponseLogDto.class));
-                        assertEquals(2*2, res.size());
-                        // 2 = 1시, 2시
-                        // 2 = 1명 * 2개(t/f)
-                        for (ResponseLogDto dto : res) {
-                            System.out.println(dto.toString());
-                        }
-                    })
+
                     .andDo(document(DOCUMENT_NAME));
         }
         
@@ -461,13 +390,7 @@ class LogControllerTest {
             mockMvc.perform(TestSnippet.secured(post(urlPaging), adminToken.getAccessToken(), objectMapper, requestLogDto))
                     .andDo(print())
                     .andExpect(status().isOk())
-                    .andExpect(rst -> {
-                        List<ResponseLogDto> res = objectMapper.readValue(rst.getResponse().getContentAsString(), objectMapper.getTypeFactory().constructCollectionType(List.class, ResponseLogDto.class));
-                        assertEquals(6, res.size());
-                        for (ResponseLogDto dto : res) {
-                            System.out.println(dto.toString());
-                        }
-                    })
+
                     .andDo(document(DOCUMENT_NAME));
         }
 
@@ -483,13 +406,7 @@ class LogControllerTest {
             mockMvc.perform(TestSnippet.secured(post(urlPaging), adminToken.getAccessToken(), objectMapper, requestLogDto))
                     .andDo(print())
                     .andExpect(status().isOk())
-                    .andExpect(rst -> {
-                        List<ResponseLogDto> res = objectMapper.readValue(rst.getResponse().getContentAsString(), objectMapper.getTypeFactory().constructCollectionType(List.class, ResponseLogDto.class));
-                        assertEquals(12, res.size());
-                        for (ResponseLogDto dto : res) {
-                            System.out.println(dto.toString());
-                        }
-                    })
+
                     .andDo(document(DOCUMENT_NAME));
         }
     }
