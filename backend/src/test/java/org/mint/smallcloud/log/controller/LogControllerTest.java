@@ -1,6 +1,7 @@
 package org.mint.smallcloud.log.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import org.apache.catalina.User;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
@@ -9,6 +10,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mint.smallcloud.TestSnippet;
 import org.mint.smallcloud.log.dto.RequestLogDto;
 import org.mint.smallcloud.log.dto.ResponseLogDto;
+import org.mint.smallcloud.log.dto.ResponseLoginLogDto;
 import org.mint.smallcloud.log.user.UserLog;
 import org.mint.smallcloud.log.user.UserLogRepository;
 import org.mint.smallcloud.security.dto.UserDetailsDto;
@@ -63,6 +65,7 @@ class LogControllerTest {
     private JwtTokenDto memberToken;
     private JwtTokenDto adminToken;
     private UserDetailsDto userDetailsDto;
+    private UserDetailsDto userDetailsDto1;
     private Member member;
     private Member member1;
     private Member admin;
@@ -98,7 +101,15 @@ class LogControllerTest {
                 .roles(admin.getRole())
                 .build();
 
+        userDetailsDto1 = UserDetailsDto.builder()
+                .username(member.getUsername())
+                .password(member.getPassword())
+                .disabled(member.isLocked())
+                .roles(member.getRole())
+                .build();
+
         adminToken = jwtTokenProvider.generateTokenDto(userDetailsDto);
+        memberToken = jwtTokenProvider.generateTokenDto(userDetailsDto1);
 
     }
 
@@ -112,11 +123,11 @@ class LogControllerTest {
         private UserLog log4;
 
         @BeforeEach
-        void boot(){
-            log1 = UserLog.of(member, LocalDateTime.now(), "/ping/success", "111.111.111.111", false);
-            log2 = UserLog.of(member, LocalDateTime.now(), "/ping/fail", "111.111.111.111", false);
-            log3 = UserLog.of(member1, LocalDateTime.now(), "/ping/success", "111.111.111.111", false);
-            log4 = UserLog.of(member1, LocalDateTime.now(), "/ping/fail", "111.111.111.111", false);
+        void boot() {
+            log1 = UserLog.of(member, LocalDateTime.now(), "/ping/login/" + member.getUsername() + "/success", "111.111.111.111", false);
+            log2 = UserLog.of(member, LocalDateTime.now(), "/ping/login/" + member.getUsername() + "/fail", "111.111.111.111", false);
+            log3 = UserLog.of(member1, LocalDateTime.now(), "/ping/login/" + member1.getUsername() + "/success", "111.111.111.111", false);
+            log4 = UserLog.of(member1, LocalDateTime.now(), "/ping/login/" + member1.getUsername() + "/fail", "111.111.111.111", false);
             em.persist(log1);
             em.persist(log2);
             em.persist(log3);
@@ -127,17 +138,40 @@ class LogControllerTest {
         @Test
         @DisplayName("로그인 로그 조회")
         public void ok() throws Exception {
+            ResponseLoginLogDto expected1 = ResponseLoginLogDto.builder()
+                    .localDateTime(log1.getTime())
+                    .action("login/" + member.getUsername() + "/")
+                    .ipAddr(log1.getIpAddr())
+                    .status(true)
+                    .build();
+            ResponseLoginLogDto expected2 = ResponseLoginLogDto.builder()
+                    .localDateTime(log2.getTime())
+                    .action("login/" + member.getUsername() + "/")
+                    .ipAddr(log2.getIpAddr())
+                    .status(false)
+                    .build();
             mockMvc.perform(
                             TestSnippet.secured(get(url), memberToken.getAccessToken()))
                     .andDo(print())
                     .andExpect(status().isOk())
                     .andExpect(result -> {
-                        List<ResponseLogDto> res = objectMapper.readValue(result.getResponse().getContentAsString(), objectMapper.getTypeFactory().constructCollectionType(List.class, ResponseLogDto.class));
+                        List<ResponseLoginLogDto> res = objectMapper.readValue(result.getResponse().getContentAsString(), objectMapper.getTypeFactory().constructCollectionType(List.class, ResponseLoginLogDto.class));
+                        for (ResponseLoginLogDto dto : res) {
+                            System.out.println(dto.getLocalDateTime());
+                            System.out.println(dto.getAction());
+                            System.out.println(dto.getIpAddr());
+                            System.out.println(dto.getStatus());
+                        }
                         assertEquals(2, res.size());
-                        assertEquals(res.get(0).getNickName(), member.getNickname());
-                        assertEquals(res.get(0).getAction().startsWith("/ping"), true);
-                        assertEquals(res.get(1).getNickName(), member.getNickname());
-                        assertEquals(res.get(1).getAction().startsWith("/ping"), true);
+                        assertEquals(expected1.getAction(), res.get(0).getAction());
+                        assertEquals(expected1.getIpAddr(), res.get(0).getIpAddr());
+                        assertEquals(expected1.getLocalDateTime(), res.get(0).getLocalDateTime());
+                        assertEquals(expected1.getStatus(), res.get(0).getStatus());
+
+                        assertEquals(expected2.getAction(), res.get(1).getAction());
+                        assertEquals(expected2.getIpAddr(), res.get(1).getIpAddr());
+                        assertEquals(expected2.getLocalDateTime(), res.get(1).getLocalDateTime());
+                        assertEquals(expected2.getStatus(), res.get(1).getStatus());
 
                     })
                     .andDo(document(DOCUMENT_NAME));
@@ -154,13 +188,14 @@ class LogControllerTest {
         private UserLog log4;
         private RequestLogDto requestLogDto;
         private RequestLogDto requestLogDto1;
+
         @BeforeEach
         void boot() {
             log1 = UserLog.of(admin, LocalDateTime.now(), "/ping/success", "123.123.123.123", true);
             em.persist(log1);
             log2 = UserLog.of(member, LocalDateTime.now(), "/ping/fail", "111.111.111.111", true);
             em.persist(log2);
-            log3 = UserLog.of(member1, LocalDateTime.now(), "/ping/pong", "123.123.123.123",false);
+            log3 = UserLog.of(member1, LocalDateTime.now(), "/ping/pong", "123.123.123.123", false);
             em.persist(log3);
             /**
              * 1. nickName

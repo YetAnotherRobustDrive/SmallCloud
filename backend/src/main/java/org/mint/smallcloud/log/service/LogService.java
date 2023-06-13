@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.mint.smallcloud.log.dto.RequestLogDto;
 import org.mint.smallcloud.log.dto.ResponseLogDto;
+import org.mint.smallcloud.log.dto.ResponseLoginLogDto;
 import org.mint.smallcloud.log.mapper.LogMapper;
 import org.mint.smallcloud.log.user.UserLog;
 import org.mint.smallcloud.log.user.UserLogRepository;
@@ -38,12 +39,24 @@ public class LogService {
                 .collect(Collectors.toList());
     }
 
-                
-    public List<ResponseLogDto> findLoginLogsByUser(String username) {
-        Member member = memberThrowerService.getMemberByUsername(username);
-        List<UserLog> userLogs = userLogRepository.findByActionStartsWithAndMember("/ping", member);
-        return userLogs.stream()
-                .map(logMapper::toResponseLogDto)
+
+    public List<ResponseLoginLogDto> findLoginLogsByUser(String username) {
+        List<UserLog> userLogs = userLogRepository.findByActionStartsWith("/ping/login/" + username + "/");
+        List<UserLog> formatted = userLogs.stream()
+                .map(e -> {
+                    Boolean status = e.getAction().contains("success") ? true : false;
+                    String action = e.getAction().replace("/ping/", "").replace("success", "").replace("fail", "");
+                    return UserLog.of(
+                            e.getMember(),
+                            e.getTime(),
+                            action,
+                            e.getIpAddr(),
+                            status
+                    );
+                })
+                .collect(Collectors.toList());
+        return formatted.stream()
+                .map(logMapper::toResponseLoginLogDto)
                 .collect(Collectors.toList());
     }
 

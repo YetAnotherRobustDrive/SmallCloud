@@ -6,6 +6,7 @@ import org.mint.smallcloud.exception.ExceptionStatus;
 import org.mint.smallcloud.exception.ServiceException;
 import org.mint.smallcloud.log.dto.RequestLogDto;
 import org.mint.smallcloud.log.dto.ResponseLogDto;
+import org.mint.smallcloud.log.dto.ResponseLoginLogDto;
 import org.mint.smallcloud.log.service.LogService;
 import org.mint.smallcloud.security.UserDetailsProvider;
 import org.mint.smallcloud.user.domain.Roles;
@@ -31,7 +32,7 @@ public class LogController {
     // 사용자 log 가져오기
     @Secured({Roles.S_COMMON})
     @GetMapping("")
-    public List<ResponseLogDto> getLoginLogs() {
+    public List<ResponseLoginLogDto> getLoginLogs() {
         UserDetails user = getLoginUser();
         return logService.findLoginLogsByUser(user.getUsername());
     }

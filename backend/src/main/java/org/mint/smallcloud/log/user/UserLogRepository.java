@@ -102,10 +102,9 @@ public class UserLogRepository {
         return query.getResultList();
     }
 
-    public List<UserLog> findByActionStartsWithAndMember(String action, Member member){
-        return em.createQuery("select ul from UserLog ul where ul.action like :action and ul.member = :member", UserLog.class)
+    public List<UserLog> findByActionStartsWith(String action){
+        return em.createQuery("select ul from UserLog ul where ul.action like :action", UserLog.class)
                 .setParameter("action", "%" + action + "%")
-                .setParameter("member", member)
                 .getResultList();
     }
 }
