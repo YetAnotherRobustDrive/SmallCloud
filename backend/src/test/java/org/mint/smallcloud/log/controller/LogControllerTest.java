@@ -7,6 +7,7 @@ import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mint.smallcloud.TestSnippet;
+import org.mint.smallcloud.log.dto.RequestLogDto;
 import org.mint.smallcloud.log.dto.ResponseLogDto;
 import org.mint.smallcloud.log.user.UserLog;
 import org.mint.smallcloud.log.user.UserLogRepository;
@@ -36,6 +37,8 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.documentationConfiguration;
 import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.get;
+import static org.springframework.restdocs.payload.PayloadDocumentation.fieldWithPath;
+import static org.springframework.restdocs.payload.PayloadDocumentation.requestFields;
 import static org.springframework.security.test.web.servlet.setup.SecurityMockMvcConfigurers.springSecurity;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -58,9 +61,11 @@ class LogControllerTest {
     private final String URL_PREFIX = "/logs";
     private final String DOCUMENT_NAME = "log/{ClassName}/{methodName}";
     private JwtTokenDto memberToken;
+    private JwtTokenDto adminToken;
     private UserDetailsDto userDetailsDto;
     private Member member;
     private Member member1;
+    private Member admin;
 
 
     @Autowired
@@ -82,15 +87,18 @@ class LogControllerTest {
         member1 = Member.createCommon("testMemberName1", "testPw1", "testNickname1");
         em.persist(member1);
         em.flush();
+        admin = Member.createAdmin("admin", "admin", "admin");
+        em.persist(admin);
+        em.flush();
 
         userDetailsDto = UserDetailsDto.builder()
-                .username(member.getUsername())
-                .password(member.getPassword())
-                .disabled(member.isLocked())
-                .roles(member.getRole())
+                .username(admin.getUsername())
+                .password(admin.getPassword())
+                .disabled(admin.isLocked())
+                .roles(admin.getRole())
                 .build();
 
-        memberToken = jwtTokenProvider.generateTokenDto(userDetailsDto);
+        adminToken = jwtTokenProvider.generateTokenDto(userDetailsDto);
 
     }
 
@@ -133,6 +141,62 @@ class LogControllerTest {
 
                     })
                     .andDo(document(DOCUMENT_NAME));
+        }
+    }
+
+    @Nested
+    @DisplayName("/logs/admin document")
+    class admin {
+        private final String url = URL_PREFIX + "/admin";
+        private UserLog log1;
+        private UserLog log2;
+        private UserLog log3;
+        private UserLog log4;
+        private RequestLogDto requestLogDto;
+        private RequestLogDto requestLogDto1;
+        @BeforeEach
+        void boot() {
+            log1 = UserLog.of(admin, LocalDateTime.now(), "/ping/success", "123.123.123.123", true);
+            em.persist(log1);
+            log2 = UserLog.of(member, LocalDateTime.now(), "/ping/fail", "111.111.111.111", true);
+            em.persist(log2);
+            log3 = UserLog.of(member1, LocalDateTime.now(), "/ping/pong", "123.123.123.123",false);
+            em.persist(log3);
+            /**
+             * 1. nickName
+             * 2. action
+             * 3. status true
+             * 4. status false
+             * 5. startTime
+             * 6. endTime
+             * 7. startTime, endTime
+             * 8. nickName, action
+             * 9. nickName, status true
+             * 10. nickName, between
+             */
+
+            requestLogDto = RequestLogDto.builder()
+                    .nickName(member.getNickname())
+                    .build();
+
+            requestLogDto1 = RequestLogDto.builder()
+                    .action("/ping/success")
+                    .build();
+        }
+
+        @DisplayName("정상적인 로그 조회")
+        @Test
+        void ok() throws Exception {
+            mockMvc.perform(TestSnippet.secured(get(url), adminToken.getAccessToken(), objectMapper, requestLogDto))
+                    .andDo(print())
+                    .andExpect(status().isOk())
+                    .andDo(document(DOCUMENT_NAME, requestFields(
+                            fieldWithPath("nickName").description("닉네임"),
+                            fieldWithPath("action").description("액션"),
+                            fieldWithPath("status").description("상태"),
+                            fieldWithPath("startTime").description("시작시간"),
+                            fieldWithPath("endTime").description("종료시간")
+                    )));
         }
     }
 }

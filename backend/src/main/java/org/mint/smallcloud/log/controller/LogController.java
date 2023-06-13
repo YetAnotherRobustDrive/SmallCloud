@@ -13,10 +13,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.security.access.annotation.Secured;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import java.util.List;
@@ -49,7 +46,7 @@ public class LogController {
     @Secured({Roles.S_ADMIN})
     @GetMapping("/admin")
     public List<ResponseLogDto> getAdminLogs(
-            @Valid @PathVariable RequestLogDto requestLogDto, Pageable pageable) {
+            @Valid @RequestBody RequestLogDto requestLogDto, Pageable pageable) {
         return logService.findLogs(requestLogDto, pageable);
     }
 }
