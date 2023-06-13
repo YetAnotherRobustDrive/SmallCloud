@@ -5,3 +5,33 @@ operation::log/UserLoginLogs/ok[snippets='http-request']
 ==== 성공
 
 operation::log/UserLoginLogs/ok[snippets='http-response']
+
+=== 어드민 조건 검색
+
+operation::log/admin/actionFilter[snippets='http-response']
+IMPORTANT: 액션 기준 조회
+
+operation::log/admin/statusFilter[snippets='http-response']
+IMPORTANT: 상태 기준 조회
+
+operation::log/admin/startTimeFilter[snippets='http-response']
+IMPORTANT: 시작 시간 기준 조회
+
+operation::log/admin/endTimeFilter[snippets='http-response']
+IMPORTANT: 종료 시간 기준 조회
+
+operation::log/admin/startTimeAndEndTimeFilter[snippets='http-response']
+IMPORTANT: 시작 시간과 종료 시간 기준 조회
+
+operation::log/admin/nicknameFilter[snippets='http-response']
+IMPORTANT: 닉네임 기준 조회
+
+operation::log/admin/nicknameAndActionFilter[snippets='http-response']
+IMPORTANT: 닉네임과 액션 기준 조회
+
+operation::log/admin/nicknameAndStartTimeAndEndTimeFilter[snippets='http-response']
+IMPORTANT: 닉네임과 시작 시간과 종료 시간 기준 조회
+
+operation::log/admin/nicknameAndStatusFilter[snippets='http-response']
+IMPORTANT: 닉네임과 상태 기준 조회
+
