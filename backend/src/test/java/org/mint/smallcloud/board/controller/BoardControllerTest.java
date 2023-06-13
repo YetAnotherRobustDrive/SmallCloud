@@ -627,4 +627,36 @@ class BoardControllerTest {
                     .andDo(document(DOCUMENT_NAME));
         }
     }
+
+    @Nested
+    @DisplayName("/inquiries/search/answer docs")
+    class searchAnswer {
+        String url = URL_PREFIX + "/search/answer?answerId={answerId}";
+        private Question question;
+        private Question question1;
+        private Answer answer;
+        private Answer findAnswer;
+
+        @BeforeEach
+        void boot() {
+            answer = Answer.answer("testContent", null);
+            em.persist(answer);
+            question = Question.question("testTitle", "testContent", "testContact", "testWriter", answer);
+            em.persist(question);
+            question1 = Question.question("testTitle", "testContent", "testContact", "testWriter", null);
+            em.persist(question1);
+        }
+
+        @DisplayName("정상적 답변 조회")
+        @Test
+        void ok() throws Exception {
+            findAnswer = answerRepository.findByQuestionId(question.getId()).orElseThrow();
+            mockMvc.perform(TestSnippet.secured(get(url, findAnswer.getId()), adminToken.getAccessToken()))
+                    .andDo(print())
+                    .andExpect(status().isOk())
+                    .andDo(document(DOCUMENT_NAME, requestParameters(
+                            parameterWithName("answerId").description("조회할 답변 아이디를 담고 있습니다.")
+                    )));
+        }
+    }
 }

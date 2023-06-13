@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.mint.smallcloud.ResponseDto;
 import org.mint.smallcloud.board.domain.BoardType;
+import org.mint.smallcloud.board.dto.AnswerDto;
 import org.mint.smallcloud.board.dto.BoardDto;
 import org.mint.smallcloud.board.dto.QuestionDto;
 import org.mint.smallcloud.board.dto.RequestDto;
@@ -114,5 +115,12 @@ public class BoardController {
     @GetMapping("/board/created")
     public BoardDto getBoardCreatedDate(@RequestParam BoardType boardType, @RequestParam int createdDate) {
            return boardService.findBoardCreatedDate(boardType, createdDate);
+    }
+
+    // answer 조회
+    @Secured(Roles.S_ADMIN)
+    @GetMapping("/search/answer")
+    public AnswerDto getAnswers(@RequestParam("answerId") Long answerId) {
+        return answerService.findAnswer(answerId);
     }
 }
