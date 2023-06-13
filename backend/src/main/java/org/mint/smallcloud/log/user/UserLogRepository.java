@@ -112,4 +112,20 @@ public class UserLogRepository {
                 .setParameter("action", "%" + action + "%")
                 .getResultList();
     }
+
+    public Integer getTotalPageCnt(){
+        return em.createQuery("select count(ul) from UserLog ul", Long.class)
+                .getSingleResult().intValue();
+    }
+
+    public Integer countByActionStartsWith(String s) {
+        return em.createQuery("select count(ul) from UserLog ul where ul.action like :action", Long.class)
+                .setParameter("action", "%" + s + "%")
+                .getSingleResult().intValue();
+    }
+
+    public List<UserLog> findAll() {
+        return em.createQuery("select ul from UserLog ul", UserLog.class)
+                .getResultList();
+    }
 }

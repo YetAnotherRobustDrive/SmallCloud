@@ -37,6 +37,13 @@ public class LogController {
         return logService.findLoginLogsByUser(user.getUsername());
     }
 
+    @Secured({Roles.S_COMMON})
+    @GetMapping("/count")
+    public Integer getLoginLogsCount() {
+        UserDetails user = getLoginUser();
+        return logService.getLoginLogsCountByUser(user.getUsername());
+    }
+
 
     private UserDetails getLoginUser() {
         return userDetailsProvider.getUserDetails()
@@ -49,5 +56,11 @@ public class LogController {
     public List<ResponseLogDto> getAdminLogs(
             @Valid @RequestBody RequestLogDto requestLogDto, Pageable pageable) {
         return logService.findLogs(requestLogDto, pageable);
+    }
+
+    @Secured({Roles.S_ADMIN})
+    @GetMapping("/count/admin")
+    public Integer getAdminLogsCount() {
+        return logService.getTotalSize();
     }
 }
