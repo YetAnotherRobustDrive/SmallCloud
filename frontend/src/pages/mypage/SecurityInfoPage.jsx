@@ -7,22 +7,14 @@ import GetLoginLog from "../../services/log/GetLoginLog";
 
 export default function SecurityInfoPage() {
 
-    const [log, setLog] = useState([
-        {
-            time: "2021-08-01 12:00:00",
-            user: "admin",
-            action: "로그인",
-            status: "성공",
-            ip: "111.111.111.111",
-        },
-    ]);
+    const [log, setLog] = useState([]);
 
     useEffect(() => {
-        // const init = async () => {
-        //     const res = await GetLoginLog();
-        //     setLog(res);
-        // }
-        // init();
+        const init = async () => {
+            const res = await GetLoginLog();
+            setLog(res[1]);
+        }
+        init();
     }, []);
 
     return (
@@ -36,7 +28,6 @@ export default function SecurityInfoPage() {
                         <thead>
                             <tr>
                                 <th>시간</th>
-                                <th>닉네임</th>
                                 <th>종류</th>
                                 <th>결과</th>
                                 <th>IP</th>
@@ -46,11 +37,10 @@ export default function SecurityInfoPage() {
                             {
                                 log.map((item, index) => (
                                     <tr key={index}>
-                                        <td>{item.time}</td>
-                                        <td>{item.user}</td>
+                                        <td>{item.localDateTime}</td>
                                         <td>{item.action}</td>
-                                        <td>{item.status}</td>
-                                        <td>{item.ip}</td>
+                                        <td>{item.status===true ? "성공" : "실패"}</td>
+                                        <td>{item.ipAddr}</td>
                                     </tr>
                                 ))
                             }

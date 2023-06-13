@@ -9,6 +9,7 @@ import "../../css/modal.css";
 import IsAdminToken from "../../services/token/IsAdminToken";
 import { asyncCheckAdmin } from "../../slice/TokenSlice";
 import { setIsLoggedIn } from "../../slice/UserSlice";
+import ThrowPingAs from "../../services/log/ThrowPingAs";
 
 export default function LoginPage() {
 
@@ -62,8 +63,10 @@ export default function LoginPage() {
             const res = await fetch(configData.API_SERVER + 'auth/login', model);
             const data = await res.json();
             if (!res.ok) {
+                ThrowPingAs("login-fail");
                 throw data;
             }
+            ThrowPingAs("login-success");
             localStorage.setItem("accessToken", data.accessToken); //성공
             localStorage.setItem("refreshToken", data.refreshToken);
             await checkAdmin();//check admin        
