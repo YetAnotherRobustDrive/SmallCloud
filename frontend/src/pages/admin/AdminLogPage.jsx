@@ -12,6 +12,8 @@ export default function AdminLogPage() {
 
     const [isOpen, setIsOpen] = useState(false);
     const [log, setLog] = useState([]);
+    const [page, setPage] = useState(0);
+    const [totalPage, setTotalPage] = useState(0);
 
     const actionList = [
         {
@@ -122,17 +124,16 @@ export default function AdminLogPage() {
         },
     ]
 
-    const handlesubmit = async (e) => {
+    const handleSubmit = async (e) => {
         e.preventDefault();
-        const data = {
-            action: e.target.action.value,
-            result: e.target.result.value,
-            startDate: e.target.startDate.value,
-            endDate: e.target.endDate.value,
-            page: 1,
-            size: 10,
+        e.stopPropagation();
+        const data = new FormData(e.target);
+        const value = Object.fromEntries(data.entries());
+        const res = await AdminGetLogBy(value, page);
+        if (res[0]) {
+            setLog(res[1]);
         }
-        const res = await AdminGetLogBy(data);
+
     }
 
     return (
@@ -143,11 +144,11 @@ export default function AdminLogPage() {
                 <BodyHeader text="시스템로그 확인" />
                 <div className="logOptionOpen" onClick={() => setIsOpen(!isOpen)}>검색 옵션 {isOpen ? <IoIosArrowUp /> : <IoIosArrowDown />}
                     {isOpen &&
-                        <form className="logOptionSelect" onClick={e => e.stopPropagation()}>
+                        <form className="logOptionSelect" onClick={e => e.stopPropagation()} onSubmit={handleSubmit}>
                             <span className="title" htmlFor="action">종류 및 결과</span>
                             <div className="actionSelect">
                                 <select className="action" name="action">
-                                    <option value="all">전체</option>
+                                    <option value="">전체</option>
                                     {actionList.map((action, index) => (
                                         <optgroup key={index} label={action.title}>
                                             {action.list.map((item, index) => (
@@ -157,20 +158,20 @@ export default function AdminLogPage() {
                                     ))}
                                 </select>
                                 <select className="status" name="status">
-                                    <option value="all">전체</option>
-                                    <option value="success">성공</option>
-                                    <option value="fail">실패</option>
+                                    <option value="">전체</option>
+                                    <option value={true}>성공</option>
+                                    <option value={false}>실패</option>
                                 </select>
                             </div>
                             <span className="title">시간</span>
                             <div className="timeSelect">
-                                <input className="start" type="datetime-local" name="start" />
+                                <input className="start" type="datetime-local" name="startTime" />
                                 <span className="between">~</span>
-                                <input className="end" type="datetime-local" name="end" />
+                                <input className="end" type="datetime-local" name="endTime" />
                             </div>
                             <span className="title">닉네임</span>
                             <div className="userSelect" >
-                                <input className="user" type="text" name="user" placeholder="사용자 닉네임을 입력하세요. (입력하지 않으면 전체 검색)" />
+                                <input className="user" type="text" name="nickName" placeholder="사용자 닉네임을 입력하세요. (입력하지 않으면 전체 검색)" />
                             </div>
                             <div className="searchButton">
                                 <button type="reset">초기화</button>

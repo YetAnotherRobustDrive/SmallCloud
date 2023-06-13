@@ -1,19 +1,22 @@
 import RefreshToken from "../token/RefreshToken";
 import configData from "../../config/config.json"
 
-export default async function AdminGetLogBy() {
+export default async function AdminGetLogBy(value, page) {
     await RefreshToken();
     const accessToken = localStorage.getItem("accessToken");
     const model = {
-        method: "GET",
+        method: "POST",
         headers: {
             "Authorization": "Bearer " + accessToken,
+            "Content-Type": "application/json",
         },
+        body: JSON.stringify(value),
     };
 
     try {
-        const res = await fetch(configData.API_SERVER + 'logs', model);
+        const res = await fetch(configData.API_SERVER + 'logs/admin?size=20&page=' + page, model);
         const data = await res.json();
+        console.log(data);
         if (res.status === 200) {
             return [true, data];  //성공
         }
