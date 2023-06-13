@@ -187,11 +187,9 @@ class LogControllerTest {
         private final String url = URL_PREFIX + "/admin";
         private UserLog log;
         private RequestLogDto requestLogDto;
-        private RequestLogDto requestLogDto1;
 
         @BeforeEach
         void boot() {
-//          log1 = UserLog.of(member, LocalDateTime.now(), "/ping/login/" + member.getUsername() + "/success", "111.111.111.111", false);
             List<String> actionList = new ArrayList<>();
             actionList.addAll(Arrays.asList( //24개
                     "/auth/register",
@@ -262,7 +260,8 @@ class LogControllerTest {
                     .andExpect(status().isOk())
                     .andExpect(rst -> {
                         List<ResponseLogDto> res = objectMapper.readValue(rst.getResponse().getContentAsString(), objectMapper.getTypeFactory().constructCollectionType(List.class, ResponseLogDto.class));
-                        assertEquals(48, res.size());
+                        assertEquals(20, res.size());
+                        // paging 48 -> 20
                         for (ResponseLogDto dto : res) {
                             System.out.println(dto.toString());
                         }
@@ -306,7 +305,8 @@ class LogControllerTest {
                     .andExpect(status().isOk())
                     .andExpect(rst -> {
                         List<ResponseLogDto> res = objectMapper.readValue(rst.getResponse().getContentAsString(), objectMapper.getTypeFactory().constructCollectionType(List.class, ResponseLogDto.class));
-                        assertEquals(48, res.size());
+                        assertEquals(20, res.size());
+                        // paging 48 -> 20
                         for (ResponseLogDto dto : res) {
                             System.out.println(dto.toString());
                         }
@@ -325,7 +325,8 @@ class LogControllerTest {
                     .andExpect(status().isOk())
                     .andExpect(rst -> {
                         List<ResponseLogDto> res = objectMapper.readValue(rst.getResponse().getContentAsString(), objectMapper.getTypeFactory().constructCollectionType(List.class, ResponseLogDto.class));
-                        assertEquals(96 - 3 * 4, res.size());
+                        assertEquals(20, res.size());
+                        //96 - 3 * 4 인데 페이징으로 20
                         // 3 = 0시, 1시, 2시
                         // 4 = 2명 * 2개(t/f)
                         for (ResponseLogDto dto : res) {
@@ -412,7 +413,8 @@ class LogControllerTest {
                     .andExpect(status().isOk())
                     .andExpect(rst -> {
                         List<ResponseLogDto> res = objectMapper.readValue(rst.getResponse().getContentAsString(), objectMapper.getTypeFactory().constructCollectionType(List.class, ResponseLogDto.class));
-                        assertEquals(3*8*1, res.size());
+                        assertEquals(20, res.size());
+                        // paging 24 -> 20
                         // 3 = 액션 당 3번
                         // 8 = 액션 종류
                         // 1 = 1명 * 1개(t)
@@ -439,6 +441,28 @@ class LogControllerTest {
                         assertEquals(2*2, res.size());
                         // 2 = 1시, 2시
                         // 2 = 1명 * 2개(t/f)
+                        for (ResponseLogDto dto : res) {
+                            System.out.println(dto.toString());
+                        }
+                    })
+                    .andDo(document(DOCUMENT_NAME));
+        }
+
+
+
+        @DisplayName("페이지 조회")
+        @Test
+        void pageFilter() throws Exception {
+            String urlPaging = url + "?size=10&page=9";
+            requestLogDto = RequestLogDto.builder()
+                    .build(); // find all
+
+            mockMvc.perform(TestSnippet.secured(get(urlPaging), adminToken.getAccessToken(), objectMapper, requestLogDto))
+                    .andDo(print())
+                    .andExpect(status().isOk())
+                    .andExpect(rst -> {
+                        List<ResponseLogDto> res = objectMapper.readValue(rst.getResponse().getContentAsString(), objectMapper.getTypeFactory().constructCollectionType(List.class, ResponseLogDto.class));
+                        assertEquals(6, res.size());
                         for (ResponseLogDto dto : res) {
                             System.out.println(dto.toString());
                         }

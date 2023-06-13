@@ -1,7 +1,6 @@
 package org.mint.smallcloud.log.user;
 
 import lombok.RequiredArgsConstructor;
-import org.mint.smallcloud.user.domain.Member;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Repository;
 
@@ -79,7 +78,9 @@ public class UserLogRepository {
             jpql += " ul.action = :action";
         }
 
-        TypedQuery<UserLog> query = em.createQuery(jpql, UserLog.class);
+        TypedQuery<UserLog> query = em.createQuery(jpql, UserLog.class)
+                .setFirstResult((int) pageable.getOffset())
+                .setMaxResults(pageable.getPageSize());
         if (nickname != null) {
             query = query.setParameter("nickname", nickname);
         }
