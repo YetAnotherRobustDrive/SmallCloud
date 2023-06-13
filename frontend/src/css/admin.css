@@ -336,3 +336,29 @@
     border: 1px solid black;
     margin: 10px;
 }
+
+.logTable table {
+    width: 100%;
+    border: 1px solid black;
+}
+
+.logTable tr {
+    border: 1px solid black
+}
+
+.logTable td {
+    border: 1px solid black;
+    text-align: center;
+}
+
+.logTable th {
+    border: 1px solid black;
+}
+
+.logTable tr {
+    font-size: normal;
+    padding: 10px;
+    padding-bottom: 0;
+    border-top: 1px solid #666666;
+    width: calc(100% - 20px);
+}

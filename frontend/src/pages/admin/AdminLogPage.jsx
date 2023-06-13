@@ -16,7 +16,7 @@ export default function AdminLogPage() {
     const [page, setPage] = useState(0);
     const [totalPage, setTotalPage] = useState(0);
 
-    const actionList = [
+    const actionList = [ //최신화 필요
         {
             title: "인증 관련 (auth)",
             list: [
@@ -137,9 +137,9 @@ export default function AdminLogPage() {
         }
         const res = await AdminGetLogBy(value, page);
         if (res[0]) {
-            setLog(res[1]);
+            setLog(res[1].responseLogDtoList);
+            console.log(res[1]);
         }
-
     }
 
     return (
@@ -190,6 +190,7 @@ export default function AdminLogPage() {
                     <table>
                         <thead>
                             <tr>
+                                <th>No</th>
                                 <th>시간</th>
                                 <th>닉네임</th>
                                 <th>종류</th>
@@ -201,6 +202,7 @@ export default function AdminLogPage() {
                             {
                                 log.map((item, index) => (
                                     <tr key={index}>
+                                        <td>{index + 1}</td>
                                         <td>{item.localDateTime}</td>
                                         <td>{item.nickName}</td>
                                         <td>{item.action}</td>
