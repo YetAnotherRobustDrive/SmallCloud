@@ -2,13 +2,12 @@ package org.mint.smallcloud.log.service;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.mint.smallcloud.log.dto.LogSizeDto;
 import org.mint.smallcloud.log.dto.RequestLogDto;
-import org.mint.smallcloud.log.dto.ResponseLogDto;
 import org.mint.smallcloud.log.dto.ResponseLoginLogDto;
 import org.mint.smallcloud.log.mapper.LogMapper;
 import org.mint.smallcloud.log.user.UserLog;
 import org.mint.smallcloud.log.user.UserLogRepository;
-import org.mint.smallcloud.user.domain.Member;
 import org.mint.smallcloud.user.service.MemberThrowerService;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -26,7 +25,7 @@ public class LogService {
     private final MemberThrowerService memberThrowerService;
     private final LogMapper logMapper;
 
-    public List<ResponseLogDto> findLogs(RequestLogDto requestLogDto, Pageable pageable) {
+    public LogSizeDto findLogs(RequestLogDto requestLogDto, Pageable pageable) {
         List<UserLog> userLogs = userLogRepository.findLogs(
                 requestLogDto.getNickName(),
                 requestLogDto.getStartTime(),
@@ -34,9 +33,13 @@ public class LogService {
                 requestLogDto.getStatus(),
                 requestLogDto.getAction(),
                 pageable);
-        return userLogs.stream()
-                .map(logMapper::toResponseLogDto)
-                .collect(Collectors.toList());
+
+        return LogSizeDto.builder()
+                .size((long) userLogs.size())
+                .responseLogDtoList(userLogs.stream()
+                        .map(logMapper::toResponseLogDto)
+                        .collect(Collectors.toList()))
+                .build();
     }
 
 
