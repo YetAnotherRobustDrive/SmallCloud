@@ -4,6 +4,7 @@ import Header from "../../component/header/Header";
 import SidebarAdmin from "../../component/sidebar/SidebarAdmin";
 import BodyHeader from "../../component/main/BodyHeader";
 import { IoIosArrowDown, IoIosArrowUp } from "react-icons/io";
+import { BsFillCircleFill } from "react-icons/bs";
 
 import "../../css/admin.css"
 import AdminGetLogBy from "../../services/admin/AdminGetLogBy";
@@ -129,6 +130,11 @@ export default function AdminLogPage() {
         e.stopPropagation();
         const data = new FormData(e.target);
         const value = Object.fromEntries(data.entries());
+        for (let key in value) {
+            if (value[key] === "") {
+                delete value[key];
+            }
+        }
         const res = await AdminGetLogBy(value, page);
         if (res[0]) {
             setLog(res[1]);
@@ -187,19 +193,19 @@ export default function AdminLogPage() {
                                 <th>시간</th>
                                 <th>닉네임</th>
                                 <th>종류</th>
-                                <th>결과</th>
                                 <th>IP</th>
+                                <th>결과</th>
                             </tr>
                         </thead>
                         <tbody>
                             {
                                 log.map((item, index) => (
                                     <tr key={index}>
-                                        <td>{item.time}</td>
-                                        <td>{item.user}</td>
+                                        <td>{item.localDateTime}</td>
+                                        <td>{item.nickName}</td>
                                         <td>{item.action}</td>
-                                        <td>{item.status}</td>
-                                        <td>{item.ip}</td>
+                                        <td>{item.ipAddr}</td>
+                                        <td>{item.status === true ? <BsFillCircleFill color="green" /> : <BsFillCircleFill color="red" />}</td>
                                     </tr>
                                 ))
                             }

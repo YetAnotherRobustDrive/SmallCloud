@@ -63,10 +63,10 @@ export default function LoginPage() {
             const res = await fetch(configData.API_SERVER + 'auth/login', model);
             const data = await res.json();
             if (!res.ok) {
-                ThrowPingAs("login-fail");
+                ThrowPingAs("login/" + value.id + "/fail");
                 throw data;
             }
-            ThrowPingAs("login-success");
+            ThrowPingAs("login/" + value.id + "/success");
             localStorage.setItem("accessToken", data.accessToken); //성공
             localStorage.setItem("refreshToken", data.refreshToken);
             await checkAdmin();//check admin        

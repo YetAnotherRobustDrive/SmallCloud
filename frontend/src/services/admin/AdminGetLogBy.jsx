@@ -16,7 +16,6 @@ export default async function AdminGetLogBy(value, page) {
     try {
         const res = await fetch(configData.API_SERVER + 'logs/admin?size=20&page=' + page, model);
         const data = await res.json();
-        console.log(data);
         if (res.status === 200) {
             return [true, data];  //성공
         }
