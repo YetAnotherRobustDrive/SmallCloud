@@ -45,19 +45,3 @@ IMPORTANT: 페이지 기준 조회
 operation::log/admin/parameterExist[snippets='http-request']
 operation::log/admin/parameterExist[snippets='http-response']
 IMPORTANT: 파라미터 있는 경우
-
-=== 어드민 로그 개수 조회
-
-operation::log/count/getAdminCount[snippets='http-request']
-
-==== 성공
-
-operation::log/count/getAdminCount[snippets='http-response']
-
-=== 유저 로그인 로그 개수 조회
-
-operation::log/count/getUserCount[snippets='http-request']
-
-==== 성공
-
-operation::log/count/getUserCount[snippets='http-response']
