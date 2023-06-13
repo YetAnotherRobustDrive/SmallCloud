@@ -18,7 +18,12 @@ function createWindow() {
   });
   mainWindow.setMenuBarVisibility(false);
 
-  mainWindow.loadFile("index.html")
+  if (isDev) {
+    mainWindow.loadURL("http://localhost:3000");  
+  }
+  else {
+    mainWindow.loadFile(path.join(__dirname, 'index.html'))
+  }
 
   if (isDev) {
     mainWindow.webContents.openDevTools({ mode: "detach" });

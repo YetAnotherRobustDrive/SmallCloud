@@ -1,8 +1,11 @@
 {
   "main": "public/main.js",
   "homepage": ".",
-  "name": "my-app",
-  "version": "0.1.0",
+  "author": "Mint",
+  "description": "Yet Another Robust Drive",
+  "name": "yard",
+  "version": "1.0.0",
+  "license": "MIT",
   "private": true,
   "dependencies": {
     "@material-ui/core": "^4.12.4",
@@ -32,55 +35,33 @@
     "cross-env": "^7.0.3",
     "electron": "^25.1.0",
     "electron-builder": "^23.6.0",
-    "wait-on": "^7.0.1"
+    "wait-on": "^7.0.1",
+    "@babel/plugin-proposal-private-property-in-object": "^7.16.7"
   },
   "scripts": {
     "electron-serve": "concurrently -k \"cross-env BROWSER=none npm run start\" \"npm run electron-start\"",
-    "electron-build": "",
+    "electron-build": "yarn build && electron-builder -c.extraMetadata.main=build/main.js",
     "electron-start": "wait-on tcp:127.0.0.1:3000 && electron .",
-    "start": "WATCHPACK_POLLING=true react-scripts start",
+    "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
-    "eject": "react-scripts eject",
-    "deploy:osx": "electron-builder --mac",
-    "deploy:win": "npm run deploy:win32 && npm run deploy:win64",
-    "deploy:win32": "electron-builder --win nsis:ia32",
-    "deploy:win64": "electron-builder --win nsis:x64"
+    "eject": "react-scripts eject"
   },
   "build": {
+    "extends": null,
     "productName": "YARD",
     "appId": "org.mint.smallcloud",
-    "asar": true,
-    "mac": {
-      "target": [
-        "default"
-      ]
-    },
-    "dmg": {
-      "title": "Install YARD"
-    },
-    "win": {
-      "target": [
-        {
-          "target": "nsis",
-          "arch": [
-            "x64",
-            "ia32"
-          ]
-        }
-      ]
-    },
-    "nsis": {
-      "oneClick": false,
-      "allowToChangeInstallationDirectory": false,
-      "createDesktopShortcut": true
+    "files": [
+        "*.js",
+        "build",
+        "node_modules"
+    ],
+    "win" : {
+      "icon": "public/favicon256.png"
     },
     "directories": {
-      "buildResources": "./resources/installer/",
-      "output": "./dist/",
-      "app": "."
-    },
-    "extends": null
+      "buildResources": "assets"
+    }
   },
   "eslintConfig": {
     "extends": [
