@@ -51,3 +51,7 @@ include::topping/admin.adoc[]
 
 include::topping/labels.adoc[]
 
+[[log]]
+=== 로그 관련 (log)
+
+include::topping/log.adoc[]
