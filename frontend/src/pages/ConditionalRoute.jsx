@@ -1,6 +1,6 @@
 import React from 'react';
 import { useSelector } from 'react-redux';
-import { Route, BrowserRouter as Router, Routes } from 'react-router-dom';
+import { HashRouter as Router, Routes, Route } from "react-router-dom";
 import LogoutUser from '../services/user/LogoutUser';
 import AdminConfigPage from './admin/AdminConfigPage';
 import AdminFAQUploadPage from './admin/AdminFAQUploadPage';
@@ -31,6 +31,7 @@ import SharePage from './common/SharePage';
 import Groups from './cs/Groups';
 import SearchPage from './common/SearchPage';
 import AdminLogPage from './admin/AdminLogPage';
+import configData from '../config/config.json'
 
 export default () => {
     const isPrivileged = useSelector(state => state.token.isPrivileged);
@@ -40,6 +41,9 @@ export default () => {
     return (
         <Router>
             <Routes>
+                {configData.API_SERVER === ""
+
+                }
                 {isAdmin &&
                     <>
                         <Route path='/login' element={<LoginPage />} />
