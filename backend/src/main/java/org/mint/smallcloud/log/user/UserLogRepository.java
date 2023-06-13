@@ -1,9 +1,8 @@
 package org.mint.smallcloud.log.user;
 
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.Pageable;
 import org.mint.smallcloud.user.domain.Member;
-import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Repository;
 
 import javax.persistence.EntityManager;
@@ -21,11 +20,12 @@ public class UserLogRepository {
         em.persist(userLog);
         em.flush();
     }
+
     public List<UserLog> findLogs(String userName, LocalDateTime startTime, LocalDateTime endTime, Boolean status, String action, Pageable pageable) {
         String jpql = "select ul from UserLog ul join ul.member m";
         boolean isFirst = true;
-        if(userName != null) {
-            if(isFirst) {
+        if (userName != null) {
+            if (isFirst) {
                 jpql += " where";
                 isFirst = false;
             } else {
@@ -33,8 +33,8 @@ public class UserLogRepository {
             }
             jpql += " m.userName = :userName";
         }
-        if(startTime != null && endTime == null) {
-            if(isFirst) {
+        if (startTime != null && endTime == null) {
+            if (isFirst) {
                 jpql += " where";
                 isFirst = false;
             } else {
@@ -42,8 +42,8 @@ public class UserLogRepository {
             }
             jpql += " ul.localDateTime >= :startTime";
         }
-        if(startTime == null && endTime != null) {
-            if(isFirst) {
+        if (startTime == null && endTime != null) {
+            if (isFirst) {
                 jpql += " where";
                 isFirst = false;
             } else {
@@ -51,8 +51,8 @@ public class UserLogRepository {
             }
             jpql += " ul.localDateTime <= :endTime";
         }
-        if(startTime != null && endTime != null) {
-            if(isFirst) {
+        if (startTime != null && endTime != null) {
+            if (isFirst) {
                 jpql += " where";
                 isFirst = false;
             } else {
@@ -60,8 +60,8 @@ public class UserLogRepository {
             }
             jpql += " ul.localDateTime between :startTime and :endTime";
         }
-        if(status != null) {
-            if(isFirst) {
+        if (status != null) {
+            if (isFirst) {
                 jpql += " where";
                 isFirst = false;
             } else {
@@ -69,8 +69,8 @@ public class UserLogRepository {
             }
             jpql += " ul.status = :status";
         }
-        if(action != null) {
-            if(isFirst) {
+        if (action != null) {
+            if (isFirst) {
                 jpql += " where";
                 isFirst = false;
             } else {
@@ -80,7 +80,7 @@ public class UserLogRepository {
         }
 
         TypedQuery<UserLog> query = em.createQuery(jpql, UserLog.class);
-        if(userName != null) {
+        if (userName != null) {
             query = query.setParameter("userName", userName);
         }
         if (startTime != null && endTime == null) {
@@ -93,14 +93,19 @@ public class UserLogRepository {
             query = query.setParameter("startTime", startTime);
             query = query.setParameter("endTime", endTime);
         }
-        if(status != null) {
+        if (status != null) {
             query = query.setParameter("status", status);
         }
-        if(action != null) {
+        if (action != null) {
             query = query.setParameter("action", action);
         }
         return query.getResultList();
     }
-    
-    List<UserLog> findByActionStartsWithAndMember(String action, Member member);
+
+    public List<UserLog> findByActionStartsWithAndMember(String action, Member member){
+        return em.createQuery("select ul from UserLog ul where ul.action like :action and ul.member = :member", UserLog.class)
+                .setParameter("action", "%" + action + "%")
+                .setParameter("member", member)
+                .getResultList();
+    }
 }

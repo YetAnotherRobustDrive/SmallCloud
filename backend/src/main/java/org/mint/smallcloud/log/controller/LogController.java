@@ -49,7 +49,7 @@ public class LogController {
     @Secured({Roles.S_ADMIN})
     @GetMapping("/admin")
     public List<ResponseLogDto> getAdminLogs(
-            @Valid @PathVariable RequestLogDto requestLogDto) {
-        return logService.findLogs(requestLogDto);
+            @Valid @PathVariable RequestLogDto requestLogDto, Pageable pageable) {
+        return logService.findLogs(requestLogDto, pageable);
     }
 }

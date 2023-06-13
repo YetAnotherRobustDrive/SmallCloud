@@ -7,10 +7,9 @@ import org.mint.smallcloud.log.dto.ResponseLogDto;
 import org.mint.smallcloud.log.mapper.LogMapper;
 import org.mint.smallcloud.log.user.UserLog;
 import org.mint.smallcloud.log.user.UserLogRepository;
-import org.springframework.data.domain.Pageable;
 import org.mint.smallcloud.user.domain.Member;
-import org.mint.smallcloud.user.repository.MemberRepository;
 import org.mint.smallcloud.user.service.MemberThrowerService;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -37,6 +36,7 @@ public class LogService {
         return userLogs.stream()
                 .map(logMapper::toResponseLogDto)
                 .collect(Collectors.toList());
+    }
 
                 
     public List<ResponseLogDto> findLoginLogsByUser(String username) {
