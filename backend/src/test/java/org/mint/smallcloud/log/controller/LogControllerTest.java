@@ -39,6 +39,7 @@ import java.util.Dictionary;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.mint.smallcloud.TestSnippet.post;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.documentationConfiguration;
 import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.get;
@@ -255,7 +256,7 @@ class LogControllerTest {
                     .nickName(member.getNickname())
                     .build();
 
-            mockMvc.perform(TestSnippet.secured(get(url), adminToken.getAccessToken(), objectMapper, requestLogDto))
+            mockMvc.perform(TestSnippet.secured(post(url), adminToken.getAccessToken(), objectMapper, requestLogDto))
                     .andDo(print())
                     .andExpect(status().isOk())
                     .andExpect(rst -> {
@@ -281,7 +282,7 @@ class LogControllerTest {
             requestLogDto = RequestLogDto.builder()
                     .action("/auth/register")
                     .build();
-            mockMvc.perform(TestSnippet.secured(get(url), adminToken.getAccessToken(), objectMapper, requestLogDto))
+            mockMvc.perform(TestSnippet.secured(post(url), adminToken.getAccessToken(), objectMapper, requestLogDto))
                     .andDo(print())
                     .andExpect(status().isOk())
                     .andExpect(rst -> {
@@ -300,7 +301,7 @@ class LogControllerTest {
             requestLogDto = RequestLogDto.builder()
                     .status(true)
                     .build();
-            mockMvc.perform(TestSnippet.secured(get(url), adminToken.getAccessToken(), objectMapper, requestLogDto))
+            mockMvc.perform(TestSnippet.secured(post(url), adminToken.getAccessToken(), objectMapper, requestLogDto))
                     .andDo(print())
                     .andExpect(status().isOk())
                     .andExpect(rst -> {
@@ -320,7 +321,7 @@ class LogControllerTest {
             requestLogDto = RequestLogDto.builder()
                     .startTime(LocalDateTime.of(2023, 1, 1, 2, 59, 59, 0))
                     .build();
-            mockMvc.perform(TestSnippet.secured(get(url), adminToken.getAccessToken(), objectMapper, requestLogDto))
+            mockMvc.perform(TestSnippet.secured(post(url), adminToken.getAccessToken(), objectMapper, requestLogDto))
                     .andDo(print())
                     .andExpect(status().isOk())
                     .andExpect(rst -> {
@@ -342,7 +343,7 @@ class LogControllerTest {
             requestLogDto = RequestLogDto.builder()
                     .endTime(LocalDateTime.of(2023, 1, 1, 2, 59, 59, 0))
                     .build();
-            mockMvc.perform(TestSnippet.secured(get(url), adminToken.getAccessToken(), objectMapper, requestLogDto))
+            mockMvc.perform(TestSnippet.secured(post(url), adminToken.getAccessToken(), objectMapper, requestLogDto))
                     .andDo(print())
                     .andExpect(status().isOk())
                     .andExpect(rst -> {
@@ -364,7 +365,7 @@ class LogControllerTest {
                     .startTime(LocalDateTime.of(2023, 1, 1, 0, 59, 59, 0))
                     .endTime(LocalDateTime.of(2023, 1, 1, 2, 59, 59, 0))
                     .build();
-            mockMvc.perform(TestSnippet.secured(get(url), adminToken.getAccessToken(), objectMapper, requestLogDto))
+            mockMvc.perform(TestSnippet.secured(post(url), adminToken.getAccessToken(), objectMapper, requestLogDto))
                     .andDo(print())
                     .andExpect(status().isOk())
                     .andExpect(rst -> {
@@ -387,7 +388,7 @@ class LogControllerTest {
                     .nickName(member.getNickname())
                     .action("/files/{id}")
                     .build();
-            mockMvc.perform(TestSnippet.secured(get(url), adminToken.getAccessToken(), objectMapper, requestLogDto))
+            mockMvc.perform(TestSnippet.secured(post(url), adminToken.getAccessToken(), objectMapper, requestLogDto))
                     .andDo(print())
                     .andExpect(status().isOk())
                     .andExpect(rst -> {
@@ -409,7 +410,7 @@ class LogControllerTest {
                     .nickName(member.getNickname())
                     .status(true)
                     .build();
-            mockMvc.perform(TestSnippet.secured(get(url), adminToken.getAccessToken(), objectMapper, requestLogDto))
+            mockMvc.perform(TestSnippet.secured(post(url), adminToken.getAccessToken(), objectMapper, requestLogDto))
                     .andDo(print())
                     .andExpect(status().isOk())
                     .andExpect(rst -> {
@@ -434,7 +435,7 @@ class LogControllerTest {
                     .startTime(LocalDateTime.of(2023, 1, 1, 0, 59, 59, 0))
                     .endTime(LocalDateTime.of(2023, 1, 1, 2, 59, 59, 0))
                     .build();
-            mockMvc.perform(TestSnippet.secured(get(url), adminToken.getAccessToken(), objectMapper, requestLogDto))
+            mockMvc.perform(TestSnippet.secured(post(url), adminToken.getAccessToken(), objectMapper, requestLogDto))
                     .andDo(print())
                     .andExpect(status().isOk())
                     .andExpect(rst -> {
@@ -457,7 +458,7 @@ class LogControllerTest {
             requestLogDto = RequestLogDto.builder()
                     .build(); // find all
 
-            mockMvc.perform(TestSnippet.secured(get(urlPaging), adminToken.getAccessToken(), objectMapper, requestLogDto))
+            mockMvc.perform(TestSnippet.secured(post(urlPaging), adminToken.getAccessToken(), objectMapper, requestLogDto))
                     .andDo(print())
                     .andExpect(status().isOk())
                     .andExpect(rst -> {
@@ -479,7 +480,7 @@ class LogControllerTest {
                     .build();
 
 
-            mockMvc.perform(TestSnippet.secured(get(urlPaging), adminToken.getAccessToken(), objectMapper, requestLogDto))
+            mockMvc.perform(TestSnippet.secured(post(urlPaging), adminToken.getAccessToken(), objectMapper, requestLogDto))
                     .andDo(print())
                     .andExpect(status().isOk())
                     .andExpect(rst -> {

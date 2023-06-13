@@ -45,7 +45,7 @@ public class LogController {
 
     // 관리자 log 가져오기
     @Secured({Roles.S_ADMIN})
-    @GetMapping("/admin")
+    @PostMapping("/admin")
     public List<ResponseLogDto> getAdminLogs(
             @Valid @RequestBody RequestLogDto requestLogDto, Pageable pageable) {
         return logService.findLogs(requestLogDto, pageable);

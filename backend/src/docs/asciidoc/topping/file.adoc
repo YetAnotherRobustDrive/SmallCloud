@@ -52,7 +52,7 @@ IMPORTANT: 잘못된 토큰
 
 === 파일 복구 (restore)
 
-operation::file/restore/okNoLabel[snippets='http-request,path-parameters']
+operation::file/restore/ok[snippets='http-request,path-parameters']
 
 ==== 성공
 
