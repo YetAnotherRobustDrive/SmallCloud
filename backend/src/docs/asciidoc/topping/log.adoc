@@ -8,7 +8,7 @@ operation::log/UserLoginLogs/ok[snippets='http-response']
 
 === 어드민 조건 검색
 
-operation::log/admin/actionFilter[snippets='http-request']
+operation::log/admin/pageFilter[snippets='http-request']
 
 ==== 성공
 
@@ -39,3 +39,9 @@ IMPORTANT: 닉네임과 시작 시간과 종료 시간 기준 조회
 operation::log/admin/nicknameAndStatusFilter[snippets='http-response']
 IMPORTANT: 닉네임과 상태 기준 조회
 
+operation::log/admin/pageFilter[snippets='http-response']
+IMPORTANT: 페이지 기준 조회
+
+operation::log/admin/parameterExist[snippets='http-request']
+operation::log/admin/parameterExist[snippets='http-response']
+IMPORTANT: 파라미터 있는 경우

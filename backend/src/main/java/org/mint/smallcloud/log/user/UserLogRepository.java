@@ -1,7 +1,6 @@
 package org.mint.smallcloud.log.user;
 
 import lombok.RequiredArgsConstructor;
-import org.mint.smallcloud.user.domain.Member;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Repository;
 
@@ -76,10 +75,12 @@ public class UserLogRepository {
             } else {
                 jpql += " and";
             }
-            jpql += " ul.action = :action";
+            jpql += " ul.action like :action";
         }
 
-        TypedQuery<UserLog> query = em.createQuery(jpql, UserLog.class);
+        TypedQuery<UserLog> query = em.createQuery(jpql, UserLog.class)
+                .setFirstResult((int) pageable.getOffset())
+                .setMaxResults(pageable.getPageSize());
         if (nickname != null) {
             query = query.setParameter("nickname", nickname);
         }
@@ -97,7 +98,11 @@ public class UserLogRepository {
             query = query.setParameter("status", status);
         }
         if (action != null) {
-            query = query.setParameter("action", action);
+            // convert
+            // from /group/{groupName}/add-user/{username}
+            // to /group/%/remove-user/%
+            String actionLike = action.replaceAll("\\{.*?\\}", "%");
+            query = query.setParameter("action", actionLike);
         }
         return query.getResultList();
     }
