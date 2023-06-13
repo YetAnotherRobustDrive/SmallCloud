@@ -104,7 +104,9 @@ class UserControllerTest {
         public void ok() throws Exception {
             mockMvc.perform(TestSnippet.secured(post(url, member1.getUsername()), adminToken.getAccessToken()))
                 .andExpect(status().isOk())
-                .andExpect((rst) -> assertNull(em.find(Member.class, member1.getId())))
+                    .andExpect((rst) -> {
+                        assertTrue(member1.isLocked());
+                    })
                 .andDo(document(DOCUMENT_NAME,
                     pathParameters(
                         parameterWithName("username").description("삭제하려는 유저의 아이디")

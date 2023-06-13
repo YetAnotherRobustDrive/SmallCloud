@@ -77,7 +77,7 @@ public class MemberService {
 
     public void deregisterCommon(String username) {
         Member member = memberThrowerService.getCommonByUsername(username);
-        memberRepository.delete(member);
+        member.lock();
     }
 
     public void checkPassword(LoginDto loginDto) {
