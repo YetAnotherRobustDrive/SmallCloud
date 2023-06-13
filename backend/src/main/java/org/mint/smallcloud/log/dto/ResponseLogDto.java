@@ -15,4 +15,15 @@ public class ResponseLogDto {
     private final String action;
     private final String ipAddr;
     private final Boolean status;
+
+    @Override
+    public String toString() {
+        return "UserLog{" +
+                "nickName=" + nickName +
+                ", action=" + action +
+                ", time=" + localDateTime +
+                ", ipAddr=" + ipAddr +
+                ", status=" + status.toString() +
+                '}';
+    }
 }

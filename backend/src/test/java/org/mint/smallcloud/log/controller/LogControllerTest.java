@@ -33,6 +33,9 @@ import org.springframework.web.filter.CharacterEncodingFilter;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Dictionary;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -182,26 +185,61 @@ class LogControllerTest {
     @DisplayName("/logs/admin document")
     class admin {
         private final String url = URL_PREFIX + "/admin";
-        private UserLog log1;
-        private UserLog log2;
-        private UserLog log3;
-        private UserLog log4;
+        private UserLog log;
         private RequestLogDto requestLogDto;
         private RequestLogDto requestLogDto1;
 
         @BeforeEach
         void boot() {
-            log1 = UserLog.of(admin, LocalDateTime.now(), "/ping/success", "123.123.123.123", true);
-            em.persist(log1);
-            log2 = UserLog.of(member, LocalDateTime.now(), "/ping/fail", "111.111.111.111", true);
-            em.persist(log2);
-            log3 = UserLog.of(member1, LocalDateTime.now(), "/ping/pong", "123.123.123.123", false);
-            em.persist(log3);
+//          log1 = UserLog.of(member, LocalDateTime.now(), "/ping/login/" + member.getUsername() + "/success", "111.111.111.111", false);
+            List<String> actionList = new ArrayList<>();
+            actionList.addAll(Arrays.asList( //24개
+                    "/auth/register",
+                    "/auth/register",
+                    "/auth/register",
+                    "/auth/login",
+                    "/auth/login",
+                    "/auth/login",
+                    "/auth/refresh",
+                    "/auth/refresh",
+                    "/auth/refresh",
+                    "/auth/elevate",
+                    "/auth/elevate",
+                    "/auth/elevate",
+                    "/files/{id}",
+                    "/files/{id}",
+                    "/files/{id}",
+                    "/admin/lock",
+                    "/admin/lock",
+                    "/admin/lock",
+                    "/admin/unlock",
+                    "/admin/unlock",
+                    "/admin/unlock",
+                    "/files/{id}",
+                    "/files/{id}",
+                    "/files/{id}"
+            ));
+            LocalDateTime testTime = LocalDateTime.of(2023, 1, 1, 0, 0, 0, 0);
+            for (int i = 0; i < actionList.size(); i++) { //사용자 당 48개의 로그 생성
+                log = UserLog.of(member, testTime.plusHours(i), actionList.get(i), "111.111.111.111", true);
+                em.persist(log);
+                log = UserLog.of(member, testTime.plusHours(i), actionList.get(i), "111.111.111.111", false);
+                em.persist(log);
+                log = UserLog.of(member1, testTime.plusHours(i), actionList.get(i), "111.111.222.111", true);
+                em.persist(log);
+                log = UserLog.of(member1, testTime.plusHours(i), actionList.get(i), "111.111.222.111", false);
+                em.persist(log);
+            }
+            em.flush();
             /**
              * 1. nickName
+             *  - 24개 * 2개(t/f) = 48개
              * 2. action
+             *  - 3개 * 2개(t/f) * 2개(2명) = 12개
              * 3. status true
+             *  - 24개 * 2개(2명) = 48개
              * 4. status false
+             * - 24개 * 2개(2명) = 48개
              * 5. startTime
              * 6. endTime
              * 7. startTime, endTime
@@ -209,22 +247,26 @@ class LogControllerTest {
              * 9. nickName, status true
              * 10. nickName, between
              */
+        }
+
+        @DisplayName("닉네임 조회")
+        @Test
+        void nicknameFilter() throws Exception {
 
             requestLogDto = RequestLogDto.builder()
                     .nickName(member.getNickname())
                     .build();
 
-            requestLogDto1 = RequestLogDto.builder()
-                    .action("/ping/success")
-                    .build();
-        }
-
-        @DisplayName("정상적인 로그 조회")
-        @Test
-        void ok() throws Exception {
             mockMvc.perform(TestSnippet.secured(get(url), adminToken.getAccessToken(), objectMapper, requestLogDto))
                     .andDo(print())
                     .andExpect(status().isOk())
+                    .andExpect(rst -> {
+                        List<ResponseLogDto> res = objectMapper.readValue(rst.getResponse().getContentAsString(), objectMapper.getTypeFactory().constructCollectionType(List.class, ResponseLogDto.class));
+                        assertEquals(48, res.size());
+                        for (ResponseLogDto dto : res) {
+                            System.out.println(dto.toString());
+                        }
+                    })
                     .andDo(document(DOCUMENT_NAME, requestFields(
                             fieldWithPath("nickName").description("닉네임"),
                             fieldWithPath("action").description("액션"),
@@ -232,6 +274,176 @@ class LogControllerTest {
                             fieldWithPath("startTime").description("시작시간"),
                             fieldWithPath("endTime").description("종료시간")
                     )));
+        }
+
+        @DisplayName("액션 조회")
+        @Test
+        void actionFilter() throws Exception {
+            requestLogDto = RequestLogDto.builder()
+                    .action("/auth/register")
+                    .build();
+            mockMvc.perform(TestSnippet.secured(get(url), adminToken.getAccessToken(), objectMapper, requestLogDto))
+                    .andDo(print())
+                    .andExpect(status().isOk())
+                    .andExpect(rst -> {
+                        List<ResponseLogDto> res = objectMapper.readValue(rst.getResponse().getContentAsString(), objectMapper.getTypeFactory().constructCollectionType(List.class, ResponseLogDto.class));
+                        assertEquals(12, res.size());
+                        for (ResponseLogDto dto : res) {
+                            System.out.println(dto.toString());
+                        }
+                    })
+                    .andDo(document(DOCUMENT_NAME));
+        }
+
+        @DisplayName("상태 조회")
+        @Test
+        void statusFilter() throws Exception {
+            requestLogDto = RequestLogDto.builder()
+                    .status(true)
+                    .build();
+            mockMvc.perform(TestSnippet.secured(get(url), adminToken.getAccessToken(), objectMapper, requestLogDto))
+                    .andDo(print())
+                    .andExpect(status().isOk())
+                    .andExpect(rst -> {
+                        List<ResponseLogDto> res = objectMapper.readValue(rst.getResponse().getContentAsString(), objectMapper.getTypeFactory().constructCollectionType(List.class, ResponseLogDto.class));
+                        assertEquals(48, res.size());
+                        for (ResponseLogDto dto : res) {
+                            System.out.println(dto.toString());
+                        }
+                    })
+                    .andDo(document(DOCUMENT_NAME));
+        }
+
+        @DisplayName("시작시간 조회")
+        @Test
+        void startTimeFilter() throws Exception {
+            requestLogDto = RequestLogDto.builder()
+                    .startTime(LocalDateTime.of(2023, 1, 1, 2, 59, 59, 0))
+                    .build();
+            mockMvc.perform(TestSnippet.secured(get(url), adminToken.getAccessToken(), objectMapper, requestLogDto))
+                    .andDo(print())
+                    .andExpect(status().isOk())
+                    .andExpect(rst -> {
+                        List<ResponseLogDto> res = objectMapper.readValue(rst.getResponse().getContentAsString(), objectMapper.getTypeFactory().constructCollectionType(List.class, ResponseLogDto.class));
+                        assertEquals(96 - 3 * 4, res.size());
+                        // 3 = 0시, 1시, 2시
+                        // 4 = 2명 * 2개(t/f)
+                        for (ResponseLogDto dto : res) {
+                            System.out.println(dto.toString());
+                        }
+                    })
+                    .andDo(document(DOCUMENT_NAME));
+        }
+
+        @DisplayName("종료시간 조회")
+        @Test
+        void endTimeFilter() throws Exception {
+            requestLogDto = RequestLogDto.builder()
+                    .endTime(LocalDateTime.of(2023, 1, 1, 2, 59, 59, 0))
+                    .build();
+            mockMvc.perform(TestSnippet.secured(get(url), adminToken.getAccessToken(), objectMapper, requestLogDto))
+                    .andDo(print())
+                    .andExpect(status().isOk())
+                    .andExpect(rst -> {
+                        List<ResponseLogDto> res = objectMapper.readValue(rst.getResponse().getContentAsString(), objectMapper.getTypeFactory().constructCollectionType(List.class, ResponseLogDto.class));
+                        assertEquals(3 * 4, res.size());
+                        // 3 = 0시, 1시, 2시
+                        // 4 = 2명 * 2개(t/f)
+                        for (ResponseLogDto dto : res) {
+                            System.out.println(dto.toString());
+                        }
+                    })
+                    .andDo(document(DOCUMENT_NAME));
+        }
+
+        @DisplayName("시작시간, 종료시간 조회")
+        @Test
+        void startTimeAndEndTimeFilter() throws Exception {
+            requestLogDto = RequestLogDto.builder()
+                    .startTime(LocalDateTime.of(2023, 1, 1, 0, 59, 59, 0))
+                    .endTime(LocalDateTime.of(2023, 1, 1, 2, 59, 59, 0))
+                    .build();
+            mockMvc.perform(TestSnippet.secured(get(url), adminToken.getAccessToken(), objectMapper, requestLogDto))
+                    .andDo(print())
+                    .andExpect(status().isOk())
+                    .andExpect(rst -> {
+                        List<ResponseLogDto> res = objectMapper.readValue(rst.getResponse().getContentAsString(), objectMapper.getTypeFactory().constructCollectionType(List.class, ResponseLogDto.class));
+                        assertEquals(2 * 4, res.size());
+                        // 2 = 1시, 2시
+                        // 4 = 2명 * 2개(t/f)
+                        for (ResponseLogDto dto : res) {
+                            System.out.println(dto.toString());
+                        }
+                    })
+                    .andDo(document(DOCUMENT_NAME));
+        }
+
+        @DisplayName("닉네임, 액션 조회")
+        @Test
+        void nicknameAndActionFilter() throws Exception {
+            requestLogDto = RequestLogDto.builder()
+                    .nickName(member.getNickname())
+                    .action("/auth/login")
+                    .build();
+            mockMvc.perform(TestSnippet.secured(get(url), adminToken.getAccessToken(), objectMapper, requestLogDto))
+                    .andDo(print())
+                    .andExpect(status().isOk())
+                    .andExpect(rst -> {
+                        List<ResponseLogDto> res = objectMapper.readValue(rst.getResponse().getContentAsString(), objectMapper.getTypeFactory().constructCollectionType(List.class, ResponseLogDto.class));
+                        assertEquals(3*2, res.size());
+                        // 3 = 액션 당 3번
+                        // 2 = 1명 * 2개(t/f)
+                        for (ResponseLogDto dto : res) {
+                            System.out.println(dto.toString());
+                        }
+                    })
+                    .andDo(document(DOCUMENT_NAME));
+        }
+
+        @DisplayName("닉네임, 상태 조회")
+        @Test
+        void nicknameAndStatusFilter() throws Exception {
+            requestLogDto = RequestLogDto.builder()
+                    .nickName(member.getNickname())
+                    .status(true)
+                    .build();
+            mockMvc.perform(TestSnippet.secured(get(url), adminToken.getAccessToken(), objectMapper, requestLogDto))
+                    .andDo(print())
+                    .andExpect(status().isOk())
+                    .andExpect(rst -> {
+                        List<ResponseLogDto> res = objectMapper.readValue(rst.getResponse().getContentAsString(), objectMapper.getTypeFactory().constructCollectionType(List.class, ResponseLogDto.class));
+                        assertEquals(3*8*1, res.size());
+                        // 3 = 액션 당 3번
+                        // 8 = 액션 종류
+                        // 1 = 1명 * 1개(t)
+                        for (ResponseLogDto dto : res) {
+                            System.out.println(dto.toString());
+                        }
+                    })
+                    .andDo(document(DOCUMENT_NAME));
+        }
+
+        @DisplayName("닉네임, 시작시간, 종료시간 조회")
+        @Test
+        void nicknameAndStartTimeAndEndTimeFilter() throws Exception {
+            requestLogDto = RequestLogDto.builder()
+                    .nickName(member.getNickname())
+                    .startTime(LocalDateTime.of(2023, 1, 1, 0, 59, 59, 0))
+                    .endTime(LocalDateTime.of(2023, 1, 1, 2, 59, 59, 0))
+                    .build();
+            mockMvc.perform(TestSnippet.secured(get(url), adminToken.getAccessToken(), objectMapper, requestLogDto))
+                    .andDo(print())
+                    .andExpect(status().isOk())
+                    .andExpect(rst -> {
+                        List<ResponseLogDto> res = objectMapper.readValue(rst.getResponse().getContentAsString(), objectMapper.getTypeFactory().constructCollectionType(List.class, ResponseLogDto.class));
+                        assertEquals(2*2, res.size());
+                        // 2 = 1시, 2시
+                        // 2 = 1명 * 2개(t/f)
+                        for (ResponseLogDto dto : res) {
+                            System.out.println(dto.toString());
+                        }
+                    })
+                    .andDo(document(DOCUMENT_NAME));
         }
     }
 }

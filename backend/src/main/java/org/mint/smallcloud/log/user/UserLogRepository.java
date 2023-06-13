@@ -21,17 +21,17 @@ public class UserLogRepository {
         em.flush();
     }
 
-    public List<UserLog> findLogs(String userName, LocalDateTime startTime, LocalDateTime endTime, Boolean status, String action, Pageable pageable) {
+    public List<UserLog> findLogs(String nickname, LocalDateTime startTime, LocalDateTime endTime, Boolean status, String action, Pageable pageable) {
         String jpql = "select ul from UserLog ul join ul.member m";
         boolean isFirst = true;
-        if (userName != null) {
+        if (nickname != null) {
             if (isFirst) {
                 jpql += " where";
                 isFirst = false;
             } else {
                 jpql += " and";
             }
-            jpql += " m.userName = :userName";
+            jpql += " m.nickname = :nickname";
         }
         if (startTime != null && endTime == null) {
             if (isFirst) {
@@ -40,7 +40,7 @@ public class UserLogRepository {
             } else {
                 jpql += " and";
             }
-            jpql += " ul.localDateTime >= :startTime";
+            jpql += " ul.time >= :startTime";
         }
         if (startTime == null && endTime != null) {
             if (isFirst) {
@@ -49,7 +49,7 @@ public class UserLogRepository {
             } else {
                 jpql += " and";
             }
-            jpql += " ul.localDateTime <= :endTime";
+            jpql += " ul.time <= :endTime";
         }
         if (startTime != null && endTime != null) {
             if (isFirst) {
@@ -58,7 +58,7 @@ public class UserLogRepository {
             } else {
                 jpql += " and";
             }
-            jpql += " ul.localDateTime between :startTime and :endTime";
+            jpql += " ul.time between :startTime and :endTime";
         }
         if (status != null) {
             if (isFirst) {
@@ -80,8 +80,8 @@ public class UserLogRepository {
         }
 
         TypedQuery<UserLog> query = em.createQuery(jpql, UserLog.class);
-        if (userName != null) {
-            query = query.setParameter("userName", userName);
+        if (nickname != null) {
+            query = query.setParameter("nickname", nickname);
         }
         if (startTime != null && endTime == null) {
             query = query.setParameter("startTime", startTime);
