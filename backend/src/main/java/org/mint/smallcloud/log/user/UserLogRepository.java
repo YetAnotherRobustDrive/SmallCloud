@@ -1,19 +1,25 @@
 package org.mint.smallcloud.log.user;
 
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Repository;
 
-import javax.persistence.*;
+import javax.persistence.EntityManager;
+import javax.persistence.TypedQuery;
 import java.time.LocalDateTime;
 import java.util.List;
 
 @Repository
-public interface UserLogRepository extends JpaRepository<UserLog, Long> {
+@RequiredArgsConstructor
+public class UserLogRepository {
 
-    @PersistenceContext
-    private EntityManager em;
-    List<UserLog> findLogs(String userName, LocalDateTime startTime, LocalDateTime endTime, Boolean status, String action) {
+    private final EntityManager em;
+
+    public void saveAndFlush(UserLog userLog) {
+        em.persist(userLog);
+        em.flush();
+    }
+    public List<UserLog> findLogs(String userName, LocalDateTime startTime, LocalDateTime endTime, Boolean status, String action, Pageable pageable) {
         String jpql = "select ul from UserLog ul join ul.member m";
         boolean isFirst = true;
         if(userName != null) {
@@ -83,7 +89,7 @@ public interface UserLogRepository extends JpaRepository<UserLog, Long> {
         }
         if (startTime != null && endTime != null) {
             query = query.setParameter("startTime", startTime);
-            query.setParameter("endTime", endTime);
+            query = query.setParameter("endTime", endTime);
         }
         if(status != null) {
             query = query.setParameter("status", status);
