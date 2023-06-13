@@ -60,4 +60,11 @@ public class LogService {
                 .collect(Collectors.toList());
     }
 
+    public Integer getTotalSize(){
+        return userLogRepository.getTotalPageCnt();
+    }
+
+    public Integer getLoginLogsCountByUser(String username) {
+        return userLogRepository.countByActionStartsWith("/ping/login/" + username + "/");
+    }
 }
