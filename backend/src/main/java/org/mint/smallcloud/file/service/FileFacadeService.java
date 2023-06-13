@@ -8,6 +8,7 @@ import org.mint.smallcloud.file.domain.File;
 import org.mint.smallcloud.file.domain.Folder;
 import org.mint.smallcloud.file.dto.DirectoryMoveDto;
 import org.mint.smallcloud.file.dto.FileDto;
+import org.mint.smallcloud.file.dto.UsageDto;
 import org.mint.smallcloud.file.mapper.FileMapper;
 import org.mint.smallcloud.file.repository.FileRepository;
 import org.mint.smallcloud.user.domain.Member;
@@ -77,5 +78,10 @@ public class FileFacadeService {
     public List<FileDto> search(String q, String username) {
         Member user = memberThrowerService.getMemberByUsername(username);
         return fileService.search(q, user).stream().map(fileMapper::toFileDto).collect(Collectors.toList());
+    }
+
+    public UsageDto getUsage(String username) {
+        Member user = memberThrowerService.getMemberByUsername(username);
+        return fileService.getUsage(user);
     }
 }

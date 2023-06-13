@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.mint.smallcloud.file.domain.File;
 import org.mint.smallcloud.file.domain.Folder;
+import org.mint.smallcloud.file.dto.UsageDto;
 import org.mint.smallcloud.file.repository.FileRepository;
 import org.mint.smallcloud.label.service.LabelService;
 import org.mint.smallcloud.user.domain.Member;
@@ -69,5 +70,11 @@ public class FileService {
         if (q.isBlank())
             return List.<File>of();
         return fileRepository.findByFileType_NameLikeAndOwner(q, user);
+    }
+
+    public UsageDto getUsage(Member user) {
+        return UsageDto.builder()
+                .used(fileRepository.sumSizeByOwner(user))
+                .build();
     }
 }

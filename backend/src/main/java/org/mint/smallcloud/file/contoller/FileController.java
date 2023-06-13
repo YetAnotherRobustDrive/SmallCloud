@@ -16,6 +16,7 @@ import org.mint.smallcloud.file.domain.Folder;
 import org.mint.smallcloud.file.dto.DirectoryMoveDto;
 import org.mint.smallcloud.file.dto.FileDto;
 import org.mint.smallcloud.file.dto.LabelUpdateDto;
+import org.mint.smallcloud.file.dto.UsageDto;
 import org.mint.smallcloud.file.repository.FileRepository;
 import org.mint.smallcloud.file.repository.FolderRepository;
 import org.mint.smallcloud.file.service.FileFacadeService;
@@ -224,5 +225,15 @@ public class FileController {
     private UserDetails getLoginUser() {
         return userDetailsProvider.getUserDetails()
             .orElseThrow(() -> new ServiceException(ExceptionStatus.NO_PERMISSION));
+    }
+
+    @Secured(Roles.S_COMMON)
+    @GetMapping("/usage")
+    public UsageDto getUsage() {
+        UserDetails user = getLoginUser();
+        UsageDto usage = fileFacadeService.getUsage(user.getUsername());
+        return UsageDto.builder()
+                .used(usage.getUsed())
+                .build();
     }
 }

@@ -181,3 +181,10 @@ operation::file/search/ok[snippets='http-request,request-parameters']
 operation::file/search/ok[snippets='http-response']
 
 
+=== 사용량 조회
+
+operation::file/usage/ok[snippets='http-request']
+
+==== 성공
+
+operation::file/usage/ok[snippets='http-response']
