@@ -41,3 +41,7 @@ IMPORTANT: 닉네임과 상태 기준 조회
 
 operation::log/admin/pageFilter[snippets='http-response']
 IMPORTANT: 페이지 기준 조회
+
+operation::log/admin/parameterExist[snippets='http-request']
+operation::log/admin/parameterExist[snippets='http-response']
+IMPORTANT: 파라미터 있는 경우

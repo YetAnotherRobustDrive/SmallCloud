@@ -204,18 +204,18 @@ class LogControllerTest {
                     "/auth/elevate",
                     "/auth/elevate",
                     "/auth/elevate",
-                    "/files/{id}",
-                    "/files/{id}",
-                    "/files/{id}",
+                    "/files/1",
+                    "/files/2",
+                    "/files/3",
                     "/admin/lock",
                     "/admin/lock",
                     "/admin/lock",
                     "/admin/unlock",
                     "/admin/unlock",
                     "/admin/unlock",
-                    "/files/{id}",
-                    "/files/{id}",
-                    "/files/{id}"
+                    "/group/test/add-user/user1",
+                    "/group/test/add-user/user1",
+                    "/group/test/add-user/user1"
             ));
             LocalDateTime testTime = LocalDateTime.of(2023, 1, 1, 0, 0, 0, 0);
             for (int i = 0; i < actionList.size(); i++) { //사용자 당 48개의 로그 생성
@@ -382,9 +382,10 @@ class LogControllerTest {
         @DisplayName("닉네임, 액션 조회")
         @Test
         void nicknameAndActionFilter() throws Exception {
+
             requestLogDto = RequestLogDto.builder()
                     .nickName(member.getNickname())
-                    .action("/auth/login")
+                    .action("/files/{id}")
                     .build();
             mockMvc.perform(TestSnippet.secured(get(url), adminToken.getAccessToken(), objectMapper, requestLogDto))
                     .andDo(print())
@@ -447,8 +448,7 @@ class LogControllerTest {
                     })
                     .andDo(document(DOCUMENT_NAME));
         }
-
-
+        
 
         @DisplayName("페이지 조회")
         @Test
@@ -463,6 +463,28 @@ class LogControllerTest {
                     .andExpect(rst -> {
                         List<ResponseLogDto> res = objectMapper.readValue(rst.getResponse().getContentAsString(), objectMapper.getTypeFactory().constructCollectionType(List.class, ResponseLogDto.class));
                         assertEquals(6, res.size());
+                        for (ResponseLogDto dto : res) {
+                            System.out.println(dto.toString());
+                        }
+                    })
+                    .andDo(document(DOCUMENT_NAME));
+        }
+
+        @DisplayName("파라미터 있는 경우")
+        @Test
+        void parameterExist() throws Exception {
+            String urlPaging = url + "?size=100&page=0";
+            requestLogDto = RequestLogDto.builder()
+                    .action("/group/{groupName}/add-user/{username}")
+                    .build();
+
+
+            mockMvc.perform(TestSnippet.secured(get(urlPaging), adminToken.getAccessToken(), objectMapper, requestLogDto))
+                    .andDo(print())
+                    .andExpect(status().isOk())
+                    .andExpect(rst -> {
+                        List<ResponseLogDto> res = objectMapper.readValue(rst.getResponse().getContentAsString(), objectMapper.getTypeFactory().constructCollectionType(List.class, ResponseLogDto.class));
+                        assertEquals(12, res.size());
                         for (ResponseLogDto dto : res) {
                             System.out.println(dto.toString());
                         }

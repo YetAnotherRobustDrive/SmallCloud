@@ -75,7 +75,7 @@ public class UserLogRepository {
             } else {
                 jpql += " and";
             }
-            jpql += " ul.action = :action";
+            jpql += " ul.action like :action";
         }
 
         TypedQuery<UserLog> query = em.createQuery(jpql, UserLog.class)
@@ -98,7 +98,11 @@ public class UserLogRepository {
             query = query.setParameter("status", status);
         }
         if (action != null) {
-            query = query.setParameter("action", action);
+            // convert
+            // from /group/{groupName}/add-user/{username}
+            // to /group/%/remove-user/%
+            String actionLike = action.replaceAll("\\{.*?\\}", "%");
+            query = query.setParameter("action", actionLike);
         }
         return query.getResultList();
     }
