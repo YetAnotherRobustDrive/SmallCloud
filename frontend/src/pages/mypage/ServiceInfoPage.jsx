@@ -48,6 +48,7 @@ export default function ServiceInfoPage() {
             <SidebarMypage />
             <BodyFrame>
                 <BodyHeader text="약관 변경내역 (이전 / 최신)" />
+                <div style={{width:"100%", overflow:"scroll"}}>
                 {(lastTwoTerm[0] === "" || lastTwoTerm[1] === "") ? <div>이전 버전이 없습니다.</div> :
                     <ReacDiffViewer
                         oldValue={lastTwoTerm[0]}
@@ -55,7 +56,9 @@ export default function ServiceInfoPage() {
                         splitView={true}
                     />
                 }
+                </div>
                 <BodyHeader text="개인정보 취급 방침 변경내역 (이전 / 최신)" />
+                <div style={{width:"100%", overflow:"scroll"}}>
                 {(lastTwoPrivacy[0] === "" || lastTwoPrivacy[1] === "") ? <div>이전 버전이 없습니다.</div> :
                     <ReacDiffViewer
                         oldValue={lastTwoPrivacy[0]}
@@ -63,8 +66,7 @@ export default function ServiceInfoPage() {
                         splitView={true}
                     />
                 }
-
-
+                </div>
             </BodyFrame>
         </>
     )
