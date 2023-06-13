@@ -8,6 +8,10 @@ operation::log/UserLoginLogs/ok[snippets='http-response']
 
 === 어드민 조건 검색
 
+operation::log/admin/actionFilter[snippets='http-request']
+
+==== 성공
+
 operation::log/admin/actionFilter[snippets='http-response']
 IMPORTANT: 액션 기준 조회
 
