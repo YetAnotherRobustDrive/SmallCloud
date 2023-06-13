@@ -34,7 +34,8 @@ public enum ExceptionStatus {
     NOT_FOUND_LABEL(HttpStatus.NOT_FOUND, "라벨을 찾을 수 없습니다."),
     NOT_FOUND_OWNER(HttpStatus.NOT_FOUND, "소유자를 찾을 수 없습니다."),
     USER_LOCKED(HttpStatus.FORBIDDEN, "잠긴 유저입니다."),
-    NOT_FOUND_NOTIFICATION(HttpStatus.NOT_FOUND, "알림을 찾을 수 없습니다."),;
+    NOT_FOUND_NOTIFICATION(HttpStatus.NOT_FOUND, "알림을 찾을 수 없습니다."),
+    NOT_FOUND_ANSWER(HttpStatus.NOT_FOUND, "답변을 찾을 수 없습니다."),;
 
     ExceptionStatus(HttpStatus status, String message) {
         responseDto = ErrorResponseDto.builder()

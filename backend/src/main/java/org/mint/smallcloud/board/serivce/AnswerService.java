@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.mint.smallcloud.board.domain.Answer;
 import org.mint.smallcloud.board.domain.Question;
+import org.mint.smallcloud.board.dto.AnswerDto;
 import org.mint.smallcloud.board.dto.RequestDto;
 import org.mint.smallcloud.board.repository.AnswerRepository;
 import org.mint.smallcloud.board.repository.QuestionRepository;
@@ -47,5 +48,15 @@ public class AnswerService {
                 );
         }
         return true;
+    }
+
+    public AnswerDto findAnswer(Long questionId) {
+        Answer answer = answerRepository.findByQuestionId(questionId)
+                .orElseThrow(() -> new ServiceException(ExceptionStatus.NOT_FOUND_ANSWER));
+        return AnswerDto.builder()
+                .id(answer.getId())
+                .content(answer.getContent())
+                .createdDate(answer.getCreatedDate())
+                .build();
     }
 }
