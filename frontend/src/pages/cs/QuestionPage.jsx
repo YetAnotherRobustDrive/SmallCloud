@@ -9,7 +9,6 @@ import SidebarCS from "../../component/sidebar/SidebarCS";
 import '../../css/cs.css';
 import GetBoardListFrom from "../../services/board/GetBoardListFrom";
 import PostBoard from "../../services/board/PostBoard";
-import GetUserInfo from "../../services/user/GetUserInfo";
 
 export default function QuestionPage() {
     const [isEmpty, setIsEmpty] = useState(false);
@@ -27,6 +26,12 @@ export default function QuestionPage() {
                 setMessage(res[1]);
                 return;
             }
+            res[1].forEach(async (item) => {
+                if (item.answerId !== null) {
+                    const answerRes = await GetBoardListFrom('inquiries/search/answer?answerId=' + item.answerId);
+                    item.answer = answerRes[1].content;
+                }
+            });
             setMyQuestion(res[1]);
         }
         fetchMyQuestion();
@@ -82,7 +87,18 @@ export default function QuestionPage() {
                 <div style={{ overflow: "scroll", overflowX: "hidden", height: "calc(100vh - 579px)" }}>
                     {myQuestion.length === 0 ? <div style={{ textAlign: "center", marginTop: "20px" }}>문의 내역이 없습니다.</div> :
                         myQuestion.map((data) => {
-                            return <ExtendBox key={data.id} title={data.title}>{data.content}</ExtendBox>
+                            return <ExtendBox key={data.id} title={data.title}>
+                                <>
+                                    <span>질문</span>
+                                    <div style={{ minWidth: "calc(100% - 20px)", width: "max-content", borderBottom: "1px solid black", padding: "10px", marginBottom: "10px" }}>
+                                        {data.content}
+                                    </div>
+                                    <span>답변</span>
+                                    <div style={{ minWidth: "calc(100% - 20px)", width: "max-content", padding: "10px" }}>
+                                        {data.answer === undefined ? "등록된 답변이 없습니다." : data.answer}
+                                    </div>
+                                </>
+                            </ExtendBox>
                         })
                     }
                 </div>
