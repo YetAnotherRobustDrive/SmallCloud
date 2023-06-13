@@ -6,19 +6,12 @@ import BodyHeader from "../../component/main/BodyHeader";
 import { IoIosArrowDown, IoIosArrowUp } from "react-icons/io";
 
 import "../../css/admin.css"
+import AdminGetLogBy from "../../services/admin/AdminGetLogBy";
 
 export default function AdminLogPage() {
 
     const [isOpen, setIsOpen] = useState(false);
-    const [log, setLog] = useState([
-        {
-            time: "2021-08-01 12:00:00",
-            user: "admin",
-            action: "로그인",
-            status: "성공",
-            ip: "111.111.111.111",
-        },
-    ]);
+    const [log, setLog] = useState([]);
 
     const actionList = [
         {
@@ -128,6 +121,19 @@ export default function AdminLogPage() {
             ]
         },
     ]
+
+    const handlesubmit = async (e) => {
+        e.preventDefault();
+        const data = {
+            action: e.target.action.value,
+            result: e.target.result.value,
+            startDate: e.target.startDate.value,
+            endDate: e.target.endDate.value,
+            page: 1,
+            size: 10,
+        }
+        const res = await AdminGetLogBy(data);
+    }
 
     return (
         <>
