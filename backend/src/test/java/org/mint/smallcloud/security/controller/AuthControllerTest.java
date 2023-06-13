@@ -32,8 +32,7 @@ import javax.transaction.Transactional;
 import java.util.HashMap;
 import java.util.Map;
 
-import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.*;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.documentationConfiguration;
 import static org.springframework.restdocs.payload.PayloadDocumentation.*;
@@ -274,7 +273,7 @@ class AuthControllerTest {
 
         @Test
         @DisplayName("정상 요청")
-        void ok() throws Exception {
+        void  ok() throws Exception {
             JwtTokenDto privilegeToken = jwtTokenProvider.generateTokenDto(
                 UserDetailsDto.builder()
                     .username(user1.getId())
@@ -284,8 +283,9 @@ class AuthControllerTest {
                     .build());
             mockMvc.perform(TestSnippet.securePost(url, privilegeToken.getAccessToken()))
                 .andExpect(status().isOk())
-                .andExpect((rst) -> assertNull(em.find(Member.class, member1.getId())))
-                .andDo(document(DOCUMENT_NAME));
+                    .andExpect((rst) -> {
+                        assertTrue(member1.isLocked());
+                    }).andDo(document(DOCUMENT_NAME));
         }
 
         @Test
