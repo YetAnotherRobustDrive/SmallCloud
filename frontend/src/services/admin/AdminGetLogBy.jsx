@@ -1,24 +1,21 @@
 import RefreshToken from "../token/RefreshToken";
 import configData from "../../config/config.json"
 
-export default async function GetShareFolderList() {
+export default async function AdminGetLogBy(value, page) {
     await RefreshToken();
     const accessToken = localStorage.getItem("accessToken");
     const model = {
-        method: "GET",
+        method: "POST",
         headers: {
             "Authorization": "Bearer " + accessToken,
+            "Content-Type": "application/json",
         },
+        body: JSON.stringify(value),
     };
 
     try {
-        const res = await fetch(configData.API_SERVER + 'share/directory-list', model);
+        const res = await fetch(configData.API_SERVER + 'logs/admin?size=20&page=' + page, model);
         const data = await res.json();
-        data.forEach(e => {
-            e.type = "folder";
-            e.isFavorite = e.labels.find(e => e.name === "!$@*%&Favorite") !== undefined;
-            e.labels = e.labels.filter(e => e.name.startsWith("!$@*%&") === false);
-        });
         if (res.status === 200) {
             return [true, data];  //성공
         }

@@ -17,6 +17,7 @@ export default async function GetSubDirList(id) {
         data.forEach(e => {
             e.type = "folder"
             e.isFavorite = e.labels.find(e => e.name === "!$@*%&Favorite") !== undefined;
+            e.isShareExist = e.shares.length !== 0;
             e.labels = e.labels.filter(e => e.name.startsWith("!$@*%&") === false);
         });
         if (res.status === 200) {

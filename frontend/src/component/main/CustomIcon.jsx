@@ -1,9 +1,12 @@
 import React, { useEffect, useState } from "react";
-import { FcFile, FcFolder } from 'react-icons/fc';
 import { AiFillStar } from 'react-icons/ai';
+import { BiShare } from 'react-icons/bi';
+import { TbShare3 } from 'react-icons/tb';
+import { FcFile, FcFolder } from 'react-icons/fc';
 import { useNavigate } from "react-router-dom";
 import '../../css/customIcon.css';
 import ContextFolder from "../contextMenu/ContextFolder";
+import jwtDecode from "jwt-decode";
 
 export default function CustomIcon(props) {
 
@@ -14,10 +17,10 @@ export default function CustomIcon(props) {
 
     const handleOnClick = (e) => {
         e.preventDefault();
-        if (props.isDeleted === true) {
-            return;
-        }
-        if (props.data.type === "folder" ) {
+        if (props.data.type === "folder") {
+            if (props.isDeleted === true) {
+                return;
+            }
             navigate("/folder/" + props.data.id);
             return;
         }
@@ -89,6 +92,10 @@ export default function CustomIcon(props) {
                     onDrop={handelDrop} draggable />
                 {props.data.isFavorite &&
                     <div className="star"><AiFillStar /></div>
+                }
+                {props.data.isShareExist && (
+                    <div className="shared"><BiShare /></div>
+                )
                 }
                 <div className="icon">
                     <div className="real" name={props.data.type}>

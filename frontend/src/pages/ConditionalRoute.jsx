@@ -30,6 +30,7 @@ import ServiceInfoPage from './mypage/ServiceInfoPage';
 import SharePage from './common/SharePage';
 import Groups from './cs/Groups';
 import SearchPage from './common/SearchPage';
+import AdminLogPage from './admin/AdminLogPage';
 
 export default () => {
     const isPrivileged = useSelector(state => state.token.isPrivileged);
@@ -54,6 +55,7 @@ export default () => {
                         <Route path='/admin/faq' element={<AdminFAQUploadPage />} />
                         <Route path='/admin/term' element={<AdminTermUploadPage />} />
                         <Route path='/admin/privacy' element={<AdminPrivacyUploadPage />} />
+                        <Route path='/admin/log' element={<AdminLogPage />} />
                     </>
                 }
                 {!isAdmin &&

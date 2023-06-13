@@ -1,5 +1,6 @@
 import RefreshToken from "../token/RefreshToken";
 import configData from "../../config/config.json"
+import jwtDecode from "jwt-decode";
 
 export default async function GetShareFileList() {
     await RefreshToken();
@@ -10,6 +11,7 @@ export default async function GetShareFileList() {
             "Authorization": "Bearer " + accessToken,
         },
     };
+    const myName = toString(jwtDecode(accessToken).sub);
 
     try {
         const res = await fetch(configData.API_SERVER + 'share/file-list', model);
@@ -29,6 +31,8 @@ export default async function GetShareFileList() {
                 e.size = size + "B";
             }
             e.type = "file"
+            e.isShared = true;
+            e.labels = e.labels.filter(e => e.name.startsWith("!$@*%&") === false);
         });
         
         if (res.status === 200) {

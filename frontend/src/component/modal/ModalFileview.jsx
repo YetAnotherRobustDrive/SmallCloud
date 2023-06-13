@@ -152,7 +152,9 @@ export default function ModalFileview(props) {
                     <div className='head'>
                         <div className="fileBtn">
                             {props.isDeleted !== true && <>
-                                <div className='icon' onClick={handleFavorite}>{fileData.isFavorite ? <AiFillStar /> : <AiOutlineStar />}</div>
+                                {fileData.isShared !== true &&
+                                    <div className='icon' onClick={handleFavorite}>{fileData.isFavorite ? <AiFillStar /> : <AiOutlineStar />}</div>
+                                }
                                 <div className='icon' onClick={handleDownload}><GoCloudDownload /></div>
                             </>}
                             <div className='icon' onClick={() => setIsFileOpen(true)}><MdOpenInFull /></div>
@@ -166,7 +168,7 @@ export default function ModalFileview(props) {
                                 onClick={() => setIsGeneralSelected(true)}>
                                 일반
                             </span>
-                            {props.isDeleted !== true &&
+                            {(props.isDeleted !== true && fileData.isShared !== true) &&
                                 <span
                                     style={!isGeneralSelected ? { textDecoration: "underline" } : {}}
                                     onClick={() => setIsGeneralSelected(false)}>
@@ -178,7 +180,7 @@ export default function ModalFileview(props) {
                             <>
                                 <div className="labels">
                                     <span>라벨</span>
-                                    {props.isDeleted !== true &&
+                                    {(props.isDeleted !== true && fileData.isShared !== true) &&
                                         <button onClick={handleLabelEdit} className="icon" ><TbEdit /></button>
                                     }
                                     <div className="label">
@@ -211,12 +213,12 @@ export default function ModalFileview(props) {
                                         {fileData.createdDate.substring(0, fileData.createdDate.indexOf("T")).replace(/-/g, ".")}
                                     </div>
                                 </div>
-                                {props.isDeleted !== true &&
+                                {(props.isDeleted !== true && fileData.isShared !== true) &&
                                     <div className="removeFile" onClick={handleFileRemove}>
                                         <span><BsFillTrashFill /></span>
                                     </div>
                                 }
-                                {props.isDeleted === true &&
+                                {(props.isDeleted !== true && fileData.isShared !== true) &&
                                     <div className="removeFile" onClick={handleFileRestore}>
                                         <span><RiArrowGoBackLine /></span>
                                     </div>
@@ -264,7 +266,7 @@ export default function ModalFileview(props) {
                 <ModalAddShare
                     fileID={fileData.id}
                     isOpen={isShareOpen}
-                    after={() => { setIsShareOpen(false); setTimeout(() => window.location.reload(), 250);}}
+                    after={() => { setIsShareOpen(false); setTimeout(() => window.location.reload(), 250); }}
                 />
             }
             {isLabelEditOpen &&

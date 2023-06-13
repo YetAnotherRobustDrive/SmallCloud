@@ -31,12 +31,14 @@ export default async function GetTrashFileList() {
             }
             e.type = "file"
             e.isDeleted = e.labels.find(e => e.name === "!$@*%&Trash") !== undefined;
+            e.isShareExist = e.shares.length !== 0;
             e.labels = e.labels.filter(e => e.name.startsWith("!$@*%&") === false);
         });
         const folders = [...data.folders];
         folders.forEach(e => {
             e.type = "folder";
             e.isDeleted = e.labels.find(e => e.name === "!$@*%&Trash") !== undefined;
+            e.isShareExist = e.shares.length !== 0;
             e.labels = e.labels.filter(e => e.name.startsWith("!$@*%&") === false);
         });
         
