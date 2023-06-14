@@ -6,8 +6,10 @@ import PostNewDirName from "../../services/directory/PostNewDirName";
 import PostPurgeFolder from "../../services/directory/PostPurgeFolder";
 import PostRestoreFolder from "../../services/directory/PostRestoreFolder";
 import PostUnfavoriteFolder from "../../services/directory/PostUnfavoriteFolder";
+import ErrorHandler from "../main/ErrorHandler";
 import ModalFolderShare from "../modal/ModalFolderShare";
 import ModalGetString from "../modal/ModalGetString";
+import MyAlert from "../main/MyAlert";
 
 export default function ContextFolder(props) {
     const [isModalOpen, setIsModalOpen] = useState(false);
@@ -18,7 +20,7 @@ export default function ContextFolder(props) {
         const rename = async () => {
             const res = await PostNewDirName(props.folderID, newName);
             if (!res[0]) {
-                alert(res[1]);
+                ErrorHandler(res[1]);
                 return;
             }
             window.location.reload();
@@ -35,7 +37,7 @@ export default function ContextFolder(props) {
         }
         const res = await PostDeleteFolder(props.folderID);
         if (!res[0]) {
-            alert(res[1]);
+            ErrorHandler(res[1]);
             return;
         }
         window.location.reload();
@@ -46,13 +48,13 @@ export default function ContextFolder(props) {
             const res = await PostFavoriteFolder(props.folderID);
             if (!res[0]) {
                 if (res[1] === "이미 존재하는 라벨입니다.") {
-                    alert("이미 즐겨찾기에 추가되어 있습니다.");
+                    MyAlert("warning", "이미 즐겨찾기에 추가되어 있습니다.");
                     return;
                 }
                 alert(res[1]);
                 return;
             }
-            alert("즐겨찾기에 추가되었습니다.");
+            MyAlert("success", "즐겨찾기에 추가되었습니다.", () => { window.location.reload() });
         }
         else {
             const res = await PostUnfavoriteFolder(props.folderID);
@@ -60,9 +62,8 @@ export default function ContextFolder(props) {
                 alert(res[1]);
                 return;
             }
-            alert("즐겨찾기에서 삭제되었습니다.");
+            MyAlert("success", "즐겨찾기에서 삭제되었습니다.", () => { window.location.reload() });
         }
-        window.location.reload();
     }
 
     const handlePurge = async () => {

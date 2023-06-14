@@ -4,6 +4,7 @@ import '../../css/context.css';
 import GetRootDir from "../../services/directory/GetRootDir";
 import PostNewDir from "../../services/directory/PostNewDir";
 import ModalGetString from "../modal/ModalGetString";
+import ErrorHandler from "../main/ErrorHandler";
 
 export default function ContextBody() {
     const [isModalOpen, setIsModalOpen] = useState(false);
@@ -16,14 +17,14 @@ export default function ContextBody() {
             if (curr === undefined) {     
                 const rootIDRes = await GetRootDir();
                 if (!rootIDRes[0]) {
-                    alert(rootIDRes[1]);
+                    ErrorHandler(rootIDRes[1]);
                     return;
                 }    
                 curr = rootIDRes[1];
             }
             const res = await PostNewDir(curr, newName);
             if (!res[0]) {
-                alert(res[1]);
+                ErrorHandler(res[1]);
                 return;               
             }
             window.location.reload();

@@ -10,6 +10,7 @@ import IsAdminToken from "../../services/token/IsAdminToken";
 import { asyncCheckAdmin } from "../../slice/TokenSlice";
 import { setIsLoggedIn } from "../../slice/UserSlice";
 import ThrowPingAs from "../../services/log/ThrowPingAs";
+import ErrorHandler from "../../component/main/ErrorHandler";
 
 export default function LoginPage() {
 
@@ -74,8 +75,7 @@ export default function LoginPage() {
             setLoginInfo({isSuccess: true, id: inputData.get("id")});
             return;
         } catch (e) {
-            if (e.message !== undefined) setMessage(e.message)
-            setIsFail(true);
+            ErrorHandler(e);
         }
     }
     return (
