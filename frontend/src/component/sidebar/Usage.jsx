@@ -1,22 +1,27 @@
+import { ArcElement, Chart as ChartJS, Legend, Tooltip } from "chart.js";
 import React, { useState } from "react";
-import "../../css/sidebar.css"
-import { Chart as ChartJS, ArcElement, Tooltip, Legend } from "chart.js";
 import { Pie } from "react-chartjs-2";
+import "../../css/sidebar.css";
+import GetUserUsage from "../../services/user/GetUserUsage";
 
 export default function Usage() {
 
   React.useEffect(() => {
-    const timer = setInterval(() => {
-      setPer((per) => (per >= 100 ? 1 : per + 1));
-    }, 100);
-    return () => {
-      clearInterval(timer);
-    };
+    const fetchUsage = async () => {
+      const res = await GetUserUsage();
+      if (!res[0]) {
+        return;
+      }
+      setPer(res[1] === null ? 0 : res[1]);
+      setUnit(res[2]);
+    }
+    fetchUsage();
   }, []);
 
   ChartJS.register(ArcElement, Tooltip, Legend);
 
   const [per, setPer] = useState(0);
+  const [unit, setUnit] = useState("GB");
 
   const data = {
     labels: [
@@ -43,7 +48,7 @@ export default function Usage() {
       <Pie id="usage" data={data} />
       <div>
         <div style={{ paddingBottom: "10px", fontSize: "large" }}><b>사용량</b></div>
-        <div><b>{per} GB</b></div>
+        <div><b>{per}{unit}</b></div>
         <div>/ 100GB</div>
       </div>
     </div>
