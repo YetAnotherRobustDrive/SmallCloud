@@ -16,6 +16,7 @@ export default function QuestionPage() {
     const [isOK, setIsok] = useState(false);
     const [message, setMessage] = useState("일시적인 오류가 발생했습니다.");
     const [myQuestion, setMyQuestion] = useState([]);
+    const [myQuestionAns, setMyQuestionAns] = useState([]);
 
     useEffect(() => {
         const fetchMyQuestion = async () => {
@@ -26,10 +27,18 @@ export default function QuestionPage() {
                 setMessage(res[1]);
                 return;
             }
+            setMyQuestionAns([]);
             res[1].forEach(async (item) => {
                 if (item.answerId !== null) {
                     const answerRes = await GetBoardListFrom('inquiries/search/answer?answerId=' + item.answerId);
                     item.answer = answerRes[1].content;
+                    setMyQuestionAns([
+                        ...myQuestionAns,
+                        {
+                            id: item.id,
+                            answer: answerRes[1].content
+                        }
+                    ]);
                 }
             });
             setMyQuestion(res[1]);
@@ -95,7 +104,18 @@ export default function QuestionPage() {
                                     </div>
                                     <span>답변</span>
                                     <div style={{ minWidth: "calc(100% - 20px)", width: "max-content", padding: "10px" }}>
-                                        {data.answer === undefined ? "등록된 답변이 없습니다." : data.answer}
+                                        {
+                                            myQuestionAns.map((item) => {
+                                                if (item.id === data.id) {
+                                                    return item.answer;
+                                                }
+                                            }) === undefined ? "등록된 답변이 없습니다." : myQuestionAns.map((item) => {
+                                                if (item.id === data.id) {
+                                                    return item.answer;
+                                                }
+                                            }
+                                            )
+                                        }
                                     </div>
                                 </>
                             </ExtendBox>
