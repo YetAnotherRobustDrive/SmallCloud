@@ -53,7 +53,7 @@ export default function AlertDropdown() {
                     <ul className="dropdown-options">
                         {alarms.map((option) => (
                             <li
-                                key={option.value}
+                                key={option.id}
                                 className="dropdown-option"
                                 onClick={handleOptionClick}
                             >
