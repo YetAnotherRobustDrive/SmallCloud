@@ -1,6 +1,8 @@
 package org.mint.smallcloud.log.user;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Repository;
 
@@ -20,7 +22,7 @@ public class UserLogRepository {
         em.flush();
     }
 
-    public List<UserLog> findLogs(String nickname, LocalDateTime startTime, LocalDateTime endTime, Boolean status, String action, Pageable pageable) {
+    public Page<UserLog> findLogs(String nickname, LocalDateTime startTime, LocalDateTime endTime, Boolean status, String action, Pageable pageable) {
         String jpql = "select ul from UserLog ul join ul.member m";
         boolean isFirst = true;
         if (nickname != null) {
@@ -78,9 +80,7 @@ public class UserLogRepository {
             jpql += " ul.action like :action";
         }
 
-        TypedQuery<UserLog> query = em.createQuery(jpql, UserLog.class)
-                .setFirstResult((int) pageable.getOffset())
-                .setMaxResults(pageable.getPageSize());
+        TypedQuery<UserLog> query = em.createQuery(jpql, UserLog.class);
         if (nickname != null) {
             query = query.setParameter("nickname", nickname);
         }
@@ -104,7 +104,9 @@ public class UserLogRepository {
             String actionLike = action.replaceAll("\\{.*?\\}", "%");
             query = query.setParameter("action", actionLike);
         }
-        return query.getResultList();
+        List<UserLog> content = query.getResultList();
+        long total = query.getResultList().size();
+        return new PageImpl<>(content, pageable, total);
     }
 
     public List<UserLog> findByActionStartsWith(String action){

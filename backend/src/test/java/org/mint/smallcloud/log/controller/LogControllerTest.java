@@ -19,6 +19,9 @@ import org.mint.smallcloud.user.repository.MemberRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.restdocs.RestDocumentationContextProvider;
 import org.springframework.restdocs.RestDocumentationExtension;
 import org.springframework.test.context.ActiveProfiles;
@@ -252,14 +255,15 @@ class LogControllerTest {
             requestLogDto = RequestLogDto.builder()
                     .nickName(member.getNickname())
                     .build();
-
+            Pageable pageable = PageRequest.of(0, 5);
+            Page<UserLog> userLogs = userLogRepository.findLogs(requestLogDto.getNickName(), null, null, null, null, pageable);
+            System.out.println(userLogs.getSize());
+            System.out.println(userLogs.getTotalPages());
+            System.out.println(userLogs.getTotalElements());
             mockMvc.perform(TestSnippet.secured(post(url), adminToken.getAccessToken(), objectMapper, requestLogDto))
                     .andDo(print())
                     .andExpect(status().isOk())
-                    .andExpect(rst -> {
-                        System.out.println(rst.getResponse().getContentLength());
 
-                    })
                     .andDo(document(DOCUMENT_NAME, requestFields(
                             fieldWithPath("nickName").description("닉네임"),
                             fieldWithPath("action").description("액션"),
