@@ -10,6 +10,7 @@ import org.mint.smallcloud.user.domain.Member;
 import javax.persistence.*;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
 @Table(name = "DATA_NODES")
@@ -153,5 +154,14 @@ public abstract class DataNode {
 
     public boolean isFolder() {
         return this instanceof Folder;
+    }
+
+    public void deleteAllLabel() {
+        Iterator<Label> iter = labels.iterator();
+        while (iter.hasNext()) {
+            Label label = iter.next();
+            iter.remove();
+            label.deleteFile(this);
+        }
     }
 }

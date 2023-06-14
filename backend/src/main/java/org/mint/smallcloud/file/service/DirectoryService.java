@@ -51,7 +51,7 @@ public class DirectoryService {
     }
 
     public void purgeDirectory(Folder folder) {
-        folder.getLabels().forEach(label -> label.deleteFile(folder));
+        folder.deleteAllLabel();
         folderRepository.deleteById(folder.getId());
     }
 
