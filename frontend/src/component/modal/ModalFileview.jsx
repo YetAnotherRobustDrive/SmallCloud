@@ -218,7 +218,7 @@ export default function ModalFileview(props) {
                                         <span><BsFillTrashFill /></span>
                                     </div>
                                 }
-                                {(props.isDeleted !== true && fileData.isShared !== true) &&
+                                {(props.isDeleted === true && fileData.isShared !== true) &&
                                     <div className="removeFile" onClick={handleFileRestore}>
                                         <span><RiArrowGoBackLine /></span>
                                     </div>
