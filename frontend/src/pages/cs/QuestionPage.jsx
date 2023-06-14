@@ -44,7 +44,7 @@ export default function QuestionPage() {
             setMyQuestion(res[1]);
         }
         fetchMyQuestion();
-    }, []);
+    }, [myQuestionAns]);
 
     const handleSubmit = async (e) => {
         e.preventDefault();
@@ -61,8 +61,8 @@ export default function QuestionPage() {
         const res = await PostBoard(value);
         if (!res[0]) {
             if (typeof res[1] === "object") {
-                let tmpMessage = new String();
-                for (const [key, value] of Object.entries(res[1])) {
+                let tmpMessage = "";
+                for (const [, value] of Object.entries(res[1])) {
                     tmpMessage += value + '\n';
                 }
                 setMessage(tmpMessage);
@@ -105,16 +105,7 @@ export default function QuestionPage() {
                                     <span>답변</span>
                                     <div style={{ minWidth: "calc(100% - 20px)", width: "max-content", padding: "10px" }}>
                                         {
-                                            myQuestionAns.map((item) => {
-                                                if (item.id === data.id) {
-                                                    return item.answer;
-                                                }
-                                            }) === undefined ? "등록된 답변이 없습니다." : myQuestionAns.map((item) => {
-                                                if (item.id === data.id) {
-                                                    return item.answer;
-                                                }
-                                            }
-                                            )
+                                            myQuestionAns.find(elem => elem.id === data.id) === undefined ? "답변이 등록되지 않았습니다." : myQuestionAns.find(elem => elem.id === data.id).answer
                                         }
                                     </div>
                                 </>

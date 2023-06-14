@@ -30,12 +30,6 @@ export default function Usage() {
     datasets: [{
       data: [per, 100 - per],
       backgroundColor: function (context) {
-        const chart = context.chart;
-        const { _, chartArea } = chart;
-        if (!chartArea) {
-          // This case happens on initial chart load
-          return;
-        }
         return [getColor(per), 'rgb(255,255,255)'];
       },
       borderColor: 'rgb(0, 0, 0)',

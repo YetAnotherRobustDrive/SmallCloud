@@ -45,7 +45,7 @@ export default function AdminUserCtrlPage() {
             setNewPw("");
         }
         initPw();
-    }, [newPw]);
+    }, [newPw, user.username]);
 
     useEffect(() => {
         const setGroup = async () => {
@@ -73,7 +73,7 @@ export default function AdminUserCtrlPage() {
             })
         }
         setGroup();
-    }, [newGroup]);
+    }, [newGroup, user]);
 
     const handleDeactivate = async () => {
         const res = await AdminDeactivateUser(user.username);
@@ -218,7 +218,7 @@ export default function AdminUserCtrlPage() {
                 {user !== null &&
                     <>
                         <div className="profile">
-                            <img src={img} />
+                            <img src={img} alt="프로필 이미지"/>
                             <div className="userinfo">
                                 <div className="text">
                                     <span className="title">ID</span>

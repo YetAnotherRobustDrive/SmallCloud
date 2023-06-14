@@ -109,8 +109,8 @@ export default function FolderPage() {
     }, [target, source])
 
     useEffect(() => {
-        setGridFiles([...
-            gridFiles.sort((a, b) => {
+        setGridFiles([
+            ...gridFiles.sort((a, b) => {
                 if (sort === "name_asc") {
                     return a.props.data.name.localeCompare(b.props.data.name);
                 }
@@ -120,7 +120,7 @@ export default function FolderPage() {
                 else if (sort === "time_asc") {
                     return a.props.data.createdDate.localeCompare(b.props.data.createdDate);
                 }
-                else if (sort === "time_desc") {
+                else {
                     return b.props.data.createdDate.localeCompare(a.props.data.createdDate);
                 }
             })])

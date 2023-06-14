@@ -47,8 +47,8 @@ export default function AdminTermUploadPage() {
         const res = await PostBoardAdmin(value);
         if (!res[0]) {
             if (typeof res[1] === "object") {
-                let tmpMessage = new String();
-                for (const [key, value] of Object.entries(res[1])) {
+                let tmpMessage = "";
+                for (const [, value] of Object.entries(res[1])) {
                     tmpMessage += value + '\n';
                 }
                 setMessage(tmpMessage);

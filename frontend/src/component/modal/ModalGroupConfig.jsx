@@ -3,9 +3,8 @@ import { AiOutlineClose } from 'react-icons/ai';
 import { MdGroups } from 'react-icons/md';
 import Modal from 'react-modal';
 import '../../css/modal.css';
-import GetSearchGroup from "../../services/group/GetSearchGroup";
 import AdminGroupRm from "../../services/admin/AdminGroupRm";
-import jwtDecode from "jwt-decode";
+import GetSearchGroup from "../../services/group/GetSearchGroup";
 
 export default function ModalGroupConfig(props) {
 

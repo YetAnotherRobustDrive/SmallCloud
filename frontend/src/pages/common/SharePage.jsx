@@ -42,7 +42,7 @@ export default function SharePage() {
                             setIsFileView(true);
                         }}
                         key={data.id}
-                        data={data}/>
+                        data={data} />
                 })
             );
         }
@@ -57,21 +57,21 @@ export default function SharePage() {
     }, [params.fileID])
 
     useEffect(() => {
-        setGridFiles([...
-        gridFiles.sort((a, b) => {
-            if (sort === "name_asc") {
-                return a.props.data.name.localeCompare(b.props.data.name);
-            }
-            else if (sort === "name_desc") {
-                return b.props.data.name.localeCompare(a.props.data.name);
-            }
-            else if (sort === "time_asc") {
-                return a.props.data.createdDate.localeCompare(b.props.data.createdDate);
-            }
-            else if (sort === "time_desc") {
-                return b.props.data.createdDate.localeCompare(a.props.data.createdDate);
-            }
-        })])
+        setGridFiles([
+            ...gridFiles.sort((a, b) => {
+                if (sort === "name_asc") {
+                    return a.props.data.name.localeCompare(b.props.data.name);
+                }
+                else if (sort === "name_desc") {
+                    return b.props.data.name.localeCompare(a.props.data.name);
+                }
+                else if (sort === "time_asc") {
+                    return a.props.data.createdDate.localeCompare(b.props.data.createdDate);
+                }
+                else {
+                    return b.props.data.createdDate.localeCompare(a.props.data.createdDate);
+                }
+            })])
     }, [sort])
 
     return (
@@ -80,7 +80,7 @@ export default function SharePage() {
             <Header />
             <Sidebar />
             <BodyFrame hasContext={true}>
-                <BodyHeader text={"공유받은 파일"} isSortable setter={setSort}/>
+                <BodyHeader text={"공유받은 파일"} isSortable setter={setSort} />
                 {
                     gridFiles.length === 0 ? <div style={{ height: "calc(100vh - 137px)", textAlign: "center", marginTop: "20px" }}>파일이 없습니다.</div> :
                         <GridBox height="calc(100vh - 117px)">

@@ -44,6 +44,7 @@ export default function Flow(props) {
                     }];
                     setIsRootExist(true);
                 }
+                return null;
             });
 
             const tmpRes = JSON.parse(JSON.stringify(res.filter(elem => elem.source !== "__ROOT__")));
@@ -115,7 +116,7 @@ export default function Flow(props) {
                 setIsRootExist(false);
             }
         },
-        [nodes, edges]
+        []
     );
     const onEdgeUpdateStart = useCallback(() => {
         edgeUpdateSuccessful.current = false;
@@ -133,7 +134,7 @@ export default function Flow(props) {
 
     const handleClickAdd = () => {
         const rawName = window.prompt("새 그룹의 이름을 입력해주세요.");
-        const reg = /[\{\}\[\]\/?.,;:|\)*~`!^\-_+<>@\#$%&\\\=\(\'\"]/gi;
+        const reg = /[{}[]\/?.,;:|\)*~`!^-_+<>@#$%&\\=\('"]/gi;
         const name = rawName.replace(reg, '');
         if (name === null || name === "") {
             return;

@@ -1,12 +1,10 @@
 import React, { useEffect, useState } from "react";
 import { AiFillStar } from 'react-icons/ai';
 import { BiShare } from 'react-icons/bi';
-import { TbShare3 } from 'react-icons/tb';
 import { FcFile, FcFolder } from 'react-icons/fc';
 import { useNavigate } from "react-router-dom";
 import '../../css/customIcon.css';
 import ContextFolder from "../contextMenu/ContextFolder";
-import jwtDecode from "jwt-decode";
 
 export default function CustomIcon(props) {
 
@@ -71,7 +69,7 @@ export default function CustomIcon(props) {
         context.style.top = (e.clientY + context.offsetHeight < window.innerHeight ? newY : newY - context.offsetHeight) + "px";
     }
 
-    const contextMenu = (props.data.type == "file" ? <></> : <ContextFolder folderID={props.data.id} isDeleted={props.data.isDeleted} isFavorite={props.data.isFavorite} />);
+    const contextMenu = (props.data.type === "file" ? <></> : <ContextFolder folderID={props.data.id} isDeleted={props.data.isDeleted} isFavorite={props.data.isFavorite} />);
 
     return (
         <>

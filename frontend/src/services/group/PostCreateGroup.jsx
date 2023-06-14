@@ -1,6 +1,5 @@
-import configData from "../../config/config.json"
-import RefreshToken from '../token/RefreshToken'
-import GetGroupTree from "./GetGroupTree";
+import configData from "../../config/config.json";
+import RefreshToken from '../token/RefreshToken';
 
 export default async function PostCreateGroup(name, parent) {
     await RefreshToken();

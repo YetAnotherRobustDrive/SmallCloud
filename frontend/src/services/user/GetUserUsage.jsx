@@ -1,4 +1,3 @@
-import jwtDecode from "jwt-decode";
 import configData from "../../config/config.json";
 import RefreshToken from "../token/RefreshToken";
 

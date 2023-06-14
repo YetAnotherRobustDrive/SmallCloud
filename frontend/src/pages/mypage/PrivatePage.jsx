@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useNavigate } from 'react-router-dom';
 import BodyFrame from "../../component/Bodyframe";
 import Header from "../../component/header/Header";
+import ModalGetPW from "../../component/modal/ModalGetPW";
 import ModalOk from '../../component/modal/ModalOk';
 import EditableColumn from "../../component/mypage/EditableColumn";
 import SidebarMypage from "../../component/sidebar/SidebarMypage";
@@ -9,8 +10,6 @@ import '../../css/mypage.css';
 import RefreshToken from "../../services/token/RefreshToken";
 import GetUserInfo from "../../services/user/GetUserInfo";
 import UpdateUserInfo from "../../services/user/UpdateUserInfo";
-import ModalGetString from "../../component/modal/ModalGetString";
-import ModalGetPW from "../../component/modal/ModalGetPW";
 
 export default function PrivatePage() {
     const [img, setImg] = useState(null);
@@ -102,7 +101,7 @@ export default function PrivatePage() {
             <SidebarMypage />
             <BodyFrame>
                 <form className="private-profile" onSubmit={handleSubmit}>
-                    <img src={img} />
+                    <img src={img} alt="프로필 이미지"/>
                     <label htmlFor="file">프로필 변경하기</label>
                     <input
                         onChange={handleImgChange}

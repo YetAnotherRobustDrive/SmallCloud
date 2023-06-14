@@ -33,7 +33,7 @@ import SearchPage from './common/SearchPage';
 import AdminLogPage from './admin/AdminLogPage';
 import configData from '../config/config.json'
 
-export default () => {
+export default function ConditionalRoute() {
     const isPrivileged = useSelector(state => state.token.isPrivileged);
     const isAdmin = useSelector(state => state.token.isAdmin);
     const isLoggedIn = useSelector(state => state.user.isLoggedIn);

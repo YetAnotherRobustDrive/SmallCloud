@@ -12,7 +12,6 @@ export default function ModalCheckPW(props) {
     const [count, setCount] = useState(0);
     const [message, setMessage] = useState(false);
     
-    const [nickname, setNickname] = useState("Nick_name");
     const [img, setImg] = useState(null);
     const navigate = useNavigate();
 
@@ -65,7 +64,6 @@ export default function ModalCheckPW(props) {
             <Modal isOpen={isOpen} style={modalStyle}>
                 <div className="modalOuter">
                     <img src={img}></img>
-                    <span className="nick">{nickname}</span>
                     <input
                         type="password"
                         placeholder="PW"

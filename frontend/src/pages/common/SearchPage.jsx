@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { useNavigate, useSearchParams } from 'react-router-dom';
+import { useSearchParams } from 'react-router-dom';
 import BodyFrame from "../../component/Bodyframe";
 import Header from "../../component/header/Header";
 import BodyHeader from "../../component/main/BodyHeader";
@@ -21,10 +21,10 @@ export default function SearchPage() {
     const [gridFiles, setGridFiles] = useState([]);
     const [sort, setSort] = useState("name_asc");
     const params = useSearchParams();
+    const keywords = params[0].get("q").split(" ");
 
     useEffect(() => {
         const render = async () => {
-            const keywords = params[0].get("q").split(" ");
             keywords.forEach(async (keyword) => {
                 if (keyword.startsWith("#")) {
                     const searchLabelRes = await GetLabelSearch(keyword.substring(1));
@@ -65,12 +65,12 @@ export default function SearchPage() {
         }
         render();
         setIsLoading(false);
-    }, [params[0].get("q")])
+    }, [keywords])
 
 
     useEffect(() => {
-        setGridFiles([...
-            gridFiles.sort((a, b) => {
+        setGridFiles([
+            ...gridFiles.sort((a, b) => {
                 if (sort === "name_asc") {
                     return a.props.data.name.localeCompare(b.props.data.name);
                 }
@@ -80,7 +80,7 @@ export default function SearchPage() {
                 else if (sort === "time_asc") {
                     return a.props.data.createdDate.localeCompare(b.props.data.createdDate);
                 }
-                else if (sort === "time_desc") {
+                else {
                     return b.props.data.createdDate.localeCompare(a.props.data.createdDate);
                 }
             })])

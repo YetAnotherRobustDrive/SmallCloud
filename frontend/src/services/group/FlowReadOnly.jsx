@@ -37,6 +37,7 @@ export default function Flow(props) {
                     }];
                     setIsRootExist(true);
                 }
+                return null;
             });
 
             const tmpRes = JSON.parse(JSON.stringify(res.filter(elem => elem.source !== "__ROOT__")));

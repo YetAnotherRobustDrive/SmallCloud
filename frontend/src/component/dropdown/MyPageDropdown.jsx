@@ -1,7 +1,7 @@
-import React, { useEffect, useState } from "react";
-import '../../css/dropdown.css'
-import { BsPersonCircle } from "react-icons/bs"
+import React, { useState } from "react";
+import { BsPersonCircle } from "react-icons/bs";
 import { Link } from "react-router-dom";
+import '../../css/dropdown.css';
 
 export default function MypageDropdown() {
 

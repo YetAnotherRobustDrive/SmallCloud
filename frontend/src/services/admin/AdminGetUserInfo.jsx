@@ -1,7 +1,6 @@
-import jwtDecode from "jwt-decode";
-import RefreshToken from "../token/RefreshToken";
-import configData from "../../config/config.json"
+import configData from "../../config/config.json";
 import default_profile_img from '../../img/defalutProfile.png';
+import RefreshToken from "../token/RefreshToken";
 
 export default async function AdminGetUserInfo(name) {
     await RefreshToken();

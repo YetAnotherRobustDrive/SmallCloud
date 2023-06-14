@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { FiChevronDown, FiChevronUp } from 'react-icons/fi';
 import ModalOk from "../../component/modal/ModalOk";
 import '../../css/cs.css';
@@ -27,8 +27,8 @@ export default function ExtendBoxAdmin(props) {
         const res = await PostAnswer(value);
         if (!res[0]) {
             if (typeof res[1] === "object") {
-                let tmpMessage = new String();
-                for (const [key, value] of Object.entries(res[1])) {
+                let tmpMessage = "";
+                for (const [, value] of Object.entries(res[1])) {
                     tmpMessage += value + '\n';
                 }
                 setMessage(tmpMessage);
@@ -41,10 +41,10 @@ export default function ExtendBoxAdmin(props) {
         }
         setIsSuccess(true);
     }
-    
+
     return (
         <>
-            {isSuccess && <ModalOk close={() => { setIsSuccess(false); window.location.reload()}}>{"답변이 등록되었습니다."}</ModalOk>}
+            {isSuccess && <ModalOk close={() => { setIsSuccess(false); window.location.reload() }}>{"답변이 등록되었습니다."}</ModalOk>}
             {isFail && <ModalOk close={() => setIsFail(false)}>{message}</ModalOk>}
             {isEmpty && <ModalOk close={() => setIsEmpty(false)}>{"입력하지 않은 내용이 있습니다."}</ModalOk>}
             <div className="extendBox" key={props.key}>
