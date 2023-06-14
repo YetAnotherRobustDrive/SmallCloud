@@ -1,5 +1,6 @@
 import { useNavigate } from "react-router-dom";
 import { persistor } from "../..";
+import { useEffect } from "react";
 
 export default function LogoutUser() {
     const navigate = useNavigate();
@@ -13,6 +14,9 @@ export default function LogoutUser() {
     const purge = async () => {
         await persistor.purge();
     }
-    render();
-    purge();
+
+    useEffect(() => {
+        render();
+        purge();
+    }, []);
 }

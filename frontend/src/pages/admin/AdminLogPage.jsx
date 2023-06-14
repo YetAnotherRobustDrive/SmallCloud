@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import BodyFrame from "../../component/Bodyframe";
 import Header from "../../component/header/Header";
 import SidebarAdmin from "../../component/sidebar/SidebarAdmin";
@@ -12,9 +12,12 @@ import AdminGetLogBy from "../../services/admin/AdminGetLogBy";
 export default function AdminLogPage() {
 
     const [isOpen, setIsOpen] = useState(false);
-    const [log, setLog] = useState([]);
+    const [log, setLog] = useState({
+        content: [],
+        totalPages: 0,
+    });
     const [page, setPage] = useState(0);
-    const [totalPage, setTotalPage] = useState(0);
+    const [option, setOption] = useState({});
 
     const actionList = [ //최신화 필요
         {
@@ -135,12 +138,20 @@ export default function AdminLogPage() {
                 delete value[key];
             }
         }
-        const res = await AdminGetLogBy(value, page);
-        if (res[0]) {
-            setLog(res[1].responseLogDtoList);
-            console.log(res[1]);
-        }
+        setOption(value);
+        setPage(0);
     }
+
+    useEffect(() => {
+        const getLog = async () => {
+            const res = await AdminGetLogBy(option, page);
+            if (res[0]) {
+                setLog(res[1]);
+            }
+        }
+        getLog();
+    },[page])
+            
 
     return (
         <>
@@ -200,7 +211,7 @@ export default function AdminLogPage() {
                         </thead>
                         <tbody>
                             {
-                                log.map((item, index) => (
+                                log.content.map((item, index) => (
                                     <tr key={index}>
                                         <td>{index + 1}</td>
                                         <td>{item.localDateTime}</td>
@@ -213,6 +224,13 @@ export default function AdminLogPage() {
                             }
                         </tbody>
                     </table>
+                    <div className="page">
+                        {
+                            [...Array(log.totalPages)].map((_, item) => (
+                                <button key={item} onClick={() => {setPage(item)}}>{item + 1}</button>
+                            ))
+                        }
+                    </div>
                 </div>
             </BodyFrame>
         </>
