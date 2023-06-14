@@ -4,12 +4,13 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.mint.smallcloud.exception.ExceptionStatus;
 import org.mint.smallcloud.exception.ServiceException;
-import org.mint.smallcloud.log.dto.LogSizeDto;
 import org.mint.smallcloud.log.dto.RequestLogDto;
+import org.mint.smallcloud.log.dto.ResponseLogDto;
 import org.mint.smallcloud.log.dto.ResponseLoginLogDto;
 import org.mint.smallcloud.log.service.LogService;
 import org.mint.smallcloud.security.UserDetailsProvider;
 import org.mint.smallcloud.user.domain.Roles;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.security.access.annotation.Secured;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -46,7 +47,7 @@ public class LogController {
     // 관리자 log 가져오기
     @Secured({Roles.S_ADMIN})
     @PostMapping("/admin")
-    public LogSizeDto getAdminLogs(
+    public Page<ResponseLogDto> getAdminLogs(
             @Valid @RequestBody RequestLogDto requestLogDto, Pageable pageable) {
         return logService.findLogs(requestLogDto, pageable);
     }

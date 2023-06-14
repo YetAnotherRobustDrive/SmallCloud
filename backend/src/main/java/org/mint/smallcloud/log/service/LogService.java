@@ -2,13 +2,14 @@ package org.mint.smallcloud.log.service;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.mint.smallcloud.log.dto.LogSizeDto;
 import org.mint.smallcloud.log.dto.RequestLogDto;
+import org.mint.smallcloud.log.dto.ResponseLogDto;
 import org.mint.smallcloud.log.dto.ResponseLoginLogDto;
 import org.mint.smallcloud.log.mapper.LogMapper;
 import org.mint.smallcloud.log.user.UserLog;
 import org.mint.smallcloud.log.user.UserLogRepository;
 import org.mint.smallcloud.user.service.MemberThrowerService;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -25,8 +26,8 @@ public class LogService {
     private final MemberThrowerService memberThrowerService;
     private final LogMapper logMapper;
 
-    public LogSizeDto findLogs(RequestLogDto requestLogDto, Pageable pageable) {
-        List<UserLog> userLogs = userLogRepository.findLogs(
+    public Page<ResponseLogDto> findLogs(RequestLogDto requestLogDto, Pageable pageable) {
+        Page<UserLog> userLogs = userLogRepository.findLogs(
                 requestLogDto.getNickName(),
                 requestLogDto.getStartTime(),
                 requestLogDto.getEndTime(),
@@ -34,12 +35,14 @@ public class LogService {
                 requestLogDto.getAction(),
                 pageable);
 
-        return LogSizeDto.builder()
-                .size((long) userLogs.size())
-                .responseLogDtoList(userLogs.stream()
-                        .map(logMapper::toResponseLogDto)
-                        .collect(Collectors.toList()))
-                .build();
+        return userLogs.map(m ->
+            ResponseLogDto.builder()
+                    .action(m.getAction())
+                    .localDateTime(m.getTime())
+                    .nickName(m.getMember().getNickname())
+                    .status(m.getStatus())
+                    .ipAddr(m.getIpAddr())
+                    .build());
     }
 
 
