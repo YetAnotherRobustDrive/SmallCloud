@@ -10,7 +10,7 @@ import org.mint.smallcloud.board.repository.AnswerRepository;
 import org.mint.smallcloud.board.repository.QuestionRepository;
 import org.mint.smallcloud.exception.ExceptionStatus;
 import org.mint.smallcloud.exception.ServiceException;
-import org.mint.smallcloud.notification.event.NoticeAllEventAfterCommit;
+import org.mint.smallcloud.notification.event.NoticeEventAfterCommit;
 import org.mint.smallcloud.user.domain.Member;
 import org.mint.smallcloud.user.repository.MemberRepository;
 import org.springframework.context.ApplicationEventPublisher;
@@ -41,9 +41,10 @@ public class AnswerService {
                     .orElseThrow(() -> new ServiceException(ExceptionStatus.NOT_FOUND_MEMBER));
             if (member.canLogin())
                 applicationEventPublisher.publishEvent(
-                        NoticeAllEventAfterCommit
+                        NoticeEventAfterCommit
                                 .builder()
                                 .content(String.format("%s 문의의 답변이(가) 등록되었습니다.", question.getTitle()))
+                                .owner(member)
                                 .build()
                 );
         }
