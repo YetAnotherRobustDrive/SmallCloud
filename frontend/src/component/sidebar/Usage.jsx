@@ -5,6 +5,11 @@ import "../../css/sidebar.css";
 import GetUserUsage from "../../services/user/GetUserUsage";
 
 export default function Usage() {
+  ChartJS.register(ArcElement, Tooltip, Legend);
+
+  const [per, setPer] = useState(0);
+  const [unit, setUnit] = useState("GB");
+  const [actual, setActual] = useState(0);
 
   React.useEffect(() => {
     const fetchUsage = async () => {
@@ -12,16 +17,12 @@ export default function Usage() {
       if (!res[0]) {
         return;
       }
-      setPer(res[1] === null ? 0 : res[1]);
+      setActual(res[1]);
       setUnit(res[2]);
+      setPer(res[3]);
     }
     fetchUsage();
   }, []);
-
-  ChartJS.register(ArcElement, Tooltip, Legend);
-
-  const [per, setPer] = useState(0);
-  const [unit, setUnit] = useState("GB");
 
   const data = {
     labels: [
@@ -48,7 +49,7 @@ export default function Usage() {
       <Pie id="usage" data={data} />
       <div>
         <div style={{ paddingBottom: "10px", fontSize: "large" }}><b>사용량</b></div>
-        <div><b>{per}{unit}</b></div>
+        <div><b>{actual}{unit}</b></div>
         <div>/ 100GB</div>
       </div>
     </div>
