@@ -118,7 +118,7 @@ public class BoardController {
     }
 
     // answer 조회
-    @Secured(Roles.S_ADMIN)
+    @Secured(Roles.S_COMMON)
     @GetMapping("/search/answer")
     public AnswerDto getAnswers(@RequestParam("answerId") Long answerId) {
         return answerService.findAnswer(answerId);

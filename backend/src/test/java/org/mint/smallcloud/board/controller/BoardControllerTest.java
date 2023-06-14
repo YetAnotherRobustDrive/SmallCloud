@@ -651,7 +651,7 @@ class BoardControllerTest {
         @Test
         void ok() throws Exception {
             findAnswer = answerRepository.findByQuestionId(question.getId()).orElseThrow();
-            mockMvc.perform(TestSnippet.secured(get(url, findAnswer.getId()), adminToken.getAccessToken()))
+            mockMvc.perform(TestSnippet.secured(get(url, findAnswer.getId()), memberToken.getAccessToken()))
                     .andDo(print())
                     .andExpect(status().isOk())
                     .andDo(document(DOCUMENT_NAME, requestParameters(
