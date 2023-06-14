@@ -4,7 +4,6 @@ import Header from "../../component/header/Header";
 import BodyHeader from "../../component/main/BodyHeader";
 import CustomIcon from "../../component/main/CustomIcon";
 import GridBox from "../../component/main/GridBox";
-import UploadBtn from "../../component/main/UploadBtn";
 import ModalFileview from "../../component/modal/ModalFileview";
 import ModalLoading from "../../component/modal/ModalLoading";
 import Sidebar from "../../component/sidebar/Sidebar";
@@ -33,9 +32,9 @@ export default function TrashBinPage() {
                             setIsFileView(true);
                         }}
                         key={data.id}
-                        data={data} 
+                        data={data}
                         isDeleted={true}
-                        />
+                    />
                 })
             );
         }
@@ -46,20 +45,20 @@ export default function TrashBinPage() {
 
     useEffect(() => {
         setGridFiles([...
-        gridFiles.sort((a, b) => {
-            if (sort === "name_asc") {
-                return a.props.data.name.localeCompare(b.props.data.name);
-            }
-            else if (sort === "name_desc") {
-                return b.props.data.name.localeCompare(a.props.data.name);
-            }
-            else if (sort === "time_asc") {
-                return a.props.data.createdDate.localeCompare(b.props.data.createdDate);
-            }
-            else if (sort === "time_desc") {
-                return b.props.data.createdDate.localeCompare(a.props.data.createdDate);
-            }
-        })])
+            gridFiles.sort((a, b) => {
+                if (sort === "name_asc") {
+                    return a.props.data.name.localeCompare(b.props.data.name);
+                }
+                else if (sort === "name_desc") {
+                    return b.props.data.name.localeCompare(a.props.data.name);
+                }
+                else if (sort === "time_asc") {
+                    return a.props.data.createdDate.localeCompare(b.props.data.createdDate);
+                }
+                else if (sort === "time_desc") {
+                    return b.props.data.createdDate.localeCompare(a.props.data.createdDate);
+                }
+            })])
     }, [sort])
 
     return (
@@ -68,11 +67,10 @@ export default function TrashBinPage() {
             <Header />
             <Sidebar />
             <BodyFrame>
-                <BodyHeader text="Trash" isSortable setter={setSort}/>
+                <BodyHeader text="Trash" isSortable setter={setSort} />
                 <GridBox height="calc(100vh - 117px)">
                     {gridFiles}
                 </GridBox>
-                <UploadBtn />
             </BodyFrame>
             {isFileView && (
                 <>
