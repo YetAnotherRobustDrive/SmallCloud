@@ -145,7 +145,6 @@ export default function AdminLogPage() {
     }
 
     useEffect(() => {
-        console.log(option, page);
         const getLog = async () => {
             const res = await AdminGetLogBy(option, page);
             if (res[0]) {
