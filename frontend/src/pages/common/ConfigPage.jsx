@@ -1,7 +1,6 @@
 import React, { useState } from "react";
 import { Link, useNavigate } from 'react-router-dom';
-import ModalOk from "../../component/modal/ModalOk";
-import configData from "../../config/config.json";
+import SwalError from "../../component/swal/SwalError";
 import logo_img from '../../config/img/logo.png';
 import "../../css/login.css";
 import "../../css/modal.css";
@@ -15,7 +14,7 @@ export default function ConfigPage() {
         e.preventDefault();
         const inputData = new FormData(e.target);
         const value = Object.fromEntries(inputData.entries());
-        alert(value);
+        SwalError(value)
 
     }
     return (

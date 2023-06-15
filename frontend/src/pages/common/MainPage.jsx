@@ -17,6 +17,7 @@ import PostMoveDir from "../../services/directory/PostMoveDir";
 import PostMoveFile from "../../services/file/PostMoveFile";
 import GetShareFileList from "../../services/share/GetShareFileList";
 import GetShareFolderList from "../../services/share/GetShareFolderList";
+import SwalError from "../../component/swal/SwalError";
 
 export default function MainPage() {
 
@@ -43,7 +44,7 @@ export default function MainPage() {
         const render = async () => {
             const rootIDRes = await GetRootDir();
             if (!rootIDRes[0]) {
-                alert(rootIDRes[1])
+                SwalError(rootIDRes[1]);
                 return;
             }
 
@@ -51,12 +52,12 @@ export default function MainPage() {
 
             const subFileRes = await GetSubFileList(rootID);
             if (!subFileRes[0]) {
-                alert(subFileRes[1]);
+                SwalError(subFileRes[1]);
                 return;
             }
             const subDirRes = await GetSubDirList(rootID);
             if (!subDirRes[0]) {
-                alert(subDirRes[1]);
+                SwalError(subDirRes[1]);
                 return;
             }
             const files = [...subDirRes[1], ...subFileRes[1]];
@@ -75,12 +76,12 @@ export default function MainPage() {
             )
             const shareFileRes = await GetShareFileList();
             if (!shareFileRes[0]) {
-                alert(shareFileRes[1])
+                SwalError(shareFileRes[1]);
                 return;
             }
             const shareDirRes = await GetShareFolderList();
             if (!shareDirRes[0]) {
-                alert(shareDirRes[1])
+                SwalError(shareDirRes[1]);
                 return;
             }
             const shareFiles = [...shareDirRes[1], ...shareFileRes[1]];
@@ -106,14 +107,14 @@ export default function MainPage() {
             if (source.type === "file") {
                 const res = await PostMoveFile(source.id, target);
                 if (!res[0]) {
-                    alert("오류가 발생했습니다.");
+                    SwalError(res[1]);
                     return;
                 }
             }
             else if (source.type === "folder") {
                 const res = await PostMoveDir(source.id, target);
                 if (!res[0]) {
-                    alert("오류가 발생했습니다.");
+                    SwalError(res[1]);
                     return;
                 }
             }

@@ -7,6 +7,7 @@ import GridBox from "../../component/main/GridBox";
 import ModalFileview from "../../component/modal/ModalFileview";
 import ModalLoading from "../../component/modal/ModalLoading";
 import Sidebar from "../../component/sidebar/Sidebar";
+import SwalError from "../../component/swal/SwalError";
 import GetTrashFileList from "../../services/label/GetTrashFileList";
 
 export default function TrashBinPage() {
@@ -21,7 +22,7 @@ export default function TrashBinPage() {
         const init = async () => {
             const fileRes = await GetTrashFileList();
             if (!fileRes[0]) {
-                alert(fileRes[1]);
+                SwalError(fileRes[1])
                 return;
             }
             setGridFiles(

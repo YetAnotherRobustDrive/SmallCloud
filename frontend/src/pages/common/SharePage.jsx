@@ -11,6 +11,7 @@ import ModalLoading from "../../component/modal/ModalLoading";
 import Sidebar from "../../component/sidebar/Sidebar";
 import GetShareFileList from "../../services/share/GetShareFileList";
 import GetShareFolderList from "../../services/share/GetShareFolderList";
+import SwalError from "../../component/swal/SwalError";
 
 export default function SharePage() {
 
@@ -25,12 +26,12 @@ export default function SharePage() {
         const render = async () => {
             const shareFileRes = await GetShareFileList();
             if (!shareFileRes[0]) {
-                alert(shareFileRes[1]);
+                SwalError(shareFileRes[1])
                 return;
             }
             const shareDirRes = await GetShareFolderList();
             if (!shareDirRes[0]) {
-                alert(shareDirRes[1]);
+                SwalError(shareDirRes[1])
                 return;
             }
             const files = [...shareDirRes[1], ...shareFileRes[1]];
@@ -51,7 +52,7 @@ export default function SharePage() {
             render();
             setTimeout(() => setIsLoading(false), 250);
         } catch (error) {
-            alert(error);
+            SwalError(error);
             setIsLoading(false);
         }
     }, [params.fileID])

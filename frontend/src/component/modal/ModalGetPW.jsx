@@ -3,6 +3,8 @@ import { AiOutlineClose } from 'react-icons/ai';
 import Modal from 'react-modal';
 import '../../css/modal.css';
 import PostChangePw from "../../services/user/PostChangePw";
+import SwalError from "../swal/SwalError";
+import SwalAlert from "../swal/SwalAlert";
 
 export default function ModalGetPW(props) {
 
@@ -28,16 +30,15 @@ export default function ModalGetPW(props) {
         const inputData = new FormData(e.target);
         const value = Object.fromEntries(inputData.entries());
         if (value.newPassword !== value.newPasswordConfirm) {
-            alert("새 비밀번호가 일치하지 않습니다.");
+            SwalError("새 비밀번호가 일치하지 않습니다.");
             return;
         }
         const res = await PostChangePw(value);
         if (res[0]) {
-            alert("비밀번호가 변경되었습니다.");
-            props.after();
+            SwalAlert("success", "비밀번호가 변경되었습니다.", props.after)
         }
         else {
-            alert(res[1]);
+            SwalError(res[1]);
         }
     }
 

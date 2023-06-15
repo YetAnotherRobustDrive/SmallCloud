@@ -7,7 +7,7 @@ export default function SwalError(error) {
     
     Swal.fire({
         icon: 'error',
-        text: errorConverter.find((data) => data.origin === error.message) === undefined ? error.message : errorConverter.find((data) => data.origin === error.message).message,
+        text: error,
         confirmButtonText: '확인',
         allowOutsideClick: false,
     })

@@ -1,6 +1,7 @@
 import { useNavigate } from "react-router-dom";
 import { persistor } from "../..";
 import { useEffect } from "react";
+import SwalAlert from "../../component/swal/SwalAlert";
 
 export default function LogoutUser() {
     const navigate = useNavigate();
@@ -8,7 +9,7 @@ export default function LogoutUser() {
     const render = () => {
         localStorage.removeItem("accessToken");
         localStorage.removeItem("refreshToken");
-        window.alert("로그아웃 되었습니다.");
+        SwalAlert("success", "로그아웃 되었습니다.");
         navigate("/login");
     }
     const purge = async () => {

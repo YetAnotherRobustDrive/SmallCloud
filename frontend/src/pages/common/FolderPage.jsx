@@ -14,6 +14,7 @@ import GetSubDirList from "../../services/directory/GetSubDirList";
 import GetSubFileList from "../../services/directory/GetSubFileList";
 import PostMoveDir from "../../services/directory/PostMoveDir";
 import PostMoveFile from "../../services/file/PostMoveFile";
+import SwalError from "../../component/swal/SwalError";
 
 export default function FolderPage() {
 
@@ -76,7 +77,7 @@ export default function FolderPage() {
             render();
             setTimeout(() => setIsLoading(false), 250);
         } catch (error) {
-            alert(error);
+            SwalError(error);
             setIsLoading(false);
         }
     }, [params.fileID])
@@ -84,18 +85,10 @@ export default function FolderPage() {
     useEffect(() => {
         const move = async () => {
             if (source.type === "file") {
-                const res = await PostMoveFile(source.id, target);
-                if (!res[0]) {
-                    alert("오류가 발생했습니다.");
-                    return;
-                }
+                await PostMoveFile(source.id, target);
             }
             else if (source.type === "folder") {
-                const res = await PostMoveDir(source.id, target);
-                if (!res[0]) {
-                    alert("오류가 발생했습니다.");
-                    return;
-                }
+                await PostMoveDir(source.id, target);
             }
             setTarget(0);
             setSource({ type: "", id: 0 });

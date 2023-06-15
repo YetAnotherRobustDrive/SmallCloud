@@ -4,6 +4,8 @@ import { useNavigate } from 'react-router-dom'
 import default_profile_img from '../../img/defalutProfile.png';
 import RefreshToken from "../../services/token/RefreshToken";
 import ElevateUser from '../../services/user/ElevateUser';
+import SwalError from "../swal/SwalError";
+import SwalAlert from "../swal/SwalAlert";
 
 export default function ModalCheckPW(props) {
 
@@ -36,7 +38,7 @@ export default function ModalCheckPW(props) {
         if (e.key === 'Enter') {
             const refreshOk = await RefreshToken();
             if(!refreshOk) {
-                window.alert('로그인 정보가 만료되었습니다.');
+                SwalError("로그인 정보가 만료되었습니다.");
                 navigate('/login');
                 return;
             }
@@ -46,7 +48,7 @@ export default function ModalCheckPW(props) {
                 setCount(count + 1);
                 setMessage(message);
                 if (message === 'JWT토큰이 올바르지 않습니다.') {
-                    window.alert('로그인 정보가 만료되었습니다.');
+                    SwalError("로그인 정보가 만료되었습니다.");
                     navigate('/login');
                 }
                 setIsError(true);

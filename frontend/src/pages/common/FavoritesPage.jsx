@@ -8,6 +8,7 @@ import ModalFileview from "../../component/modal/ModalFileview";
 import ModalLoading from "../../component/modal/ModalLoading";
 import Sidebar from "../../component/sidebar/Sidebar";
 import GetFavoriteList from "../../services/label/GetFavoriteList";
+import SwalError from "../../component/swal/SwalError";
 
 export default function FavoritesPage() {
     const [isFileView, setIsFileView] = useState(false);
@@ -20,7 +21,7 @@ export default function FavoritesPage() {
         const init = async () => {
             const fileRes = await GetFavoriteList();
             if (!fileRes[0]) {
-                alert(fileRes[1]);
+                SwalError(fileRes[1]);
                 return;
             }
             setGridFiles(

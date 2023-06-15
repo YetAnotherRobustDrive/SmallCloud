@@ -18,6 +18,8 @@ import AdminInitUserPw from "../../services/admin/AdminInitUserPw";
 import GetSearchUser from "../../services/user/GetSearchUser";
 import ModalGroupConfig from "../../component/modal/ModalGroupConfig";
 import AdminGroupAdd from "../../services/admin/AdminGroupAdd";
+import SwalAlert from "../../component/swal/SwalAlert";
+import SwalError from "../../component/swal/SwalError";
 
 
 export default function AdminUserCtrlPage() {
@@ -38,10 +40,10 @@ export default function AdminUserCtrlPage() {
             }
             const res = await AdminInitUserPw(user.username, newPw);
             if (!res[0]) {
-                alert("비밀번호 재설정에 실패했습니다.");
+                SwalError(res[1]);
                 return;
             }
-            alert("비밀번호 재설정에 성공했습니다.");
+            SwalAlert("success", "비밀번호 초기화에 성공했습니다.");
             setNewPw("");
         }
         initPw();
@@ -62,10 +64,10 @@ export default function AdminUserCtrlPage() {
             }
             const res = await AdminGroupAdd(newGroup, user.username);
             if (!res[0]) {
-                alert("그룹 설정에 실패했습니다.");
+                SwalError(res[1]);
                 return;
             }
-            alert("그룹 설정에 성공했습니다.");
+            SwalAlert("success", "그룹 추가에 성공했습니다.");
             setNewGroup("");
             setUser({
                 ...user,
@@ -78,10 +80,10 @@ export default function AdminUserCtrlPage() {
     const handleDeactivate = async () => {
         const res = await AdminDeactivateUser(user.username);
         if (!res[0]) {
-            alert(res[1])
+            SwalError(res[1]);
             return;
         }
-        alert("사용자 계정 비활성화에 성공했습니다.");
+        SwalAlert("success", "사용자 계정 비활성화에 성공했습니다.");
         setUser({
             ...user,
             locked: true,
@@ -91,10 +93,10 @@ export default function AdminUserCtrlPage() {
     const handleActivate = async () => {
         const res = await AdminActivateUser(user.username);
         if (!res[0]) {
-            alert(res[1])
+            SwalError(res[1]);
             return;
         }
-        alert("사용자 계정 활성화에 성공했습니다.");
+        SwalAlert("success", "사용자 계정 활성화에 성공했습니다.");
         setUser({
             ...user,
             locked: false,
@@ -113,7 +115,7 @@ export default function AdminUserCtrlPage() {
         document.getElementById("searchUser").value = "";
         setSearched([]);
         if (!res[0]) {
-            alert("사용자 정보를 불러오는데 실패했습니다.");
+            SwalError(res[1]);
             return;
         }
         setUser(res[1]);
@@ -158,7 +160,7 @@ export default function AdminUserCtrlPage() {
         e.preventDefault();
         const inputData = new FormData(e.target);
         if (inputData.get("newExpireDate") === "" || inputData.get("newExpireDate") === null) {
-            alert("만료일을 입력해주세요.");
+            SwalAlert("error", "만료일을 입력해주세요.");
             return;
         }
         const value = {
@@ -167,10 +169,10 @@ export default function AdminUserCtrlPage() {
         }
         const res = await AdminExpireUser(value);
         if (!res[0]) {
-            alert(res[1]);
+            SwalError(res[1]);
             return;
         }
-        alert("적용되었습니다.");
+        SwalAlert("success", "만료일 설정에 성공했습니다.");
     }
 
     return (

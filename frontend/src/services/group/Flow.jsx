@@ -10,6 +10,8 @@ import 'reactflow/dist/style.css';
 import GetGroupTree from './GetGroupTree';
 import PostCreateGroup from './PostCreateGroup';
 import PostDeleteGroup from './PostDeleteGroup';
+import SwalError from '../../component/swal/SwalError';
+import SwalAlert from '../../component/swal/SwalAlert';
 
 export default function Flow(props) {
     const [nodes, setNodes] = useState([]);
@@ -141,7 +143,7 @@ export default function Flow(props) {
         }
         const exist = nodeRef.current.find((e) => e.id === name);
         if (exist !== undefined) {
-            alert("이미 존재하는 그룹입니다.");
+            SwalError("이미 존재하는 그룹입니다.")
             return;
         }
 
@@ -177,7 +179,7 @@ export default function Flow(props) {
 
         const rootNode = nodeRef.current.find((e) => e.type === "customRootNode");
         if (rootNode === undefined) {
-            alert("루트 그룹이 존재하지 않습니다.");
+            SwalError("루트 그룹이 존재하지 않습니다.");
             return;
         }
         await PostCreateGroup(rootNode.data.label, "__ROOT__");
@@ -203,8 +205,7 @@ export default function Flow(props) {
             const element = deleteList[index];
             await PostDeleteGroup(element.target);
         }
-        alert("저장되었습니다.");
-        window.location.reload();
+        SwalAlert("success", "그룹이 저장되었습니다.", () => { window.location.reload(); })
     }
 
     return (

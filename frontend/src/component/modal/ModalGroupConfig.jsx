@@ -5,6 +5,8 @@ import Modal from 'react-modal';
 import '../../css/modal.css';
 import AdminGroupRm from "../../services/admin/AdminGroupRm";
 import GetSearchGroup from "../../services/group/GetSearchGroup";
+import SwalError from "../swal/SwalError";
+import SwalAlert from "../swal/SwalAlert";
 
 export default function ModalGroupConfig(props) {
 
@@ -53,18 +55,19 @@ export default function ModalGroupConfig(props) {
 
     const handleRemove = async () => {
         if (props.curr === null || props.curr === "없음") {
-            alert("소속된 그룹이 없습니다.");
+            SwalError("소속 그룹이 없습니다.");
             return;
         } 
 
         const res = await AdminGroupRm(props.curr, props.userName);
         if (!res[0]) {
-            alert(res[1]);
+            SwalError("그룹 제거에 실패했습니다.");
             return;
         }
-        alert("그룹이 제거되었습니다.");
-        props.setter("없음");
-        props.after();
+        SwalAlert("success", "그룹 제거에 성공했습니다.", () => {
+            props.setter("없음");
+            props.after();
+        });
     }
 
     const handleClick = (e) => {

@@ -4,7 +4,8 @@ import '../../css/context.css';
 import GetRootDir from "../../services/directory/GetRootDir";
 import PostNewDir from "../../services/directory/PostNewDir";
 import ModalGetString from "../modal/ModalGetString";
-import ErrorHandler from "../swal/SwalError";
+import SwalError from "../swal/SwalError";
+import SwalAlert from "../swal/SwalAlert";
 
 export default function ContextBody() {
     const [isModalOpen, setIsModalOpen] = useState(false);
@@ -17,17 +18,17 @@ export default function ContextBody() {
             if (curr === undefined) {     
                 const rootIDRes = await GetRootDir();
                 if (!rootIDRes[0]) {
-                    ErrorHandler(rootIDRes[1]);
+                    SwalError(rootIDRes[1]);
                     return;
                 }    
                 curr = rootIDRes[1];
             }
             const res = await PostNewDir(curr, newName);
             if (!res[0]) {
-                ErrorHandler(res[1]);
+                SwalError(res[1]);
                 return;               
             }
-            window.location.reload();
+            SwalAlert("success", "폴더가 생성되었습니다.", () => window.location.reload());
         }
         if (newName !== undefined && newName !== "") {
             mkFile();

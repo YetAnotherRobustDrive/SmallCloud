@@ -23,7 +23,7 @@ export default function ContextFolder(props) {
                 SwalError(res[1]);
                 return;
             }
-            window.location.reload();
+            SwalAlert("success", "이름이 변경되었습니다.", () => { window.location.reload() });
         }
         if (newName !== undefined && newName !== "") {
             rename();
@@ -40,7 +40,7 @@ export default function ContextFolder(props) {
             SwalError(res[1]);
             return;
         }
-        window.location.reload();
+        SwalAlert("success", "폴더가 삭제되었습니다.", () => { window.location.reload() });
     }
 
     const handleFavorite = async (isAddFavorite) => {
@@ -51,7 +51,7 @@ export default function ContextFolder(props) {
                     SwalAlert("warning", "이미 즐겨찾기에 추가되어 있습니다.");
                     return;
                 }
-                alert(res[1]);
+                SwalError(res[1]);
                 return;
             }
             SwalAlert("success", "즐겨찾기에 추가되었습니다.", () => { window.location.reload() });
@@ -59,7 +59,7 @@ export default function ContextFolder(props) {
         else {
             const res = await PostUnfavoriteFolder(props.folderID);
             if (!res[0]) {
-                alert(res[1]);
+                SwalError(res[1]);
                 return;
             }
             SwalAlert("success", "즐겨찾기에서 삭제되었습니다.", () => { window.location.reload() });
@@ -73,10 +73,9 @@ export default function ContextFolder(props) {
         }
         const res = await PostPurgeFolder(props.folderID);
         if (!res[0]) {
-            alert(res[1]);
+            SwalError(res[1]);
             return;
         }
-        window.location.reload();
     }
 
     const handleRestore = async () => {
@@ -86,11 +85,10 @@ export default function ContextFolder(props) {
         }
         const res = await PostRestoreFolder(props.folderID);
         if (!res[0]) {
-            alert(res[1]);
+            SwalError(res[1]);
             return;
         }
-        alert("복원되었습니다.");
-        window.location.reload();
+        SwalAlert("success", "복원되었습니다.", () => { window.location.reload() });
     }
 
     let options = [];

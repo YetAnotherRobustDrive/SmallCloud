@@ -6,6 +6,8 @@ import '../../css/modal.css';
 import GetSearchUser from "../../services/user/GetSearchUser";
 import GetSearchGroup from "../../services/group/GetSearchGroup";
 import PostCreateShare from "../../services/share/PostCreateShare";
+import SwalError from "../swal/SwalError";
+import SwalAlert from "../swal/SwalAlert";
 
 export default function ModalAddShare(props) {
 
@@ -95,12 +97,11 @@ export default function ModalAddShare(props) {
             }
             const res = await PostCreateShare(data);
             if (!res[0]) {
-                alert(res[1]);
+                SwalError("공유 추가에 실패하였습니다.");
                 return;
             }
         })
-        alert("공유가 추가되었습니다.");
-        props.after();
+        SwalAlert("success", "공유 추가에 성공하였습니다.", props.after);
     }
 
     Modal.setAppElement("#root");
