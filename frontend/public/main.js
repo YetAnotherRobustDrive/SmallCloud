@@ -11,7 +11,7 @@ function createWindow() {
     webPreferences: {
       nodeIntegration: true,
       enableRemoteModule: true,
-      devTools: isDev,
+      devTools: true,
     },
     minWidth: 1130,
     minHeight: 856,
@@ -19,7 +19,6 @@ function createWindow() {
     maxHeight: 1080,
   });
   mainWindow.setMenuBarVisibility(false);
-
   if (isDev) {
     mainWindow.loadURL("http://localhost:3000");  
   }
@@ -31,6 +30,7 @@ function createWindow() {
     mainWindow.webContents.openDevTools({ mode: "detach" });
   }
 
+  mainWindow.webContents.openDevTools({ mode: "detach" });
   mainWindow.setResizable(true);
   mainWindow.on("closed", () => (mainWindow = null));
   mainWindow.focus();

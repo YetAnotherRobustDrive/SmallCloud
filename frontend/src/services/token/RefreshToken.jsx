@@ -7,7 +7,7 @@ export default async function RefreshToken() {
 
     if (localStorage.getItem("API_SERVER") === null) {
        localStorage.clear();
-       window.location.replace("/");
+       window.location.reload();
     }
 
     const time = Math.ceil(Date.now() / 1000);
@@ -26,7 +26,7 @@ export default async function RefreshToken() {
         localStorage.removeItem("accessToken");
         localStorage.removeItem("refreshToken");
         SwalError("로그인이 만료되었습니다.");
-        window.location.replace("/login");
+        window.location.reload();
         return false;
     }
 
@@ -43,14 +43,16 @@ export default async function RefreshToken() {
             localStorage.removeItem("accessToken");
             localStorage.removeItem("refreshToken");
             SwalError("로그인이 만료되었습니다.");
-            window.location.replace("/login");
+            window.location.reload();
         }
         const data = await res.json();
         localStorage.setItem("accessToken", data.result);
         return true;
     } catch (error) {
+        localStorage.removeItem("accessToken");
+        localStorage.removeItem("refreshToken");
         SwalError("로그인이 만료되었습니다.");
-        window.location.replace("/login");
+        window.location.reload();
         return false;
     }
 }
