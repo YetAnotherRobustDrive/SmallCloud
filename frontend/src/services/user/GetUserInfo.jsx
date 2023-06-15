@@ -1,6 +1,6 @@
 import jwtDecode from "jwt-decode";
 import RefreshToken from "../token/RefreshToken";
-import configData from "../../config/config.json"
+ 
 import default_profile_img from '../../img/defalutProfile.png';
 
 export default async function GetUserInfo() {
@@ -12,7 +12,7 @@ export default async function GetUserInfo() {
         return new Promise((resolve, reject) => {
             const xhr = new XMLHttpRequest();
             xhr.responseType = 'blob';
-            xhr.open('GET', configData.API_SERVER + 'users/profile-photo', true);
+            xhr.open('GET', localStorage.getItem("API_SERVER") + 'users/profile-photo', true);
             xhr.onreadystatechange = () => {
                 if (xhr.readyState === XMLHttpRequest.DONE) {
                     const res = xhr.response;
@@ -47,7 +47,7 @@ export default async function GetUserInfo() {
 
         const accessToken = localStorage.getItem("accessToken");
         const userID = jwtDecode(accessToken).sub;
-        const res = await fetch(configData.API_SERVER + 'users/' + userID, {
+        const res = await fetch(localStorage.getItem("API_SERVER") + 'users/' + userID, {
             method: "GET",
             headers: {
                 "Authorization": "Bearer " + accessToken,

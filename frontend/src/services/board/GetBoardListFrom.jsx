@@ -1,5 +1,4 @@
 import RefreshToken from "../token/RefreshToken";
-import configData from "../../config/config.json"
 
 export default async function GetBoardListFrom(url) {
     await RefreshToken();
@@ -12,7 +11,7 @@ export default async function GetBoardListFrom(url) {
     };
 
     try {
-        const res = await fetch(configData.API_SERVER + url , model);
+        const res = await fetch(localStorage.getItem("API_SERVER") + url , model);
         const data = await res.json();
         if (res.status === 200) {
             return [true, data];  //성공

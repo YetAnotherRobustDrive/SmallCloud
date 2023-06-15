@@ -1,4 +1,4 @@
-import configData from "../../config/config.json"
+ 
 import RefreshToken from '../token/RefreshToken'
 
 export default async function GetSearchFile(str) {
@@ -12,7 +12,7 @@ export default async function GetSearchFile(str) {
     };
 
     try {
-        const res = await fetch(configData.API_SERVER + 'files/search?q=' + str, model);
+        const res = await fetch(localStorage.getItem("API_SERVER") + 'files/search?q=' + str, model);
         const data = await res.json();
         if (!res.ok) {
             throw data;

@@ -1,5 +1,5 @@
 import RefreshToken from "../token/RefreshToken";
-import configData from "../../config/config.json"
+ 
 
 export default async function ThrowPingAs(message) {
     await RefreshToken();
@@ -12,7 +12,7 @@ export default async function ThrowPingAs(message) {
     };
 
     try {
-        const res = await fetch(configData.API_SERVER + 'ping/' + message, model);
+        const res = await fetch(localStorage.getItem("API_SERVER") + 'ping/' + message, model);
         if (res.status === 200) {
             return [true, ''];  //성공
         }

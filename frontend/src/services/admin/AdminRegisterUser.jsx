@@ -1,4 +1,3 @@
-import configData from "../../config/config.json";
 import RefreshToken from "../token/RefreshToken";
 
 export default async function AdminRegisterUser(value) {
@@ -14,7 +13,7 @@ export default async function AdminRegisterUser(value) {
     };
 
     try {
-        const res = await fetch(configData.API_SERVER + 'users', model);
+        const res = await fetch(localStorage.getItem("API_SERVER") + 'users', model);
         if (res.status === 200) {
             return [true, ''];  //성공
         }

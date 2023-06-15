@@ -1,4 +1,4 @@
-import configData from "../../config/config.json"
+ 
 import RefreshToken from "./RefreshToken";
 
 export default async function IsAdminToken() {
@@ -6,7 +6,7 @@ export default async function IsAdminToken() {
 
     try {
         const accessToken = localStorage.getItem("accessToken");
-        const res = await fetch(configData.API_SERVER + 'auth/admin-check', {
+        const res = await fetch(localStorage.getItem("API_SERVER") + 'auth/admin-check', {
             method: "GET",
             headers: {
                 "Authorization": "Bearer " + accessToken,

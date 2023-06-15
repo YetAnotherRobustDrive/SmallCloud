@@ -1,5 +1,5 @@
 import RefreshToken from "../token/RefreshToken";
-import configData from "../../config/config.json"
+ 
 import PostUnfavoriteFolder from "./PostUnfavoriteFolder";
 
 export default async function PostDeleteFolder(id) {
@@ -14,7 +14,7 @@ export default async function PostDeleteFolder(id) {
 
     try {
         await PostUnfavoriteFolder(id);
-        const res = await fetch(configData.API_SERVER + 'directory/' + id + '/delete', model);
+        const res = await fetch(localStorage.getItem("API_SERVER") + 'directory/' + id + '/delete', model);
         if (res.status === 200) {
             return [true, ''];  //성공
         }

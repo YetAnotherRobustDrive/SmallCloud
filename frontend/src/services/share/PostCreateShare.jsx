@@ -1,5 +1,5 @@
 import RefreshToken from "../token/RefreshToken";
-import configData from "../../config/config.json"
+ 
 
 export default async function PostCreateShare(value) {
     await RefreshToken();
@@ -14,7 +14,7 @@ export default async function PostCreateShare(value) {
         body: JSON.stringify(value),
     };
     try {
-        const res = await fetch(configData.API_SERVER + "share/create", model);
+        const res = await fetch(localStorage.getItem("API_SERVER") + "share/create", model);
         if (res.status === 200) {
             return [true, ''];  //성공
         }

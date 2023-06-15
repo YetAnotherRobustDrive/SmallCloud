@@ -1,5 +1,5 @@
 import RefreshToken from "../token/RefreshToken";
-import configData from "../../config/config.json"
+ 
 
 export default async function PostNewFile(value, setter, after) {
     await RefreshToken();
@@ -10,7 +10,7 @@ export default async function PostNewFile(value, setter, after) {
         const upload = async () => {
             return new Promise((resolve, reject) => {
                 const xhr = new XMLHttpRequest();
-                xhr.open('POST', configData.API_SERVER + 'files', true);
+                xhr.open('POST', localStorage.getItem("API_SERVER") + 'files', true);
                 xhr.upload.addEventListener("progress", (e) => {
                     const percentage = (e.loaded / e.total) * 100;
                     setter(percentage);

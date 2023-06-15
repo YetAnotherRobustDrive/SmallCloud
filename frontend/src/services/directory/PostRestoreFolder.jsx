@@ -1,5 +1,5 @@
 import RefreshToken from "../token/RefreshToken";
-import configData from "../../config/config.json"
+ 
 
 export default async function PostRestoreFolder(id) {
     await RefreshToken();
@@ -12,7 +12,7 @@ export default async function PostRestoreFolder(id) {
     };
 
     try {
-        const res = await fetch(configData.API_SERVER + 'directory/' + id + '/restore', model);
+        const res = await fetch(localStorage.getItem("API_SERVER") + 'directory/' + id + '/restore', model);
         if (res.status === 200) {
             return [true, ''];  //성공
         }

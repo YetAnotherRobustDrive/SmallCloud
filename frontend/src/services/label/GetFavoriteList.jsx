@@ -1,4 +1,3 @@
-import configData from "../../config/config.json";
 import RefreshToken from "../token/RefreshToken";
 
 export default async function GetFavoriteList() {
@@ -12,7 +11,7 @@ export default async function GetFavoriteList() {
     };
 
     try {
-        const res = await fetch(configData.API_SERVER + 'labels/favorite', model);
+        const res = await fetch(localStorage.getItem("API_SERVER") + 'labels/favorite', model);
         const data = await res.json();
         const files = [...data.files];
         files.forEach(e => {

@@ -1,5 +1,5 @@
 import SwalError from "../../component/swal/SwalError";
-import configData from "../../config/config.json"
+ 
 import jwtDecode from "jwt-decode";
 
 export default async function RefreshToken() {
@@ -33,7 +33,7 @@ export default async function RefreshToken() {
     };
 
     try {
-        const res = await fetch(configData.API_SERVER + 'auth/refresh', model);
+        const res = await fetch(localStorage.getItem("API_SERVER") + 'auth/refresh', model);
         if (!res.ok) {
             localStorage.removeItem("accessToken");
             localStorage.removeItem("refreshToken");

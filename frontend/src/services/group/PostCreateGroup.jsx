@@ -1,4 +1,3 @@
-import configData from "../../config/config.json";
 import RefreshToken from '../token/RefreshToken';
 
 export default async function PostCreateGroup(name, parent) {
@@ -18,7 +17,7 @@ export default async function PostCreateGroup(name, parent) {
 
     try {
         if (parent === "__ROOT__") {//시스템 루트 밑에는 하나만 있도록 유지
-            const testRes = await fetch(configData.API_SERVER + 'group/' + parent, {
+            const testRes = await fetch(localStorage.getItem("API_SERVER") + 'group/' + parent, {
                 method: "GET",
                 headers: {
                     "Authorization": "Bearer " + accessToken,
@@ -31,7 +30,7 @@ export default async function PostCreateGroup(name, parent) {
                 }
             }
         }
-        const res = await fetch(configData.API_SERVER + 'group/create', model);
+        const res = await fetch(localStorage.getItem("API_SERVER") + 'group/create', model);
         if (!res.ok) {
             const data = await res.json();
             throw data;

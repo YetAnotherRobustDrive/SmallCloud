@@ -1,5 +1,4 @@
 import RefreshToken from "../token/RefreshToken";
-import configData from "../../config/config.json"
 
 export default async function AdminGetLogBy(value, page) {
     await RefreshToken();
@@ -14,7 +13,7 @@ export default async function AdminGetLogBy(value, page) {
     };
 
     try {
-        const res = await fetch(configData.API_SERVER + 'logs/admin?size=25&page=' + page, model);
+        const res = await fetch(localStorage.getItem("API_SERVER") + 'logs/admin?size=25&page=' + page, model);
         const data = await res.json();
         if (res.status === 200) {
             return [true, data];  //성공

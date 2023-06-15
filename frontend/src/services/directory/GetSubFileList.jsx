@@ -1,4 +1,3 @@
-import configData from "../../config/config.json";
 import RefreshToken from "../token/RefreshToken";
 
 export default async function GetSubFileList(id) {
@@ -12,7 +11,7 @@ export default async function GetSubFileList(id) {
     };
 
     try {
-        const res = await fetch(configData.API_SERVER + "directory/" + id + '/files', model);
+        const res = await fetch(localStorage.getItem("API_SERVER") + "directory/" + id + '/files', model);
         const data = await res.json();
         data.forEach(e => {
             const size = parseInt(e.size);

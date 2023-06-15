@@ -1,6 +1,6 @@
 import jwtDecode from "jwt-decode";
 import RefreshToken from "../token/RefreshToken";
-import configData from "../../config/config.json"
+ 
 
 export default async function UpdateUserInfo(value, isImgChanged) {
     await RefreshToken();
@@ -11,7 +11,7 @@ export default async function UpdateUserInfo(value, isImgChanged) {
         formData.append('imageFile', value.location);
         return new Promise((resolve, reject) => {
             const xhr = new XMLHttpRequest();
-            xhr.open('POST', configData.API_SERVER + 'users/profile-photo', true);
+            xhr.open('POST', localStorage.getItem("API_SERVER") + 'users/profile-photo', true);
             xhr.onreadystatechange = () => {
                 if (xhr.readyState === XMLHttpRequest.DONE) {
                     if (xhr.status !== 200) {
@@ -53,7 +53,7 @@ export default async function UpdateUserInfo(value, isImgChanged) {
 
         const userID = jwtDecode(accessToken).sub;
 
-        const res = await fetch(configData.API_SERVER + 'users/' + userID + '/update', model);
+        const res = await fetch(localStorage.getItem("API_SERVER") + 'users/' + userID + '/update', model);
         if (!res.ok) {
             const data = await res.json();
             throw data;

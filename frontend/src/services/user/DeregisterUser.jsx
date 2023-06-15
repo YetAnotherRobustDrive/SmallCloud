@@ -1,4 +1,4 @@
-import configData from "../../config/config.json"
+ 
 
 export default async function DeregisterUser() {
     await RefreshToken();
@@ -11,7 +11,7 @@ export default async function DeregisterUser() {
     };
 
     try {
-        const res = await fetch(configData.API_SERVER + 'auth/deregister', model);
+        const res = await fetch(localStorage.getItem("API_SERVER") + 'auth/deregister', model);
         if (!res.ok) {
             const data = await res.json();
             throw data;
