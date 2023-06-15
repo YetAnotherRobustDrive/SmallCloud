@@ -11,7 +11,7 @@ function createWindow() {
     webPreferences: {
       nodeIntegration: true,
       enableRemoteModule: true,
-      devTools: true,
+      devTools: isDev,
     },
     minWidth: 1130,
     minHeight: 856,
@@ -30,7 +30,6 @@ function createWindow() {
     mainWindow.webContents.openDevTools({ mode: "detach" });
   }
 
-  mainWindow.webContents.openDevTools({ mode: "detach" });
   mainWindow.setResizable(true);
   mainWindow.on("closed", () => (mainWindow = null));
   mainWindow.focus();
