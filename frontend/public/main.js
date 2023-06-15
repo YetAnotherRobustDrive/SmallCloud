@@ -6,15 +6,17 @@ let mainWindow;
 
 function createWindow() {
   mainWindow = new BrowserWindow({
-    width: 900,
-    height: 680,
+    width: 1425,
+    height: 1080,
     webPreferences: {
       nodeIntegration: true,
       enableRemoteModule: true,
       devTools: isDev,
     },
-    minWidth: 900,
-    minHeight: 680,
+    minWidth: 1130,
+    minHeight: 856,
+    maxWidth: 1425,
+    maxHeight: 1080,
   });
   mainWindow.setMenuBarVisibility(false);
 
