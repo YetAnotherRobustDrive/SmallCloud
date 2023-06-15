@@ -19,6 +19,7 @@ export default function Flow(props) {
     const [nodes, setNodes] = useState([]);
     const [edges, setEdges] = useState([]);
     const [prevEdges, setPrevEdges] = useState([]);
+    const [newGroup, setNewGroup] = useState("");
 
     const [isRootExist, setIsRootExist] = useState(false);
 
@@ -82,6 +83,44 @@ export default function Flow(props) {
         init();
     }, [])
 
+    useEffect(() => {
+        if (newGroup === null || newGroup === "") {
+            return;
+        }
+        const exist = nodeRef.current.find((e) => e.id === newGroup);
+        if (exist !== undefined) {
+            SwalError("이미 존재하는 그룹입니다.")
+            return;
+        }
+
+        if (isRootExistRef.current === true) {
+            const newNode = nodes.concat({
+                id: newGroup,
+                type: 'customNode',
+                position: { x: 0, y: 0 },
+                data: {
+                    label: newGroup,
+                }
+            })
+            setNodes(newNode);
+            return;
+        }
+        else {
+            const newNode = nodes.concat({
+                id: newGroup,
+                type: 'customRootNode',
+                position: { x: 250, y: 0 },
+                data: {
+                    label: newGroup,
+                }
+            })
+            setIsRootExist(true);
+            setNodes(newNode);
+            return;
+        }
+    }, [newGroup])
+
+
     const onConnect = useCallback((params) => {
         const exist = edgeRef.current.find((e) => e.target === params.target);
         if (params.source === params.target) {
@@ -137,7 +176,6 @@ export default function Flow(props) {
     }, []);
 
     const handleClickAdd = () => {
-        let rawName;
         Swal.fire({
             title: '그룹 추가',
             input: 'text',
@@ -149,45 +187,12 @@ export default function Flow(props) {
             allowOutsideClick: false,
         }).then((result) => {
             if (result.isConfirmed) {
-                rawName = result.value.login
+                const rawName = result.value + "";
+                const reg = /[{}[]\/?.,;:|\)*~`!^-_+<>@#$%&\\=\('"]/gi;
+                const name = rawName.replace(reg, '');
+                setNewGroup(name);
             }
         })
-        const reg = /[{}[]\/?.,;:|\)*~`!^-_+<>@#$%&\\=\('"]/gi;
-        const name = rawName.replace(reg, '');
-        if (name === null || name === "") {
-            return;
-        }
-        const exist = nodeRef.current.find((e) => e.id === name);
-        if (exist !== undefined) {
-            SwalError("이미 존재하는 그룹입니다.")
-            return;
-        }
-
-        if (isRootExistRef.current === true) {
-            const newNode = nodes.concat({
-                id: name,
-                type: 'customNode',
-                position: { x: 0, y: 0 },
-                data: {
-                    label: name,
-                }
-            })
-            setNodes(newNode);
-            return;
-        }
-        else {
-            const newNode = nodes.concat({
-                id: name,
-                type: 'customRootNode',
-                position: { x: 250, y: 0 },
-                data: {
-                    label: name,
-                }
-            })
-            setIsRootExist(true);
-            setNodes(newNode);
-            return;
-        }
     }
 
     const handleClickSave = async () => {

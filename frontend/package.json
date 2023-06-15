@@ -60,6 +60,9 @@
     "win": {
       "icon": "public/favicon256.png"
     },
+    "dmg": {
+      "icon": "public/favicon256.png"
+    },
     "directories": {
       "buildResources": "assets"
     }
