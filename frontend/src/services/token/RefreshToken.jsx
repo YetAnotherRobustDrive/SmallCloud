@@ -1,7 +1,6 @@
-import SwalError from "../../component/swal/SwalError";
-import { persistor } from "../.."; 
 import jwtDecode from "jwt-decode";
-import LogoutUser from "../user/LogoutUser";
+import { persistor } from "../..";
+import SwalError from "../../component/swal/SwalError";
 
 export default async function RefreshToken() {
 
@@ -17,6 +16,12 @@ export default async function RefreshToken() {
         if (accessTokenExp > time) {
             return true;
         }
+    }
+    if (accessToken === null) {
+        SwalError("로그인이 만료되었습니다.");
+        persistor.purge();
+        window.location.reload();
+        return false;        
     }
 
     const refreshToken = localStorage.getItem("refreshToken");
