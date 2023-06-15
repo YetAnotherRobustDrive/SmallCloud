@@ -75,7 +75,7 @@ export default function LoginPage() {
             setLoginInfo({isSuccess: true, id: inputData.get("id")});
             return;
         } catch (e) {
-            SwalError(e);
+            SwalError(e.message);
         }
     }
     return (

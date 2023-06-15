@@ -10,6 +10,8 @@ import ModalFolderShare from "../modal/ModalFolderShare";
 import ModalGetString from "../modal/ModalGetString";
 import SwalAlert from "../swal/SwalAlert";
 import SwalError from "../swal/SwalError";
+import Swal from 'sweetalert2';
+import SwalConfirm from "../swal/SwalConfirm";
 
 export default function ContextFolder(props) {
     const [isModalOpen, setIsModalOpen] = useState(false);
@@ -31,16 +33,16 @@ export default function ContextFolder(props) {
     }, [newName])
 
     const handleDelete = async () => {
-        const confirm = window.confirm("정말로 삭제하시겠습니까?");
-        if (!confirm) {
-            return;
-        }
-        const res = await PostDeleteFolder(props.folderID);
-        if (!res[0]) {
-            SwalError(res[1]);
-            return;
-        }
-        SwalAlert("success", "폴더가 삭제되었습니다.", () => { window.location.reload() });
+        SwalConfirm("폴더를 삭제하시겠습니까?", async () => {
+            const res = await PostDeleteFolder(props.folderID);
+            if (!res[0]) {
+                SwalError(res[1]);
+                return;
+            }
+            SwalAlert("success", "폴더가 삭제되었습니다.", () => { window.location.reload() });
+        }, () => {
+            SwalAlert("info", "취소되었습니다.");
+        })
     }
 
     const handleFavorite = async (isAddFavorite) => {
@@ -67,40 +69,36 @@ export default function ContextFolder(props) {
     }
 
     const handlePurge = async () => {
-        const confirm = window.confirm("정말로 영구 삭제하시겠습니까?");
-        if (!confirm) {
-            return;
-        }
-        const res = await PostPurgeFolder(props.folderID);
-        if (!res[0]) {
-            SwalError(res[1]);
-            return;
-        }
+        SwalConfirm("폴더를 영구 삭제하시겠습니까?", async () => {
+            const res = await PostPurgeFolder(props.folderID);
+            if (!res[0]) {
+                SwalError(res[1]);
+                return;
+            }
+        }, () => { })
     }
 
     const handleRestore = async () => {
-        const confirm = window.confirm("정말로 복원하시겠습니까?");
-        if (!confirm) {
-            return;
-        }
-        const res = await PostRestoreFolder(props.folderID);
-        if (!res[0]) {
-            SwalError(res[1]);
-            return;
-        }
-        SwalAlert("success", "복원되었습니다.", () => { window.location.reload() });
+        SwalConfirm("폴더를 복원하시겠습니까?", async () => {
+            const res = await PostRestoreFolder(props.folderID);
+            if (!res[0]) {
+                SwalError(res[1]);
+                return;
+            }
+            SwalAlert("success", "복원되었습니다.", () => { window.location.reload() });
+        }, () => { })
     }
 
     let options = [];
     if (props.isFavorite === false) {
         options = [
-            ...options, 
+            ...options,
             { label: "즐겨찾기 추가", onClick: () => { handleFavorite(true) } }
         ];
     }
     else {
         options = [
-            ...options, 
+            ...options,
             { label: "즐겨찾기 삭제", onClick: () => { handleFavorite(false) } }
         ];
     }

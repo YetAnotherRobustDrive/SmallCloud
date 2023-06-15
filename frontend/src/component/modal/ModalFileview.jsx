@@ -20,6 +20,7 @@ import ModalAddShare from "./ModalAddShare";
 import ModalEmpty from "./ModalEmpty";
 import ModalFileopen from "./ModalFileopen";
 import ModalGetString from "./ModalGetString";
+import SwalConfirm from "../swal/SwalConfirm";
 
 export default function ModalFileview(props) {
     const [isFileOpen, setIsFileOpen] = useState(false);
@@ -72,27 +73,28 @@ export default function ModalFileview(props) {
     const handleFileRemove = async (e) => {
         e.stopPropagation();
         e.preventDefault();
-        if (window.confirm("정말로 파일을 삭제하시겠습니까?")) {
+
+        SwalConfirm("정말로 파일을 삭제하시겠습니까?", async () => {
             const res = await PostDeleteFile(fileData.id);
             if (!res[0]) {
                 SwalError(res[1]);
                 return;
             }
             SwalAlert("success", "파일이 삭제되었습니다.", () => window.location.reload());
-        }
+        }, () => { });
     }
 
     const handleFileRestore = async (e) => {
         e.stopPropagation();
         e.preventDefault();
-        if (window.confirm("정말로 파일을 복구하시겠습니까?")) {
+        SwalConfirm("정말로 파일을 복구하시겠습니까?", async () => {
             const res = await PostRestoreFile(fileData.id);
             if (!res[0]) {
                 SwalError(res[1]);
                 return;
             }
             SwalAlert("success", "파일이 복구되었습니다.", () => window.location.reload());
-        }
+        }, () => { });
     }
 
     const handleFavorite = async (e) => {

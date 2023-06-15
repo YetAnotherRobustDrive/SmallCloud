@@ -12,6 +12,8 @@ import PostCreateGroup from './PostCreateGroup';
 import PostDeleteGroup from './PostDeleteGroup';
 import SwalError from '../../component/swal/SwalError';
 import SwalAlert from '../../component/swal/SwalAlert';
+import SwalConfirm from '../../component/swal/SwalConfirm';
+import Swal from 'sweetalert2';
 
 export default function Flow(props) {
     const [nodes, setNodes] = useState([]);
@@ -102,10 +104,10 @@ export default function Flow(props) {
     }, []);
     const onEdgesChange = useCallback((changes) => {
         if (changes[0].type === "remove") {
-            if (!window.confirm("그룹을 삭제하시겠습니까?")) {
+            SwalConfirm("그룹을 삭제하시겠습니까?", () => { }, () => {
                 tempRef.current = true;
                 return;
-            }
+            });
         }
         else {
             tempRef.current = false;
@@ -135,7 +137,21 @@ export default function Flow(props) {
     }, []);
 
     const handleClickAdd = () => {
-        const rawName = window.prompt("새 그룹의 이름을 입력해주세요.");
+        let rawName;
+        Swal.fire({
+            title: '그룹 추가',
+            input: 'text',
+            inputAttributes: {
+                autocapitalize: 'off'
+            },
+            showCancelButton: true,
+            confirmButtonText: '추가',
+            allowOutsideClick: false,
+        }).then((result) => {
+            if (result.isConfirmed) {
+                rawName = result.value.login
+            }
+        })
         const reg = /[{}[]\/?.,;:|\)*~`!^-_+<>@#$%&\\=\('"]/gi;
         const name = rawName.replace(reg, '');
         if (name === null || name === "") {
