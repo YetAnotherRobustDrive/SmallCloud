@@ -362,3 +362,19 @@
     border-top: 1px solid #666666;
     width: calc(100% - 20px);
 }
+
+.logTable .page {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    width: calc(100% - 10px);
+    padding: 5px;
+    overflow-x: scroll;
+}
+
+.logTable .page button {
+    border: none;
+    font-size: larger;
+    background-color: transparent;
+}

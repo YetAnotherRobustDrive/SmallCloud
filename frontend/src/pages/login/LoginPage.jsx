@@ -2,15 +2,15 @@ import React, { useState } from "react";
 import { useDispatch } from "react-redux";
 import { Link, useNavigate } from 'react-router-dom';
 import ModalOk from "../../component/modal/ModalOk";
+import SwalError from "../../component/swal/SwalError";
 import configData from "../../config/config.json";
 import logo_img from '../../config/img/logo.png';
 import "../../css/login.css";
 import "../../css/modal.css";
+import ThrowPingAs from "../../services/log/ThrowPingAs";
 import IsAdminToken from "../../services/token/IsAdminToken";
 import { asyncCheckAdmin } from "../../slice/TokenSlice";
 import { setIsLoggedIn } from "../../slice/UserSlice";
-import ThrowPingAs from "../../services/log/ThrowPingAs";
-import ErrorHandler from "../../component/main/ErrorHandler";
 
 export default function LoginPage() {
 
@@ -75,7 +75,7 @@ export default function LoginPage() {
             setLoginInfo({isSuccess: true, id: inputData.get("id")});
             return;
         } catch (e) {
-            ErrorHandler(e);
+            SwalError(e);
         }
     }
     return (

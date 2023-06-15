@@ -4,7 +4,7 @@ import '../../css/context.css';
 import GetRootDir from "../../services/directory/GetRootDir";
 import PostNewDir from "../../services/directory/PostNewDir";
 import ModalGetString from "../modal/ModalGetString";
-import ErrorHandler from "../main/ErrorHandler";
+import ErrorHandler from "../swal/SwalError";
 
 export default function ContextBody() {
     const [isModalOpen, setIsModalOpen] = useState(false);

@@ -45,7 +45,7 @@ export default function AdminUserCtrlPage() {
             setNewPw("");
         }
         initPw();
-    }, [newPw, user.username]);
+    }, [newPw]);
 
     useEffect(() => {
         const setGroup = async () => {
@@ -73,7 +73,7 @@ export default function AdminUserCtrlPage() {
             })
         }
         setGroup();
-    }, [newGroup, user]);
+    }, [newGroup]);
 
     const handleDeactivate = async () => {
         const res = await AdminDeactivateUser(user.username);
