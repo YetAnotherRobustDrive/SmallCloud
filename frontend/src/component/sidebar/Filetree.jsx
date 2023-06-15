@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { FcFile, FcFolder } from 'react-icons/fc';
 import { useNavigate } from 'react-router-dom';
 import "../../css/sidebar.css";

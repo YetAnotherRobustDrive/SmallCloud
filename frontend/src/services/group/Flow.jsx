@@ -10,6 +10,10 @@ import 'reactflow/dist/style.css';
 import GetGroupTree from './GetGroupTree';
 import PostCreateGroup from './PostCreateGroup';
 import PostDeleteGroup from './PostDeleteGroup';
+import SwalError from '../../component/swal/SwalError';
+import SwalAlert from '../../component/swal/SwalAlert';
+import SwalConfirm from '../../component/swal/SwalConfirm';
+import Swal from 'sweetalert2';
 
 export default function Flow(props) {
     const [nodes, setNodes] = useState([]);
@@ -44,6 +48,7 @@ export default function Flow(props) {
                     }];
                     setIsRootExist(true);
                 }
+                return null;
             });
 
             const tmpRes = JSON.parse(JSON.stringify(res.filter(elem => elem.source !== "__ROOT__")));
@@ -99,10 +104,10 @@ export default function Flow(props) {
     }, []);
     const onEdgesChange = useCallback((changes) => {
         if (changes[0].type === "remove") {
-            if (!window.confirm("그룹을 삭제하시겠습니까?")) {
+            SwalConfirm("그룹을 삭제하시겠습니까?", () => { }, () => {
                 tempRef.current = true;
                 return;
-            }
+            });
         }
         else {
             tempRef.current = false;
@@ -115,7 +120,7 @@ export default function Flow(props) {
                 setIsRootExist(false);
             }
         },
-        [nodes, edges]
+        []
     );
     const onEdgeUpdateStart = useCallback(() => {
         edgeUpdateSuccessful.current = false;
@@ -132,15 +137,29 @@ export default function Flow(props) {
     }, []);
 
     const handleClickAdd = () => {
-        const rawName = window.prompt("새 그룹의 이름을 입력해주세요.");
-        const reg = /[\{\}\[\]\/?.,;:|\)*~`!^\-_+<>@\#$%&\\\=\(\'\"]/gi;
+        let rawName;
+        Swal.fire({
+            title: '그룹 추가',
+            input: 'text',
+            inputAttributes: {
+                autocapitalize: 'off'
+            },
+            showCancelButton: true,
+            confirmButtonText: '추가',
+            allowOutsideClick: false,
+        }).then((result) => {
+            if (result.isConfirmed) {
+                rawName = result.value.login
+            }
+        })
+        const reg = /[{}[]\/?.,;:|\)*~`!^-_+<>@#$%&\\=\('"]/gi;
         const name = rawName.replace(reg, '');
         if (name === null || name === "") {
             return;
         }
         const exist = nodeRef.current.find((e) => e.id === name);
         if (exist !== undefined) {
-            alert("이미 존재하는 그룹입니다.");
+            SwalError("이미 존재하는 그룹입니다.")
             return;
         }
 
@@ -176,7 +195,7 @@ export default function Flow(props) {
 
         const rootNode = nodeRef.current.find((e) => e.type === "customRootNode");
         if (rootNode === undefined) {
-            alert("루트 그룹이 존재하지 않습니다.");
+            SwalError("루트 그룹이 존재하지 않습니다.");
             return;
         }
         await PostCreateGroup(rootNode.data.label, "__ROOT__");
@@ -202,8 +221,7 @@ export default function Flow(props) {
             const element = deleteList[index];
             await PostDeleteGroup(element.target);
         }
-        alert("저장되었습니다.");
-        window.location.reload();
+        SwalAlert("success", "그룹이 저장되었습니다.", () => { window.location.reload(); })
     }
 
     return (

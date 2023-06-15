@@ -1,8 +1,8 @@
 import { combineReducers, configureStore } from '@reduxjs/toolkit';
+import { persistReducer } from 'redux-persist';
+import storage from 'redux-persist/lib/storage';
 import tokenSlice from '../slice/TokenSlice';
 import userSlice from '../slice/UserSlice';
-import storage from 'redux-persist/lib/storage';
-import { persistReducer, PURGE } from 'redux-persist';
 
 const reducers = combineReducers({
 	user: userSlice.reducer,

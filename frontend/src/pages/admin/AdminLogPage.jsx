@@ -1,20 +1,24 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
+import { BsFillCircleFill } from "react-icons/bs";
+import { IoIosArrowDown, IoIosArrowUp } from "react-icons/io";
 import BodyFrame from "../../component/Bodyframe";
 import Header from "../../component/header/Header";
-import SidebarAdmin from "../../component/sidebar/SidebarAdmin";
 import BodyHeader from "../../component/main/BodyHeader";
-import { IoIosArrowDown, IoIosArrowUp } from "react-icons/io";
-import { BsFillCircleFill } from "react-icons/bs";
+import SidebarAdmin from "../../component/sidebar/SidebarAdmin";
 
-import "../../css/admin.css"
+import "../../css/admin.css";
 import AdminGetLogBy from "../../services/admin/AdminGetLogBy";
 
 export default function AdminLogPage() {
 
     const [isOpen, setIsOpen] = useState(false);
-    const [log, setLog] = useState([]);
+    const [log, setLog] = useState({
+        content: [],
+        totalPages: 0,
+    });
     const [page, setPage] = useState(0);
-    const [totalPage, setTotalPage] = useState(0);
+    const [option, setOption] = useState({});
+    const [isDoSearch, setIsDoSearch] = useState(false);
 
     const actionList = [ //최신화 필요
         {
@@ -135,12 +139,21 @@ export default function AdminLogPage() {
                 delete value[key];
             }
         }
-        const res = await AdminGetLogBy(value, page);
-        if (res[0]) {
-            setLog(res[1].responseLogDtoList);
-            console.log(res[1]);
-        }
+        setOption(value);
+        setPage(0);
+        setIsDoSearch(!isDoSearch);
     }
+
+    useEffect(() => {
+        const getLog = async () => {
+            const res = await AdminGetLogBy(option, page);
+            if (res[0]) {
+                setLog(res[1]);
+            }
+        }
+        getLog();
+    }, [page, isDoSearch])
+
 
     return (
         <>
@@ -200,9 +213,9 @@ export default function AdminLogPage() {
                         </thead>
                         <tbody>
                             {
-                                log.map((item, index) => (
+                                log.content.map((item, index) => (
                                     <tr key={index}>
-                                        <td>{index + 1}</td>
+                                        <td>{25 * page + index + 1}</td>
                                         <td>{item.localDateTime}</td>
                                         <td>{item.nickName}</td>
                                         <td>{item.action}</td>
@@ -213,6 +226,58 @@ export default function AdminLogPage() {
                             }
                         </tbody>
                     </table>
+                    <div className="page">
+                        {page <= 9 &&
+                            <>
+                                {
+                                    [...Array(log.totalPages)].map((_, item) => (
+                                        item < 11 ?
+                                            <button key={item} onClick={() => { setPage(item) }}>
+                                                {item + 1}
+                                            </button> : null
+                                    ))
+                                }
+                                {log.totalPages > 11 &&
+                                    <>
+                                        <div>...</div>
+                                        < button key={log.totalPages} onClick={() => { setPage(log.totalPages) }}>
+                                            {log.totalPages + 1}
+                                        </button>
+                                    </>
+                                }
+                            </>
+                        }
+                        {page > 9 &&
+                            <>
+                                {
+                                    [...Array(log.totalPages)].map((_, item) => (
+                                        item < 3 ?
+                                            <button key={item} onClick={() => { setPage(item) }}>
+                                                {item + 1}
+                                            </button> : null
+                                    ))
+                                }
+                                <div>...</div>
+                                <button key={page - 1} onClick={() => { setPage(page - 1) }}>
+                                    {page - 1 + 1}
+                                </button>
+                                <button key={page} onClick={() => { setPage(page) }}>
+                                    {page + 1}
+                                </button>
+                                <button key={page + 1} onClick={() => { setPage(page + 1) }}>
+                                    {page + 1 + 1}
+                                </button>
+                                {log.totalPages > 10 && page + 1 < log.totalPages &&
+                                    <>
+                                        <div>...</div>
+                                        < button key={log.totalPages} onClick={() => { setPage(log.totalPages) }}>
+                                            {log.totalPages + 1}
+                                        </button>
+                                    </>
+                                }
+                            </>
+                        }
+                    </div>
                 </div>
             </BodyFrame>
         </>

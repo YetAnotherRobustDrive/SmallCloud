@@ -1,5 +1,6 @@
 import RefreshToken from "../token/RefreshToken";
 import configData from "../../config/config.json"
+import SwalError from "../../component/swal/SwalError";
 
 export default async function PostMoveFile(sourceID, targetID) {
     await RefreshToken();
@@ -25,6 +26,7 @@ export default async function PostMoveFile(sourceID, targetID) {
             throw data; //실패
         }
     } catch (e) {
+        SwalError(e.message);
         return [false, e.message]; //실패 후 처리
     }
 }

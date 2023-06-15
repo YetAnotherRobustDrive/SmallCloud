@@ -1,19 +1,16 @@
 import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import logo_img from '../../config/img/logo.png'
-import configData from "../../config/config.json"
-import "../../css/login.css"
-import "../../css/modal.css"
-import ModalOk from "../../component/modal/ModalOk";
+import SwalAlert from "../../component/swal/SwalAlert";
+import SwalError from "../../component/swal/SwalError";
+import configData from "../../config/config.json";
+import logo_img from '../../config/img/logo.png';
+import "../../css/login.css";
+import "../../css/modal.css";
 
 export default function RegisterPage() {
 
     const [name, setName] = useState();
 
-    const [isChkWrong, setIsChkWrong] = useState(false);
-    const [isEmpty, setIsEmpty] = useState(false);
-    const [isExistUser, setIsExistUser] = useState(false);
-    const [isSuccess, setIsSuccess] = useState(false);
     const moveTo = useNavigate();
 
     const getName = () => {
@@ -21,7 +18,6 @@ export default function RegisterPage() {
     }
 
     const afterSuccess = () => {
-        setIsSuccess(false);
         moveTo("/login");
     }
 
@@ -31,11 +27,11 @@ export default function RegisterPage() {
         const inputData = new FormData(e.target);
         const value = Object.fromEntries(inputData.entries());
         if (inputData.get("name") === "" || inputData.get("id") === "" || inputData.get("password") === "" || inputData.get("password_chk") === "") {
-            setIsEmpty(true);
+            SwalError("모든 항목을 입력해주세요.");
             return;
         }
         else if (inputData.get("password_chk") !== inputData.get("password")) {
-            setIsChkWrong(true);
+            SwalError("비밀번호가 일치하지 않습니다.");
             return;
         }
         inputData.delete("password_chk");
@@ -53,9 +49,14 @@ export default function RegisterPage() {
             if (!res.ok) {
                 throw new Error('');//실패
             }
-            setIsSuccess(true);//성공
+            SwalAlert("success", "회원가입이 완료되었습니다.", afterSuccess);
         } catch (e) {
-            setIsExistUser(true);//실패 후 처리
+            if (e.message !== undefined) {
+                SwalError(e.message);
+            }
+            else {
+                SwalError("회원가입에 실패하였습니다.");
+            }
         }
     }
     return (
@@ -71,11 +72,6 @@ export default function RegisterPage() {
                 <button className="link" >가입 신청</button>
             </div>
             <Link to='/login/ask'>가입에 문제가 있으신가요?</Link>
-
-            {isEmpty && <ModalOk close={() => setIsEmpty(false)}>{"입력하지 않은 값이 있습니다."}</ModalOk>}
-            {isChkWrong && <ModalOk close={() => setIsChkWrong(false)}>{"비밀번호 확인이 일치하지 않습니다."}</ModalOk>}
-            {isExistUser && <ModalOk close={() => setIsExistUser(false)}>{"이미 존재하는 유저입니다."}</ModalOk>}
-            {isSuccess && <ModalOk close={afterSuccess}>{"가입되었습니다!!"}</ModalOk>}
         </form>
     )
 }

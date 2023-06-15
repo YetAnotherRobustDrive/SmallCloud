@@ -11,6 +11,7 @@ import ModalLoading from "../../component/modal/ModalLoading";
 import Sidebar from "../../component/sidebar/Sidebar";
 import GetShareFileList from "../../services/share/GetShareFileList";
 import GetShareFolderList from "../../services/share/GetShareFolderList";
+import SwalError from "../../component/swal/SwalError";
 
 export default function SharePage() {
 
@@ -25,12 +26,12 @@ export default function SharePage() {
         const render = async () => {
             const shareFileRes = await GetShareFileList();
             if (!shareFileRes[0]) {
-                alert(shareFileRes[1]);
+                SwalError(shareFileRes[1])
                 return;
             }
             const shareDirRes = await GetShareFolderList();
             if (!shareDirRes[0]) {
-                alert(shareDirRes[1]);
+                SwalError(shareDirRes[1])
                 return;
             }
             const files = [...shareDirRes[1], ...shareFileRes[1]];
@@ -42,7 +43,7 @@ export default function SharePage() {
                             setIsFileView(true);
                         }}
                         key={data.id}
-                        data={data}/>
+                        data={data} />
                 })
             );
         }
@@ -51,27 +52,27 @@ export default function SharePage() {
             render();
             setTimeout(() => setIsLoading(false), 250);
         } catch (error) {
-            alert(error);
+            SwalError(error);
             setIsLoading(false);
         }
     }, [params.fileID])
 
     useEffect(() => {
-        setGridFiles([...
-        gridFiles.sort((a, b) => {
-            if (sort === "name_asc") {
-                return a.props.data.name.localeCompare(b.props.data.name);
-            }
-            else if (sort === "name_desc") {
-                return b.props.data.name.localeCompare(a.props.data.name);
-            }
-            else if (sort === "time_asc") {
-                return a.props.data.createdDate.localeCompare(b.props.data.createdDate);
-            }
-            else if (sort === "time_desc") {
-                return b.props.data.createdDate.localeCompare(a.props.data.createdDate);
-            }
-        })])
+        setGridFiles([
+            ...gridFiles.sort((a, b) => {
+                if (sort === "name_asc") {
+                    return a.props.data.name.localeCompare(b.props.data.name);
+                }
+                else if (sort === "name_desc") {
+                    return b.props.data.name.localeCompare(a.props.data.name);
+                }
+                else if (sort === "time_asc") {
+                    return a.props.data.createdDate.localeCompare(b.props.data.createdDate);
+                }
+                else {
+                    return b.props.data.createdDate.localeCompare(a.props.data.createdDate);
+                }
+            })])
     }, [sort])
 
     return (
@@ -80,7 +81,7 @@ export default function SharePage() {
             <Header />
             <Sidebar />
             <BodyFrame hasContext={true}>
-                <BodyHeader text={"공유받은 파일"} isSortable setter={setSort}/>
+                <BodyHeader text={"공유받은 파일"} isSortable setter={setSort} />
                 {
                     gridFiles.length === 0 ? <div style={{ height: "calc(100vh - 137px)", textAlign: "center", marginTop: "20px" }}>파일이 없습니다.</div> :
                         <GridBox height="calc(100vh - 117px)">

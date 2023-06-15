@@ -1,6 +1,6 @@
-import React, { useState } from "react";
+import React from "react";
 import Modal from 'react-modal';
-import '../../css/modal.css'
+import '../../css/modal.css';
 
 
 export default function ModalEmpty(props) {

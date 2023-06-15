@@ -8,6 +8,8 @@ import GetSearchGroup from "../../services/group/GetSearchGroup";
 import PostCreateShare from "../../services/share/PostCreateShare";
 import PostDeleteShare from "../../services/share/PostDeleteShare";
 import GetSearchUser from "../../services/user/GetSearchUser";
+import SwalAlert from "../swal/SwalAlert";
+import SwalError from "../swal/SwalError";
 
 export default function ModalFolderShare(props) {
 
@@ -30,7 +32,7 @@ export default function ModalFolderShare(props) {
         const getShare = async () => {
             const res = await GetDirInfo(props.folderID);
             if (!res[0]) {
-                alert(res[1]);
+                SwalError(res[1]);
                 return;
             }
             const shares = res[1].shares;
@@ -141,11 +143,10 @@ export default function ModalFolderShare(props) {
             }
             await PostCreateShare(data);
         })
-        alert("공유가 적용되었습니다.");
-        props.after();
-        setTimeout(() => {
+        SwalAlert("success", "공유 관리가 완료되었습니다.", () => {
+            props.after();
             window.location.reload();
-        }, 250);
+        });
     }
 
     Modal.setAppElement("#root");

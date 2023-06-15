@@ -1,14 +1,11 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { FiChevronDown, FiChevronUp } from 'react-icons/fi';
-import ModalOk from "../../component/modal/ModalOk";
 import '../../css/cs.css';
 import PostAnswer from "../../services/board/PostAnswer";
+import SwalAlert from "../swal/SwalAlert";
+import SwalError from "../swal/SwalError";
 
 export default function ExtendBoxAdmin(props) {
-    const [isEmpty, setIsEmpty] = useState(false);
-    const [isFail, setIsFail] = useState(false);
-    const [isSuccess, setIsSuccess] = useState(false);
-    const [message, setMessage] = useState("일시적인 오류가 발생했습니다.");
     const [isOpen, setIsOpen] = useState(false);
 
     const handleClick = () => {
@@ -20,33 +17,29 @@ export default function ExtendBoxAdmin(props) {
         const inputData = new FormData(e.target);
         inputData.append("questionId", props.id);
         if (inputData.get("content") === "") {
-            setIsEmpty(true);
+            SwalError("답변을 입력해주세요.");
             return;
         }
         const value = Object.fromEntries(inputData.entries());
         const res = await PostAnswer(value);
         if (!res[0]) {
             if (typeof res[1] === "object") {
-                let tmpMessage = new String();
-                for (const [key, value] of Object.entries(res[1])) {
+                let tmpMessage = "";
+                for (const [, value] of Object.entries(res[1])) {
                     tmpMessage += value + '\n';
                 }
-                setMessage(tmpMessage);
+                SwalError(tmpMessage);
             }
             else {
-                setMessage(res[1]);
+                SwalError(res[1]);
             }
-            setIsFail(true);
             return;
         }
-        setIsSuccess(true);
+        SwalAlert("success", "답변이 등록되었습니다.", () => window.location.reload());
     }
-    
+
     return (
         <>
-            {isSuccess && <ModalOk close={() => { setIsSuccess(false); window.location.reload()}}>{"답변이 등록되었습니다."}</ModalOk>}
-            {isFail && <ModalOk close={() => setIsFail(false)}>{message}</ModalOk>}
-            {isEmpty && <ModalOk close={() => setIsEmpty(false)}>{"입력하지 않은 내용이 있습니다."}</ModalOk>}
             <div className="extendBox" key={props.key}>
                 <div className="head" onClick={handleClick}>
                     <span className="title">{props.title}</span>

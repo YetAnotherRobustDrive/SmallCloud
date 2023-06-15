@@ -1,23 +1,21 @@
 import React, { useState } from "react";
 import { useDispatch } from "react-redux";
 import { Link, useNavigate } from 'react-router-dom';
-import ModalOk from "../../component/modal/ModalOk";
+import SwalAlert from "../../component/swal/SwalAlert";
+import SwalError from "../../component/swal/SwalError";
 import configData from "../../config/config.json";
 import logo_img from '../../config/img/logo.png';
 import "../../css/login.css";
 import "../../css/modal.css";
+import ThrowPingAs from "../../services/log/ThrowPingAs";
 import IsAdminToken from "../../services/token/IsAdminToken";
 import { asyncCheckAdmin } from "../../slice/TokenSlice";
 import { setIsLoggedIn } from "../../slice/UserSlice";
-import ThrowPingAs from "../../services/log/ThrowPingAs";
 
 export default function LoginPage() {
 
     const [name, setName] = useState();
-    const [isEmpty, setIsEmpty] = useState(false);
-    const [isFail, setIsFail] = useState(false);
     const [loginInfo, setLoginInfo] = useState({isSuccess: false, id: ''});
-    const [message, setMessage] = useState("로그인 에러");
     const navigate = useNavigate();
 
     const dispath = useDispatch();
@@ -55,7 +53,7 @@ export default function LoginPage() {
         };
 
         if (inputData.get("id") === "" || inputData.get("password") === "") {
-            setIsEmpty(true);
+            SwalError("모든 항목을 입력해주세요.");
             return;
         }
 
@@ -72,10 +70,10 @@ export default function LoginPage() {
             await checkAdmin();//check admin        
             
             setLoginInfo({isSuccess: true, id: inputData.get("id")});
+            SwalAlert("success", "로그인 되었습니다.", afterSuccess);
             return;
         } catch (e) {
-            if (e.message !== undefined) setMessage(e.message)
-            setIsFail(true);
+            SwalError(e.message);
         }
     }
     return (
@@ -89,10 +87,6 @@ export default function LoginPage() {
                 <button className="link" >로그인</button>
             </div>
             <Link to='/login/ask'>로그인에 문제가 있으신가요?</Link>
-
-            {isFail && <ModalOk close={() => setIsFail(false)}>{message}</ModalOk>}
-            {isEmpty && <ModalOk close={() => setIsEmpty(false)}>{"입력하지 않은 값이 있습니다."}</ModalOk>}
-            {loginInfo.isSuccess && <ModalOk close={afterSuccess}>{"로그인 성공"}</ModalOk>}
         </form>
     )
 }

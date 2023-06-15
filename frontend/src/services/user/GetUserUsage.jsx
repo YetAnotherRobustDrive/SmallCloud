@@ -1,7 +1,7 @@
 import configData from "../../config/config.json";
 import RefreshToken from "../token/RefreshToken";
 
-export default async function GetShareFileList() {
+export default async function GetUserUsage() {
     await RefreshToken();
     const accessToken = localStorage.getItem("accessToken");
     const model = {
@@ -10,31 +10,31 @@ export default async function GetShareFileList() {
             "Authorization": "Bearer " + accessToken,
         },
     };
-    
+
     try {
-        const res = await fetch(configData.API_SERVER + 'share/file-list', model);
+        const res = await fetch(configData.API_SERVER + 'files/usage', model);
         const data = await res.json();
-        data.forEach(e => {
-            const size = parseInt(e.size);
+        if (res.status === 200) {
+            const size = parseInt(data.used === null ? 0 : data.used );
+            let converted;
+            let unit;
             if (parseInt(size / Math.pow(10, 9)) > 0) {
-                e.size = (size / Math.pow(10, 9)).toFixed(1) + "GB";
+                converted = (size / Math.pow(10, 9)).toFixed(1);
+                unit = "GB";
             }
             else if (parseInt(size / Math.pow(10, 6)) > 0) {
-                e.size = (size / Math.pow(10, 6)).toFixed(1) + "MB";
+                converted = (size / Math.pow(10, 6)).toFixed(1);
+                unit = "MB";
             }
             else if (parseInt(size / Math.pow(10, 3)) > 0) {
-                e.size = (size / Math.pow(10, 3)).toFixed(1) + "KB";
+                converted = (size / Math.pow(10, 3)).toFixed(1);
+                unit = "KB";
             }
             else {
-                e.size = size + "B";
+                converted = size;
+                unit = "B";
             }
-            e.type = "file"
-            e.isShared = true;
-            e.labels = e.labels.filter(e => e.name.startsWith("!$@*%&") === false);
-        });
-        
-        if (res.status === 200) {
-            return [true, data];  //성공
+            return [true, converted, unit, (size / Math.pow(10, 9)).toFixed(1)];  //성공
         }
         else {
             throw data; //실패

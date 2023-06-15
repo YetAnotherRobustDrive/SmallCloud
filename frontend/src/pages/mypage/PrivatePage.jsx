@@ -2,15 +2,15 @@ import React, { useEffect, useState } from "react";
 import { useNavigate } from 'react-router-dom';
 import BodyFrame from "../../component/Bodyframe";
 import Header from "../../component/header/Header";
-import ModalOk from '../../component/modal/ModalOk';
+import ModalGetPW from "../../component/modal/ModalGetPW";
 import EditableColumn from "../../component/mypage/EditableColumn";
 import SidebarMypage from "../../component/sidebar/SidebarMypage";
 import '../../css/mypage.css';
 import RefreshToken from "../../services/token/RefreshToken";
 import GetUserInfo from "../../services/user/GetUserInfo";
 import UpdateUserInfo from "../../services/user/UpdateUserInfo";
-import ModalGetString from "../../component/modal/ModalGetString";
-import ModalGetPW from "../../component/modal/ModalGetPW";
+import SwalAlert from "../../component/swal/SwalAlert";
+import SwalError from "../../component/swal/SwalError";
 
 export default function PrivatePage() {
     const [img, setImg] = useState(null);
@@ -19,11 +19,7 @@ export default function PrivatePage() {
     const [group, setGroup] = useState("소속이 없습니다.");
     const [joined, setJoined] = useState(null);
 
-    const [isFail, setIsFail] = useState(false);
-    const [isFetchFail, setIsFetchFail] = useState(false);
-    const [isSuccess, setIsSuccess] = useState(false);
     const [isModalOpen, setIsModalOpen] = useState(false);
-    const [message, setMessage] = useState(false);
     const [isImgChanged, setIsImgChanged] = useState(false);
     const navigate = useNavigate();
 
@@ -33,7 +29,7 @@ export default function PrivatePage() {
 
             const res = await GetUserInfo();
             if (!res[0]) {
-                setIsFetchFail(true);
+                SwalAlert("error", "일시적인 오류가 발생했습니다. 잠시 후 다시 시도해주세요.", navigate("/"));
             }
 
             //성공 후 처리
@@ -61,11 +57,10 @@ export default function PrivatePage() {
         const value = Object.fromEntries(inputData.entries());
         const res = await UpdateUserInfo(value, isImgChanged);
         if (!res[0]) {
-            setIsFail(true);
-            setMessage(res[1] === undefined ? "잘못된 값이 있습니다." : res[1]);
+            SwalError(res[1]);
             return;
         }
-        setIsSuccess(true);
+        SwalAlert("success", "회원정보가 수정되었습니다.", navigate("/mypage"));
     }
 
     const handleChangePW = async (e) => {
@@ -95,14 +90,11 @@ export default function PrivatePage() {
                     isOpen={isModalOpen}
                     after={() => setIsModalOpen(false)}
                 />}
-            {isSuccess && <ModalOk close={() => { window.location.reload() }}>{"변경되었습니다."}</ModalOk>}
-            {isFail && <ModalOk close={() => setIsFail(false)}>{message}</ModalOk>}
-            {isFetchFail && <ModalOk close={() => { setIsFail(false); navigate('/'); }}>{"일시적인 오류가 발생했습니다."}</ModalOk>}
             <Header />
             <SidebarMypage />
             <BodyFrame>
                 <form className="private-profile" onSubmit={handleSubmit}>
-                    <img src={img} />
+                    <img src={img} alt="프로필 이미지"/>
                     <label htmlFor="file">프로필 변경하기</label>
                     <input
                         onChange={handleImgChange}

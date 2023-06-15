@@ -1,22 +1,28 @@
+import { ArcElement, Chart as ChartJS, Legend, Tooltip } from "chart.js";
 import React, { useState } from "react";
-import "../../css/sidebar.css"
-import { Chart as ChartJS, ArcElement, Tooltip, Legend } from "chart.js";
 import { Pie } from "react-chartjs-2";
+import "../../css/sidebar.css";
+import GetUserUsage from "../../services/user/GetUserUsage";
 
 export default function Usage() {
-
-  React.useEffect(() => {
-    const timer = setInterval(() => {
-      setPer((per) => (per >= 100 ? 1 : per + 1));
-    }, 100);
-    return () => {
-      clearInterval(timer);
-    };
-  }, []);
-
   ChartJS.register(ArcElement, Tooltip, Legend);
 
   const [per, setPer] = useState(0);
+  const [unit, setUnit] = useState("GB");
+  const [actual, setActual] = useState(0);
+
+  React.useEffect(() => {
+    const fetchUsage = async () => {
+      const res = await GetUserUsage();
+      if (!res[0]) {
+        return;
+      }
+      setActual(res[1]);
+      setUnit(res[2]);
+      setPer(res[3]);
+    }
+    fetchUsage();
+  }, []);
 
   const data = {
     labels: [
@@ -24,12 +30,6 @@ export default function Usage() {
     datasets: [{
       data: [per, 100 - per],
       backgroundColor: function (context) {
-        const chart = context.chart;
-        const { _, chartArea } = chart;
-        if (!chartArea) {
-          // This case happens on initial chart load
-          return;
-        }
         return [getColor(per), 'rgb(255,255,255)'];
       },
       borderColor: 'rgb(0, 0, 0)',
@@ -43,7 +43,7 @@ export default function Usage() {
       <Pie id="usage" data={data} />
       <div>
         <div style={{ paddingBottom: "10px", fontSize: "large" }}><b>사용량</b></div>
-        <div><b>{per} GB</b></div>
+        <div><b>{actual}{unit}</b></div>
         <div>/ 100GB</div>
       </div>
     </div>

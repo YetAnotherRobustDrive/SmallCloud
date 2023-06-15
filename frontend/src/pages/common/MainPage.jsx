@@ -9,6 +9,7 @@ import UploadBtn from "../../component/main/UploadBtn";
 import ModalFileview from "../../component/modal/ModalFileview";
 import ModalLoading from "../../component/modal/ModalLoading";
 import Sidebar from "../../component/sidebar/Sidebar";
+import Upbar from "../../component/sidebar/Upbar";
 import GetRootDir from "../../services/directory/GetRootDir";
 import GetSubDirList from "../../services/directory/GetSubDirList";
 import GetSubFileList from "../../services/directory/GetSubFileList";
@@ -16,7 +17,7 @@ import PostMoveDir from "../../services/directory/PostMoveDir";
 import PostMoveFile from "../../services/file/PostMoveFile";
 import GetShareFileList from "../../services/share/GetShareFileList";
 import GetShareFolderList from "../../services/share/GetShareFolderList";
-import Upbar from "../../component/sidebar/Upbar";
+import SwalError from "../../component/swal/SwalError";
 
 export default function MainPage() {
 
@@ -32,10 +33,10 @@ export default function MainPage() {
     const [innerWidth, setInnerWidth] = useState(window.innerWidth);
 
     useEffect(() => {
-      const resizeListener = () => {
-        setInnerWidth(window.innerWidth);
-      };
-      window.addEventListener("resize", resizeListener);
+        const resizeListener = () => {
+            setInnerWidth(window.innerWidth);
+        };
+        window.addEventListener("resize", resizeListener);
     });
 
 
@@ -43,7 +44,7 @@ export default function MainPage() {
         const render = async () => {
             const rootIDRes = await GetRootDir();
             if (!rootIDRes[0]) {
-                alert(rootIDRes[1])
+                SwalError(rootIDRes[1]);
                 return;
             }
 
@@ -51,12 +52,12 @@ export default function MainPage() {
 
             const subFileRes = await GetSubFileList(rootID);
             if (!subFileRes[0]) {
-                alert(subFileRes[1]);
+                SwalError(subFileRes[1]);
                 return;
             }
             const subDirRes = await GetSubDirList(rootID);
             if (!subDirRes[0]) {
-                alert(subDirRes[1]);
+                SwalError(subDirRes[1]);
                 return;
             }
             const files = [...subDirRes[1], ...subFileRes[1]];
@@ -70,17 +71,17 @@ export default function MainPage() {
                         targetSetter={setTarget}
                         sourceSetter={setSource}
                         key={data.id}
-                        data={data}/>
+                        data={data} />
                 })
             )
             const shareFileRes = await GetShareFileList();
             if (!shareFileRes[0]) {
-                alert(shareFileRes[1])
+                SwalError(shareFileRes[1]);
                 return;
             }
             const shareDirRes = await GetShareFolderList();
             if (!shareDirRes[0]) {
-                alert(shareDirRes[1])
+                SwalError(shareDirRes[1]);
                 return;
             }
             const shareFiles = [...shareDirRes[1], ...shareFileRes[1]];
@@ -106,14 +107,14 @@ export default function MainPage() {
             if (source.type === "file") {
                 const res = await PostMoveFile(source.id, target);
                 if (!res[0]) {
-                    alert("오류가 발생했습니다.");
+                    SwalError(res[1]);
                     return;
                 }
             }
             else if (source.type === "folder") {
                 const res = await PostMoveDir(source.id, target);
                 if (!res[0]) {
-                    alert("오류가 발생했습니다.");
+                    SwalError(res[1]);
                     return;
                 }
             }
@@ -129,21 +130,21 @@ export default function MainPage() {
     }, [target, source])
 
     useEffect(() => {
-        setGridFiles([...
-        gridFiles.sort((a, b) => {
-            if (sort === "name_asc") {
-                return a.props.data.name.localeCompare(b.props.data.name);
-            }
-            else if (sort === "name_desc") {
-                return b.props.data.name.localeCompare(a.props.data.name);
-            }
-            else if (sort === "time_asc") {
-                return a.props.data.createdDate.localeCompare(b.props.data.createdDate);
-            }
-            else if (sort === "time_desc") {
-                return b.props.data.createdDate.localeCompare(a.props.data.createdDate);
-            }
-        })])
+        setGridFiles([
+            ...gridFiles.sort((a, b) => {
+                if (sort === "name_asc") {
+                    return a.props.data.name.localeCompare(b.props.data.name);
+                }
+                else if (sort === "name_desc") {
+                    return b.props.data.name.localeCompare(a.props.data.name);
+                }
+                else if (sort === "time_asc") {
+                    return a.props.data.createdDate.localeCompare(b.props.data.createdDate);
+                }
+                else {
+                    return b.props.data.createdDate.localeCompare(a.props.data.createdDate);
+                }
+            })])
     }, [sort])
 
     return (
@@ -153,7 +154,7 @@ export default function MainPage() {
             {innerWidth > 768 && <Sidebar />}
             {innerWidth <= 768 && <Upbar />}
             <BodyFrame hasContext={true} innerWidth={innerWidth}>
-                <BodyHeader text="내 파일" isSortable setter={setSort}/>
+                <BodyHeader text="내 파일" isSortable setter={setSort} />
                 {
                     gridFiles.length === 0 ? <div style={{ height: innerWidth > 768 ? "calc(100vh - 299px)" : "calc(100vh - 369px)", textAlign: "center", marginTop: "20px" }}>파일이 없습니다.</div> :
                         <GridBox height="calc(100vh - 299px)">

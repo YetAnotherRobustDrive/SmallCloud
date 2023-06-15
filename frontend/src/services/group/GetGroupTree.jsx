@@ -1,5 +1,5 @@
-import configData from "../../config/config.json"
-import RefreshToken from '../token/RefreshToken'
+import configData from "../../config/config.json";
+import RefreshToken from '../token/RefreshToken';
 import PostCreateGroup from "./PostCreateGroup";
 
 export default async function GetGroupTree(isReadOnly = false) {

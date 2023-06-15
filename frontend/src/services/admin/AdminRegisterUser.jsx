@@ -1,5 +1,5 @@
+import configData from "../../config/config.json";
 import RefreshToken from "../token/RefreshToken";
-import configData from "../../config/config.json"
 
 export default async function AdminRegisterUser(value) {
     await RefreshToken();
@@ -19,8 +19,7 @@ export default async function AdminRegisterUser(value) {
             return [true, ''];  //성공
         }
         else if (res.status === 400) {
-            const data = await res.json();
-            throw "입력 형식 오류입니다.";
+            throw new Error("입력 형식 오류입니다.");
         }
         else {
             const data = await res.json();

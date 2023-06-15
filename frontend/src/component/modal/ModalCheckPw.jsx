@@ -4,6 +4,8 @@ import { useNavigate } from 'react-router-dom'
 import default_profile_img from '../../img/defalutProfile.png';
 import RefreshToken from "../../services/token/RefreshToken";
 import ElevateUser from '../../services/user/ElevateUser';
+import SwalError from "../swal/SwalError";
+import SwalAlert from "../swal/SwalAlert";
 
 export default function ModalCheckPW(props) {
 
@@ -12,7 +14,6 @@ export default function ModalCheckPW(props) {
     const [count, setCount] = useState(0);
     const [message, setMessage] = useState(false);
     
-    const [nickname, setNickname] = useState("Nick_name");
     const [img, setImg] = useState(null);
     const navigate = useNavigate();
 
@@ -37,7 +38,7 @@ export default function ModalCheckPW(props) {
         if (e.key === 'Enter') {
             const refreshOk = await RefreshToken();
             if(!refreshOk) {
-                window.alert('로그인 정보가 만료되었습니다.');
+                SwalError("로그인 정보가 만료되었습니다.");
                 navigate('/login');
                 return;
             }
@@ -47,7 +48,7 @@ export default function ModalCheckPW(props) {
                 setCount(count + 1);
                 setMessage(message);
                 if (message === 'JWT토큰이 올바르지 않습니다.') {
-                    window.alert('로그인 정보가 만료되었습니다.');
+                    SwalError("로그인 정보가 만료되었습니다.");
                     navigate('/login');
                 }
                 setIsError(true);
@@ -65,7 +66,6 @@ export default function ModalCheckPW(props) {
             <Modal isOpen={isOpen} style={modalStyle}>
                 <div className="modalOuter">
                     <img src={img}></img>
-                    <span className="nick">{nickname}</span>
                     <input
                         type="password"
                         placeholder="PW"

@@ -14,10 +14,13 @@ import PostLabelFile from "../../services/file/PostLabelFile";
 import PostRestoreFile from "../../services/file/PostRestoreFile";
 import PostUnfavoriteFile from "../../services/file/PostUnfavoriteFile";
 import PostDeleteShare from "../../services/share/PostDeleteShare";
+import SwalAlert from "../swal/SwalAlert";
+import SwalError from "../swal/SwalError";
 import ModalAddShare from "./ModalAddShare";
 import ModalEmpty from "./ModalEmpty";
 import ModalFileopen from "./ModalFileopen";
 import ModalGetString from "./ModalGetString";
+import SwalConfirm from "../swal/SwalConfirm";
 
 export default function ModalFileview(props) {
     const [isFileOpen, setIsFileOpen] = useState(false);
@@ -61,39 +64,37 @@ export default function ModalFileview(props) {
         }
         const res = await PostDeleteShare(value);
         if (!res[0]) {
-            alert(res[1]);
+            SwalError(res[1]);
             return;
         }
-        alert("공유가 해제되었습니다.");
-        setTimeout(() => window.location.reload(), 250);
+        SwalAlert("success", "공유가 해제되었습니다.", () => window.location.reload());
     }
 
     const handleFileRemove = async (e) => {
         e.stopPropagation();
         e.preventDefault();
-        if (window.confirm("정말로 파일을 삭제하시겠습니까?")) {
+
+        SwalConfirm("정말로 파일을 삭제하시겠습니까?", async () => {
             const res = await PostDeleteFile(fileData.id);
             if (!res[0]) {
-                alert(res[1]);
+                SwalError(res[1]);
                 return;
             }
-            alert("파일이 삭제되었습니다.");
-            window.location.reload();
-        }
+            SwalAlert("success", "파일이 삭제되었습니다.", () => window.location.reload());
+        }, () => { });
     }
 
     const handleFileRestore = async (e) => {
         e.stopPropagation();
         e.preventDefault();
-        if (window.confirm("정말로 파일을 복구하시겠습니까?")) {
+        SwalConfirm("정말로 파일을 복구하시겠습니까?", async () => {
             const res = await PostRestoreFile(fileData.id);
             if (!res[0]) {
-                alert(res[1]);
+                SwalError(res[1]);
                 return;
             }
-            alert("파일이 복구되었습니다.");
-            window.location.reload();
-        }
+            SwalAlert("success", "파일이 복구되었습니다.", () => window.location.reload());
+        }, () => { });
     }
 
     const handleFavorite = async (e) => {
@@ -102,25 +103,24 @@ export default function ModalFileview(props) {
         if (fileData.isFavorite) {
             const res = await PostUnfavoriteFile(fileData.id);
             if (!res[0]) {
-                alert(res[1]);
+                SwalError(res[1]);                
                 return;
             }
         }
         else {
             const res = await PostFavoriteFile(fileData.id);
             if (!res[0]) {
-                alert(res[1]);
+                SwalError(res[1]);
                 return;
             }
         }
         fileData.isFavorite = !fileData.isFavorite;
         if (fileData.isFavorite) {
-            alert("즐겨찾기 설정되었습니다.");
+            SwalAlert("success", "즐겨찾기 되었습니다.", () => window.location.reload());
         }
         else {
-            alert("즐겨찾기 해제되었습니다.");
+            SwalAlert("success", "즐겨찾기 해제되었습니다.", () => window.location.reload());
         }
-        window.location.reload();
     }
 
     useEffect(() => {
@@ -132,8 +132,7 @@ export default function ModalFileview(props) {
             labelsForPost = [...new Set(labelsForPost)];
             if (labelsForPost.length !== 0) {
                 await PostLabelFile(fileData.id, labelsForPost);
-                alert("라벨이 수정되었습니다.");
-                window.location.reload();
+                SwalAlert("success", "라벨이 수정되었습니다.", () => window.location.reload());
             }
         }
         editLabel();
@@ -218,7 +217,7 @@ export default function ModalFileview(props) {
                                         <span><BsFillTrashFill /></span>
                                     </div>
                                 }
-                                {(props.isDeleted !== true && fileData.isShared !== true) &&
+                                {(props.isDeleted === true && fileData.isShared !== true) &&
                                     <div className="removeFile" onClick={handleFileRestore}>
                                         <span><RiArrowGoBackLine /></span>
                                     </div>

@@ -1,6 +1,6 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
+import { BsToggleOff, BsToggleOn } from 'react-icons/bs';
 import '../../css/admin.css';
-import {BsToggleOff, BsToggleOn} from 'react-icons/bs'
 
 export default function ToggleBtn(props) {
 

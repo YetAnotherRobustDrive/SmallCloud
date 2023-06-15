@@ -1,7 +1,7 @@
-import React, { useState } from "react";
-import "../../css/header.css"
-import { useNavigate } from "react-router-dom"
-import { BiSearch } from "react-icons/bi"
+import React from "react";
+import { BiSearch } from "react-icons/bi";
+import { useNavigate } from "react-router-dom";
+import "../../css/header.css";
 
 export default function SearchBar() {
     const navigate = useNavigate();

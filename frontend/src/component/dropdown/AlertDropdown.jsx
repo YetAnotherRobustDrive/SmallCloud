@@ -3,6 +3,7 @@ import '../../css/dropdown.css'
 import { BsBell } from "react-icons/bs"
 import GetFiveAlarm from "../../services/alarm/GetFiveAlarm";
 import PostDeleteAlarm from "../../services/alarm/PostDeleteAlarm";
+import SwalAlert from "../swal/SwalAlert";
 export default function AlertDropdown() {
 
     const [alarms, setAlarms] = useState([]);
@@ -12,7 +13,7 @@ export default function AlertDropdown() {
         const getAlarm = async () => {
             const res = await GetFiveAlarm();
             if (!res[0]) {
-                alert(res[1]);
+                SwalAlert("error", res[1]);
                 return;
             }
             setAlarms(res[1].notificationDtoList);
@@ -34,7 +35,7 @@ export default function AlertDropdown() {
         const rmAlarm = async () => {
             const res = await PostDeleteAlarm(e.target.id);
             if (!res[0]) {
-                alert(res[1]);
+                SwalAlert("error", res[1]);
                 return;
             }
             setCount(count - 1);
@@ -53,7 +54,7 @@ export default function AlertDropdown() {
                     <ul className="dropdown-options">
                         {alarms.map((option) => (
                             <li
-                                key={option.value}
+                                key={option.id}
                                 className="dropdown-option"
                                 onClick={handleOptionClick}
                             >
