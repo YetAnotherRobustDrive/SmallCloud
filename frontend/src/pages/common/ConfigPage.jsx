@@ -1,5 +1,4 @@
 import React, { useState } from "react";
-import { Link, useNavigate } from 'react-router-dom';
 import SwalError from "../../component/swal/SwalError";
 import logo_img from '../../config/img/logo.png';
 import "../../css/login.css";
@@ -7,8 +6,7 @@ import "../../css/modal.css";
 
 export default function ConfigPage() {
 
-    const [name, setName] = useState();
-    const navigate = useNavigate();
+    const [name, setName] = useState();ㅒ
 
     const handleSubmit = async (e) => {
         e.preventDefault();
@@ -24,8 +22,7 @@ export default function ConfigPage() {
             <input name='id' type="text" placeholder="ID" autoFocus />
             <input name='password' type="password" placeholder="PW" />
             <div className="buttons">
-                <Link to='/register' className="link">회원가입</Link>
-                <button className="link" >로그인</button>
+                <button className="link" >설정완료</button>
             </div>
         </form>
     )

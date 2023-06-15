@@ -53,7 +53,7 @@ export default function UploadBtn() {
             }
             formData.append('cwd', curr);
             formData.append('file', file);
-            const res = await PostNewFile(formData, setUploadState, SwalAlert("success", "업로드가 완료되었습니다."));
+            const res = await PostNewFile(formData, setUploadState, () => SwalAlert("success", "업로드가 완료되었습니다.", ()=>window.location.reload()));
             if (!res[0]) {
                 SwalError(res[1]);
                 return;

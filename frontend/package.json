@@ -1,12 +1,13 @@
 {
   "main": "public/main.js",
   "homepage": ".",
-  "author": "Mint",
+  "author": "Mint <https://github.com/YetAnotherRobustDrive>",
   "description": "Yet Another Robust Drive",
   "name": "yard",
   "version": "1.0.0",
   "license": "MIT",
   "private": true,
+  "email" : "",
   "dependencies": {
     "@material-ui/core": "^4.12.4",
     "@reduxjs/toolkit": "^1.9.3",
@@ -25,7 +26,8 @@
     "reactflow": "^11.7.1",
     "redux-persist": "^6.0.0",
     "sweetalert2": "^11.7.12",
-    "web-vitals": "^2.1.4"
+    "web-vitals": "^2.1.4",
+    "yarn": "^1.22.19"
   },
   "devDependencies": {
     "@babel/plugin-proposal-private-property-in-object": "^7.16.7",
@@ -62,6 +64,17 @@
     },
     "dmg": {
       "icon": "public/favicon256.png"
+    },
+    "linux": {
+      "target": [
+        "AppImage", 
+        "deb",
+        "rpm",
+        "zip",
+        "tar.gz"
+      ],
+      "icon": "public/favicon256.png",
+      "category": "Utility"
     },
     "directories": {
       "buildResources": "assets"
