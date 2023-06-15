@@ -4,7 +4,6 @@ export default function SwalError(error) {
     const errorConverter = [
 
     ]
-    console.log(error);
     
     Swal.fire({
         icon: 'error',
