@@ -4,17 +4,14 @@ import BodyFrame from "../../component/Bodyframe";
 import ExtendBox from "../../component/cs/ExtendBox";
 import Header from "../../component/header/Header";
 import BodyHeader from "../../component/main/BodyHeader";
-import ModalOk from "../../component/modal/ModalOk";
 import SidebarCS from "../../component/sidebar/SidebarCS";
+import SwalAlert from "../../component/swal/SwalAlert";
+import SwalError from "../../component/swal/SwalError";
 import '../../css/cs.css';
 import GetBoardListFrom from "../../services/board/GetBoardListFrom";
 import PostBoard from "../../services/board/PostBoard";
 
 export default function QuestionPage() {
-    const [isEmpty, setIsEmpty] = useState(false);
-    const [isFail, setIsFail] = useState(false);
-    const [isOK, setIsok] = useState(false);
-    const [message, setMessage] = useState("일시적인 오류가 발생했습니다.");
     const [myQuestion, setMyQuestion] = useState([]);
     const [myQuestionAns, setMyQuestionAns] = useState([]);
 
@@ -23,8 +20,7 @@ export default function QuestionPage() {
             const userName = jwtDecode(localStorage.getItem("accessToken")).sub;
             const res = await GetBoardListFrom('inquiries/myQuestions?writer=' + userName);
             if (!res[0]) {
-                setIsFail(true);
-                setMessage(res[1]);
+                SwalError(res[1]);
                 return;
             }
             setMyQuestionAns([]);
@@ -55,7 +51,7 @@ export default function QuestionPage() {
         const value = Object.fromEntries(inputData.entries());
 
         if (inputData.get("content") === "" || inputData.get("title") === "") {
-            setIsEmpty(true);
+            SwalError("내용을 입력해주세요.");
             return;
         }
         const res = await PostBoard(value);
@@ -65,22 +61,18 @@ export default function QuestionPage() {
                 for (const [, value] of Object.entries(res[1])) {
                     tmpMessage += value + '\n';
                 }
-                setMessage(tmpMessage);
+                SwalError(tmpMessage);
             }
             else {
-                setMessage(res[1]);
+                SwalError(res[1]);
             }
-            setIsFail(true);
             return;
         }
-        setIsok(true);
+        SwalAlert("success", "문의가 등록되었습니다.", () => window.location.reload());
     }
 
     return (
         <>
-            {isOK && <ModalOk close={() => { setIsok(false); window.location.reload(); }}>{"등록되었습니다."}</ModalOk>}
-            {isFail && <ModalOk close={() => setIsFail(false)}>{message}</ModalOk>}
-            {isEmpty && <ModalOk close={() => setIsEmpty(false)}>{"제목과 내용을 입력해주세요."}</ModalOk>}
             <Header />
             <SidebarCS />
             <BodyFrame>

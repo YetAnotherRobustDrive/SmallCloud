@@ -2,18 +2,16 @@ import React, { useEffect, useState } from "react";
 import BodyFrame from "../../component/Bodyframe";
 import Header from "../../component/header/Header";
 import BodyHeader from "../../component/main/BodyHeader";
-import ModalOk from "../../component/modal/ModalOk";
-import SidebarAdmin from "../../component/sidebar/SidebarAdmin";
-import PostBoardAdmin from "../../services/board/PostBoardAdmin";
-import GetBoardListFrom from "../../services/board/GetBoardListFrom";
 import ModalLoading from "../../component/modal/ModalLoading";
+import SidebarAdmin from "../../component/sidebar/SidebarAdmin";
+import GetBoardListFrom from "../../services/board/GetBoardListFrom";
+import PostBoardAdmin from "../../services/board/PostBoardAdmin";
+import SwalError from "../../component/swal/SwalError";
+import Swal from "sweetalert2";
+import SwalAlert from "../../component/swal/SwalAlert";
 
 export default function AdminPrivacyUploadPage() {
-    const [isEmpty, setIsEmpty] = useState(false);
-    const [isFail, setIsFail] = useState(false);
-    const [isOK, setIsok] = useState(false);
     const [isLoading, setIsLoading] = useState(true);
-    const [message, setMessage] = useState("");
     const [curr, setCurr] = useState();
 
     useEffect(() => {
@@ -21,8 +19,7 @@ export default function AdminPrivacyUploadPage() {
             const res = await GetBoardListFrom("inquiries/board/created?boardType=privacy&createdDate=0");
             setTimeout(() => setIsLoading(false), 250);
             if (!res[0]) {
-                setIsFail(true);
-                setMessage(res[1]);
+                SwalError(res[1]);
                 return;
             }
             if (res[1] !== null) {
@@ -41,7 +38,7 @@ export default function AdminPrivacyUploadPage() {
         const value = Object.fromEntries(inputData.entries());
 
         if (inputData.get("content") === "") {
-            setIsEmpty(true);
+            SwalError("내용을 입력해주세요.");
             return;
         }
         const res = await PostBoardAdmin(value);
@@ -51,24 +48,20 @@ export default function AdminPrivacyUploadPage() {
                 for (const [, value] of Object.entries(res[1])) {
                     tmpMessage += value + '\n';
                 }
-                setMessage(tmpMessage);
+                SwalError(tmpMessage);
             }
             else {
-                setMessage(res[1]);
+                SwalError(res[1]);
             }
-            setIsFail(true);
             return;
         }
-        setIsok(true);
+        SwalAlert("success", "개인정보취급방침이 등록되었습니다.", () => window.location.reload());
     }
 
 
     return (
         <>
             {isLoading && <ModalLoading isOpen={isLoading} />}
-            {isOK && <ModalOk close={() => { setIsok(false);}}>{"등록되었습니다."}</ModalOk>}
-            {isFail && <ModalOk close={() => setIsFail(false)}>{message}</ModalOk>}
-            {isEmpty && <ModalOk close={() => setIsEmpty(false)}>{"제목과 내용을 입력해주세요."}</ModalOk>}
             <Header />
             <SidebarAdmin />
             <BodyFrame>

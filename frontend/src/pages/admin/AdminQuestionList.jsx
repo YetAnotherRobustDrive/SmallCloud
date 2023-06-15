@@ -3,24 +3,20 @@ import BodyFrame from "../../component/Bodyframe";
 import ExtendBoxAdmin from "../../component/cs/ExtendBoxAdmin";
 import Header from "../../component/header/Header";
 import BodyHeader from "../../component/main/BodyHeader";
-import ModalLoading from "../../component/modal/ModalLoading";
-import ModalOk from "../../component/modal/ModalOk";
 import SidebarAdmin from "../../component/sidebar/SidebarAdmin";
+import SwalError from "../../component/swal/SwalError";
 import '../../css/admin.css';
 import GetBoardListFrom from "../../services/board/GetBoardListFrom";
 
 export default function AdminQuestionList() {
     const [questions, setQuestions] = useState([]);
-    const [isFail, setIsFail] = useState(false);
     const [isLoading, setIsLoading] = useState(true);
-    const [message, setMessage] = useState("로그인 에러");
 
     useEffect(() => {
         const render = async () => {
             const res = await GetBoardListFrom('inquiries/questioned');
             if (!res[0]) {
-                setIsFail(true);
-                setMessage(res[1]);
+                SwalError(res[1]);
                 return;
             }
             setQuestions(res[1]);
@@ -31,8 +27,6 @@ export default function AdminQuestionList() {
 
     return (
         <>
-            {isLoading && <ModalLoading isOpen={isLoading} />}
-            {isFail && <ModalOk close={() => setIsFail(false)}>{message}</ModalOk>}
             <Header />
             <SidebarAdmin />
             <BodyFrame>

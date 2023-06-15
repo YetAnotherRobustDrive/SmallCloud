@@ -1,16 +1,13 @@
-import React, { useState } from "react";
+import React from "react";
 import BodyFrame from "../../component/Bodyframe";
 import Header from "../../component/header/Header";
 import BodyHeader from "../../component/main/BodyHeader";
-import ModalOk from "../../component/modal/ModalOk";
 import SidebarAdmin from "../../component/sidebar/SidebarAdmin";
 import PostBoardAdmin from "../../services/board/PostBoardAdmin";
+import SwalError from "../../component/swal/SwalError";
+import SwalAlert from "../../component/swal/SwalAlert";
 
 export default function AdminNoticeUploadPage() {
-    const [isEmpty, setIsEmpty] = useState(false);
-    const [isFail, setIsFail] = useState(false);
-    const [isOK, setIsok] = useState(false);
-    const [message, setMessage] = useState("");
 
     const handleSubmit = async (e) => {
         e.preventDefault();
@@ -20,7 +17,7 @@ export default function AdminNoticeUploadPage() {
         const value = Object.fromEntries(inputData.entries());
 
         if (inputData.get("content") === "" || inputData.get("title") === "") {
-            setIsEmpty(true);
+            SwalError("공지사항 제목과 내용을 입력해주세요.");
             return;
         }
         const res = await PostBoardAdmin(value);
@@ -30,23 +27,19 @@ export default function AdminNoticeUploadPage() {
                 for (const [, value] of Object.entries(res[1])) {
                     tmpMessage += value + '\n';
                 }
-                setMessage(tmpMessage);
+                SwalError(tmpMessage);
             }
             else {
-                setMessage(res[1]);
+                SwalError(res[1]);
             }
-            setIsFail(true);
             return;
         }
-        setIsok(true);
+        SwalAlert("success", "공지사항이 등록되었습니다.", () => window.location.reload());
     }
 
 
     return (
         <>
-            {isOK && <ModalOk close={() => { setIsok(false); window.location.reload(); }}>{"등록되었습니다."}</ModalOk>}
-            {isFail && <ModalOk close={() => setIsFail(false)}>{message}</ModalOk>}
-            {isEmpty && <ModalOk close={() => setIsEmpty(false)}>{"제목과 내용을 입력해주세요."}</ModalOk>}
             <Header />
             <SidebarAdmin />
             <BodyFrame>
