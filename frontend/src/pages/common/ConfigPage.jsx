@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import configData from "../../config/config";
 import logo_img from '../../config/img/logo.png';
 import "../../css/login.css";
@@ -8,7 +8,6 @@ import SwalError from "../../component/swal/SwalError";
 import ModalLoading from "../../component/modal/ModalLoading";
 
 export default function ConfigPage() {
-    const [name, setName] = React.useState('');
     const [isLoading, setIsLoading] = React.useState(false);
 
     const setConfig = (addr) => {
@@ -26,7 +25,7 @@ export default function ConfigPage() {
                 },
             });
             if (res.status === 200) {
-                SwalAlert("success", "서버 연결에 성공하였습니다.", () => {setConfig(addr); window.location.reload();});
+                SwalAlert("success", "서버 연결에 성공하였습니다.", () => {setConfig(addr); window.location.replace("/login");});
             } else {
                 SwalError("서버 연결에 실패하였습니다.");  
                 throw new Error();
@@ -47,15 +46,15 @@ export default function ConfigPage() {
         checkConnection(fullAddr);
     }
 
-    const getName = async () => {
-        setName(configData.name);
-    }
+    useEffect(() => {
+        localStorage.clear();
+    }, []);
 
     return (
-        <form className="login" onLoad={getName} onSubmit={handleSubmit}>
+        <form className="login" onSubmit={handleSubmit}>
             {isLoading && <ModalLoading isOpen={isLoading}/>}
             <img src={logo_img} alt="LOGO" />
-            <span className="namespan">{name}</span>
+            <span className="namespan">서버 주소를 입력해주세요.</span>
             <input name='ip' type="text" placeholder="000.000.000.000" autoFocus />
             <div className="buttons">
                 <button className="link" >설정완료</button>

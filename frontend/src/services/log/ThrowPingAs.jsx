@@ -1,14 +1,6 @@
-import RefreshToken from "../token/RefreshToken";
- 
-
 export default async function ThrowPingAs(message) {
-    await RefreshToken();
-    const accessToken = localStorage.getItem("accessToken");
     const model = {
         method: "GET",
-        headers: {
-            "Authorization": "Bearer " + accessToken,
-        },
     };
 
     try {
@@ -20,6 +12,6 @@ export default async function ThrowPingAs(message) {
             return [true, ''];  //성공
         }
     } catch (e) {
-        return [true, ''];  //성공
+        return [false, e.message];  //성공
     }
 }

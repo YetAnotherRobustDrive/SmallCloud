@@ -1,17 +1,22 @@
 import SwalError from "../../component/swal/SwalError";
- 
+import { persistor } from "../.."; 
 import jwtDecode from "jwt-decode";
+import LogoutUser from "../user/LogoutUser";
 
 export default async function RefreshToken() {
+
+    if (localStorage.getItem("API_SERVER") === null) {
+       localStorage.clear();
+       window.location.replace("/");
+    }
+
     const time = Math.ceil(Date.now() / 1000);
     const accessToken = localStorage.getItem("accessToken");
-    if (accessToken === null) {
-        return false;
-    }
-    const accessTokenExp = jwtDecode(accessToken).exp;
-
-    if (accessTokenExp > time) {
-        return true;
+    if (accessToken !== null) {
+        const accessTokenExp = jwtDecode(accessToken).exp;
+        if (accessTokenExp > time) {
+            return true;
+        }
     }
 
     const refreshToken = localStorage.getItem("refreshToken");

@@ -1,4 +1,4 @@
- 
+import RefreshToken from '../token/RefreshToken';
 
 export default async function DeregisterUser() {
     await RefreshToken();
@@ -16,7 +16,6 @@ export default async function DeregisterUser() {
             const data = await res.json();
             throw data;
         }
-        const token = await res.text();
         localStorage.removeItem("accessToken");
         localStorage.removeItem("refreshToken");
         return [true, ''];

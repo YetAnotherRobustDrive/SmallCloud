@@ -41,10 +41,10 @@ export default function ConditionalRoute() {
     return (
         <Router>
             <Routes>
-                {localStorage.getItem("API_SERVER") === undefined &&
+                {localStorage.getItem("API_SERVER") === null &&
                     <Route path='*' element={<ConfigPage />} />
                 }
-                {localStorage.getItem("API_SERVER") !== undefined &&
+                {localStorage.getItem("API_SERVER") !== null &&
                     <>
                         {isAdmin &&
                             <>
