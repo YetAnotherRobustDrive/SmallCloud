@@ -3,6 +3,7 @@ import { AiFillStar, AiOutlineClose, AiOutlineStar } from "react-icons/ai";
 import { BsFillShareFill, BsFillTrashFill } from 'react-icons/bs';
 import { GoCloudDownload } from 'react-icons/go';
 import { MdGroups, MdOpenInFull, MdPerson } from 'react-icons/md';
+import { TbFileShredder } from 'react-icons/tb';
 import { RiArrowGoBackLine } from 'react-icons/ri';
 import { TbEdit } from 'react-icons/tb';
 import ProgressBar from "../../component/updown/ProgressBar";
@@ -21,6 +22,7 @@ import ModalEmpty from "./ModalEmpty";
 import ModalFileopen from "./ModalFileopen";
 import ModalGetString from "./ModalGetString";
 import SwalConfirm from "../swal/SwalConfirm";
+import PostPurgeFile from "../../services/file/PostPurgeFile";
 
 export default function ModalFileview(props) {
     const [isFileOpen, setIsFileOpen] = useState(false);
@@ -123,6 +125,20 @@ export default function ModalFileview(props) {
         }
     }
 
+    const handlePurge = async (e) => {
+        e.stopPropagation();
+        e.preventDefault();
+        SwalConfirm("정말로 파일을 영구 삭제하시겠습니까?", async () => {
+            const res = await PostPurgeFile(fileData.id);
+            if (!res[0]) {
+                SwalError(res[1]);
+                return;
+            }
+            SwalAlert("success", "파일이 영구 삭제되었습니다.", () => window.location.reload());
+        }, () => { });
+    }
+
+
     useEffect(() => {
         const editLabel = async () => {
             let labelsForPost = [];
@@ -156,6 +172,7 @@ export default function ModalFileview(props) {
                                 }
                                 <div className='icon' onClick={handleDownload}><GoCloudDownload /></div>
                             </>}
+                            {props.isDeleted === true && <div className='icon' onClick={handlePurge}><TbFileShredder /></div> }
                             <div className='icon' onClick={() => setIsFileOpen(true)}><MdOpenInFull /></div>
                             <div className='icon' onClick={() => props.after()}><AiOutlineClose /></div>
                         </div>
