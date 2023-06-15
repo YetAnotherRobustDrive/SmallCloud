@@ -1,4 +1,3 @@
-import configData from "../../config/config.json";
 import RefreshToken from '../token/RefreshToken';
 import PostCreateGroup from "./PostCreateGroup";
 
@@ -15,7 +14,7 @@ export default async function GetGroupTree(isReadOnly = false) {
 
     const getChildren = async (parent) => {
         try {
-            const res = await fetch(configData.API_SERVER + 'group/' + parent, model);
+            const res = await fetch(localStorage.getItem("API_SERVER") + 'group/' + parent, model);
             const data = await res.json();
             if (res.status === 404) {
                 return null;

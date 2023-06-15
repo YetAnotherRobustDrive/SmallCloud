@@ -1,4 +1,4 @@
-import configData from "../../config/config.json"
+ 
 import RefreshToken from '../token/RefreshToken'
 
 export default async function ElevateUser(pw) {
@@ -16,7 +16,7 @@ export default async function ElevateUser(pw) {
     };
 
     try {
-        const res = await fetch(configData.API_SERVER + 'auth/elevate', model);
+        const res = await fetch(localStorage.getItem("API_SERVER") + 'auth/elevate', model);
         const data = await res.json();
         if (!res.ok) {
             throw data;

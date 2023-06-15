@@ -1,4 +1,4 @@
-import configData from "../../config/config.json"
+ 
 import RefreshToken from '../token/RefreshToken'
 
 export default async function PostDeleteGroup(name) {
@@ -12,7 +12,7 @@ export default async function PostDeleteGroup(name) {
     };
 
     try {
-        const res = await fetch(configData.API_SERVER + 'group/' + name + '/delete', model);
+        const res = await fetch(localStorage.getItem("API_SERVER") + 'group/' + name + '/delete', model);
         if (!res.ok) {
             const data = await res.json();
             throw data;

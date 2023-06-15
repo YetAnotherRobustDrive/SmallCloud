@@ -1,4 +1,3 @@
-import configData from "../../config/config.json";
 import default_profile_img from '../../img/defalutProfile.png';
 import RefreshToken from "../token/RefreshToken";
 
@@ -45,7 +44,7 @@ export default async function AdminGetUserInfo(name) {
             img = default_profile_img;
         }
 
-        const res = await fetch(configData.API_SERVER + 'users/' + name, {
+        const res = await fetch(localStorage.getItem("API_SERVER") + 'users/' + name, {
             method: "GET",
             headers: {
                 "Authorization": "Bearer " + accessToken,

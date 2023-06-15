@@ -1,5 +1,4 @@
 import RefreshToken from "../token/RefreshToken";
-import configData from "../../config/config.json"
 
 export default async function AdminInitUserPw(username, newPw) {
     await RefreshToken();
@@ -16,7 +15,7 @@ export default async function AdminInitUserPw(username, newPw) {
     };
 
     try {
-        const res = await fetch(configData.API_SERVER + "admin/change-password/" + username , model);
+        const res = await fetch(localStorage.getItem("API_SERVER") + "admin/change-password/" + username , model);
         if (res.status === 200) {
             return [true, ''];  //성공
         }

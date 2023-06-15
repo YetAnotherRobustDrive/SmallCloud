@@ -1,5 +1,5 @@
 import RefreshToken from "../token/RefreshToken";
-import configData from "../../config/config.json"
+ 
 
 export default async function PostDeleteShare(value) {
     await RefreshToken();
@@ -15,7 +15,7 @@ export default async function PostDeleteShare(value) {
     };
 
     try {
-        const res = await fetch(configData.API_SERVER + "share/delete ", model);
+        const res = await fetch(localStorage.getItem("API_SERVER") + "share/delete ", model);
         if (res.status === 200) {
             return [true, ''];  //성공
         }

@@ -1,5 +1,5 @@
 import RefreshToken from "../token/RefreshToken";
-import configData from "../../config/config.json"
+ 
 
 export default async function GetShareFolderList() {
     await RefreshToken();
@@ -12,7 +12,7 @@ export default async function GetShareFolderList() {
     };
 
     try {
-        const res = await fetch(configData.API_SERVER + 'share/directory-list', model);
+        const res = await fetch(localStorage.getItem("API_SERVER") + 'share/directory-list', model);
         const data = await res.json();
         data.forEach(e => {
             e.type = "folder";

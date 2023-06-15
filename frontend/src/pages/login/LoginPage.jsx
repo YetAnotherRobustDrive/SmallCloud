@@ -3,7 +3,7 @@ import { useDispatch } from "react-redux";
 import { Link, useNavigate } from 'react-router-dom';
 import SwalAlert from "../../component/swal/SwalAlert";
 import SwalError from "../../component/swal/SwalError";
-import configData from "../../config/config.json";
+import configData from "../../config/config.json"
 import logo_img from '../../config/img/logo.png';
 import "../../css/login.css";
 import "../../css/modal.css";
@@ -58,13 +58,21 @@ export default function LoginPage() {
         }
 
         try {
-            const res = await fetch(configData.API_SERVER + 'auth/login', model);
+            const res = await fetch(localStorage.getItem("API_SERVER") + 'auth/login', model);
             const data = await res.json();
             if (!res.ok) {
-                ThrowPingAs("login/" + value.id + "/fail");
+                try {
+                    ThrowPingAs("login/" + value.id + "/fail");                    
+                } catch (error) {
+                    throw error;
+                }
                 throw data;
             }
-            ThrowPingAs("login/" + value.id + "/success");
+            try {
+                ThrowPingAs("login/" + value.id + "/fail");
+            } catch (error) {
+                throw error;
+            }
             localStorage.setItem("accessToken", data.accessToken); //성공
             localStorage.setItem("refreshToken", data.refreshToken);
             await checkAdmin();//check admin        

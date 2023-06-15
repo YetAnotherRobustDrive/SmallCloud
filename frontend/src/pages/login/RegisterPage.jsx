@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import SwalAlert from "../../component/swal/SwalAlert";
 import SwalError from "../../component/swal/SwalError";
-import configData from "../../config/config.json";
+import configData from "../../config/config.json"
 import logo_img from '../../config/img/logo.png';
 import "../../css/login.css";
 import "../../css/modal.css";
@@ -45,9 +45,10 @@ export default function RegisterPage() {
         };
 
         try {
-            const res = await fetch(configData.API_SERVER + 'auth/register', model);
+            const res = await fetch(localStorage.getItem("API_SERVER") + 'auth/register', model);
             if (!res.ok) {
-                throw new Error('');//실패
+                SwalError("회원가입에 실패하였습니다.");
+                return;
             }
             SwalAlert("success", "회원가입이 완료되었습니다.", afterSuccess);
         } catch (e) {

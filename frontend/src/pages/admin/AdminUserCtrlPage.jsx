@@ -20,6 +20,8 @@ import ModalGroupConfig from "../../component/modal/ModalGroupConfig";
 import AdminGroupAdd from "../../services/admin/AdminGroupAdd";
 import SwalAlert from "../../component/swal/SwalAlert";
 import SwalError from "../../component/swal/SwalError";
+import AdminDeregisterUser from "../../services/admin/AdminDeregisterUser";
+import SwalConfirm from "../../component/swal/SwalConfirm";
 
 
 export default function AdminUserCtrlPage() {
@@ -175,6 +177,22 @@ export default function AdminUserCtrlPage() {
         SwalAlert("success", "만료일 설정에 성공했습니다.");
     }
 
+    const handleDeregister = async (e) => {
+        e.preventDefault();
+        SwalConfirm(
+            "정말로 회원 탈퇴를 하시겠습니까?",
+            async () => {
+                const res = await AdminDeregisterUser(user.username);
+                if (!res[0]) {
+                    SwalError(res[1]);
+                    return;
+                }
+                SwalAlert("success", "회원 탈퇴가 완료되었습니다.", () => { window.location.reload()});
+            },
+            () => { return; }
+        );
+    }
+
     return (
         <>
             {isGroupModalOpen &&
@@ -220,7 +238,7 @@ export default function AdminUserCtrlPage() {
                 {user !== null &&
                     <>
                         <div className="profile">
-                            <img src={img} alt="프로필 이미지"/>
+                            <img src={img} alt="프로필 이미지" />
                             <div className="userinfo">
                                 <div className="text">
                                     <span className="title">ID</span>
@@ -237,6 +255,10 @@ export default function AdminUserCtrlPage() {
 
                             </div>
                         </div>
+                        <div className="addtional-func-admin">
+                            <button className="submitBtn" onClick={handleDeregister} >회원 삭제</button>
+                        </div>
+
                         <TitledBox>
                             <RuleBox
                                 title="사용자 계정 비활성화"
@@ -252,7 +274,7 @@ export default function AdminUserCtrlPage() {
                                 title="그룹 설정"
                                 desc="하나의 그룹에만 속할 수 있습니다.">
                                 <span className="currGroup">현재 그룹: {user.groupName === null ? "없음" : user.groupName}</span>
-                                <div className="editGroup" onClick={() => setIsGroupModalOpen(true)}><TbEdit/></div>
+                                <div className="editGroup" onClick={() => setIsGroupModalOpen(true)}><TbEdit /></div>
                             </RuleBox>
                             <RuleBox
                                 title="계정 만료일 설정"

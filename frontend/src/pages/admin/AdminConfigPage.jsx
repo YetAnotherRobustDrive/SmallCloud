@@ -7,9 +7,8 @@ import RuleInput from "../../component/admin/ruleInput";
 import TitledBox from "../../component/admin/titledBox";
 import ToggleBtn from "../../component/admin/toggleBtn";
 import Header from "../../component/header/Header";
-import SidebarAdmin from "../../component/sidebar/SidebarAdmin";
 import ModalGetPW from "../../component/modal/ModalGetPW";
-import configData from "../../config/config.json";
+import SidebarAdmin from "../../component/sidebar/SidebarAdmin";
 
 export default function AdminConfigPage() {
     const [isAdminNeedChangePassword, setIsAdminNeedChangePassword] = React.useState(false);
@@ -26,7 +25,7 @@ export default function AdminConfigPage() {
                     "password": "root",
                 }),
             };
-            const res = await fetch(configData.API_SERVER + 'auth/login', model);
+            const res = await fetch(localStorage.getItem("API_SERVER") + 'auth/login', model);
             if (res.status === 200) {
                 setIsAdminNeedChangePassword(true);
             }

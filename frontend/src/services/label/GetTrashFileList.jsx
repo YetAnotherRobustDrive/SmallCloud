@@ -1,5 +1,5 @@
 import RefreshToken from "../token/RefreshToken";
-import configData from "../../config/config.json"
+ 
 
 export default async function GetTrashFileList() {
     await RefreshToken();
@@ -12,7 +12,7 @@ export default async function GetTrashFileList() {
     };
 
     try {
-        const res = await fetch(configData.API_SERVER + 'labels/trash', model);
+        const res = await fetch(localStorage.getItem("API_SERVER") + 'labels/trash', model);
         const data = await res.json();
         const files = [...data.files];
         files.forEach(e => {

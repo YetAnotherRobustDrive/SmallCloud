@@ -1,6 +1,5 @@
-import RefreshToken from "../token/RefreshToken";
-import configData from "../../config/config.json";
 import jwtDecode from "jwt-decode";
+import RefreshToken from "../token/RefreshToken";
 
 export default async function GetFiveAlarm() {
     await RefreshToken();
@@ -17,7 +16,7 @@ export default async function GetFiveAlarm() {
         if (username === "root") {
             return [true, { notificationDtoList: [], count: 0 }];
         }
-        const res = await fetch(configData.API_SERVER + 'notifications/' + username + '/confirm', model);
+        const res = await fetch(localStorage.getItem("API_SERVER") + 'notifications/' + username + '/confirm', model);
         const data = await res.json();
         if (res.status === 200) {
             data.notificationDtoList.forEach((data) => {

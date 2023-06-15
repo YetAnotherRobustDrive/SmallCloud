@@ -1,5 +1,4 @@
 import RefreshToken from "../token/RefreshToken";
-import configData from "../../config/config.json"
 
 export default async function AdminGroupRm(group, user) {
     await RefreshToken();
@@ -12,7 +11,7 @@ export default async function AdminGroupRm(group, user) {
     };
 
     try {
-        const res = await fetch(configData.API_SERVER + 'group/' + group + '/delete-user/' + user, model);
+        const res = await fetch(localStorage.getItem("API_SERVER") + 'group/' + group + '/delete-user/' + user, model);
         if (res.status === 200) {
             return [true, ''];  //성공
         }

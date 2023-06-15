@@ -1,6 +1,6 @@
 import RefreshToken from "../token/RefreshToken";
 
-export default async function AdminRegisterUser(value) {
+export default async function AdminDeregisterUser(username) {
     await RefreshToken();
     const accessToken = localStorage.getItem("accessToken");
     const model = {
@@ -9,11 +9,10 @@ export default async function AdminRegisterUser(value) {
             "Content-Type": "application/json",
             "Authorization": "Bearer " + accessToken,
         },
-        body: JSON.stringify(value),
     };
 
     try {
-        const res = await fetch(localStorage.getItem("API_SERVER") + 'users', model);
+        const res = await fetch(localStorage.getItem("API_SERVER") + 'users/' + username + '/delete', model);
         if (res.status === 200) {
             return [true, ''];  //성공
         }

@@ -1,5 +1,5 @@
 import RefreshToken from "../token/RefreshToken";
-import configData from "../../config/config.json"
+ 
 
 export default async function PostLabelFile(fileID, value) {
     await RefreshToken();
@@ -17,7 +17,7 @@ export default async function PostLabelFile(fileID, value) {
     };
 
     try {
-        const res = await fetch(configData.API_SERVER + 'files/update/label', model);
+        const res = await fetch(localStorage.getItem("API_SERVER") + 'files/update/label', model);
         if (res.status === 200) {
             return [true, ''];  //성공
         }

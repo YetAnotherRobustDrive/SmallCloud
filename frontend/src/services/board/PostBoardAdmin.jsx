@@ -1,5 +1,4 @@
-import configData from "../../config/config.json"
-import RefreshToken from '../token/RefreshToken'
+import RefreshToken from '../token/RefreshToken';
 
 export default async function PostBoardAdmin(value) {
     await RefreshToken();
@@ -15,7 +14,7 @@ export default async function PostBoardAdmin(value) {
 
 
     try {
-        const res = await fetch(configData.API_SERVER + 'inquiries/board', model);
+        const res = await fetch(localStorage.getItem("API_SERVER") + 'inquiries/board', model);
         if (!res.ok) {
             const data = await res.json();
             throw data;

@@ -1,5 +1,5 @@
 import RefreshToken from "../token/RefreshToken";
-import configData from "../../config/config.json"
+ 
 
 export default async function GetDownloadFile(targetID, setter, after, filename) {
     await RefreshToken();
@@ -11,7 +11,7 @@ export default async function GetDownloadFile(targetID, setter, after, filename)
             return new Promise((resolve, reject) => {
                 const xhr = new XMLHttpRequest();
                 xhr.responseType = 'blob';
-                xhr.open('GET', configData.API_SERVER + 'files/' + targetID, true);
+                xhr.open('GET', localStorage.getItem("API_SERVER") + 'files/' + targetID, true);
                 xhr.onprogress = (e) => {
                     const percentage = (e.loaded / e.total) * 100;
                     setter(percentage);

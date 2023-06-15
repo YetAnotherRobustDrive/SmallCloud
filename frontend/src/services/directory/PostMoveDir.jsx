@@ -1,5 +1,5 @@
 import RefreshToken from "../token/RefreshToken";
-import configData from "../../config/config.json"
+ 
 import SwalError from "../../component/swal/SwalError";
 
 export default async function PostMoveDir(sourceID, targetID) {
@@ -17,7 +17,7 @@ export default async function PostMoveDir(sourceID, targetID) {
     };
 
     try {
-        const res = await fetch(configData.API_SERVER + "directory/" + sourceID + '/move', model);
+        const res = await fetch(localStorage.getItem("API_SERVER") + "directory/" + sourceID + '/move', model);
         if (res.status === 200) {
             return [true, ''];  //성공
         }

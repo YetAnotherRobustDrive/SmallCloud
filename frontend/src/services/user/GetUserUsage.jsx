@@ -1,4 +1,3 @@
-import configData from "../../config/config.json";
 import RefreshToken from "../token/RefreshToken";
 
 export default async function GetUserUsage() {
@@ -12,7 +11,7 @@ export default async function GetUserUsage() {
     };
 
     try {
-        const res = await fetch(configData.API_SERVER + 'files/usage', model);
+        const res = await fetch(localStorage.getItem("API_SERVER") + 'files/usage', model);
         const data = await res.json();
         if (res.status === 200) {
             const size = parseInt(data.used === null ? 0 : data.used );

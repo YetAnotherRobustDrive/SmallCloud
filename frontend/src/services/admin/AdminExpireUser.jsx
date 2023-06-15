@@ -1,5 +1,4 @@
 import RefreshToken from "../token/RefreshToken";
-import configData from "../../config/config.json"
 
 export default async function AdminExpireUser(value) {
     await RefreshToken();
@@ -14,7 +13,7 @@ export default async function AdminExpireUser(value) {
     };
 
     try {
-        const res = await fetch(configData.API_SERVER + 'users/update-expired', model);
+        const res = await fetch(localStorage.getItem("API_SERVER") + 'users/update-expired', model);
         if (res.status === 200) {
             return [true, ''];  //성공
         }

@@ -1,5 +1,5 @@
 import RefreshToken from "../token/RefreshToken";
-import configData from "../../config/config.json"
+ 
 
 export default async function GetLoginLog() {
     await RefreshToken();
@@ -12,7 +12,7 @@ export default async function GetLoginLog() {
     };
 
     try {
-        const res = await fetch(configData.API_SERVER + 'logs', model);
+        const res = await fetch(localStorage.getItem("API_SERVER") + 'logs', model);
         const data = await res.json();
         if (res.status === 200) {
             return [true, data];  //성공
