@@ -39,7 +39,7 @@ export default function SecurityInfoPage() {
                             {
                                 log.map((item, index) => (
                                     <tr key={index}>
-                                        <td>{index}</td>
+                                        <td>{index + 1}</td>
                                         <td>{item.localDateTime}</td>
                                         <td>{item.action}</td>
                                         <td>{item.ipAddr}</td>

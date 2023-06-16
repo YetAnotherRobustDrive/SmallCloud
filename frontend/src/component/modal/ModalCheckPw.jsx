@@ -1,11 +1,11 @@
 import React, { useEffect, useState } from "react";
 import Modal from 'react-modal';
-import { useNavigate } from 'react-router-dom'
-import default_profile_img from '../../img/defalutProfile.png';
+import { useNavigate } from 'react-router-dom';
 import RefreshToken from "../../services/token/RefreshToken";
 import ElevateUser from '../../services/user/ElevateUser';
-import SwalError from "../swal/SwalError";
+import GetUserInfo from "../../services/user/GetUserInfo";
 import SwalAlert from "../swal/SwalAlert";
+import SwalError from "../swal/SwalError";
 
 export default function ModalCheckPW(props) {
 
@@ -13,14 +13,21 @@ export default function ModalCheckPW(props) {
     const [isOpen, setIsOpen] = useState(true);
     const [count, setCount] = useState(0);
     const [message, setMessage] = useState(false);
-    
+
     const [img, setImg] = useState(null);
     const navigate = useNavigate();
 
     useEffect(() => {
-        if (img === null) {
-            setImg(default_profile_img);
+        const getUserInfo = async () => {
+            await RefreshToken();
+
+            const res = await GetUserInfo();
+            if (!res[0]) {
+                SwalAlert("error", "일시적인 오류가 발생했습니다. 잠시 후 다시 시도해주세요.", navigate("/"));
+            }
+            setImg(res[2]);
         }
+        getUserInfo();
     }, [])
 
     const modalStyle = {
@@ -37,7 +44,7 @@ export default function ModalCheckPW(props) {
     const handleSubmit = async (e) => {
         if (e.key === 'Enter') {
             const refreshOk = await RefreshToken();
-            if(!refreshOk) {
+            if (!refreshOk) {
                 SwalError("로그인 정보가 만료되었습니다.");
                 navigate('/login');
                 return;

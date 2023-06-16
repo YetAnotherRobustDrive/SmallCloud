@@ -69,7 +69,7 @@ export default function LoginPage() {
                 throw data;
             }
             try {
-                ThrowPingAs("login/" + value.id + "/fail");
+                ThrowPingAs("login/" + value.id + "/success");
             } catch (error) {
                 throw error;
             }

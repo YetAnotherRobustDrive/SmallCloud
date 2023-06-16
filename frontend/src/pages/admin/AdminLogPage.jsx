@@ -36,10 +36,10 @@ export default function AdminLogPage() {
         {
             title: "유저 관련 (users)",
             list: [
-                { name: "삭제", value: "/users/delete" },
-                { name: "등록", value: "/users/register" },
-                { name: "프로필 업데이트", value: "/users/update" },
-                { name: "프로필 조회", value: "/users/profile" },
+                { name: "삭제", value: "/users/{username}/delete" },
+                { name: "등록", value: "/users" },
+                { name: "프로필 업데이트", value: "/users//{username}/update" },
+                { name: "프로필 조회", value: "/users/{username}" },
                 { name: "유저 검색", value: "/users/search" },
                 { name: "패스워드 변경", value: "/users/password" },
                 { name: "만료일 설정", value: "/users/update-expired" },
@@ -51,80 +51,89 @@ export default function AdminLogPage() {
                 { name: "등록", value: "/inquiries" },
                 { name: "전체 조회", value: "/inquiries" },
                 { name: "선택", value: "/inquiries/{id}" },
-                { name: "답변 등록", value: "/inquiries/{id}/answer" },
-                { name: "답변 되지 않은 문의 조회", value: "/inquiries/answer" },
-                { name: "내 문의 전체 조회", value: "/inquiries/my" },
-                { name: "보드 등록", value: "/inquiries/{id}/board" },
-                { name: "보드(faq, 공지사항) 전체 조회", value: "/inquiries/{id}/board" },
-                { name: "보드(terms, privacy) 조회", value: "/inquiries/{id}/board" },
+                { name: "답변 등록", value: "/inquiries/answer" },
+                { name: "답변 되지 않은 문의 조회", value: "/inquiries/questioned" },
+                { name: "내 문의 전체 조회", value: "/inquiries/myQuestions" },
+                { name: "보드 등록", value: "/inquiries/board" },
+                { name: "보드(faq, 공지사항) 전체 조회", value: "/inquiries/board" },
+                { name: "보드(terms, privacy) 조회", value: "/inquiries/board/created" },
+                { name: "답변 조회", value: "/inquiries/search/answer" },
             ]
         },
         {
-            title: "디렉토리 관련 (directories)",
+            title: "디렉토리 관련 (directory)",
             list: [
-                { name: "등록", value: "/directories" },
-                { name: "이름 바꾸기", value: "/directories/{id}" },
-                { name: "이동", value: "/directories/{id}" },
-                { name: "정보", value: "/directories/{id}" },
-                { name: "자식 폴더", value: "/directories/{id}/subDirectories" },
-                { name: "자식 파일", value: "/directories/{id}/subFiles" },
-                { name: "완전삭제", value: "/directories/{id}/purge" },
-                { name: "삭제", value: "/directories/{id}" },
-                { name: "복구", value: "/directories/{id}/restore" },
-                { name: "즐겨찾기 추가", value: "/directories/{id}/favorite" },
-                { name: "즐겨찾기 삭제", value: "/directories/{id}/unfavorite" },
-                { name: "폴더 검색", value: "/directories/search" },
+                { name: "등록", value: "/directory/{id}/create" },
+                { name: "이름 바꾸기", value: "/directory/{id}/rename" },
+                { name: "이동", value: "/directory/{id}/move" },
+                { name: "정보", value: "/directory/{id}" },
+                { name: "자식 폴더", value: "/directory/{id}/subDirectories" },
+                { name: "자식 파일", value: "/directory/{id}/files" },
+                { name: "완전삭제", value: "/directory/{id}/purge" },
+                { name: "삭제", value: "/directory/{id}/delete" },
+                { name: "복구", value: "/directory/{id}/restore" },
+                { name: "즐겨찾기 추가", value: "/directory/{id}/favorite" },
+                { name: "즐겨찾기 삭제", value: "/directory/{id}/unfavorite" },
+                { name: "폴더 검색", value: "/directory/search" },
             ]
         },
         {
             title: "공유 관련 (share)",
             list: [
-                { name: "등록", value: "/share" },
-                { name: "삭제", value: "/share/{id}" },
-                { name: "파일 리스트", value: "/share/{id}/file-list" },
-                { name: "폴더 리스트", value: "/share/{id}/directory-list" },
+                { name: "등록", value: "/share/create" },
+                { name: "삭제", value: "/share/delete" },
+                { name: "파일 리스트", value: "/share/file-list" },
+                { name: "폴더 리스트", value: "/share/directory-list" },
             ]
         },
         {
             title: "파일 관련 (files)",
             list: [
-                { name: "파일 라벨 업데이트", value: "/files/{id}/labelUpdate" },
-                { name: "파일 삭제", value: "/files/{id}" },
-                { name: "파일 복구", value: "/files/{id}/restore" },
-                { name: "파일 이동", value: "/files/{id}" },
-                { name: "파일 완전 삭제", value: "/files/{id}/purge" },
-                { name: "즐겨찾기 추가", value: "/files/{id}/favorite" },
-                { name: "즐겨찾기 삭제", value: "/files/{id}/unfavorite" },
+                { name: "파일 라벨 업데이트", value: "/files/update/label" },
+                { name: "파일 삭제", value: "/files/{fileId}/delete" },
+                { name: "파일 복구", value: "/files/{fileId}/restore" },
+                { name: "파일 이동", value: "/files/{fileId}/move" },
+                { name: "파일 완전 삭제", value: "/files/{fileId}/purge" },
+                { name: "즐겨찾기 추가", value: "/files/{fileId}/favorite" },
+                { name: "즐겨찾기 삭제", value: "/files/{fileId}/unfavorite" },
                 { name: "파일 검색", value: "/files/search" },
+                { name: "파일 사용량 검색", value: "/files/usage" },
             ]
         },
         {
             title: "그룹 관련 (group)",
             list: [
-                { name: "그룹 만들기", value: "/group" },
-                { name: "그룹 삭제", value: "/group/{id}" },
-                { name: "그룹원 추가", value: "/group/{id}/add" },
-                { name: "그룹 업데이트", value: "/group/{id}" },
-                { name: "그룹원 삭제", value: "/group/{id}/remove" },
-                { name: "그룹 트리", value: "/group/tree" },
-                { name: "그룹원 목록", value: "/group/{id}/members" },
+                { name: "그룹 만들기", value: "/group/create" },
+                { name: "그룹 삭제", value: "/group/{groupName}/delete" },
+                { name: "그룹원 추가", value: "/group/{groupName}/add-user/{username}" },
+                { name: "그룹 업데이트", value: "/group/{username}/update" },
+                { name: "그룹원 삭제", value: "/group/{groupName}/delete-user/{username}" },
+                { name: "그룹 트리", value: "/group/{groupName}" },
+                { name: "그룹원 목록", value: "/group/{groupName}/user-list" },
                 { name: "그룹 검색", value: "/group/search" },
             ]
         },
         {
             title: "관리자 관련 (admin)",
             list: [
-                { name: "유저 잠금", value: "/admin/lock" },
-                { name: "유저 잠금", value: "/admin/unlock" },
-                { name: "유저 패스워드 변경", value: "/admin/password" },
+                { name: "유저 잠금", value: "/admin/lock/{username}" },
+                { name: "유저 잠금", value: "/admin/unlock/{username}" },
+                { name: "유저 패스워드 변경", value: "/admin/change-password/{username}" },
             ]
         },
         {
-            title: "라벨 관련 (label)",
+            title: "라벨 관련 (labels)",
             list: [
-                { name: "라벨 검색", value: "/label/search" },
-                { name: "휴지통 라벨 검색", value: "/label/trash" },
-                { name: "즐겨찾기 라벨 검색", value: "/label/favorite" },
+                { name: "라벨 검색", value: "/labels/search" },
+                { name: "휴지통 라벨 검색", value: "/labels/trash" },
+                { name: "즐겨찾기 라벨 검색", value: "/labels/favorite" },
+            ]
+        },
+        {
+            title: "로그 관련 (logs)",
+            list: [
+                { name: "유저 로그인", value: "/logs" },
+                { name: "어드민 조건 검색", value: "/logs/admin" },
             ]
         },
     ]
@@ -264,9 +273,11 @@ export default function AdminLogPage() {
                                 <button key={page} onClick={() => { setPage(page) }}>
                                     {page + 1}
                                 </button>
-                                <button key={page + 1} onClick={() => { setPage(page + 1) }}>
-                                    {page + 1 + 1}
-                                </button>
+                                {page + 1 < log.totalPages &&
+                                    <button key={page + 1} onClick={() => { setPage(page + 1) }}>
+                                        {page + 1 + 1}
+                                    </button>
+                                }
                                 {log.totalPages > 10 && page + 1 < log.totalPages &&
                                     <>
                                         <div>...</div>
