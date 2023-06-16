@@ -9,6 +9,8 @@ import PostNewFile from "../../services/file/PostNewFile";
 import SwalError from "../swal/SwalError";
 import ProgressBar from "../updown/ProgressBar";
 import SwalAlert from "../swal/SwalAlert";
+import GetUserUsage from "../../services/user/GetUserUsage";
+import GetConfig from "../../services/config/GetConfig";
 
 export default function UploadBtn() {
 
@@ -53,7 +55,42 @@ export default function UploadBtn() {
             }
             formData.append('cwd', curr);
             formData.append('file', file);
-            const res = await PostNewFile(formData, setUploadState, () => SwalAlert("success", "업로드가 완료되었습니다.", ()=>window.location.reload()));
+
+            const configRes = await GetConfig("301");
+            if (!configRes[0]) {
+                SwalError(configRes[1]);
+                return;
+            }
+            const maxSize = parseInt(configRes[1]) * 1000 * 1000 * 1000;
+            const usage = await GetUserUsage();
+            if (!usage[0]) {
+                SwalError(usage[1]);
+                return;
+            }
+            const fileSize = parseInt(file.size);
+            const used = parseInt(usage[4]);
+            console.log(fileSize + used);
+            console.log(maxSize);
+            if (maxSize < fileSize + used) {
+                const size = maxSize - used;
+                let converted;
+                if (parseInt(size / Math.pow(10, 9)) > 0) {
+                    converted = (size / Math.pow(10, 9)).toFixed(1) + "GB";
+                }
+                else if (parseInt(size / Math.pow(10, 6)) > 0) {
+                    converted = (size / Math.pow(10, 6)).toFixed(1) + "MB";
+                }
+                else if (parseInt(size / Math.pow(10, 3)) > 0) {
+                    converted = (size / Math.pow(10, 3)).toFixed(1) + "KB";
+                }
+                else {
+                    converted = size + "B";
+                }
+                SwalError("사용 가능한 용량을 초과하였습니다. 잔여 용량 : " + converted);
+                return;
+            }
+
+            const res = await PostNewFile(formData, setUploadState, () => SwalAlert("success", "업로드가 완료되었습니다.", () => window.location.reload()));
             if (!res[0]) {
                 SwalError(res[1]);
                 return;

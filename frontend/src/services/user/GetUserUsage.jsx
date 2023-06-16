@@ -33,7 +33,7 @@ export default async function GetUserUsage() {
                 converted = size;
                 unit = "B";
             }
-            return [true, converted, unit, (size / Math.pow(10, 9)).toFixed(1)];  //성공
+            return [true, converted, unit, (size / Math.pow(10, 9)).toFixed(1), data.used];  //성공
         }
         else {
             throw data; //실패

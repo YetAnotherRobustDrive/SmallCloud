@@ -3,6 +3,8 @@ import React, { useState } from "react";
 import { Pie } from "react-chartjs-2";
 import "../../css/sidebar.css";
 import GetUserUsage from "../../services/user/GetUserUsage";
+import GetConfig from "../../services/config/GetConfig";
+import SwalError from "../swal/SwalError";
 
 export default function Usage() {
   ChartJS.register(ArcElement, Tooltip, Legend);
@@ -10,6 +12,7 @@ export default function Usage() {
   const [per, setPer] = useState(0);
   const [unit, setUnit] = useState("GB");
   const [actual, setActual] = useState(0);
+  const [max, setMax] = useState(100);
 
   React.useEffect(() => {
     const fetchUsage = async () => {
@@ -20,7 +23,15 @@ export default function Usage() {
       setActual(res[1]);
       setUnit(res[2]);
       setPer(res[3]);
+
+      const configRes = await GetConfig("301");
+      if (!configRes[0]) {
+          SwalError(configRes[1]);
+          return;
+      }
+      setMax(configRes[1]);
     }
+    
     fetchUsage();
   }, []);
 
@@ -44,7 +55,7 @@ export default function Usage() {
       <div>
         <div style={{ paddingBottom: "10px", fontSize: "large" }}><b>사용량</b></div>
         <div><b>{actual}{unit}</b></div>
-        <div>/ 100GB</div>
+        <div>/ {max}GB</div>
       </div>
     </div>
   )
