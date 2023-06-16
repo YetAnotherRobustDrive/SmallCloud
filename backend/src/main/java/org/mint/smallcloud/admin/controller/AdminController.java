@@ -44,7 +44,7 @@ public class AdminController {
         adminService.requestConfig(adminConfigDto);
     }
 
-    @GetMapping("/config")
+    @GetMapping("/config/{code}")
     public AdminConfig nickname(@PathVariable String code) {
         return adminService.responseConfig(code);
     }
