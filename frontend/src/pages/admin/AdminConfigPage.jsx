@@ -9,9 +9,38 @@ import ToggleBtn from "../../component/admin/toggleBtn";
 import Header from "../../component/header/Header";
 import ModalGetPW from "../../component/modal/ModalGetPW";
 import SidebarAdmin from "../../component/sidebar/SidebarAdmin";
+import GetConfig from "../../services/config/GetConfig";
+import SwalError from "../../component/swal/SwalError";
+import SwalAlert from "../../component/swal/SwalAlert";
+import AdminPostConfig from "../../services/config/AdminPostConfig";
 
 export default function AdminConfigPage() {
     const [isAdminNeedChangePassword, setIsAdminNeedChangePassword] = React.useState(false);
+    const [configNow, setConfigNow] = React.useState({
+        "101": false,
+        "102": false,
+        "201": false,
+        "202": 0,
+        "203": 0,
+        "204": false,
+        "301": 0,
+    });
+
+    useEffect(() => {
+        [101, 102, 201, 202, 203, 204, 301].forEach(async (code) => {
+            const res = await GetConfig(code);
+            if(!res[0]){
+                SwalError(res[1]);
+                return;
+            }
+            setConfigNow((prev) => {
+                return {
+                    ...prev,
+                    [code]: res[1].value,
+                }
+            })
+        })
+    }, []);
 
     useEffect(() => {
         const checkPW = async () => {
@@ -34,9 +63,29 @@ export default function AdminConfigPage() {
     }, []);
 
 
-    const testF = (() => {
-        alert("clicked!");
+    const handleToggleSubmit =  ( async (code) => {
+        const res = await AdminPostConfig(code, !configNow[code]);
+        if(!res[0]){
+            SwalError(res[1]);
+            return;
+        }
+        SwalAlert("success", "변경되었습니다.", () => { setConfigNow((prev) => {
+            return {
+                ...prev,
+                [code]: !configNow[code],
+            }
+         });
+        });
     })
+
+    const handleInputSubmit = ( (code, value) => {
+        setConfigNow((prev) => {
+            return {
+                ...prev,
+                [code]: value,
+            }
+        })
+    });
 
     return (
         <>
@@ -56,12 +105,12 @@ export default function AdminConfigPage() {
                     <RuleBox
                         title="사용자 닉네임 변경"
                         desc="사용자가 닉네임을 변경할 수 있도록 설정합니다.">
-                        <ToggleBtn onClick={testF} />
+                        <ToggleBtn now={configNow[101]} onClick={() => handleToggleSubmit(101)} />
                     </RuleBox>
                     <RuleBox
                         title="사용자 로그인 ID 변경"
                         desc="사용자가 로그인 ID를 변경할 수 있도록 설정합니다.">
-                        <ToggleBtn onClick={testF} />
+                        <ToggleBtn now={configNow[102]} onClick={() => handleToggleSubmit(102)} />
                     </RuleBox>
                 </TitledBox>
                 <TitledBox
@@ -71,22 +120,22 @@ export default function AdminConfigPage() {
                     <RuleBox
                         title="특수문자, 숫자, 알파벳 대문자 조합 사용"
                         desc="비밀번호에 특수문자와 숫자, 알파벳 대문자를 모두 사용하도록 설정합니다.">
-                        <ToggleBtn onClick={testF} />
+                        <ToggleBtn now={configNow[201]} onClick={() => handleToggleSubmit(201)} />
                     </RuleBox>
                     <RuleBox
                         title="비밀번호 길이 제한"
                         desc="최소 비밀번호 길이를 설정합니다. (무제한: 0)">
-                        <RuleInput desc="길이" />
+                        <RuleInput now={configNow[202]} desc="길이" code="202" onKeyDown={handleInputSubmit} />
                     </RuleBox>
                     <RuleBox
                         title="비밀번호 변경 주기"
                         desc="최대 비밀번호 사용기간을 설정합니다. (무제한: 0)">
-                        <RuleInput desc="주기" />
+                        <RuleInput now={configNow[203]} desc="주기" code="203" onKeyDown={handleInputSubmit} />
                     </RuleBox>
                     <RuleBox
                         title="만료된 비밀번호 계정 차단"
                         desc="ON = 차단, OFF = 경고">
-                        <ToggleBtn onClick={testF} />
+                        <ToggleBtn now={configNow[204]}  onClick={() => handleToggleSubmit(204)} />
                     </RuleBox>
                 </TitledBox>
                 <TitledBox
@@ -96,7 +145,7 @@ export default function AdminConfigPage() {
                     <RuleBox
                         title="1인당 업로드 용량"
                         desc="사용자 1인의 최대 업로드 용량 제한을 설정합니다. (무제한: 0)">
-                        <RuleInput desc="용량(GB)" />
+                        <RuleInput desc="용량(GB)" now={configNow[301]} code="301" onKeyDown={handleInputSubmit} />
                     </RuleBox>
                 </TitledBox>
             </BodyFrame>

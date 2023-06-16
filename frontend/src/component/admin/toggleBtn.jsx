@@ -4,9 +4,11 @@ import '../../css/admin.css';
 
 export default function ToggleBtn(props) {
 
-    const [isLocked, setIsLocked] = useState(props.default === undefined ? false : props.default);
+    const [isLocked, setIsLocked] = useState(props.now);
 
-    const handleOnClick = (()=>{
+    const handleOnClick = ((e)=>{
+        e.stopPropagation();
+        e.preventDefault();
         setIsLocked(!isLocked);
         props.onClick();
     })
