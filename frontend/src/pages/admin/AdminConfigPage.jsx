@@ -69,23 +69,23 @@ export default function AdminConfigPage() {
                     text="비밀번호 정책"
                 >
                     <RuleBox
-                        title="특수문자, 숫자, 알파벳 조합 사용"
-                        desc="비밀번호에 특수문자와 숫자, 알파벳을 모두 사용하도록 설정합니다.">
+                        title="특수문자, 숫자, 알파벳 대문자 조합 사용"
+                        desc="비밀번호에 특수문자와 숫자, 알파벳 대문자를 모두 사용하도록 설정합니다.">
                         <ToggleBtn onClick={testF} />
                     </RuleBox>
                     <RuleBox
                         title="비밀번호 길이 제한"
-                        desc="최소 비밀번호 길이를 설정합니다.">
+                        desc="최소 비밀번호 길이를 설정합니다. (무제한: 0)">
                         <RuleInput desc="길이" />
                     </RuleBox>
                     <RuleBox
                         title="비밀번호 변경 주기"
-                        desc="최대 비밀번호 사용기간을 설정합니다.">
+                        desc="최대 비밀번호 사용기간을 설정합니다. (무제한: 0)">
                         <RuleInput desc="주기" />
                     </RuleBox>
                     <RuleBox
-                        title="만료된 비밀번호 관리"
-                        desc="변경 주기가 지난 비밀번호를 사용하는 계정을 차단합니다.">
+                        title="만료된 비밀번호 계정 차단"
+                        desc="ON = 차단, OFF = 경고">
                         <ToggleBtn onClick={testF} />
                     </RuleBox>
                 </TitledBox>
@@ -95,18 +95,8 @@ export default function AdminConfigPage() {
                 >
                     <RuleBox
                         title="1인당 업로드 용량"
-                        desc="사용자 1인의 최대 업로드 용량 제한을 설정합니다.">
+                        desc="사용자 1인의 최대 업로드 용량 제한을 설정합니다. (무제한: 0)">
                         <RuleInput desc="용량(GB)" />
-                    </RuleBox>
-                </TitledBox>
-                <TitledBox
-                    icon=<AiOutlineFileUnknown />
-                    text="파일 정책"
-                >
-                    <RuleBox
-                        title="1인당 업로드 용량"
-                        desc="사용자 1인의 최대 업로드 용량 제한을 설정합니다.">
-                        <ToggleBtn onClick={testF} />
                     </RuleBox>
                 </TitledBox>
             </BodyFrame>
