@@ -39,14 +39,12 @@ export default async function PostNewFile(value, setter, after) {
         const res = await upload();
         if (res.status === 200) {
             after();
-            console.log(res.data);
             return [true, res.data];  //성공
         }
         else {
             throw res; //실패
         }
     } catch (e) {
-        console.log(e);
         return [false, "업로드에 실패했습니다.\n다시 시도해주세요."]; //실패 후 처리
     }
 }

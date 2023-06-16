@@ -1,12 +1,11 @@
 import React, { useEffect, useState } from "react";
 import Modal from 'react-modal';
-import { useNavigate } from 'react-router-dom'
-import default_profile_img from '../../img/defalutProfile.png';
+import { useNavigate } from 'react-router-dom';
 import RefreshToken from "../../services/token/RefreshToken";
 import ElevateUser from '../../services/user/ElevateUser';
-import SwalError from "../swal/SwalError";
-import SwalAlert from "../swal/SwalAlert";
 import GetUserInfo from "../../services/user/GetUserInfo";
+import SwalAlert from "../swal/SwalAlert";
+import SwalError from "../swal/SwalError";
 
 export default function ModalCheckPW(props) {
 
