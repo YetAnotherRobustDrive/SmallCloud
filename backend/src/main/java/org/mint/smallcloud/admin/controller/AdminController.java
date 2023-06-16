@@ -1,6 +1,8 @@
 package org.mint.smallcloud.admin.controller;
 
 import lombok.RequiredArgsConstructor;
+import org.mint.smallcloud.admin.domain.AdminConfig;
+import org.mint.smallcloud.admin.dto.AdminConfigDto;
 import org.mint.smallcloud.admin.dto.ChangePasswordDto;
 import org.mint.smallcloud.admin.service.AdminService;
 import org.mint.smallcloud.user.domain.Roles;
@@ -34,5 +36,16 @@ public class AdminController {
         @PathVariable String username
     ) {
         adminService.resetPassword(username, dto);
+    }
+
+    @Secured(Roles.S_ADMIN)
+    @PostMapping("/config")
+    public void nickname(@RequestBody AdminConfigDto adminConfigDto) {
+        adminService.requestConfig(adminConfigDto);
+    }
+
+    @GetMapping("/config")
+    public AdminConfig nickname(@PathVariable String code) {
+        return adminService.responseConfig(code);
     }
 }
