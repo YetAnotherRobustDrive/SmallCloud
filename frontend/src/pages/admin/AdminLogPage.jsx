@@ -56,8 +56,8 @@ export default function AdminLogPage() {
                 { name: "내 문의 전체 조회", value: "/inquiries/myQuestions" },
                 { name: "보드 등록", value: "/inquiries/board" },
                 { name: "보드(faq, 공지사항) 전체 조회", value: "/inquiries/board" },
-                { name: "보드(terms, privacy) 조회", value: "/inquiries/board/created" }, 
-                { name: "답변 조회", value: "/inquiries/search/answer" }, 
+                { name: "보드(terms, privacy) 조회", value: "/inquiries/board/created" },
+                { name: "답변 조회", value: "/inquiries/search/answer" },
             ]
         },
         {
@@ -273,9 +273,11 @@ export default function AdminLogPage() {
                                 <button key={page} onClick={() => { setPage(page) }}>
                                     {page + 1}
                                 </button>
-                                <button key={page + 1} onClick={() => { setPage(page + 1) }}>
-                                    {page + 1 + 1}
-                                </button>
+                                {page + 1 < log.totalPages &&
+                                    <button key={page + 1} onClick={() => { setPage(page + 1) }}>
+                                        {page + 1 + 1}
+                                    </button>
+                                }
                                 {log.totalPages > 10 && page + 1 < log.totalPages &&
                                     <>
                                         <div>...</div>
