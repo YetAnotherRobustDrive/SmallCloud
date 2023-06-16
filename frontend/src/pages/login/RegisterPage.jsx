@@ -6,6 +6,7 @@ import configData from "../../config/config.json"
 import logo_img from '../../config/img/logo.png';
 import "../../css/login.css";
 import "../../css/modal.css";
+import GetConfig from "../../services/config/GetConfig";
 
 export default function RegisterPage() {
 
@@ -24,8 +25,8 @@ export default function RegisterPage() {
     const handleSubmit = async (e) => {
         e.preventDefault();
 
+
         const inputData = new FormData(e.target);
-        const value = Object.fromEntries(inputData.entries());
         if (inputData.get("name") === "" || inputData.get("id") === "" || inputData.get("password") === "" || inputData.get("password_chk") === "") {
             SwalError("모든 항목을 입력해주세요.");
             return;
@@ -35,8 +36,34 @@ export default function RegisterPage() {
             return;
         }
         inputData.delete("password_chk");
+        const value = Object.fromEntries(inputData.entries());
 
-        let model = {
+        const configRes = await GetConfig("201");
+        if (!configRes[0]) {
+            SwalError(configRes[1]);
+            return;
+        }
+        const isCombinationNeeded = (configRes[1] === "true");
+        if (isCombinationNeeded) {
+            if (!value.password.match(/^(?=.*[a-zA-Z])(?=.*[!@#$%^*+=-])(?=.*[0-9])/)) {
+                SwalError("비밀번호는 영문+숫자+특수문자 조합으로 입력해주세요.");
+                return;
+            }
+        }
+
+        const configRes2 = await GetConfig("202");
+        if (!configRes2[0]) {
+            SwalError(configRes2[1]);
+            return;
+        }
+        const minimumLength = parseInt(configRes2[1]);
+        if (minimumLength > value.password.length) {
+            SwalError("비밀번호는 " + minimumLength + "자 이상으로 입력해주세요.");
+            return;
+        }
+
+
+        const model = {
             method: "POST",
             headers: {
                 "Content-Type": "application/json",
@@ -46,6 +73,7 @@ export default function RegisterPage() {
 
         try {
             const res = await fetch(localStorage.getItem("API_SERVER") + 'auth/register', model);
+            console.log(res);
             if (!res.ok) {
                 SwalError("회원가입에 실패하였습니다.");
                 return;

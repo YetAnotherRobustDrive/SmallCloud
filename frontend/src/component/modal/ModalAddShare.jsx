@@ -89,6 +89,10 @@ export default function ModalAddShare(props) {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
+        if (candidate.length === 0) {
+            SwalError("공유할 사용자나 그룹을 추가해주세요.");
+            return;
+        }
         candidate.forEach(async (d) => {
             const data = {
                 "fileId": props.fileID,

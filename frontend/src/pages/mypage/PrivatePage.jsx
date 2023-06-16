@@ -14,6 +14,7 @@ import SwalError from "../../component/swal/SwalError";
 import BodyHeader from "../../component/main/BodyHeader"
 import SwalConfirm from "../../component/swal/SwalConfirm";
 import DeregisterUser from "../../services/user/DeregisterUser";
+import GetConfig from "../../services/config/GetConfig";
 
 export default function PrivatePage() {
     const [img, setImg] = useState(null);
@@ -24,6 +25,8 @@ export default function PrivatePage() {
 
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [isImgChanged, setIsImgChanged] = useState(false);
+    const [isChangeIdAllowed, setIsChangeIdAllowed] = useState(false);
+    const [isChangeNickAllowed, setIsChangeNickAllowed] = useState(false);
     const navigate = useNavigate();
 
     useEffect(() => {
@@ -50,6 +53,23 @@ export default function PrivatePage() {
 
             setImg(res[2]);
         }
+
+        const getConfig = async () => {
+            const res1 = await GetConfig("101");
+            if (!res1[0]) {
+                SwalError(res1[1]);
+                return;
+            }
+            setIsChangeNickAllowed(res1[1] === "false");
+
+            const res2 = await GetConfig("102");
+            if (!res2[0]) {
+                SwalError(res2[1]);
+                return;
+            }
+            setIsChangeIdAllowed(res2[1] === "false");
+        }
+        getConfig();
         getUserInfo();
     }, [])
 
@@ -139,11 +159,13 @@ export default function PrivatePage() {
                         title="ID"
                         name="username"
                         value={username}
+                        disabled={isChangeIdAllowed}
                     />
                     <EditableColumn
                         title="NAME"
                         name="nickname"
                         value={nickname}
+                        disabled={isChangeNickAllowed}
                     />
                     <EditableColumn
                         title="GROUP"
