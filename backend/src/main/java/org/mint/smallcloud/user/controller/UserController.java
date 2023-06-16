@@ -5,6 +5,7 @@ import org.mint.smallcloud.ResponseDto;
 import org.mint.smallcloud.exception.ExceptionStatus;
 import org.mint.smallcloud.exception.ServiceException;
 import org.mint.smallcloud.security.UserDetailsProvider;
+import org.mint.smallcloud.security.dto.LoginDto;
 import org.mint.smallcloud.user.domain.Roles;
 import org.mint.smallcloud.user.dto.*;
 import org.mint.smallcloud.user.service.MemberFacadeService;
@@ -131,5 +132,12 @@ public class UserController {
             .orElseThrow(() -> new ServiceException
                          (ExceptionStatus.NO_PERMISSION));
         memberFacadeService.updatePassword(user.getUsername(), dto);
+    }
+
+    @Secured(Roles.S_COMMON)
+    @GetMapping("/password/expired")
+    public PasswordChangedDateDto getPasswordChangedDate(
+            @Valid @RequestBody LoginDto loginDto) {
+        return memberFacadeService.getPasswordChangedDate(loginDto);
     }
 }
