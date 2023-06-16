@@ -5,6 +5,7 @@ import org.mint.smallcloud.exception.ExceptionStatus;
 import org.mint.smallcloud.exception.ServiceException;
 import org.mint.smallcloud.file.domain.FileLocation;
 import org.mint.smallcloud.file.repository.FolderRepository;
+import org.mint.smallcloud.security.dto.LoginDto;
 import org.mint.smallcloud.security.service.AuthThrowerService;
 import org.mint.smallcloud.user.domain.Member;
 import org.mint.smallcloud.user.dto.*;
@@ -89,5 +90,12 @@ public class MemberFacadeService {
     public void setExpired(UpdateExpiredDto setExpiredDto) {
         Member member = memberThrowerService.getMemberByUsername(setExpiredDto.getUsername());
         member.setExpiredDate(setExpiredDto.getExpiredDate());
+    }
+
+    public PasswordChangedDateDto getPasswordChangedDate(LoginDto loginDto) {
+        Member member = memberThrowerService.getMemberByUsername(loginDto.getId());
+        return PasswordChangedDateDto.builder()
+                .changedPasswordDate(member.getChangedPasswordDate())
+                .build();
     }
 }
