@@ -10,7 +10,7 @@ export default function RuleInput(props) {
         e.stopPropagation();
         if (e.key === 'Enter') {
             e.preventDefault();
-            const value = document.getElementById("value").value;
+            const value = document.getElementById("value" + props.code).value;
             if (value === "") {
                 SwalError("변경할 값을 입력해주세요.");
                 return;
@@ -33,7 +33,7 @@ export default function RuleInput(props) {
             </div>
             <div className="new">
                 <span>변경 {props.desc} : </span>
-                <input type="number" id="value" placeholder=""></input>
+                <input type="number" id={"value" + props.code } placeholder=""></input>
             </div>
         </div>
     )

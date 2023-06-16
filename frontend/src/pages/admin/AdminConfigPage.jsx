@@ -1,18 +1,18 @@
 import React, { useEffect } from "react";
 import { AiOutlineFileUnknown, AiOutlineUserSwitch } from 'react-icons/ai';
+import { BsToggleOff, BsToggleOn } from 'react-icons/bs';
 import { CgPassword } from 'react-icons/cg';
 import BodyFrame from "../../component/Bodyframe";
 import RuleBox from "../../component/admin/ruleBox";
 import RuleInput from "../../component/admin/ruleInput";
 import TitledBox from "../../component/admin/titledBox";
-import ToggleBtn from "../../component/admin/toggleBtn";
 import Header from "../../component/header/Header";
 import ModalGetPW from "../../component/modal/ModalGetPW";
 import SidebarAdmin from "../../component/sidebar/SidebarAdmin";
-import GetConfig from "../../services/config/GetConfig";
-import SwalError from "../../component/swal/SwalError";
 import SwalAlert from "../../component/swal/SwalAlert";
+import SwalError from "../../component/swal/SwalError";
 import AdminPostConfig from "../../services/config/AdminPostConfig";
+import GetConfig from "../../services/config/GetConfig";
 
 export default function AdminConfigPage() {
     const [isAdminNeedChangePassword, setIsAdminNeedChangePassword] = React.useState(false);
@@ -36,7 +36,7 @@ export default function AdminConfigPage() {
             setConfigNow((prev) => {
                 return {
                     ...prev,
-                    [code]: res[1].value,
+                    [code]: res[1],
                 }
             })
         })
@@ -105,12 +105,18 @@ export default function AdminConfigPage() {
                     <RuleBox
                         title="사용자 닉네임 변경"
                         desc="사용자가 닉네임을 변경할 수 있도록 설정합니다.">
-                        <ToggleBtn now={configNow[101]} onClick={() => handleToggleSubmit(101)} />
+                        <div onClick={() => handleToggleSubmit(101)} className="tgBtn">
+                            <div className="stateText">{!configNow[101] ? "OFF" : "ON"}</div>
+                            {!configNow[101] ? <BsToggleOff /> : <BsToggleOn />}
+                        </div>
                     </RuleBox>
                     <RuleBox
                         title="사용자 로그인 ID 변경"
                         desc="사용자가 로그인 ID를 변경할 수 있도록 설정합니다.">
-                        <ToggleBtn now={configNow[102]} onClick={() => handleToggleSubmit(102)} />
+                        <div onClick={() => handleToggleSubmit(102)} className="tgBtn">
+                            <div className="stateText">{!configNow[102] ? "OFF" : "ON"}</div>
+                            {!configNow[102] ? <BsToggleOff /> : <BsToggleOn />}
+                        </div>
                     </RuleBox>
                 </TitledBox>
                 <TitledBox
@@ -120,7 +126,10 @@ export default function AdminConfigPage() {
                     <RuleBox
                         title="특수문자, 숫자, 알파벳 대문자 조합 사용"
                         desc="비밀번호에 특수문자와 숫자, 알파벳 대문자를 모두 사용하도록 설정합니다.">
-                        <ToggleBtn now={configNow[201]} onClick={() => handleToggleSubmit(201)} />
+                        <div onClick={() => handleToggleSubmit(201)} className="tgBtn">
+                            <div className="stateText">{!configNow[201] ? "OFF" : "ON"}</div>
+                            {!configNow[201] ? <BsToggleOff /> : <BsToggleOn />}
+                        </div>
                     </RuleBox>
                     <RuleBox
                         title="비밀번호 길이 제한"
@@ -135,7 +144,10 @@ export default function AdminConfigPage() {
                     <RuleBox
                         title="만료된 비밀번호 계정 차단"
                         desc="ON = 차단, OFF = 경고">
-                        <ToggleBtn now={configNow[204]}  onClick={() => handleToggleSubmit(204)} />
+                        <div onClick={() => handleToggleSubmit(204)} className="tgBtn">
+                            <div className="stateText">{!configNow[204] ? "OFF" : "ON"}</div>
+                            {!configNow[204] ? <BsToggleOff /> : <BsToggleOn />}
+                        </div>
                     </RuleBox>
                 </TitledBox>
                 <TitledBox

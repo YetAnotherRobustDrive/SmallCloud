@@ -7,13 +7,13 @@ export default async function AdminPostConfig(code, value) {
         method: "POST",
         headers: {
             "Authorization": "Bearer " + accessToken,
+            "Content-Type": "application/json",
         },
-        body: {
+        body: JSON.stringify({ 
             "code" : code,
             "value" : value
-        }
+        })
     };
-
     try {
         const res = await fetch(localStorage.getItem("API_SERVER") + "admin/config" , model);
         if (res.status === 200) {
