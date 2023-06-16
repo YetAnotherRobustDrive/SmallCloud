@@ -39,6 +39,6 @@ public class AdminService {
 
     public AdminConfig responseConfig(String code) {
         return adminConfigRepository
-            .findByCodeOrOrderByLocalDateTimeDesc(code);
+            .findByCodeOrderByLocalDateTimeDesc(code);
     }
 }

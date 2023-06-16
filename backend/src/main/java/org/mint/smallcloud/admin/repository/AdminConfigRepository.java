@@ -6,5 +6,5 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface AdminConfigRepository extends JpaRepository<AdminConfig, Long> {
-    AdminConfig findByCodeOrOrderByLocalDateTimeDesc(String code);
+    AdminConfig findByCodeOrderByLocalDateTimeDesc(String code);
 }
