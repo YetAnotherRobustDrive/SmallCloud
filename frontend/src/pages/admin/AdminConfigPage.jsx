@@ -64,7 +64,7 @@ export default function AdminConfigPage() {
 
 
     const handleToggleSubmit =  ( async (code) => {
-        const res = await AdminPostConfig(code, !configNow[code]);
+        const res = await AdminPostConfig(code, configNow[code] === "true" ? "false" : "true",);
         if(!res[0]){
             SwalError(res[1]);
             return;
@@ -72,7 +72,7 @@ export default function AdminConfigPage() {
         SwalAlert("success", "변경되었습니다.", () => { setConfigNow((prev) => {
             return {
                 ...prev,
-                [code]: !configNow[code],
+                [code]: configNow[code] === "true" ? "false" : "true",
             }
          });
         });
@@ -106,16 +106,16 @@ export default function AdminConfigPage() {
                         title="사용자 닉네임 변경"
                         desc="사용자가 닉네임을 변경할 수 있도록 설정합니다.">
                         <div onClick={() => handleToggleSubmit(101)} className="tgBtn">
-                            <div className="stateText">{!configNow[101] ? "OFF" : "ON"}</div>
-                            {!configNow[101] ? <BsToggleOff /> : <BsToggleOn />}
+                            <div className="stateText">{configNow[101] === "true" ? "ON" : "OFF"}</div>
+                            {configNow[101] === "true" ? <BsToggleOn /> : <BsToggleOff />}
                         </div>
                     </RuleBox>
                     <RuleBox
                         title="사용자 로그인 ID 변경"
                         desc="사용자가 로그인 ID를 변경할 수 있도록 설정합니다.">
                         <div onClick={() => handleToggleSubmit(102)} className="tgBtn">
-                            <div className="stateText">{!configNow[102] ? "OFF" : "ON"}</div>
-                            {!configNow[102] ? <BsToggleOff /> : <BsToggleOn />}
+                            <div className="stateText">{configNow[102] === "true" ? "ON" : "OFF"}</div>
+                            {configNow[102] === "true" ? <BsToggleOn /> : <BsToggleOff />}
                         </div>
                     </RuleBox>
                 </TitledBox>
@@ -127,8 +127,8 @@ export default function AdminConfigPage() {
                         title="특수문자, 숫자, 알파벳 대문자 조합 사용"
                         desc="비밀번호에 특수문자와 숫자, 알파벳 대문자를 모두 사용하도록 설정합니다.">
                         <div onClick={() => handleToggleSubmit(201)} className="tgBtn">
-                            <div className="stateText">{!configNow[201] ? "OFF" : "ON"}</div>
-                            {!configNow[201] ? <BsToggleOff /> : <BsToggleOn />}
+                            <div className="stateText">{configNow[201] === "true" ? "ON" : "OFF"}</div>
+                            {configNow[201] === "true" ? <BsToggleOn /> : <BsToggleOff />}
                         </div>
                     </RuleBox>
                     <RuleBox
@@ -145,8 +145,8 @@ export default function AdminConfigPage() {
                         title="만료된 비밀번호 계정 차단"
                         desc="ON = 차단, OFF = 경고">
                         <div onClick={() => handleToggleSubmit(204)} className="tgBtn">
-                            <div className="stateText">{!configNow[204] ? "OFF" : "ON"}</div>
-                            {!configNow[204] ? <BsToggleOff /> : <BsToggleOn />}
+                            <div className="stateText">{configNow[204] === "true" ? "ON" : "OFF"}</div>
+                            {configNow[204] === "true" ? <BsToggleOn /> : <BsToggleOff />}
                         </div>
                     </RuleBox>
                 </TitledBox>
