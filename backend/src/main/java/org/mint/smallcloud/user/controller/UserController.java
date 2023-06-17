@@ -135,7 +135,7 @@ public class UserController {
     }
 
     @Secured(Roles.S_COMMON)
-    @GetMapping("/password/expired")
+    @PostMapping("/password/expired")
     public PasswordChangedDateDto getPasswordChangedDate(
             @Valid @RequestBody LoginDto loginDto) {
         return memberFacadeService.getPasswordChangedDate(loginDto);
