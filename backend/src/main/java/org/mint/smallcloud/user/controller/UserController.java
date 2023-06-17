@@ -6,6 +6,7 @@ import org.mint.smallcloud.exception.ExceptionStatus;
 import org.mint.smallcloud.exception.ServiceException;
 import org.mint.smallcloud.security.UserDetailsProvider;
 import org.mint.smallcloud.security.dto.LoginDto;
+import org.mint.smallcloud.user.domain.Member;
 import org.mint.smallcloud.user.domain.Roles;
 import org.mint.smallcloud.user.dto.*;
 import org.mint.smallcloud.user.service.MemberFacadeService;
@@ -19,9 +20,12 @@ import org.springframework.security.access.annotation.Secured;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.server.ResponseStatusException;
 
 import javax.validation.Valid;
+
 import java.util.List;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("/users")
@@ -120,9 +124,24 @@ public class UserController {
         headers.setPragma("no-cache");
         headers.setExpires(0);
         headers.setCacheControl("no-cache, no-store, must-revalidate");
+        return new ResponseEntity<Resource>(res.getPhotoResource(), headers, HttpStatus.OK);
+    }
+    
+    @Secured({Roles.S_ADMIN})
+    @GetMapping("/profile-photo/{username}")
+    public ResponseEntity<Resource> downloadPhotoForSuperUser(@PathVariable String username) {
+        PhotoDownloadResponseDto res =
+            memberFacadeService.downloadPhoto(username);
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentLength(res.getContentLength());
+        headers.setContentType(MediaType.parseMediaType(res.getContentType()));
+        headers.setPragma("no-cache");
+        headers.setExpires(0);
+        headers.setCacheControl("no-cache, no-store, must-revalidate");
         return new ResponseEntity<Resource>(res.getPhotoResource(),
                                             headers,
                                             HttpStatus.OK);
+        
     }
 
     @PostMapping("/password")
