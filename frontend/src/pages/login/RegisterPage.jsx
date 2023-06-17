@@ -73,7 +73,6 @@ export default function RegisterPage() {
 
         try {
             const res = await fetch(localStorage.getItem("API_SERVER") + 'auth/register', model);
-            console.log(res);
             if (!res.ok) {
                 SwalError("회원가입에 실패하였습니다.");
                 return;
