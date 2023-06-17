@@ -104,7 +104,7 @@ public class UserController {
         return ResponseEntity.ok().build();
     }
 
-    @Secured({Roles.S_COMMON})
+    @Secured({Roles.S_COMMON, Roles.S_COMMON, Roles.S_PRIVILEGE})
     @GetMapping("/profile-photo")
     public ResponseEntity<Resource> downloadPhoto() {
         UserDetails user = userDetailsProvider
