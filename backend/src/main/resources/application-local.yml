@@ -4,31 +4,31 @@ spring:
       on-profile: local
   datasource:
     driver-class-name: org.mariadb.jdbc.Driver
-    url: { SMALLCLOUD_DB_URL }
-    username: { SMALLCLOUD_DB_USERNAME }
-    password: { SMALLCLOUD_DB_PASSWORD }
+    url: ${SMALLCLOUD_DB_URL}
+    username: ${SMALLCLOUD_DB_USERNAME}
+    password: ${SMALLCLOUD_DB_PASSWORD}
   jpa:
     hibernate:
       ddl-auto: validate
     database-platform: org.hibernate.dialect.MariaDB103Dialect
 
 minio:
-  url: { SMALLCLOUD_MINIO_URL }
-  user: { SMALLCLOUD_MINIO_USER }
-  password: { SMALLCLOUD_MINIO_PASSWORD }
-  bucket-name: { SMALLCLOUD_MINIO_BUCKET_NAME }
+  url: ${SMALLCLOUD_MINIO_URL}
+  user: ${SMALLCLOUD_MINIO_USER}
+  password: ${SMALLCLOUD_MINIO_PASSWORD}
+  bucket-name: ${SMALLCLOUD_MINIO_BUCKET_NAME}
 
 jwt:
-  secret: { SMALLCLOUD_SECRET }
+  secret: ${SMALLCLOUD_SECRET}
 
 external:
-  origin: { SMALLCLOUD_ORIGIN }
+  origin: ${SMALLCLOUD_ORIGIN}
 
 server:
-  port: { SMALLCLOUD_BACKEND_PORT }
-  address: { SMALLCLOUD_ADDRESS }
+  port: ${SMALLCLOUD_BACKEND_PORT}
+  address: ${SMALLCLOUD_ADDRESS}
 
 smallcloud:
   admin:
-    username: { SMALLCLOUD_ADMIN_USERNAME }
-    password: { SMALLCLOUD_ADMIN_PASSWORD }
+    username: ${SMALLCLOUD_ADMIN_USERNAME}
+    password: ${SMALLCLOUD_ADMIN_PASSWORD}
