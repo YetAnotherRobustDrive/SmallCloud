@@ -19,3 +19,6 @@ logging:
   call-tracer: true
   level:
     org.mint.smallcloud: debug
+
+external:
+  origin: "http://localhost:3000"

@@ -10,15 +10,11 @@ import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 @Configuration
 public class CorsConfig {
     private final String FRONT_ORIGIN;
-    private final String LOCAL_ORIGIN;
 
     public CorsConfig(
-        @Value("${external.front_origin}")
-        String frontOrigin,
-        @Value("${external.local_origin}")
-        String localOrigin) {
+        @Value("${external.origin}")
+        String frontOrigin) {
         FRONT_ORIGIN = frontOrigin;
-        LOCAL_ORIGIN = localOrigin;
     }
 
 
@@ -26,7 +22,6 @@ public class CorsConfig {
     public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration config = new CorsConfiguration();
         config.addAllowedOrigin(FRONT_ORIGIN);
-        config.addAllowedOrigin(LOCAL_ORIGIN);
         config.addAllowedHeader("*");
         config.addAllowedMethod("*");
         config.setAllowCredentials(true);

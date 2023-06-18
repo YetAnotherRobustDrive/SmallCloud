@@ -43,3 +43,5 @@ out/
 /minio
 
 .DS_Store
+
+.env
