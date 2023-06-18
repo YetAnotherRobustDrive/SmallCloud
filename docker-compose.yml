@@ -27,7 +27,7 @@ services:
     ports:
       - "${SMALLCLOUD_BACKEND_PORT}:${SMALLCLOUD_BACKEND_PORT}"
     env_file:
-      - ./env
+      - ./.env
     depends_on:
       db:
         condition: service_healthy
