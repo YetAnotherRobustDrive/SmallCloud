@@ -130,6 +130,7 @@ public class UserController {
     @Secured({Roles.S_ADMIN})
     @GetMapping("/profile-photo/{username}")
     public ResponseEntity<Resource> downloadPhotoForSuperUser(@PathVariable String username) {
+        
         PhotoDownloadResponseDto res =
             memberFacadeService.downloadPhoto(username);
         HttpHeaders headers = new HttpHeaders();
@@ -160,3 +161,4 @@ public class UserController {
         return memberFacadeService.getPasswordChangedDate(loginDto);
     }
 }
+
