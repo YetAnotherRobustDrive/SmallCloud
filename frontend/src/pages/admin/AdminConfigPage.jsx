@@ -137,7 +137,7 @@ export default function AdminConfigPage() {
                         <RuleInput now={configNow[202]} desc="길이" code="202" onKeyDown={handleInputSubmit} />
                     </RuleBox>
                     <RuleBox
-                        title="비밀번호 변경 주기"
+                        title="비밀번호 변경 주기(일)"
                         desc="최대 비밀번호 사용기간을 설정합니다. (무제한: 0)">
                         <RuleInput now={configNow[203]} desc="주기" code="203" onKeyDown={handleInputSubmit} />
                     </RuleBox>
