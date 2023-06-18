@@ -1,4 +1,4 @@
-create or replace table admin_config
+create table if not exists admin_config
 (
     admin_config_id bigint auto_increment
         primary key,
@@ -7,7 +7,7 @@ create or replace table admin_config
     value           varchar(255) null
 );
 
-create or replace table answer
+create table if not exists answer
 (
     answer_id    bigint auto_increment
         primary key,
@@ -15,7 +15,7 @@ create or replace table answer
     created_date datetime(6)  null
 );
 
-create or replace table boards
+create table if not exists boards
 (
     board_id     bigint auto_increment
         primary key,
@@ -25,7 +25,7 @@ create or replace table boards
     title        varchar(255)  null
 );
 
-create or replace table `groups`
+create table if not exists `groups`
 (
     group_id        bigint auto_increment
         primary key,
@@ -37,7 +37,7 @@ create or replace table `groups`
         foreign key (parent_group_id) references `groups` (group_id)
 );
 
-create or replace table members
+create table if not exists members
 (
     member_id             bigint auto_increment
         primary key,
@@ -57,7 +57,7 @@ create or replace table members
         foreign key (`group`) references `groups` (group_id)
 );
 
-create or replace table data_nodes
+create table if not exists data_nodes
 (
     dtype        varchar(31)  not null,
     data_node_id bigint auto_increment
@@ -71,7 +71,7 @@ create or replace table data_nodes
         foreign key (author_id) references members (member_id)
 );
 
-create or replace table files
+create table if not exists files
 (
     location     varchar(40) null,
     size         bigint      null,
@@ -81,7 +81,7 @@ create or replace table files
         foreign key (data_node_id) references data_nodes (data_node_id)
 );
 
-create or replace table folders
+create table if not exists folders
 (
     data_node_id bigint not null
         primary key,
@@ -93,7 +93,7 @@ alter table data_nodes
     add constraint FKnirlp11e9o1bscmt2727crc96
         foreign key (folder_id) references folders (data_node_id);
 
-create or replace table labels
+create table if not exists labels
 (
     label_id bigint auto_increment
         primary key,
@@ -103,7 +103,7 @@ create or replace table labels
         foreign key (owner) references members (member_id)
 );
 
-create or replace table label_data_node
+create table if not exists label_data_node
 (
     label_id     bigint not null,
     data_node_id bigint not null,
@@ -113,7 +113,7 @@ create or replace table label_data_node
         foreign key (label_id) references labels (label_id)
 );
 
-create or replace table notifications
+create table if not exists notifications
 (
     notification_id bigint auto_increment
         primary key,
@@ -124,7 +124,7 @@ create or replace table notifications
         foreign key (owner) references members (member_id)
 );
 
-create or replace table question
+create table if not exists question
 (
     question_id  bigint auto_increment
         primary key,
@@ -138,7 +138,7 @@ create or replace table question
         foreign key (answer_id) references answer (answer_id)
 );
 
-create or replace table shares
+create table if not exists shares
 (
     dtype    varchar(31) not null,
     share_id bigint auto_increment
@@ -148,7 +148,7 @@ create or replace table shares
         foreign key (file) references data_nodes (data_node_id)
 );
 
-create or replace table group_shares
+create table if not exists group_shares
 (
     share_id bigint not null
         primary key,
@@ -159,7 +159,7 @@ create or replace table group_shares
         foreign key (share_id) references shares (share_id)
 );
 
-create or replace table member_shares
+create table if not exists member_shares
 (
     share_id bigint not null
         primary key,
@@ -170,7 +170,7 @@ create or replace table member_shares
         foreign key (share_id) references shares (share_id)
 );
 
-create or replace table user_log
+create table if not exists user_log
 (
     share_id  bigint auto_increment
         primary key,
@@ -182,3 +182,5 @@ create or replace table user_log
     constraint FKhsm7ycac9ot41w94licsb898u
         foreign key (member_id) references members (member_id)
 );
+
+
