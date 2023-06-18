@@ -17,3 +17,18 @@ minio:
   user: { SMALLCLOUD_MINIO_USER }
   password: { SMALLCLOUD_MINIO_PASSWORD }
   bucket-name: { SMALLCLOUD_MINIO_BUCKET_NAME }
+
+jwt:
+  secret: { SMALLCLOUD_SECRET }
+
+external:
+  origin: { SMALLCLOUD_ORIGIN }
+
+server:
+  port: { SMALLCLOUD_BACKEND_PORT }
+  address: { SMALLCLOUD_ADDRESS }
+
+smallcloud:
+  admin:
+    username: { SMALLCLOUD_ADMIN_USERNAME }
+    password: { SMALLCLOUD_ADMIN_PASSWORD }
