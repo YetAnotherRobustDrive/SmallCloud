@@ -21,12 +21,11 @@ export default function ConfigPage() {
                 method: 'GET',
                 headers: {
                     'Content-Type': 'application/json',
-                    'Authorization': 'Bearer ' + localStorage.getItem('token'),
                 },
             });
             if (res.status === 200) {
                 SwalAlert("success", "서버 연결에 성공하였습니다.", 
-                () => {setConfig(addr); window.location.reload();});
+                () => {setConfig(addr); window.location.replace('/login')});
             } else {
                 SwalError("서버 연결에 실패하였습니다.");  
                 throw new Error();
@@ -43,7 +42,7 @@ export default function ConfigPage() {
         e.stopPropagation();
         const form = e.currentTarget;
         const ip = form.ip.value;
-        const fullAddr = 'http://' + ip + ':8000/';
+        const fullAddr = 'http://' + ip + '/';
         checkConnection(fullAddr);
     }
 
@@ -56,7 +55,7 @@ export default function ConfigPage() {
             {isLoading && <ModalLoading isOpen={isLoading}/>}
             <img src={logo_img} alt="LOGO" />
             <span className="namespan">서버 주소를 입력해주세요.</span>
-            <input name='ip' type="text" placeholder="000.000.000.000" autoFocus />
+            <input name='ip' type="text" placeholder="0.0.0.0:0000" autoFocus />
             <div className="buttons">
                 <button className="link" >설정완료</button>
             </div>

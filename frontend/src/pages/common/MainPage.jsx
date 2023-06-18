@@ -30,16 +30,6 @@ export default function MainPage() {
     const [shareFiles, setShareFiles] = useState([]);
     const [sort, setSort] = useState("name_asc");
 
-    const [innerWidth, setInnerWidth] = useState(window.innerWidth);
-
-    useEffect(() => {
-        const resizeListener = () => {
-            setInnerWidth(window.innerWidth);
-        };
-        window.addEventListener("resize", resizeListener);
-    });
-
-
     useEffect(() => {
         const render = async () => {
             const rootIDRes = await GetRootDir();
@@ -151,12 +141,11 @@ export default function MainPage() {
         <>
             {isLoading && <ModalLoading isOpen={isLoading} />}
             <Header />
-            {innerWidth > 768 && <Sidebar />}
-            {innerWidth <= 768 && <Upbar />}
-            <BodyFrame hasContext={true} innerWidth={innerWidth}>
+            <Sidebar />
+            <BodyFrame hasContext={true}>
                 <BodyHeader text="내 파일" isSortable setter={setSort} />
                 {
-                    gridFiles.length === 0 ? <div style={{ height: innerWidth > 768 ? "calc(100vh - 299px)" : "calc(100vh - 369px)", textAlign: "center", marginTop: "20px" }}>파일이 없습니다.</div> :
+                    gridFiles.length === 0 ? <div style={{ height: "calc(100vh - 299px)", textAlign: "center", marginTop: "20px" }}>파일이 없습니다.</div> :
                         <GridBox height="calc(100vh - 299px)">
                             {gridFiles}
                         </GridBox>

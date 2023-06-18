@@ -11,13 +11,13 @@ export default async function RefreshToken() {
 
     const time = Math.ceil(Date.now() / 1000);
     const accessToken = localStorage.getItem("accessToken");
-    if (accessToken !== null) {
+    if (accessToken !== null || accessToken !== undefined || accessToken !== "" || accessToken !== "null") {
         const accessTokenExp = jwtDecode(accessToken).exp;
         if (accessTokenExp > time) {
             return true;
         }
     }
-    if (accessToken === null) {
+    else {
         SwalError("로그인이 만료되었습니다.");
         persistor.purge();
         window.location.reload();
