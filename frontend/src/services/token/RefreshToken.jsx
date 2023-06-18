@@ -17,7 +17,7 @@ export default async function RefreshToken() {
             return true;
         }
     }
-    if (accessToken === null) {
+    else {
         SwalError("로그인이 만료되었습니다.");
         persistor.purge();
         window.location.reload();
