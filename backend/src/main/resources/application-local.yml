@@ -26,6 +26,7 @@ external:
 
 server:
   port: ${SMALLCLOUD_BACKEND_PORT}
+  front-port: ${SMALLCLOUD_FRONTEND_PORT}
   address: ${SMALLCLOUD_ADDRESS}
 
 smallcloud:

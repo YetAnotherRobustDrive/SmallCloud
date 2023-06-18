@@ -29,6 +29,8 @@ jwt:
 server:
   port: 8000
   address: 0.0.0.0
+  front-port: 3000
+
 
 smallcloud:
   admin:
