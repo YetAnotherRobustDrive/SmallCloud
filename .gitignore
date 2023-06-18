@@ -41,6 +41,5 @@ out/
 
 /data
 /minio
-/src/main/resources/static/docs/
 
 .DS_Store
