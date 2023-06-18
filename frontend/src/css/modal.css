@@ -35,12 +35,6 @@
     font-size: larger;
 }
 
-.modalOuter img {
-    width: 20%;
-    margin: 0;
-    padding: 0;
-}
-
 .modalOuter .customSpan {
     white-space: pre-line;
     text-align: center;
