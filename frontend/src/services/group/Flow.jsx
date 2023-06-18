@@ -3,7 +3,9 @@ import { BiAddToQueue, BiSave } from 'react-icons/bi';
 import ReactFlow, {
     ControlButton, Controls,
     addEdge, applyNodeChanges,
-    updateEdge
+    updateEdge,
+    useKeyPress,
+    useOnSelectionChange
 } from 'reactflow';
 
 import 'reactflow/dist/style.css';
@@ -20,14 +22,13 @@ export default function Flow(props) {
     const [edges, setEdges] = useState([]);
     const [prevEdges, setPrevEdges] = useState([]);
     const [newGroup, setNewGroup] = useState("");
-
+    const [selected, setSelected] = useState(null);
     const [isRootExist, setIsRootExist] = useState(false);
 
     const edgeUpdateSuccessful = useRef(true);
     const edgeRef = useRef();
     const nodeRef = useRef();
     const isRootExistRef = useRef();
-    const tempRef = useRef();
 
     isRootExistRef.current = isRootExist;
     edgeRef.current = edges;
@@ -132,25 +133,29 @@ export default function Flow(props) {
         return setEdges((eds) => addEdge({ source: params.source, target: params.target }, eds));
     }, [setEdges]);
     const onNodesChange = useCallback((changes) => {
-        if (tempRef.current === true) {
-            tempRef.current = false;
-            return;
-        }
-        else {
-            tempRef.current = false;
-        }
         setNodes((nds) => applyNodeChanges(changes, nds))
     }, []);
+
+    const pressDelete = useKeyPress(['Delete', 'Backspace']);
+    
+    useEffect(() => {
+        if (pressDelete == false) {
+            return;
+        }
+        SwalConfirm("그룹을 삭제하시겠습니까?", () => {
+            const changes = [
+                {
+                    id: selected.id,
+                    type: 'remove',
+                },
+            ]
+            setNodes((eds) => applyNodeChanges(changes, eds))
+        }, () => {
+            return;
+        });
+    }, [pressDelete]);
+    
     const onEdgesChange = useCallback((changes) => {
-        if (changes[0].type === "remove") {
-            SwalConfirm("그룹을 삭제하시겠습니까?", () => { }, () => {
-                tempRef.current = true;
-                return;
-            });
-        }
-        else {
-            tempRef.current = false;
-        }
         setEdges((eds) => applyNodeChanges(changes, eds))
     }, []);
     const onNodesDelete = useCallback(
@@ -228,7 +233,6 @@ export default function Flow(props) {
         }
         SwalAlert("success", "그룹이 저장되었습니다.", () => { window.location.reload(); })
     }
-
     return (
         <div style={{ width: 'calc(100vw - 220px)', height: 'calc(100vh - 75px)' }}>
             <ReactFlow
@@ -243,6 +247,8 @@ export default function Flow(props) {
                 onConnect={onConnect}
                 nodeTypes={props.nodeTypes}
                 onNodesDelete={onNodesDelete}
+                deleteKeyCode={[]}
+                onSelectionChange={e => {setSelected(e.nodes[0])}}
             >
                 <Controls style={{ width: "fit-content" }} showInteractive={false}>
                     <ControlButton onClick={handleClickAdd}>

@@ -146,7 +146,9 @@ export default function PrivatePage() {
             <BodyFrame>
                 <BodyHeader text="회원정보" />
                 <form className="private-profile" onSubmit={handleSubmit}>
-                    <img src={img} alt="프로필 이미지" />
+                    <div className="imgContainer">
+                        <img src={img} alt="프로필 이미지" />
+                    </div>
                     <label htmlFor="file">프로필 변경하기</label>
                     <input
                         onChange={handleImgChange}

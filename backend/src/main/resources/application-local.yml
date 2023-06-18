@@ -4,19 +4,32 @@ spring:
       on-profile: local
   datasource:
     driver-class-name: org.mariadb.jdbc.Driver
-    url: jdbc:mariadb://db:3333/test_db?serverTimezone=Asia/Seoul
-    username: myuser
-    password: mypassword
+    url: ${SMALLCLOUD_DB_URL}
+    username: ${SMALLCLOUD_DB_USERNAME}
+    password: ${SMALLCLOUD_DB_PASSWORD}
   jpa:
     hibernate:
-      ddl-auto: create-drop
+      ddl-auto: validate
     database-platform: org.hibernate.dialect.MariaDB103Dialect
 
-jwt:
-  secret: U29tdGhpbmdTcGVjaWFsU21hbGxDbG91ZCMkIV4lKiU
-
 minio:
-  url: http://minio:9000
-  user: minio
-  password: miniopass
-  bucket-name: scloud
+  url: ${SMALLCLOUD_MINIO_URL}
+  user: ${SMALLCLOUD_MINIO_USER}
+  password: ${SMALLCLOUD_MINIO_PASSWORD}
+  bucket-name: ${SMALLCLOUD_MINIO_BUCKET_NAME}
+
+jwt:
+  secret: ${SMALLCLOUD_SECRET}
+
+external:
+  origin: ${SMALLCLOUD_ORIGIN}
+
+server:
+  port: ${SMALLCLOUD_BACKEND_PORT}
+  front-port: ${SMALLCLOUD_FRONTEND_PORT}
+  address: ${SMALLCLOUD_ADDRESS}
+
+smallcloud:
+  admin:
+    username: ${SMALLCLOUD_ADMIN_USERNAME}
+    password: ${SMALLCLOUD_ADMIN_PASSWORD}

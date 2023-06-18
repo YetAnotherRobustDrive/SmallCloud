@@ -135,7 +135,6 @@ public abstract class DataNode {
     }
 
     public boolean isActive() {
-        System.out.println("start!");
         for (Label label : this.getLabels()) {
             System.out.println(label.getName());
             if (label.isTrash()) return false;

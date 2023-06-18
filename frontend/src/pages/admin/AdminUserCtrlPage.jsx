@@ -187,7 +187,7 @@ export default function AdminUserCtrlPage() {
                     SwalError(res[1]);
                     return;
                 }
-                SwalAlert("success", "회원 탈퇴가 완료되었습니다.", () => { window.location.reload()});
+                SwalAlert("success", "회원 탈퇴가 완료되었습니다.", () => { window.location.reload() });
             },
             () => { return; }
         );
@@ -238,7 +238,9 @@ export default function AdminUserCtrlPage() {
                 {user !== null &&
                     <>
                         <div className="profile">
-                            <img src={img} alt="프로필 이미지" />
+                        <div className="imgContainer">
+                                <img src={img} alt="프로필 이미지" />
+                            </div>
                             <div className="userinfo">
                                 <div className="text">
                                     <span className="title">ID</span>

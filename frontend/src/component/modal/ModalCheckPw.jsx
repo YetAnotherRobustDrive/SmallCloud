@@ -72,7 +72,9 @@ export default function ModalCheckPW(props) {
         <>
             <Modal isOpen={isOpen} style={modalStyle}>
                 <div className="modalOuter">
-                    <img src={img}></img>
+                    <div className="imgContainer">
+                        <img src={img}></img>
+                    </div>
                     <input
                         type="password"
                         placeholder="PW"
