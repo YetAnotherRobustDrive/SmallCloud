@@ -50,8 +50,8 @@ export default function AdminConfigPage() {
                     "Content-Type": "application/json",
                 },
                 body: JSON.stringify({
-                    "id": "root",
-                    "password": "root",
+                    "id": "admin",
+                    "password": "admin",
                 }),
             };
             const res = await fetch(localStorage.getItem("API_SERVER") + 'auth/login', model);
@@ -91,7 +91,7 @@ export default function AdminConfigPage() {
         <>
             {isAdminNeedChangePassword &&
                 <ModalGetPW
-                    title="관리자 기본 비밀번호 변경"
+                    title="관리자 기본 비밀번호 변경 (보안 매우 위험)"
                     isOpen={isAdminNeedChangePassword}
                     after={() => setIsAdminNeedChangePassword(false)}
                 />}
