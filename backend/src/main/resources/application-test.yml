@@ -22,3 +22,15 @@ logging:
 
 external:
   origin: "http://localhost:3000"
+
+jwt:
+  secret: 3141ffdaff9626f76648ce729d0817617c5531d73fe4ec3a5727ae773106da09
+
+server:
+  port: 8000
+  address: 0.0.0.0
+
+smallcloud:
+  admin:
+    username: test
+    password: test
