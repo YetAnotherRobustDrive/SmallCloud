@@ -12,7 +12,6 @@ import AdminQuestionList from './admin/AdminQuestionList';
 import AdminTermUploadPage from './admin/AdminTermUploadPage';
 import AdminUserCtrlPage from './admin/AdminUserCtrlPage';
 import AdminUserRegister from './admin/AdminUserRegister';
-import ConfigPage from './common/ConfigPage';
 import ErrorPage from './common/ErrorPage';
 import FavoritesPage from './common/FavoritesPage';
 import FolderPage from './common/FolderPage';
@@ -41,10 +40,6 @@ export default function ConditionalRoute() {
     return (
         <Router>
             <Routes>
-                {localStorage.getItem("API_SERVER") === null &&
-                    <Route path='*' element={<ConfigPage />} />
-                }
-                {localStorage.getItem("API_SERVER") !== null &&
                     <>
                         {isAdmin &&
                             <>
@@ -97,7 +92,6 @@ export default function ConditionalRoute() {
                         }
                         <Route path="*" element={<ErrorPage />} />
                     </>
-                }
             </Routes>
         </Router>
     )
