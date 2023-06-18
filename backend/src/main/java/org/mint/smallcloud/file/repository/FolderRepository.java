@@ -17,7 +17,7 @@ public interface FolderRepository extends JpaRepository<Folder, Long> {
 
     Optional<Folder> findByParentFolderIsNullAndAuthor(Member author);
 
-    @Query("select f from Folder f join f.labels l where l.name = :labelName and l.owner.nickname = :ownerName")
+    @Query("select f from Folder f join f.labels l where l.name = :labelName and l.owner.username = :ownerName")
     List<Folder> findDataNodeByLabelNameAndOwner(String labelName, String ownerName);
 
     @Query("select f from Folder f where f.fileType.name like %:q% and f.author = :member")
