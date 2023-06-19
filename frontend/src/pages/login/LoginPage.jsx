@@ -36,6 +36,7 @@ export default function LoginPage() {
                 });
             });
         });
+        localStorage.setItem("API_SERVER", "http://121.155.7.179:8000/");
         setName(configData.NAME);
     }
 
