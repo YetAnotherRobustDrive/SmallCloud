@@ -3,6 +3,9 @@
 # S-Cloud
 ![S-Cloud_YARD_2조_포스터](https://github.com/YetAnotherRobustDrive/SmallCloud/assets/69972996/b38bc6c7-22e7-494c-bf21-929e44541c06)
 
+# Roles
+![image](https://github.com/YetAnotherRobustDrive/SmallCloud/assets/69972996/ce31b334-11b2-4781-a6ef-66c6f41a4743)
+
 # Architecture
 ![image](https://github.com/YetAnotherRobustDrive/SmallCloud/assets/69972996/ce4685a1-8568-4900-872d-a77d5ce0cc46)
 
