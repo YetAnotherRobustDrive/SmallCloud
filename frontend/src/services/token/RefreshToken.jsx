@@ -6,7 +6,7 @@ export default async function RefreshToken() {
 
     if (localStorage.getItem("API_SERVER") === null) {
        localStorage.clear();
-       window.location.reload();
+       window.location.replace('/login');
     }
 
     const time = Math.ceil(Date.now() / 1000);
