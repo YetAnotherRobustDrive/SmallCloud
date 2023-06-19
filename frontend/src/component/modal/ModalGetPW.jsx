@@ -55,7 +55,7 @@ export default function ModalGetPW(props) {
             return;
         }
         const minimumLength = parseInt(configRes2[1]);
-        if (minimumLength > value.password.length) {
+        if (minimumLength > value.newPassword.length) {
             SwalError("비밀번호는 " + minimumLength + "자 이상으로 입력해주세요.");
             return;
         }
