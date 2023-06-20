@@ -22,15 +22,17 @@ img {
     height: 100%
 }
 
-.logo span {
+.logo .name {
     padding-left: 10px;
     display: flex;
     height: 100%;
     align-items: center;
-    font-size: 35px;
+    font-size: 20px;
     font-weight: 500;
-    max-width: 175px;
+    width: fit-content;
+    max-width: 300px;
     overflow: hidden;
+    white-space: nowrap;
 }
 
 .searchbar {
