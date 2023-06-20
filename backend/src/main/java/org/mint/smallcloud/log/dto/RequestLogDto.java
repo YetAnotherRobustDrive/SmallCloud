@@ -10,7 +10,7 @@ import java.time.LocalDateTime;
 @Getter
 @AllArgsConstructor
 public class RequestLogDto {
-    private final String nickName;
+    private final String userName;
     private final LocalDateTime startTime;
     private final LocalDateTime endTime;
     private final String action;

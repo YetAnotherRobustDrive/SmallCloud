@@ -26,7 +26,7 @@ public class LogService {
 
     public Page<ResponseLogDto> findLogs(RequestLogDto requestLogDto, Pageable pageable) {
         Page<UserLog> userLogs = userLogRepository.findLogs(
-                requestLogDto.getNickName(),
+                requestLogDto.getUserName(),
                 requestLogDto.getStartTime(),
                 requestLogDto.getEndTime(),
                 requestLogDto.getStatus(),
@@ -35,7 +35,7 @@ public class LogService {
 
         return userLogs.map(m ->
                 {
-                    String nickname = m.getMember() == null ? null : m.getMember().getNickname();
+                    String nickname = m.getMember() == null ? null : m.getMember().getUsername();
                 return ResponseLogDto.builder()
                         .action(m.getAction())
                         .localDateTime(m.getTime())
