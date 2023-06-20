@@ -43,6 +43,10 @@ export default function UploadBtn() {
 
     const handleUpload = (e) => {
         const render = async () => {
+            if (file === undefined || file === null) {
+                SwalError("파일을 선택해주세요.");
+                return;
+            }
             const formData = new FormData();
             let curr = params.fileID;
             if (curr === undefined) {
@@ -69,8 +73,6 @@ export default function UploadBtn() {
             }
             const fileSize = parseInt(file.size);
             const used = parseInt(usage[4]);
-            console.log(fileSize + used);
-            console.log(maxSize);
             if (maxSize < fileSize + used) {
                 const size = maxSize - used;
                 let converted;

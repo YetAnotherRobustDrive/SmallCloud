@@ -50,8 +50,8 @@ export default function AdminConfigPage() {
                     "Content-Type": "application/json",
                 },
                 body: JSON.stringify({
-                    "id": "root",
-                    "password": "root",
+                    "id": "admin",
+                    "password": "admin",
                 }),
             };
             const res = await fetch(localStorage.getItem("API_SERVER") + 'auth/login', model);
@@ -133,12 +133,12 @@ export default function AdminConfigPage() {
                     </RuleBox>
                     <RuleBox
                         title="비밀번호 길이 제한"
-                        desc="최소 비밀번호 길이를 설정합니다. (무제한: 0)">
+                        desc="최소 비밀번호 길이를 설정합니다. (최대: 15, 최소: 1)">
                         <RuleInput now={configNow[202]} desc="길이" code="202" onKeyDown={handleInputSubmit} />
                     </RuleBox>
                     <RuleBox
                         title="비밀번호 변경 주기"
-                        desc="최대 비밀번호 사용기간을 설정합니다. (무제한: 0)">
+                        desc="최대 비밀번호 사용기간을 설정합니다. (미설정: 0)">
                         <RuleInput now={configNow[203]} desc="주기" code="203" onKeyDown={handleInputSubmit} />
                     </RuleBox>
                     <RuleBox
