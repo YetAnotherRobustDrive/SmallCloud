@@ -46,6 +46,10 @@ public class JwtTokenProvider {
             && bearerToken.startsWith(tokenProperties.getGrantTypePrefix())) {
             return bearerToken.substring(tokenProperties.getGrantTypePrefix().length());
         }
+        bearerToken = request.getParameter(tokenProperties.getQueryParam());
+        if (StringUtils.hasText(bearerToken)) {
+            return bearerToken;
+        }
         throw new ServiceException(ExceptionStatus.NOT_FOUND_JWT_TOKEN);
     }
 

@@ -21,6 +21,7 @@ class JwtTokenProperties {
     private final SignatureAlgorithm signaturealgorithm = SignatureAlgorithm.HS256;
     private final String roleField = "role";
     private final String typeHeaderField = "tokenType";
+    private final String queryParam = "token";
 
     public Key getTokenKey() {
         byte[] keyBytes = Decoders.BASE64.decode(secretKey);
