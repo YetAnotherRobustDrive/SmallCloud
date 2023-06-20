@@ -141,7 +141,6 @@ public class UserController {
         
     }
 
-    @Secured({Roles.S_COMMON, Roles.S_PRIVILEGE, Roles.S_ADMIN})
     @GetMapping("/profile-photo/logo")
     public ResponseEntity<Resource> downloadAdminPhoto() {
         PhotoDownloadResponseDto res =
