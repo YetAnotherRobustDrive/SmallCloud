@@ -55,7 +55,7 @@ export default function LoginQuestionPage() {
     return (
         <>
             <div className="login">
-                <img src={logo_img} alt="LOGO" />
+                <img src={img} alt="LOGO" />
                 <form className="ask" onSubmit={handleSubmit}>
                     <span className="askSpan">관리자에게 문의하기</span>
                     <span>{">> 문의 제목"}</span>
