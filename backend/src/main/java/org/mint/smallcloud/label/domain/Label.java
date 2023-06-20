@@ -28,7 +28,7 @@ public class Label {
     @JoinColumn(name = "OWNER")
     private Member owner;
 
-    @ManyToMany
+    @ManyToMany(cascade = CascadeType.ALL)
     @JoinTable(
         name = "LABEL_DATA_NODE",
         joinColumns = @JoinColumn(name = "LABEL_ID"),

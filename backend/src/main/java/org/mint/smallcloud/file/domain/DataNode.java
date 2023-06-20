@@ -48,7 +48,7 @@ public abstract class DataNode {
     private List<Share> shares = new ArrayList<>();
 
 
-    @ManyToMany(mappedBy = "files")
+    @ManyToMany(mappedBy = "files", cascade = CascadeType.ALL)
     private List<Label> labels = new ArrayList<>();
 
     protected DataNode(FileType fileType, Member author) {
