@@ -1,6 +1,9 @@
-const { app, BrowserWindow } = require("electron");
+const { app, BrowserWindow, ipcMain } = require("electron");
 const path = require("path");
 const isDev = require("electron-is-dev");
+const context = require("./context");
+const apis = require("./apis");
+const fs = require('fs')
 
 let mainWindow;
 
@@ -34,6 +37,10 @@ function createWindow() {
   mainWindow.setResizable(true);
   mainWindow.on("closed", () => (mainWindow = null));
   mainWindow.focus();
+
+  whenStart()
+  ipcMain.handle('getFFMpegPath', context.getFFMpegPath),
+  ipcMain.handle('encodeFFMpeg', handleEncode)
 }
 
 app.on("ready", createWindow);
@@ -68,14 +75,7 @@ handleEncode(_, filepath){
   try {
     return await apis.encodeFFMpeg(ffmpegPath, dataDir, filepath)  
   } catch (e) {
-    console.log(e);
     return null;
   }
   
 }
-
-app.whenReady().then(() => {
-  whenStart()
-  ipcMain.handle('getFFMpegPath', context.getFFMpegPath),
-  ipcMain.handle('encodeFFMpeg', handleEncode)
-})

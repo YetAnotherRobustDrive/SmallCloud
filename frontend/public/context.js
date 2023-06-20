@@ -3,18 +3,23 @@ let appContext = {
   dataDir: null
 }
 
-export function getFFMpegPath() {
+function getFFMpegPath() {
   return appContext.ffmpegPath;
 }
 
-export function getDataDir() {
+function getDataDir() {
   return appContext.dataDir;
 }
 
-export function setFFMpegPath(path) {
+function setFFMpegPath(path) {
   appContext.ffmpegPath = path;
 }
 
-export function setDataDir(dir) {
+function setDataDir(dir) {
   appContext.dataDir = dir;
 }
+
+exports.getFFMpegPath = getFFMpegPath;
+exports.getDataDir = getDataDir;
+exports.setFFMpegPath = setFFMpegPath;
+exports.setDataDir = setDataDir;

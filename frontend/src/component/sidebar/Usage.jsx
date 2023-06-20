@@ -39,9 +39,9 @@ export default function Usage() {
     labels: [
     ],
     datasets: [{
-      data: [per, 100 - per],
+      data: [per, max - per],
       backgroundColor: function (context) {
-        return [getColor(per), 'rgb(255,255,255)'];
+        return [getColor(per, max), 'rgb(255,255,255)'];
       },
       borderColor: 'rgb(0, 0, 0)',
       borderWidth: 2,
@@ -61,10 +61,10 @@ export default function Usage() {
   )
 }
 
-function getColor(percent) {
-  var r = parseInt(106 + (149 * percent / 100)),
-    g = parseInt(236 - (70 * percent / 100)),
-    b = parseInt(120 + (13 * percent / 100));
+function getColor(percent, max) {
+  var r = parseInt(106 + (149 * percent / max)),
+    g = parseInt(236 - (70 * percent / max)),
+    b = parseInt(120 + (13 * percent / max));
 
   var RGB = [r, g, b];
   const rgbcode = '#'

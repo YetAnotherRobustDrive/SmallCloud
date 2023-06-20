@@ -1,15 +1,16 @@
-import which from "which";
-import path from "node:path";
-import { spawn } from "node:child_process"
-import { chdir } from "node:process"
-import { stat, readdir } from "node:fs";
 
-export async function
+const which = require('which');
+const path = require('path');
+const { spawn } = require('child_process');
+const { chdir } = require('process');
+const { stat, readdir, readFile, existsSync} = require('fs');
+
+async function
   getFFMpegPath() {
   return await which('ffmpeg', { nothrow: true });
 }
 
-export async function
+async function
   encodeFFMpeg(ffmpegPath, resDir, filepath) {
   const filename = path.parse(filepath).name
   const initSegName = `init-${filename}$RepresentationID$.$ext$`
@@ -65,4 +66,25 @@ export async function
   });
 }
 
+async function
+  getFromLocal(filepath) {
+  return new Promise((resolve, reject) => {
+    try {
+      if (!existsSync(filepath)) {
+        reject(new Error('File not found'));
+      }
+      readFile(filepath, (err, data) => {
+        if (err !== null)
+          reject(err);
+        else
+          resolve(new Blob([data]));
+      })
+    }
+    catch (e) {
+      reject(e);
+    }
+  })}
 
+exports.getFFMpegPath = getFFMpegPath;
+exports.encodeFFMpeg = encodeFFMpeg;
+exports.getFromLocal = getFromLocal;
