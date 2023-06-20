@@ -47,7 +47,6 @@ export default function LoginQuestionPage() {
             else {
                 SwalError(res[1]);
             }
-            return;
         }
         SwalAlert("success", "문의가 등록되었습니다.", () => { navigate("/login"); } );
     }
@@ -74,7 +73,7 @@ export default function LoginQuestionPage() {
                              }} />
                         </div>
                         <div className="buttons">
-                            <button>문의 등록</button>
+                            <input type="submit" value="문의하기" />
                         </div>
                         <Link to="/">돌아가기</Link>
                     </div>

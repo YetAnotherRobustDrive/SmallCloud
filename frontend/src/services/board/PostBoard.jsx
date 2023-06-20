@@ -1,7 +1,6 @@
 import RefreshToken from '../token/RefreshToken';
 
 export default async function PostBoard(value) {
-    await RefreshToken();
     const accessToken = localStorage.getItem("accessToken");
     let model;
     if (accessToken === null) {

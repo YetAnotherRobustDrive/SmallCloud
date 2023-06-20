@@ -10,12 +10,13 @@ export default function RuleInput(props) {
         e.stopPropagation();
         if (e.key === 'Enter') {
             e.preventDefault();
-            const value = document.getElementById("value" + props.code).value;
+            let value = document.getElementById("value" + props.code).value;
             if (value === "") {
                 SwalError("변경할 값을 입력해주세요.");
                 return;
             }
             const code = props.code;
+            value = 0 > parseInt(value) ? 0 : parseInt(value);
             const res = await AdminPostConfig(code, value);
             if(!res[0]){
                 SwalError(res[1]);

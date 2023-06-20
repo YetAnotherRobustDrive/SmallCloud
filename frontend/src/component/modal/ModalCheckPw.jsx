@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import Modal from 'react-modal';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, Link } from 'react-router-dom';
 import RefreshToken from "../../services/token/RefreshToken";
 import ElevateUser from '../../services/user/ElevateUser';
 import GetUserInfo from "../../services/user/GetUserInfo";
@@ -85,6 +85,7 @@ export default function ModalCheckPW(props) {
                     {isError &&
                         <span style={{ color: "red", paddingTop: "5px", textDecoration: "underline" }}>{message + "(" + count + ")"}</span>
                     }
+                    <Link to="/" style={{ textDecoration: "underline", paddingTop: "5px" }}>뒤로가기</Link>
                 </div>
             </Modal>
         </>
