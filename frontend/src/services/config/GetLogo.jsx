@@ -7,7 +7,7 @@ export default async function GetLogo() {
         return new Promise((resolve, reject) => {
             const xhr = new XMLHttpRequest();
             xhr.responseType = 'blob';
-            xhr.open('GET', localStorage.getItem("API_SERVER") + 'users/profile-photo', true);
+            xhr.open('GET', localStorage.getItem("API_SERVER") + 'users/profile-photo/logo', true);
             xhr.onreadystatechange = () => {
                 if (xhr.readyState === XMLHttpRequest.DONE) {
                     const res = xhr.response;
