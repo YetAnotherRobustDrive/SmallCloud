@@ -184,7 +184,7 @@ public class FileController {
 
     @Secured(Roles.S_COMMON)
     @PostMapping("/{fileId}/purge")
-    public void purge(@PathVariable("fileId") Long fileId) {
+    public void purge(@PathVariable("fileId") Long fileId) throws Exception {
         UserDetails userDetails = getLoginUser();
         fileFacadeService.purge(fileId, userDetails.getUsername());
     }

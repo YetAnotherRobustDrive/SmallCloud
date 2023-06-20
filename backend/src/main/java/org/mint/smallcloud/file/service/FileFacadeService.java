@@ -2,9 +2,12 @@ package org.mint.smallcloud.file.service;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+
+import org.mint.smallcloud.bucket.service.StorageService;
 import org.mint.smallcloud.exception.ExceptionStatus;
 import org.mint.smallcloud.exception.ServiceException;
 import org.mint.smallcloud.file.domain.File;
+import org.mint.smallcloud.file.domain.FileLocation;
 import org.mint.smallcloud.file.domain.Folder;
 import org.mint.smallcloud.file.dto.DirectoryMoveDto;
 import org.mint.smallcloud.file.dto.FileDto;
@@ -30,6 +33,7 @@ public class FileFacadeService {
     private final FileService fileService;
     private final FileRepository fileRepository;
     private final FileMapper fileMapper;
+    private final StorageService storageService;
 
     public void delete(Long fileId, String username) {
         File file = fileThrowerService.getFileById(fileId);
@@ -53,10 +57,12 @@ public class FileFacadeService {
         fileService.moveFile(targetFile, destFolder);
     }
 
-    public void purge(Long fileId, String username) {
+    public void purge(Long fileId, String username) throws Exception {
         File targetFile = fileThrowerService.getFileById(fileId);
         if(targetFile.getAuthor().getUsername().equals(username)) {
             targetFile.getLabels().clear();
+            FileLocation loc = targetFile.getLocation();
+            storageService.removeFile(loc.getLocation());
             fileRepository.delete(targetFile);
         }
         else
