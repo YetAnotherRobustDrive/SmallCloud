@@ -8,6 +8,8 @@ import SidebarAdmin from "../../component/sidebar/SidebarAdmin";
 
 import "../../css/admin.css";
 import AdminGetLogBy from "../../services/admin/AdminGetLogBy";
+import GetSearchUser from "../../services/user/GetSearchUser";
+import { MdPerson } from "react-icons/md";
 
 export default function AdminLogPage() {
 
@@ -19,6 +21,8 @@ export default function AdminLogPage() {
     const [page, setPage] = useState(0);
     const [option, setOption] = useState({});
     const [isDoSearch, setIsDoSearch] = useState(false);
+    const [searched, setSearched] = useState([]);
+    const [selected, setSelected] = useState(""); //검색된 유저 중 선택된 유저
 
     const actionList = [ //최신화 필요
         {
@@ -148,6 +152,9 @@ export default function AdminLogPage() {
                 delete value[key];
             }
         }
+        if (selected !== "") {
+            value["nickName"] = selected;
+        }
         setOption(value);
         setPage(0);
         setIsDoSearch(!isDoSearch);
@@ -163,7 +170,24 @@ export default function AdminLogPage() {
         getLog();
     }, [page, isDoSearch])
 
-
+    const handleOnChange = async (e) => {
+        if (e.target.value !== "") {
+            const userSearch = await GetSearchUser(e.target.value);
+            if (!userSearch[0]) {
+                return;
+            }
+            const user = userSearch[1].map((d) => {
+                return {
+                    "name": d,
+                    "type": "MEMBER",
+                }
+            })
+            setSearched([...user]);
+        }
+        else {
+            setSearched([]);
+        }
+    }
     return (
         <>
             <Header />
@@ -199,7 +223,34 @@ export default function AdminLogPage() {
                             </div>
                             <span className="title">닉네임</span>
                             <div className="userSelect" >
-                                <input className="user" type="text" name="nickName" placeholder="사용자 닉네임을 입력하세요. (입력하지 않으면 전체 검색)" />
+                                {selected !== "" &&
+                                    <div className="resultItem">
+                                        <div className="icon"><MdPerson /></div>
+                                        <span className="name">{selected}</span>
+                                        <span className="close" onClick={() => setSelected("")}>X</span>
+                                    </div>
+                                }
+                                {selected === "" &&
+                                    <input className="user" type="text" placeholder="사용자 닉네임을 입력하세요. (입력하지 않으면 전체 검색)"
+                                        onChange={handleOnChange} />
+                                }
+                                {searched.length !== 0 &&
+                                    <div className="searchResult">
+                                        {searched.map((item, index) => {
+                                            return (
+                                                <div className="resultItem" key={index} onClick={(e) => {
+                                                    e.stopPropagation();
+                                                    e.preventDefault();
+                                                    setSearched([]);
+                                                    setSelected(item.name)
+                                                }}>
+                                                    <div className="icon"><MdPerson /></div>
+                                                    <span className="name">{item.name}</span>
+                                                </div>
+                                            )
+                                        })}
+                                    </div>
+                                }
                             </div>
                             <div className="searchButton">
                                 <button type="reset">초기화</button>
