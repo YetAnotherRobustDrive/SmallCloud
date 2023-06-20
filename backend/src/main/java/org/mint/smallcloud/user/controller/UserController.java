@@ -141,6 +141,20 @@ public class UserController {
         
     }
 
+    @Secured({Roles.S_COMMON, Roles.S_PRIVILEGE, Roles.S_ADMIN})
+    @GetMapping("/profile-photo/logo")
+    public ResponseEntity<Resource> downloadAdminPhoto() {
+        PhotoDownloadResponseDto res =
+                memberFacadeService.downloadPhoto("admin");
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentLength(res.getContentLength());
+        headers.setContentType(MediaType.parseMediaType(res.getContentType()));
+        headers.setPragma("no-cache");
+        headers.setExpires(0);
+        headers.setCacheControl("no-cache, no-store, must-revalidate");
+        return new ResponseEntity<Resource>(res.getPhotoResource(), headers, HttpStatus.OK);
+    }
+
     @PostMapping("/password")
     public void updatePassword(@Valid @RequestBody PasswordUpdateRequestDto dto) {
         UserDetails user = userDetailsProvider
