@@ -61,7 +61,9 @@ class UserControllerTest {
     private EntityManager em;
 
     private Member admin;
+    private String adminPassword;
     private Member member1;
+    private String member1Password;
     private JwtTokenDto adminToken;
     private JwtTokenDto memberToken;
 
@@ -73,7 +75,8 @@ class UserControllerTest {
             .apply(documentationConfiguration(restDocumentation))
             .apply(springSecurity())
             .build();
-        admin = Member.createAdmin("admin", "pw1", "admin");
+        adminPassword = "adminPassword";
+        admin = Member.createAdmin("admin", adminPassword, "admin");
         em.persist(admin);
         adminToken = jwtTokenProvider.generateTokenDto(
             UserDetailsDto.builder()
@@ -83,7 +86,8 @@ class UserControllerTest {
                 .disabled(false)
                 .build()
         );
-        member1 = Member.of("user1", "pw1", "nickname");
+        member1Password = "pwMember1";
+        member1 = Member.of("user1", member1Password, "nickname");
         em.persist(member1);
         em.flush();
         memberToken = jwtTokenProvider.generateTokenDto(UserDetailsDto.builder()
@@ -195,7 +199,7 @@ class UserControllerTest {
             registerDto = RegisterFromAdminDto.builder()
                 .name(member1.getNickname())
                 .id(member1.getUsername())
-                .password(member1.getPassword())
+                .password(member1Password)
                 .build();
             mockMvc.perform(TestSnippet.securePost(url, adminToken.getAccessToken(), objectMapper, registerDto))
                 .andExpect(status().isForbidden())
@@ -378,7 +382,7 @@ class UserControllerTest {
         @BeforeEach
         public void boot() {
             passwordRequestDto = PasswordUpdateRequestDto.builder()
-                .password(member1.getPassword())
+                .password(member1Password)
                 .newPassword("newPw2")
                 .build();
         }
@@ -390,7 +394,7 @@ class UserControllerTest {
                 .andExpect(status().isOk())
                 .andExpect((rst) -> {
                     Member member = em.find(Member.class, member1.getId());
-                    assertEquals(member.getPassword(), passwordRequestDto.getNewPassword());
+                    assertTrue(member.verifyPassword(passwordRequestDto.getNewPassword()));
                 })
                 .andDo(document(DOCUMENT_NAME,
                     requestFields(
