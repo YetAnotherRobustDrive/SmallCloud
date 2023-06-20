@@ -37,6 +37,18 @@ create table if not exists `groups`
         foreign key (parent_group_id) references `groups` (group_id)
 );
 
+create table if not exists hibernate_sequence
+(
+    next_not_cached_value bigint(21)          not null,
+    minimum_value         bigint(21)          not null,
+    maximum_value         bigint(21)          not null,
+    start_value           bigint(21)          not null comment 'start value when sequences is created or value if RESTART is used',
+    increment             bigint(21)          not null comment 'increment value',
+    cache_size            bigint(21) unsigned not null,
+    cycle_option          tinyint(1) unsigned not null comment '0 if no cycles are allowed, 1 if the sequence should begin a new cycle when maximum_value is passed',
+    cycle_count           bigint(21)          not null comment 'How many cycles have been done'
+);
+
 create table if not exists members
 (
     member_id             bigint auto_increment
@@ -138,6 +150,18 @@ create table if not exists question
         foreign key (answer_id) references answer (answer_id)
 );
 
+create table if not exists segments
+(
+    id       bigint       not null
+        primary key,
+    location varchar(255) null,
+    name     varchar(255) null,
+    size     bigint       null,
+    file_id  bigint       null,
+    constraint FK33naunvt6pd93aiwjxemvt0ho
+        foreign key (file_id) references files (data_node_id)
+);
+
 create table if not exists shares
 (
     dtype    varchar(31) not null,
@@ -184,11 +208,3 @@ create table if not exists user_log
 );
 
 
-create table if not exists SEGMENTS
-(
-        id bigint auto_increment primary key,
-        FILE_ID bigint null,
-        location varchar(255) null,
-        `name` varchar(255) null,
-        `size` bigint null
-);
