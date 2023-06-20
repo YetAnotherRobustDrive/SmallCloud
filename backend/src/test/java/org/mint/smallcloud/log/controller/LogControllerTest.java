@@ -359,7 +359,7 @@ class LogControllerTest {
         void nicknameAndStatusFilter() throws Exception {
             requestLogDto = RequestLogDto.builder()
                     .nickName(member.getNickname())
-                    .status(true)
+                    .status(false)
                     .build();
             mockMvc.perform(TestSnippet.secured(post(url), adminToken.getAccessToken(), objectMapper, requestLogDto))
                     .andDo(print())

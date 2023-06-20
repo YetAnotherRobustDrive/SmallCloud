@@ -6,7 +6,6 @@ import org.mint.smallcloud.exception.ExceptionStatus;
 import org.mint.smallcloud.exception.ServiceException;
 import org.mint.smallcloud.security.UserDetailsProvider;
 import org.mint.smallcloud.security.dto.LoginDto;
-import org.mint.smallcloud.user.domain.Member;
 import org.mint.smallcloud.user.domain.Roles;
 import org.mint.smallcloud.user.dto.*;
 import org.mint.smallcloud.user.service.MemberFacadeService;
@@ -20,12 +19,9 @@ import org.springframework.security.access.annotation.Secured;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.server.ResponseStatusException;
 
 import javax.validation.Valid;
-
 import java.util.List;
-import java.util.Optional;
 
 @RestController
 @RequestMapping("/users")
@@ -77,9 +73,9 @@ public class UserController {
         userDetailsProvider
             .getUserDetails()
             .orElseThrow(() -> new ServiceException(ExceptionStatus.NO_PERMISSION));
-        List<String> usernames = memberFacadeService.search(q);
+        List<String> nickname = memberFacadeService.search(q);
         return ResponseDto.<List<String>>builder()
-            .result(usernames)
+            .result(nickname)
             .build();
     }
 

@@ -17,7 +17,6 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
-import javax.validation.Valid;
 import java.util.List;
 
 @RestController
@@ -48,7 +47,7 @@ public class LogController {
     @Secured({Roles.S_ADMIN})
     @PostMapping("/admin")
     public Page<ResponseLogDto> getAdminLogs(
-            @Valid @RequestBody RequestLogDto requestLogDto, Pageable pageable) {
+            @RequestBody RequestLogDto requestLogDto, Pageable pageable) {
         return logService.findLogs(requestLogDto, pageable);
     }
 }
