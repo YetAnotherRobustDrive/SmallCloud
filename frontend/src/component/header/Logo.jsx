@@ -25,7 +25,7 @@ export default function Logo(props) {
     return (
         <div className="logo">
             <img src={img} alt="LOGO" />
-            <span>{name}</span>
+            <div className="name">{name}</div>
         </div>
     )
 }
