@@ -46,5 +46,8 @@ public class File extends DataNode {
             && ((File) obj).getId().equals(this.getId());
     }
 
-
+    public void updateContents(String newLoc, Long newSize) {
+        location = FileLocation.of(newLoc);
+        this.size = newSize;
+    }
 }
