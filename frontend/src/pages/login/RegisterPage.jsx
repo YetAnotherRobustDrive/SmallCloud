@@ -107,8 +107,8 @@ export default function RegisterPage() {
             <input name="password_chk" type="password" placeholder="PW Check" />
             <input name="name" type="text" placeholder="Nickname" />
             <div className="buttons">
+                <button className="link" >회원가입</button>
                 <Link to='/login' className="link">로그인</Link>
-                <button className="link" >가입 신청</button>
             </div>
             <Link to='/login/ask'>가입에 문제가 있으신가요?</Link>
         </form>
