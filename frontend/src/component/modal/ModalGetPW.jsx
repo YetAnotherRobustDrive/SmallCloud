@@ -30,6 +30,10 @@ export default function ModalGetPW(props) {
         e.preventDefault();
         const inputData = new FormData(e.target);
         const value = Object.fromEntries(inputData.entries());
+        if (value.newPassword === "" || value.newPasswordConfirm === "" || value.password === "") {
+            SwalError("새 비밀번호를 입력해주세요.");
+            return;
+        }
         
         if (value.newPassword !== value.newPasswordConfirm) {
             SwalError("새 비밀번호가 일치하지 않습니다.");

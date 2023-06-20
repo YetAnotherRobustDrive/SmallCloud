@@ -138,9 +138,24 @@ export default function ModalFileview(props) {
         }, () => { });
     }
 
+    const handleLabelPrune = async (e) => {
+        e.stopPropagation();
+        e.preventDefault();
+        SwalConfirm("정말로 파일의 라벨을 모두 삭제하시겠습니까?", async () => {
+            const res = await PostLabelFile(fileData.id, []);
+            if (!res[0]) {
+                SwalError(res[1]);
+                return;
+            }
+            SwalAlert("success", "라벨이 모두 삭제되었습니다.", () => window.location.reload());
+        }, () => { });
+    }
 
     useEffect(() => {
         const editLabel = async () => {
+            if (newLables === "") {
+                return;
+            }
             let labelsForPost = [];
             newLables.split(/\s|#/).filter(Boolean).forEach(async (label) => {
                 labelsForPost.push(label);
@@ -201,7 +216,10 @@ export default function ModalFileview(props) {
                                 <div className="labels">
                                     <span>라벨</span>
                                     {(props.isDeleted !== true && fileData.isShared !== true) &&
-                                        <button onClick={handleLabelEdit} className="icon" ><TbEdit /></button>
+                                        <>
+                                            <button onClick={handleLabelEdit} className="icon" ><TbEdit /></button>
+                                            <button onClick={handleLabelPrune} className="icon" style={{marginLeft: "10px"}}><AiOutlineClose /></button>
+                                        </>
                                     }
                                     <div className="label">
                                         {fileData.labels.length === 0 ? "없음" : fileData.labels.map((label, index) => {

@@ -55,7 +55,7 @@ export default function Usage() {
       <div>
         <div style={{ paddingBottom: "10px", fontSize: "large" }}><b>사용량</b></div>
         <div><b>{actual}{unit}</b></div>
-        <div>/ {max}GB</div>
+        <div>/ {max === null ? "제한 없음" : max+"GB"}</div>
       </div>
     </div>
   )

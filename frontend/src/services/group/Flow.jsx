@@ -149,7 +149,9 @@ export default function Flow(props) {
                     type: 'remove',
                 },
             ]
+            console.log(changes);
             setNodes((eds) => applyNodeChanges(changes, eds))
+            setEdges((eds) => eds.filter((e) => e.source !== selected.id && e.target !== selected.id));
         }, () => {
             return;
         });

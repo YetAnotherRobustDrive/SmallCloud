@@ -9,9 +9,8 @@ import PostUnfavoriteFolder from "../../services/directory/PostUnfavoriteFolder"
 import ModalFolderShare from "../modal/ModalFolderShare";
 import ModalGetString from "../modal/ModalGetString";
 import SwalAlert from "../swal/SwalAlert";
-import SwalError from "../swal/SwalError";
-import Swal from 'sweetalert2';
 import SwalConfirm from "../swal/SwalConfirm";
+import SwalError from "../swal/SwalError";
 
 export default function ContextFolder(props) {
     const [isModalOpen, setIsModalOpen] = useState(false);
@@ -90,25 +89,28 @@ export default function ContextFolder(props) {
     }
 
     let options = [];
-    if (props.isFavorite === false) {
+    if (!props.isDeleted) {
+
+        if (props.isFavorite === false) {
+            options = [
+                ...options,
+                { label: "즐겨찾기 추가", onClick: () => { handleFavorite(true) } }
+            ];
+        }
+        else {
+            options = [
+                ...options,
+                { label: "즐겨찾기 삭제", onClick: () => { handleFavorite(false) } }
+            ];
+        }
         options = [
             ...options,
-            { label: "즐겨찾기 추가", onClick: () => { handleFavorite(true) } }
+            { label: "이름 변경", onClick: () => { setIsModalOpen(true) } },
+            { label: "공유 관리", onClick: () => { setIsShareOpen(true) } },
+            { label: "폴더 삭제", onClick: () => { handleDelete() } },
         ];
     }
-    else {
-        options = [
-            ...options,
-            { label: "즐겨찾기 삭제", onClick: () => { handleFavorite(false) } }
-        ];
-    }
-    options = [
-        ...options,
-        { label: "이름 변경", onClick: () => { setIsModalOpen(true) } },
-        { label: "공유 관리", onClick: () => { setIsShareOpen(true) } },
-        { label: "폴더 삭제", onClick: () => { handleDelete() } },
-    ];
-    if (props.isDeleted) {
+    else if (props.isDeleted) {
         options = [
             ...options,
             { label: "폴더 복원", onClick: () => { handleRestore() } },

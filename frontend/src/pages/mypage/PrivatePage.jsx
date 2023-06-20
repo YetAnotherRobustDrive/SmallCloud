@@ -20,7 +20,7 @@ export default function PrivatePage() {
     const [img, setImg] = useState(null);
     const [username, setUsername] = useState(null);
     const [nickname, setNickname] = useState(null);
-    const [group, setGroup] = useState("소속이 없습니다.");
+    const [group, setGroup] = useState("");
     const [joined, setJoined] = useState(null);
 
     const [isModalOpen, setIsModalOpen] = useState(false);
@@ -48,15 +48,19 @@ export default function PrivatePage() {
             const hour = ("0" + joinDate.getHours()).slice(-2);
             const min = ("0" + joinDate.getMinutes()).slice(-2);
             setJoined(year + "-" + month + "-" + day + ' ' + hour + ':' + min);
-            if (res[1].group !== null)
-                setGroup(res[1].group);
-
+            if (res[1].groupName !== null){
+                setGroup(res[1].groupName);
+            }
+            else {
+                setGroup("미지정");
+            }
             setImg(res[2]);
         }
 
         const getConfig = async () => {
             const res1 = await GetConfig("101");
             if (!res1[0]) {
+                setImg(res1[2]);
                 SwalError(res1[1]);
                 return;
             }
