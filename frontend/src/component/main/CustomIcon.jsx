@@ -83,7 +83,7 @@ export default function CustomIcon(props) {
             <div className="CustomIcon" draggable>
                 <label className="dropzone"
                     htmlFor="icon"
-                    onContextMenu={handleOnContextMenu}
+                    onContextMenu={ props.noContext ? (e) => {e.stopPropagation(); e.preventDefault()} : handleOnContextMenu}
                     onClick={handleOnClick}
                     onDragEnd={handelDragEnd}
                     onDragOver={handelDragOver}

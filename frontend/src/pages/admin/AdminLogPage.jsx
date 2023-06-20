@@ -152,7 +152,7 @@ export default function AdminLogPage() {
             }
         }
         if (selected !== "") {
-            value["nickName"] = selected;
+            value["userName"] = selected;
         }
         setOption(value);
         setPage(0);
@@ -220,7 +220,7 @@ export default function AdminLogPage() {
                                 <span className="between">~</span>
                                 <input className="end" type="datetime-local" name="endTime" />
                             </div>
-                            <span className="title">닉네임</span>
+                            <span className="title">아이디</span>
                             <div className="userSelect" >
                                 {selected !== "" &&
                                     <div className="resultItem">
@@ -230,7 +230,7 @@ export default function AdminLogPage() {
                                     </div>
                                 }
                                 {selected === "" &&
-                                    <input className="user" type="text" placeholder="사용자 닉네임을 입력하세요. (입력하지 않으면 전체 검색)"
+                                    <input className="user" type="text" placeholder="사용자 아이디를 입력하세요. (입력하지 않으면 전체 검색)"
                                         onChange={handleOnChange} />
                                 }
                                 {searched.length !== 0 &&
