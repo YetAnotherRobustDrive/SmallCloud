@@ -140,7 +140,7 @@ create table if not exists question
 
 create table if not exists segments
 (
-    id       bigint       not null
+    id bigint auto_increment
         primary key,
     location varchar(255) null,
     name     varchar(255) null,
