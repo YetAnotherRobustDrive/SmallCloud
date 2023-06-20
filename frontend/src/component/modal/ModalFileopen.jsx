@@ -27,16 +27,29 @@ export default function ModalFileopen(props) {
             }
             getImg();
         }
+        else if (props.type === "mpd") {
+            const play = async () => {
+                const innerBox = window.document.querySelector(".preview");
+                const player = window.document.querySelector("video");
+                player.hidden = false;
+                player.style.width = innerBox.offsetWidth + "px";
+                player.style.height = innerBox.offsetHeight + "px";
+                player.style.position = "absolute";
+                player.style.zIndex = "100";
+                window.player.load(localStorage.getItem("API_SERVER") + "files/" + props.id + "?token=" + localStorage.getItem("accessToken"))
+            }
+            play();
+        }
     }, [])
 
     return (
         <div className="fileopen">
             {loading !== 0 && <ModalLoading isOpen={loading !== 0} />}
             <div className="preview">
-                {!imgType.includes(props.type) &&
+                {(!imgType.includes(props.type) && props.type !== "mpd") &&
                     <div className="inner">
                         <span>
-                        "미디어 파일이 아닙니다."
+                            "미디어 파일이 아닙니다."
                         </span>
                     </div>
                 }
@@ -44,7 +57,12 @@ export default function ModalFileopen(props) {
                     <img src={img} alt="loading..." className="inner" />
                 }
             </div>
-            <div className="fileopen-close" onClick={() => props.after()}><AiOutlineClose /></div>
+            <div className="fileopen-close" onClick={() => {
+                window.document.querySelector("video").hidden = true;
+                window.document.querySelector("video").pause();
+                props.after()
+            }
+            }><AiOutlineClose /></div>
         </div>
     )
 

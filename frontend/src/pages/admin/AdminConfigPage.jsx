@@ -124,8 +124,8 @@ export default function AdminConfigPage() {
                     text="비밀번호 정책"
                 >
                     <RuleBox
-                        title="특수문자, 숫자, 알파벳 대문자 조합 사용"
-                        desc="비밀번호에 특수문자와 숫자, 알파벳 대문자를 모두 사용하도록 설정합니다.">
+                        title="특수문자, 숫자, 알파벳 조합 사용"
+                        desc="비밀번호에 특수문자와 숫자, 알파벳을 모두 사용하도록 설정합니다.">
                         <div onClick={() => handleToggleSubmit(201)} className="tgBtn">
                             <div className="stateText">{configNow[201] === "true" ? "ON" : "OFF"}</div>
                             {configNow[201] === "true" ? <BsToggleOn /> : <BsToggleOff />}

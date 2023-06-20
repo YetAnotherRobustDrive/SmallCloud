@@ -105,7 +105,7 @@ export default function ModalFileview(props) {
         if (fileData.isFavorite) {
             const res = await PostUnfavoriteFile(fileData.id);
             if (!res[0]) {
-                SwalError(res[1]);                
+                SwalError(res[1]);
                 return;
             }
         }
@@ -155,6 +155,7 @@ export default function ModalFileview(props) {
     useEffect(() => {
         setShares(fileData.shares);
     }, [shares])
+
     return (
         <>
             {!isNowDownload &&
@@ -170,9 +171,14 @@ export default function ModalFileview(props) {
                                 }
                                 <div className='icon' onClick={handleDownload}><GoCloudDownload /></div>
                             </>}
-                            {props.isDeleted === true && <div className='icon' onClick={handlePurge}><TbFileShredder /></div> }
+                            {props.isDeleted === true && <div className='icon' onClick={handlePurge}><TbFileShredder /></div>}
                             <div className='icon' onClick={() => setIsFileOpen(true)}><MdOpenInFull /></div>
-                            <div className='icon' onClick={() => props.after()}><AiOutlineClose /></div>
+                            <div className='icon' onClick={() => {
+
+                                window.document.querySelector("video").hidden = true;
+                                window.document.querySelector("video").pause();
+                                props.after()
+                            }}><AiOutlineClose /></div>
                         </div>
                     </div>
                     <div className="body">

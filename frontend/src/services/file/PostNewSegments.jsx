@@ -1,34 +1,26 @@
 import RefreshToken from "../token/RefreshToken";
  
 
-export default async function PostNewFile(value, setter, after) {
+export default async function PostNewSegments(value, fileId) {
     await RefreshToken();
     const accessToken = localStorage.getItem("accessToken");
     
-
     try {
         const upload = async () => {
             return new Promise((resolve, reject) => {
                 const xhr = new XMLHttpRequest();
-                xhr.open('POST', localStorage.getItem("API_SERVER") + 'files', true);
-                xhr.upload.addEventListener("progress", (e) => {
-                    const percentage = (e.loaded / e.total) * 100;
-                    setter(percentage);
-                });
+                xhr.open('POST', localStorage.getItem("API_SERVER") + 'segments/' + fileId, true);
                 xhr.onreadystatechange = () => {
                     if (xhr.readyState === XMLHttpRequest.DONE) {
-                        const res = JSON.parse(xhr.responseText);
-                        if (xhr.status !== 200) {           
-                            setter(0);
-                            
-                            resolve(res);
+                        if (xhr.status !== 200) {       
+                            reject({
+                                status: xhr.status,
+                            })
                         }
                         else {
-                            const tRes = {
-                                "status": 200,
-                                "data": res
-                            }
-                            resolve(tRes);
+                            resolve({
+                                status: 200
+                            });
                         }
                     }
                 }
@@ -39,8 +31,7 @@ export default async function PostNewFile(value, setter, after) {
 
         const res = await upload();
         if (res.status === 200) {
-            after();
-            return [true, res.data];  //성공
+            return [true, ''];  //성공
         }
         else {
             throw res; //실패
