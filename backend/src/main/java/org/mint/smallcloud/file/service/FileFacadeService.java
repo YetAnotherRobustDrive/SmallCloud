@@ -55,7 +55,7 @@ public class FileFacadeService {
 
     public void purge(Long fileId, String username) {
         File targetFile = fileThrowerService.getFileById(fileId);
-        if (targetFile.canAccessUser(username))
+        if(targetFile.getAuthor().getUsername().equals(username))
             fileRepository.delete(targetFile);
         else
             throw new ServiceException(ExceptionStatus.NO_PERMISSION);
