@@ -34,13 +34,16 @@ public class LogService {
                 pageable);
 
         return userLogs.map(m ->
-            ResponseLogDto.builder()
-                    .action(m.getAction())
-                    .localDateTime(m.getTime())
-                    .nickName(m.getMember().getNickname())
-                    .status(m.getStatus())
-                    .ipAddr(m.getIpAddr())
-                    .build());
+                {
+                    String nickname = m.getMember() == null ? null : m.getMember().getNickname();
+                return ResponseLogDto.builder()
+                        .action(m.getAction())
+                        .localDateTime(m.getTime())
+                        .nickName(nickname)
+                        .status(m.getStatus())
+                        .ipAddr(m.getIpAddr())
+                        .build();
+                });
     }
 
 
