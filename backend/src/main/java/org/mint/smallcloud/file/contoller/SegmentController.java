@@ -1,14 +1,8 @@
 package org.mint.smallcloud.file.contoller;
 
-import java.io.ByteArrayInputStream;
-import java.io.InputStream;
-import java.net.URLConnection;
-import java.nio.charset.StandardCharsets;
-import java.util.List;
-import java.util.Optional;
-
-import javax.servlet.http.HttpServletRequest;
-
+import lombok.Builder;
+import lombok.Getter;
+import lombok.RequiredArgsConstructor;
 import org.mint.smallcloud.bucket.dto.FileObjectDto;
 import org.mint.smallcloud.bucket.service.StorageService;
 import org.mint.smallcloud.exception.ExceptionStatus;
@@ -30,18 +24,17 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.server.ResponseStatusException;
 
-import lombok.Builder;
-import lombok.Getter;
-import lombok.RequiredArgsConstructor;
+import javax.servlet.http.HttpServletRequest;
+import java.io.ByteArrayInputStream;
+import java.io.InputStream;
+import java.net.URLConnection;
+import java.nio.charset.StandardCharsets;
+import java.util.List;
+import java.util.Optional;
 
 @RestController
 @RequiredArgsConstructor
@@ -141,9 +134,7 @@ public class SegmentController {
             throw new ResponseStatusException(HttpStatus.FORBIDDEN, "auth/forbidden");            
 
         String fileName = formFile.getOriginalFilename();
-        String mimeType = request.getServletContext().getMimeType(fileName);
-        if (mimeType == null) 
-            mimeType = "application/octet-stream";
+        String mimeType = "application/dash+xml";
         File file = File.of(folder, FileType.of(fileName, mimeType),
                             null, 0L, memberOpt.get());
         file = fileRepository.save(file);
