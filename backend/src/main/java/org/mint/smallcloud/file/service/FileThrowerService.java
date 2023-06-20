@@ -20,7 +20,7 @@ public class FileThrowerService {
     }
 
     public void checkAccessRight(File file, String username) {
-        if (!file.canAccessUser(username)) {
+        if (!file.getAuthor().getUsername().equals(username)) {
             throw new ServiceException(ExceptionStatus.NO_PERMISSION);
         }
     }
