@@ -28,12 +28,7 @@ public class Label {
     @JoinColumn(name = "OWNER")
     private Member owner;
 
-    @ManyToMany(cascade = CascadeType.ALL)
-    @JoinTable(
-        name = "LABEL_DATA_NODE",
-        joinColumns = @JoinColumn(name = "LABEL_ID"),
-        inverseJoinColumns = @JoinColumn(name = "DATA_NODE_ID")
-    )
+    @ManyToMany(mappedBy = "labels" ,cascade = CascadeType.ALL)
     private List<DataNode> files = new ArrayList<>();
 
     protected Label(String name, Member owner) {
