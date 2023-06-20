@@ -117,7 +117,7 @@ public class MemberService {
         if (q.isBlank())
             return List.<String>of();
         return memberRepository
-            .findByUsernameLike("%" + q + "%")
+            .findByNicknameLike("%" + q + "%")
             .stream().filter(e -> !e.isRole(Role.ADMIN)).map(Member::getUsername).collect(Collectors.toList());
     }
 

@@ -356,8 +356,11 @@ class UserControllerTest {
         @DisplayName("정상 요청")
         @Test
         void ok() throws Exception {
-            mockMvc.perform(TestSnippet.secured(get(url, "ser"), adminToken.getAccessToken()))
+            mockMvc.perform(TestSnippet.secured(get(url, "nic"), adminToken.getAccessToken()))
                 .andExpect(status().isOk())
+                    .andExpect(result -> {
+                        System.out.println(result.getResponse().getContentAsString());
+                    })
                 .andExpect(jsonPath("$.result.length()").value(3))
                 .andDo(document(DOCUMENT_NAME,
                     requestParameters(
