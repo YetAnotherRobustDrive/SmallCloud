@@ -140,7 +140,7 @@ public class SegmentController {
         file = fileRepository.save(file);
         
         String contents = new String(formFile.getBytes(), StandardCharsets.UTF_8);
-        String modified = insertBaseURL(contents, String.format("/segments/%d", file.getId()));
+        String modified = insertBaseURL(contents, String.format("/segments/%d/", file.getId()));
         byte[] modifiedBytes = modified.getBytes();
         Long size = (long) modifiedBytes.length;
         InputStream stream = new ByteArrayInputStream(modifiedBytes);
