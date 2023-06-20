@@ -31,6 +31,7 @@ import MyPage from './mypage/MyPage';
 import PrivatePage from './mypage/PrivatePage';
 import SecurityInfoPage from './mypage/SecurityInfoPage';
 import ServiceInfoPage from './mypage/ServiceInfoPage';
+import AdminLogoConfigPage from './admin/AdminLogoConfigPage';
 
 export default function ConditionalRoute() {
     const isPrivileged = useSelector(state => state.token.isPrivileged);
@@ -57,6 +58,7 @@ export default function ConditionalRoute() {
                                 <Route path='/admin/term' element={<AdminTermUploadPage />} />
                                 <Route path='/admin/privacy' element={<AdminPrivacyUploadPage />} />
                                 <Route path='/admin/log' element={<AdminLogPage />} />
+                                <Route path='/admin/config' element={<AdminLogoConfigPage />} />
                             </>
                         }
                         {!isAdmin &&

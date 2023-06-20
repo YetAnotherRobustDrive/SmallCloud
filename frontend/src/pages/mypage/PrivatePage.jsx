@@ -94,6 +94,9 @@ export default function PrivatePage() {
     const handleImgChange = (e) => {
         setIsImgChanged(true);
         const file = e.target.files[0];
+        if (file !== typeof(Blob)) {
+            return;
+        }
         const reader = new FileReader();
         reader.readAsDataURL(file);
 

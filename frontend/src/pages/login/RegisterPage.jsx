@@ -1,22 +1,33 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import SwalAlert from "../../component/swal/SwalAlert";
 import SwalError from "../../component/swal/SwalError";
-import configData from "../../config/config.json"
-import logo_img from '../../config/img/logo.png';
 import "../../css/login.css";
 import "../../css/modal.css";
 import GetConfig from "../../services/config/GetConfig";
+import GetLogo from "../../services/config/GetLogo";
+import GetName from "../../services/config/GetName";
 
 export default function RegisterPage() {
 
     const [name, setName] = useState();
+    const [img, setImg] = useState();
 
     const moveTo = useNavigate();
 
-    const getName = () => {
-        setName(configData.NAME);
-    }
+    useEffect(() => {
+        const getLogo = async () => {
+            const res = await GetLogo();
+            setImg(res);
+        }
+
+        const getName = async () => {
+            const res = await GetName();
+            setName(res);
+        }
+        getLogo();
+        getName();
+    }, [])
 
     const afterSuccess = () => {
         moveTo("/login");
@@ -88,8 +99,8 @@ export default function RegisterPage() {
         }
     }
     return (
-        <form className="login" onLoad={getName} onSubmit={handleSubmit}>
-            <img src={logo_img} alt="LOGO" />
+        <form className="login" onSubmit={handleSubmit}>
+            <img src={img} alt="LOGO" />
             <span className="namespan">{name}</span>
             <input name="id" type="text" placeholder="ID" />
             <input name="password" type="password" placeholder="PW" />
