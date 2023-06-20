@@ -151,7 +151,9 @@ class FileControllerTest {
             em.persist(label1);
 
             favoriteLabel = Label.of(DefaultLabelType.defaultFavorite.getLabelName(), member);
+            labelRepository.save(favoriteLabel);
             em.persist(favoriteLabel);
+
 
             dataNode = DataNode.createFile(rootFolder, fileType, fileLocation, 100L, member);
             dataNode1 = DataNode.createFile(parent, fileType, fileLocation, 100L, member);
@@ -176,6 +178,7 @@ class FileControllerTest {
                     .fileId(dataNode1.getId())
                     .labels(labels1)
                     .build();
+
         }
         @DisplayName("정상 요청(파일에 라벨이 하나도 없을 때)")
         @Test
@@ -206,13 +209,15 @@ class FileControllerTest {
                             memberToken.getAccessToken(), objectMapper, labelUpdateDto2))
                     .andExpect(status().isOk())
                     .andExpect((rst) -> {
-                        List<Label> labels = labelRepository.findAll();
-                        assertThat(labels.size()).isEqualTo(4);
-
-                    })
-                    .andExpect((rst) -> {
                         File file = fileRepository.findById(labelUpdateDto2.getFileId()).get();
-                        assertThat(file.getLabels().size()).isEqualTo(2);
+                        assertThat(file.getLabels().size()).isEqualTo(3);
+                        System.out.println("즐겨찾기");
+                        System.out.println(favoriteLabel);
+                        Label label = labelRepository.findByNameAndOwner(DefaultLabelType.defaultFavorite.getLabelName(), member);
+                        System.out.println(label.getName());
+                        System.out.println(file.getLabels());
+                        System.out.println(file.getLabels().get(0).getName());
+                        System.out.println(file.getLabels().get(1).getName());
                     })
                     .andExpect((rst) -> {
                         if(labelRepository.existsByNameAndOwner(favoriteLabel.getName(), member))

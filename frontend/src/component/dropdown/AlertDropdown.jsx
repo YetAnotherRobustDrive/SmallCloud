@@ -4,10 +4,12 @@ import { BsBell } from "react-icons/bs"
 import GetFiveAlarm from "../../services/alarm/GetFiveAlarm";
 import PostDeleteAlarm from "../../services/alarm/PostDeleteAlarm";
 import SwalAlert from "../swal/SwalAlert";
+import { useSelector } from "react-redux";
 export default function AlertDropdown() {
 
     const [alarms, setAlarms] = useState([]);
     const [count, setCount] = useState(0);
+    const isAdmin = useSelector(state => state.token.isAdmin);
 
     useEffect(() => {
         const getAlarm = async () => {
@@ -19,7 +21,9 @@ export default function AlertDropdown() {
             setAlarms(res[1].notificationDtoList);
             setCount(res[1].count);
         }
-        getAlarm();
+        if (!isAdmin) {
+            getAlarm();
+        }
     }, [count]);
 
     const [isOpen, setIsOpen] = useState(false);

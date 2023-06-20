@@ -129,7 +129,7 @@ public class FileController {
         File file = fileOpt.get();
 
         // authority
-        if (!file.getAuthor().equals(member))
+        if (!file.canAccessUser(member))
             throw new ResponseStatusException(HttpStatus.FORBIDDEN, "auth/forbidden");
 
         InputStream stream = storageService.downloadFile(file.getLocation().getLocation());

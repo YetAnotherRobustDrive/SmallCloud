@@ -60,7 +60,7 @@ public class LabelService {
         List<Label> labels = dataNode.getLabels();
         for (Iterator<Label> iterator = labels.iterator(); iterator.hasNext();) {
             Label label = iterator.next();
-            if (!labelUpdateDto.getLabels().contains(label.getName())) {
+            if (!labelUpdateDto.getLabels().contains(label.getName()) && label != labelRepository.findByNameAndOwner(DefaultLabelType.defaultFavorite.getLabelName(), member)) {
                 iterator.remove();
                 remove(label.getName(), dataNode, member);
             }
@@ -72,9 +72,6 @@ public class LabelService {
                     Label labelSaved = register(Label.of(label, member));
                     labelSaved.addFile(dataNode);
                 });
-        Label favoriteLabel = Label.of(DefaultLabelType.defaultFavorite.name(), member);
-        if(labels.contains(favoriteLabel))
-            dataNode.addLabel(favoriteLabel);
     }
     public LabelFilesDto search(String labelName, String userName) {
         Member member = memberThrowerService.getMemberByUsername(userName);

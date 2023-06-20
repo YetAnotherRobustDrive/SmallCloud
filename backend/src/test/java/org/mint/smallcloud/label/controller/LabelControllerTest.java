@@ -7,11 +7,8 @@ import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mint.smallcloud.TestSnippet;
-import org.mint.smallcloud.file.domain.DataNode;
-import org.mint.smallcloud.file.domain.FileLocation;
-import org.mint.smallcloud.file.domain.FileType;
-import org.mint.smallcloud.file.domain.Folder;
-import org.mint.smallcloud.file.repository.DataNodeRepository;
+import org.mint.smallcloud.file.domain.*;
+import org.mint.smallcloud.file.repository.FileRepository;
 import org.mint.smallcloud.label.domain.DefaultLabelType;
 import org.mint.smallcloud.label.domain.Label;
 import org.mint.smallcloud.label.repository.LabelRepository;
@@ -60,7 +57,7 @@ class LabelControllerTest {
     @Autowired
     private LabelRepository labelRepository;
     @Autowired
-    private DataNodeRepository dataNodeRepository;
+    private FileRepository fileRepository;
     private MockMvc mockMvc;
     private final String URL_PREFIX = "/labels";
     private final String DOCUMENT_NAME = "Labels/{ClassName}/{methodName}";
@@ -201,6 +198,9 @@ class LabelControllerTest {
                     .andExpect(status().isOk())
                     .andExpect((rst) -> {
                         Label label1 = labelRepository.findByNameAndOwner(trashLabel.getName(), member);
+                        List<File> file = fileRepository.findDataNodeByLabelNameAndOwner(trashLabel.getName(), member.getUsername());
+                        System.out.println(file.size());
+                        System.out.println(file);
                         List<DataNode> files = label1.getFiles();
                         assertThat(files.size()).isEqualTo(4);
                         assertThat(files.contains(dataNode)).isTrue();
