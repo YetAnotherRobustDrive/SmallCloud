@@ -46,7 +46,7 @@ create table if not exists members
     joined_date           datetime(6)  null,
     locked                bit          null,
     nickname              varchar(15)  not null,
-    password              varchar(15)  not null,
+    password              varchar(60)  not null,
     location              varchar(40)  null,
     role                  varchar(255) null,
     username              varchar(15)  not null,
