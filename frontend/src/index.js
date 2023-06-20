@@ -6,6 +6,7 @@ import store from './store/store'
 import ConditionalRoute from './pages/ConditionalRoute';
 import { PersistGate } from 'redux-persist/integration/react';
 import persistStore from 'redux-persist/es/persistStore';
+import SwalError from './component/swal/SwalError';
 
 const container = document.getElementById('root');
 const root = createRoot(container);

@@ -12,7 +12,6 @@ import GetSearchUser from "../../services/user/GetSearchUser";
 import { MdPerson } from "react-icons/md";
 
 export default function AdminLogPage() {
-
     const [isOpen, setIsOpen] = useState(false);
     const [log, setLog] = useState({
         content: [],
