@@ -26,7 +26,7 @@ public class UserLogRepository {
     public Page<UserLog> findLogs(String nickname, LocalDateTime startTime, LocalDateTime endTime, Boolean status, String action, Pageable pageable) {
         String selectJpql = "select ul";
         String countingJpqlSelect = "select count(ul)";
-        String fromJpql = " from UserLog ul join ul.member m";
+        String fromJpql = " from UserLog ul left join ul.member m";
         String orderByJpql = " order by ul.time desc";
         List<String> conditionsWhereJpql = new ArrayList<>();
         if (nickname != null)
