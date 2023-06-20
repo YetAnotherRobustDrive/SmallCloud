@@ -20,6 +20,7 @@ export default async function PostNewFile(value, setter, after) {
                         const res = JSON.parse(xhr.responseText);
                         if (xhr.status !== 200) {           
                             setter(0);
+                            
                             resolve(res);
                         }
                         else {

@@ -32,6 +32,7 @@ import PrivatePage from './mypage/PrivatePage';
 import SecurityInfoPage from './mypage/SecurityInfoPage';
 import ServiceInfoPage from './mypage/ServiceInfoPage';
 import AdminLogoConfigPage from './admin/AdminLogoConfigPage';
+import ConfigPage from './common/ConfigPage';
 
 export default function ConditionalRoute() {
     const isPrivileged = useSelector(state => state.token.isPrivileged);
@@ -41,62 +42,70 @@ export default function ConditionalRoute() {
     return (
         <Router>
             <Routes>
-                <>
-                    {isAdmin &&
-                        <>
-                            <Route path='/login' element={<LoginPage />} />
-                            <Route path='/logout' element={<LogoutUser />} />
-                            <Route path='/' element={<AdminConfigPage />} />
-                            <Route path='/admin' element={<AdminConfigPage />} />
-                            <Route path='/admin/rules' element={<AdminConfigPage />} />
-                            <Route path='/admin/user' element={<AdminUserCtrlPage />} />
-                            <Route path='/admin/group' element={<AdminGroupConfigPage />} />
-                            <Route path='/admin/user/register' element={<AdminUserRegister />} />
-                            <Route path='/admin/questions' element={<AdminQuestionList />} />
-                            <Route path='/admin/notice' element={<AdminNoticeUploadPage />} />
-                            <Route path='/admin/faq' element={<AdminFAQUploadPage />} />
-                            <Route path='/admin/term' element={<AdminTermUploadPage />} />
-                            <Route path='/admin/privacy' element={<AdminPrivacyUploadPage />} />
-                            <Route path='/admin/log' element={<AdminLogPage />} />
-                            <Route path='/admin/config' element={<AdminLogoConfigPage />} />
-                            <Route path='/cs/notice' element={<NoticePage />} />
-                            <Route path='/cs/terms' element={<TermsPage />} />
-                            <Route path='/cs/faq' element={<FaqPage />} />
-                        </>
-                    }
-                    {!isAdmin &&
-                        <>
-                            <Route exact path='/' element={isLoggedIn ? <MainPage /> : <LoginPage />} />
-                            <Route path='/register' element={<RegisterPage />} />
+                {localStorage.getItem("API_SERVER") === null &&
+                    <Route path='*' element={<ConfigPage />} />
+                }
+                {localStorage.getItem("API_SERVER") !== null &&
+                    <>
+                        {isAdmin &&
+                            <>
+                                <Route path='/login' element={<LoginPage />} />
+                                <Route path='/logout' element={<LogoutUser />} />
+                                <Route path='/' element={<AdminConfigPage />} />
+                                <Route path='/admin' element={<AdminConfigPage />} />
+                                <Route path='/admin/rules' element={<AdminConfigPage />} />
+                                <Route path='/admin/user' element={<AdminUserCtrlPage />} />
+                                <Route path='/admin/group' element={<AdminGroupConfigPage />} />
+                                <Route path='/admin/user/register' element={<AdminUserRegister />} />
+                                <Route path='/admin/questions' element={<AdminQuestionList />} />
+                                <Route path='/admin/notice' element={<AdminNoticeUploadPage />} />
+                                <Route path='/admin/faq' element={<AdminFAQUploadPage />} />
+                                <Route path='/admin/term' element={<AdminTermUploadPage />} />
+                                <Route path='/admin/privacy' element={<AdminPrivacyUploadPage />} />
+                                <Route path='/admin/log' element={<AdminLogPage />} />
+                                <Route path='/admin/config' element={<AdminLogoConfigPage />} />
 
-                            <Route path='/login' element={<LoginPage />} />
-                            <Route path='/login/ask' element={<LoginQuestionPage />} />
-                            {isLoggedIn &&
-                                <>
-                                    <Route path='/logout' element={<LogoutUser />} />
-                                    <Route path='/favorites' element={<FavoritesPage />} />
-                                    <Route path='/trash' element={<TrashBinPage />} />
-                                    <Route path='/share' element={<SharePage />} />
-                                    <Route path='/search' element={<SearchPage />} />
+                                <Route path='/cs/notice' element={<NoticePage />} />
+                                <Route path='/cs/terms' element={<TermsPage />} />
+                                <Route path='/cs/faq' element={<FaqPage />} />
+                                <Route path='/cs/question' element={<QuestionPage />} />
+                                <Route path='/cs/groups' element={<Groups />} />
+                            </>
+                        }
+                        {!isAdmin &&
+                            <>
+                                <Route exact path='/' element={isLoggedIn ? <MainPage /> : <LoginPage />} />
+                                <Route path='/register' element={<RegisterPage />} />
 
-                                    <Route path='/folder/:fileID' element={<FolderPage />} />
+                                <Route path='/login' element={<LoginPage />} />
+                                <Route path='/login/ask' element={<LoginQuestionPage />} />
+                                {isLoggedIn &&
+                                    <>
+                                        <Route path='/logout' element={<LogoutUser />} />
+                                        <Route path='/favorites' element={<FavoritesPage />} />
+                                        <Route path='/trash' element={<TrashBinPage />} />
+                                        <Route path='/share' element={<SharePage />} />
+                                        <Route path='/search' element={<SearchPage />} />
 
-                                    <Route path='/mypage' element={isPrivileged ? <PrivatePage /> : <MyPage />} />
-                                    <Route path='/mypage/service' element={isPrivileged ? <ServiceInfoPage /> : <MyPage />} />
-                                    <Route path='/mypage/security' element={isPrivileged ? <SecurityInfoPage /> : <MyPage />} />
+                                        <Route path='/folder/:fileID' element={<FolderPage />} />
 
-                                    <Route path='/cs/notice' element={<NoticePage />} />
-                                    <Route path='/cs/terms' element={<TermsPage />} />
-                                    <Route path='/cs/faq' element={<FaqPage />} />
-                                    <Route path='/cs/question' element={<QuestionPage />} />
-                                    <Route path='/cs/groups' element={<Groups />} />
+                                        <Route path='/mypage' element={isPrivileged ? <PrivatePage /> : <MyPage />} />
+                                        <Route path='/mypage/service' element={isPrivileged ? <ServiceInfoPage /> : <MyPage />} />
+                                        <Route path='/mypage/security' element={isPrivileged ? <SecurityInfoPage /> : <MyPage />} />
 
-                                </>
-                            }
-                        </>
-                    }
-                    <Route path="*" element={<ErrorPage />} />
-                </>
+                                        <Route path='/cs/notice' element={<NoticePage />} />
+                                        <Route path='/cs/terms' element={<TermsPage />} />
+                                        <Route path='/cs/faq' element={<FaqPage />} />
+                                        <Route path='/cs/question' element={<QuestionPage />} />
+                                        <Route path='/cs/groups' element={<Groups />} />
+
+                                    </>
+                                }
+                            </>
+                        }
+                        <Route path="*" element={<ErrorPage />} />
+                    </>
+                }
             </Routes>
         </Router>
     )

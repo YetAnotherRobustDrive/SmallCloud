@@ -12,6 +12,7 @@ function createWindow() {
       nodeIntegration: true,
       enableRemoteModule: true,
       devTools: isDev,
+      preload: path.join(__dirname, "preload.js")
     },
     minWidth: 1130,
     minHeight: 856,
@@ -48,3 +49,33 @@ app.on("activate", () => {
     createWindow();
   }
 });
+
+async function whenStart() {
+  const appDir = app.getAppPath()
+  const dataDir = path.join(appDir, 'data')
+  const ffmpegPath = await apis.getFFMpegPath();
+  fs.mkdir(dataDir, { recursive: true }, () => {})
+  context.setDataDir(dataDir)
+  context.setFFMpegPath(ffmpegPath)
+}
+
+async function
+handleEncode(_, filepath){
+  let ffmpegPath = context.getFFMpegPath();
+  let dataDir = context.getDataDir();
+  if (ffmpegPath === null || dataDir === null)
+    return null;
+  try {
+    return await apis.encodeFFMpeg(ffmpegPath, dataDir, filepath)  
+  } catch (e) {
+    console.log(e);
+    return null;
+  }
+  
+}
+
+app.whenReady().then(() => {
+  whenStart()
+  ipcMain.handle('getFFMpegPath', context.getFFMpegPath),
+  ipcMain.handle('encodeFFMpeg', handleEncode)
+})
