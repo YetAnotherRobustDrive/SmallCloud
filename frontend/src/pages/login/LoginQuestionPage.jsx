@@ -1,14 +1,25 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import SwalAlert from "../../component/swal/SwalAlert";
 import SwalError from "../../component/swal/SwalError";
-import logo_img from '../../config/img/logo.png';
 import "../../css/login.css";
 import "../../css/modal.css";
 import PostBoard from "../../services/board/PostBoard";
+import GetLogo from "../../services/config/GetLogo";
 
 export default function LoginQuestionPage() {
     const navigate = useNavigate();
+    const [img, setImg] = useState();
+
+    useEffect(() => {
+        const getLogo = async () => {
+            const res = await GetLogo();
+            setImg(res);
+        }
+        getLogo();
+    }, [])
+
+
 
     const handleSubmit = async (e) => {
         e.preventDefault();
