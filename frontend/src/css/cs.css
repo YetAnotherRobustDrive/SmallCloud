@@ -25,6 +25,7 @@
     border-right: none;
     padding: 10px;
     outline: none;
+    white-space: pre-wrap;
 }
 
 .extendBox .child {
@@ -35,6 +36,8 @@
     border-right: none;
     padding: 10px;
     outline: none;
+    white-space: pre-wrap;
+    overflow-y: scroll;
 }
 
 
@@ -73,7 +76,9 @@
 
 .terms .inner {
     border: 1px solid black;
-    height: 100%
+    height: 100%;
+    white-space: pre-wrap;
+    overflow-y: scroll;
 }
 
 .ask {
@@ -91,6 +96,8 @@
     resize: none;
     padding: 10px;
     border-radius: 3px;
+    white-space: pre-wrap;
+    overflow-y: scroll;
 }
 
 .ask .askBtn{
