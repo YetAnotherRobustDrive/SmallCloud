@@ -146,10 +146,8 @@ export default function ModalFileview(props) {
                 labelsForPost.push(label);
             });
             labelsForPost = [...new Set(labelsForPost)];
-            if (labelsForPost.length !== 0) {
-                await PostLabelFile(fileData.id, labelsForPost);
-                SwalAlert("success", "라벨이 수정되었습니다.", () => window.location.reload());
-            }
+            await PostLabelFile(fileData.id, labelsForPost);
+            SwalAlert("success", "라벨이 수정되었습니다.", () => window.location.reload());
         }
         editLabel();
     }, [newLables])
