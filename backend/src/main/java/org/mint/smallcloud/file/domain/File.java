@@ -5,10 +5,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.mint.smallcloud.user.domain.Member;
 
-import javax.persistence.Column;
-import javax.persistence.Embedded;
-import javax.persistence.Entity;
-import javax.persistence.Table;
+import javax.persistence.*;
+import java.util.List;
 
 @Table(name = "FILES")
 @Entity
@@ -20,6 +18,13 @@ public class File extends DataNode {
 
     @Column(name = "SIZE")
     private Long size;
+
+    @OneToMany(
+        mappedBy = "file",
+        cascade = CascadeType.ALL,
+        orphanRemoval = true
+    )
+    private List<Segment> segments;
 
     protected File(FileType fileType, FileLocation location, Long size, Member member) {
         super(fileType, member);
