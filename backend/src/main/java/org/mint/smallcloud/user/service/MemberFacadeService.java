@@ -78,6 +78,11 @@ public class MemberFacadeService {
         FileLocation location = member.getProfileImageLocation();
         return photoService.downloadPhoto(location);
     }
+    public PhotoDownloadResponseDto downloadLogo() {
+        Member member = memberThrowerService.getMemberByUsername("admin");
+        FileLocation location = member.getProfileImageLocation();
+        return photoService.downloadPhoto(location);
+    }
 
     public void updatePassword(String username, PasswordUpdateRequestDto dto) {
         Member member = memberThrowerService.getMemberByUsername(username);

@@ -144,7 +144,7 @@ public class UserController {
     @GetMapping("/profile-photo/logo")
     public ResponseEntity<Resource> downloadAdminPhoto() {
         PhotoDownloadResponseDto res =
-                memberFacadeService.downloadPhoto("admin");
+                memberFacadeService.downloadLogo();
         HttpHeaders headers = new HttpHeaders();
         headers.setContentLength(res.getContentLength());
         headers.setContentType(MediaType.parseMediaType(res.getContentType()));
