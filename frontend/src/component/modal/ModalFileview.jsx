@@ -266,6 +266,8 @@ export default function ModalFileview(props) {
                     </div>
                     {isFileOpen &&
                         <ModalFileopen
+                            id={fileData.id}
+                            type={fileData.name.substring(fileData.name.lastIndexOf(".") + 1, fileData.name.length)}
                             after={() => setIsFileOpen(false)}
                         />
                     }
