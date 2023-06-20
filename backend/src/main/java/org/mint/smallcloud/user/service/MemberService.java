@@ -118,7 +118,7 @@ public class MemberService {
             return List.<String>of();
         return memberRepository
             .findByNicknameLike("%" + q + "%")
-            .stream().filter(e -> !e.isRole(Role.ADMIN)).map(Member::getUsername).collect(Collectors.toList());
+            .stream().filter(e -> !e.isRole(Role.ADMIN)).map(Member::getNickname).collect(Collectors.toList());
     }
 
     public void updatePassword(Member member, String newPassword) {
