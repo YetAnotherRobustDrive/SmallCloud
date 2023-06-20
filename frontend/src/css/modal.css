@@ -85,7 +85,7 @@ button:focus {
     border: 1px solid black;    
 }
 
-.modalShareBody .resultItem {
+.resultItem {
     text-align: center;
     justify-content: start;
     border-bottom: 1px solid #ccc;
