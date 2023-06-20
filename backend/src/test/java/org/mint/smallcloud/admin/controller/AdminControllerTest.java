@@ -148,8 +148,7 @@ class AdminControllerTest {
                 .andExpect((rst) -> {
                     assertThat(em.createQuery("select m from Member m where m.username = :username", Member.class)
                         .setParameter("username", user1.getUsername())
-                        .getSingleResult()
-                        .getPassword()).isEqualTo(newPassword);
+                        .getSingleResult().verifyPassword(newPassword)).isTrue();
                 })
                 .andDo(document(DOCUMENT_NAME, pathParameters(
                     parameterWithName("username").description("사용자 아이디")

@@ -6,6 +6,8 @@ import lombok.NoArgsConstructor;
 import org.mint.smallcloud.file.domain.FileLocation;
 import org.mint.smallcloud.group.domain.Group;
 import org.mint.smallcloud.share.domain.MemberShare;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
@@ -17,6 +19,9 @@ import java.util.List;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Getter
 public class Member {
+
+    private final static PasswordEncoder passwordEncoder = new BCryptPasswordEncoder(BCryptPasswordEncoder.BCryptVersion.$2A);
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "MEMBER_ID")
@@ -25,7 +30,7 @@ public class Member {
     @Column(name = "USERNAME", nullable = false, length = 15, unique = true)
     private String username;
 
-    @Column(name = "PASSWORD", nullable = false, length = 15)
+    @Column(name = "PASSWORD", nullable = false, length = 60)
     private String password;
 
     @Column(name = "NICKNAME", nullable = false, length = 15)
@@ -63,11 +68,15 @@ public class Member {
 
     protected Member(String username, String password, String nickname, Role role) {
         this.username = username;
-        this.password = password;
+        this.password = hashPassword(password);
         this.nickname = nickname;
         this.role = role;
         this.joinedDate = LocalDateTime.now();
         this.changedPasswordDate = LocalDateTime.now();
+    }
+
+    private String hashPassword(String password) {
+        return passwordEncoder.encode(password);
     }
 
     public static Member of(String username, String password, String nickname) {
@@ -98,12 +107,13 @@ public class Member {
     }
 
     public void changePassword(String password) {
-        this.password = password;
+        this.password = hashPassword(password);
     }
 
     public boolean verifyPassword(String password) {
-        return this.password.equals(password);
+        return passwordEncoder.matches(password, this.password);
     }
+
 
     public boolean isRole(Role role) {
         return this.role.equals(role);

@@ -145,7 +145,8 @@ class AuthControllerTest {
                 .id(user1.getId())
                 .password(user1.getPassword() + "abc")
                 .build();
-            em.persist(Member.of(user1.getId(), user1.getPassword(), "nickname"));
+            Member member = Member.of(user1.getId(), user1.getPassword(), "nickname");
+            em.persist(member);
             em.flush();
         }
 
@@ -203,12 +204,13 @@ class AuthControllerTest {
         @BeforeEach
         void boot() {
             map = new HashMap<>();
-            em.persist(Member.of(user1.getId(), user1.getPassword(), "nickname"));
+            Member member = Member.of(user1.getId(), user1.getPassword(), "nickname");
+            em.persist(member);
             em.flush();
             token = jwtTokenProvider.generateTokenDto(
                 UserDetailsDto.builder()
                     .username(user1.getId())
-                    .password(user1.getPassword())
+                    .password(member.getPassword())
                     .roles(Role.COMMON)
                     .disabled(false)
                     .build());
