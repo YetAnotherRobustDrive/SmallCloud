@@ -253,10 +253,10 @@ class LogControllerTest {
         void nicknameFilter() throws Exception {
 
             requestLogDto = RequestLogDto.builder()
-                    .nickName(member.getNickname())
+                    .userName(member.getUsername())
                     .build();
             Pageable pageable = PageRequest.of(0, 5);
-            Page<UserLog> userLogs = userLogRepository.findLogs(requestLogDto.getNickName(), null, null, null, null, pageable);
+            Page<UserLog> userLogs = userLogRepository.findLogs(requestLogDto.getUserName(), null, null, null, null, pageable);
             System.out.println(userLogs.getSize());
             System.out.println(userLogs.getTotalPages());
             System.out.println(userLogs.getTotalElements());
@@ -265,7 +265,7 @@ class LogControllerTest {
                     .andExpect(status().isOk())
 
                     .andDo(document(DOCUMENT_NAME, requestFields(
-                            fieldWithPath("nickName").description("닉네임"),
+                            fieldWithPath("userName").description("유저이름"),
                             fieldWithPath("action").description("액션"),
                             fieldWithPath("status").description("상태"),
                             fieldWithPath("startTime").description("시작시간"),
@@ -344,7 +344,7 @@ class LogControllerTest {
         void nicknameAndActionFilter() throws Exception {
 
             requestLogDto = RequestLogDto.builder()
-                    .nickName(member.getNickname())
+                    .userName(member.getNickname())
                     .action("/files/{id}")
                     .build();
             mockMvc.perform(TestSnippet.secured(post(url), adminToken.getAccessToken(), objectMapper, requestLogDto))
@@ -358,7 +358,7 @@ class LogControllerTest {
         @Test
         void nicknameAndStatusFilter() throws Exception {
             requestLogDto = RequestLogDto.builder()
-                    .nickName(member.getNickname())
+                    .userName(member.getNickname())
                     .status(false)
                     .build();
             mockMvc.perform(TestSnippet.secured(post(url), adminToken.getAccessToken(), objectMapper, requestLogDto))
@@ -372,7 +372,7 @@ class LogControllerTest {
         @Test
         void nicknameAndStartTimeAndEndTimeFilter() throws Exception {
             requestLogDto = RequestLogDto.builder()
-                    .nickName(member.getNickname())
+                    .userName(member.getNickname())
                     .startTime(LocalDateTime.of(2023, 1, 1, 0, 59, 59, 0))
                     .endTime(LocalDateTime.of(2023, 1, 1, 2, 59, 59, 0))
                     .build();

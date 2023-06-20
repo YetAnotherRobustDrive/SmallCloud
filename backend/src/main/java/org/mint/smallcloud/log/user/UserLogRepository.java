@@ -23,14 +23,14 @@ public class UserLogRepository {
         em.flush();
     }
 
-    public Page<UserLog> findLogs(String nickname, LocalDateTime startTime, LocalDateTime endTime, Boolean status, String action, Pageable pageable) {
+    public Page<UserLog> findLogs(String username, LocalDateTime startTime, LocalDateTime endTime, Boolean status, String action, Pageable pageable) {
         String selectJpql = "select ul";
         String countingJpqlSelect = "select count(ul)";
         String fromJpql = " from UserLog ul left join ul.member m";
         String orderByJpql = " order by ul.time desc";
         List<String> conditionsWhereJpql = new ArrayList<>();
-        if (nickname != null)
-            conditionsWhereJpql.add("m.nickname = :nickname");
+        if (username != null)
+            conditionsWhereJpql.add("m.username = :username");
         if (startTime != null && endTime == null)
             conditionsWhereJpql.add("ul.time >= :startTime");
         if (startTime == null && endTime != null)
@@ -52,9 +52,9 @@ public class UserLogRepository {
         TypedQuery<Long> countingQuery= em.createQuery(
             countingJpqlSelect + fromJpql + whereJpql,
             Long.class);
-        if (nickname != null) {
-            query = query.setParameter("nickname", nickname);
-            countingQuery = countingQuery.setParameter("nickname", nickname);
+        if (username != null) {
+            query = query.setParameter("username", username);
+            countingQuery = countingQuery.setParameter("username", username);
         }
         if (startTime != null && endTime == null) {
             query = query.setParameter("startTime", startTime);

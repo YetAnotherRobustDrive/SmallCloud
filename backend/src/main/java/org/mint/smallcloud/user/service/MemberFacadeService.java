@@ -79,8 +79,8 @@ public class MemberFacadeService {
         return photoService.downloadPhoto(location);
     }
     public PhotoDownloadResponseDto downloadLogo() {
-        Member member = memberThrowerService.getMemberByUsername("admin");
-        FileLocation location = member.getProfileImageLocation();
+        Member admin = memberThrowerService.getMemberByUsername("admin");
+        FileLocation location = admin.getProfileImageLocation();
         return photoService.downloadPhoto(location);
     }
 
