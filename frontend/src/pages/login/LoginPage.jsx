@@ -1,10 +1,8 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
 import { Link, useNavigate } from 'react-router-dom';
 import SwalAlert from "../../component/swal/SwalAlert";
 import SwalError from "../../component/swal/SwalError";
-import configData from "../../config/config.json"
-import logo_img from '../../config/img/logo.png';
 import "../../css/login.css";
 import "../../css/modal.css";
 import ThrowPingAs from "../../services/log/ThrowPingAs";
@@ -13,23 +11,26 @@ import { asyncCheckAdmin } from "../../slice/TokenSlice";
 import { setIsLoggedIn } from "../../slice/UserSlice";
 import GetUserPwExpire from "../../services/user/GetUserPwExpire";
 import GetConfig from "../../services/config/GetConfig";
+import GetLogo from "../../services/config/GetLogo";
+import GetName from "../../services/config/GetName";
 
 export default function LoginPage() {
 
     const [name, setName] = useState();
+    const [img, setImg] = useState();
     const [loginInfo, setLoginInfo] = useState({ isSuccess: false, id: '' });
     const navigate = useNavigate();
 
     const dispath = useDispatch();
 
-    function getName() {
+    useEffect(() => {
         SwalAlert("success", "본 페이지는 발표용 데모로, 다음 안내 사항을 숙지하시길 부탁드립니다.", () => {
             SwalAlert("warning", "서버에 데이터가 남을 수 있으므로 개인정보는 최대한 남기지 않으시는 것을 추천드립니다. 서버 데이터는 수시로 임의 삭제될 수 있습니다.", () => {
                 SwalAlert("info", "또한, 현재 모바일 페이지는 지원하지 않습니다. 모바일 환경에서는 다소 불편한 점이 있을 수 있습니다.", () => {
-                    SwalAlert("error", "암호화 및 인코딩은 클라이언트 버전에서만 제공하고 있습니다.", () => { 
+                    SwalAlert("error", "암호화 및 인코딩은 클라이언트 버전에서만 제공하고 있습니다.", () => {
                         SwalAlert("warning", "서버가 느릴 수 있습니다. 너무 큰 파일의 업로드는 자제 부탁드립니다.", () => {
                             SwalAlert("question", "각종 문의는 '0308bae@gmail.com'으로 부탁드립니다.", () => {
-                                SwalAlert("success", "테스트에 참여해주셔서 감사합니다.", () => {});
+                                SwalAlert("success", "테스트에 참여해주셔서 감사합니다.", () => { });
                             });
                         });
                     });
@@ -37,8 +38,18 @@ export default function LoginPage() {
             });
         });
         localStorage.setItem("API_SERVER", "http://121.155.7.179:8000/");
-        setName(configData.NAME);
-    }
+        const getLogo = async () => {
+            const res = await GetLogo();
+            setImg(res);
+        }
+
+        const getName = async () => {
+            const res = await GetName();
+            setName(res);
+        }
+        getLogo();
+        getName();
+    }, [])
 
     const afterSuccess = () => {
         dispath(setIsLoggedIn(loginInfo.id));
@@ -60,6 +71,9 @@ export default function LoginPage() {
 
         const inputData = new FormData(e.target);
         const value = Object.fromEntries(inputData.entries());
+        for (let key in value) { //remove space
+            value[key] = value[key].replace(/ /g, "");
+        }
         let model = {
             method: "POST",
             headers: {
@@ -151,8 +165,8 @@ export default function LoginPage() {
         }
     }
     return (
-        <form className="login" onLoad={getName} onSubmit={handleSubmit}>
-            <img src={logo_img} alt="LOGO" />
+        <form className="login" onSubmit={handleSubmit}>
+            <img src={img} alt="LOGO" />
             <span className="namespan">{name}</span>
             <input name='id' type="text" placeholder="ID" />
             <input name='password' type="password" placeholder="PW" />

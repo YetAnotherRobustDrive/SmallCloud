@@ -53,6 +53,9 @@ export default function SidebarAdmin() {
       <div className="menuBox">
         <Link className="link" to='/admin/log' >시스템 로그</Link>
       </div>
+      <div className="menuBox">
+        <Link className="link" to='/admin/config' >시스템 설정</Link>
+      </div>
       <div className="filetreeStub" />
       <button className="submitBtn" style={{
         width: "100%",
