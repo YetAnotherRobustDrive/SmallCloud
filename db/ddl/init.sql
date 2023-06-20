@@ -184,3 +184,11 @@ create table if not exists user_log
 );
 
 
+create table if not exists SEGMENTS
+(
+        id bigint auto_increment primary key,
+        FILE_ID bigint null,
+        location varchar(255) null,
+        `name` varchar(255) null,
+        `size` bigint null
+);
