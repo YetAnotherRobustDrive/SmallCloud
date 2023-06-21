@@ -8,6 +8,7 @@ find . \( -name '*.java'\
  -o -name '*.css'\
  -o -name '*.gradle'\
  -o -name '*.yml'\
+ -o -name '*.pl'\
  \) \
  -a -type f \
  | xargs wc -l \
