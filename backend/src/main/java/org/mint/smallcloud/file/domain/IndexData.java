@@ -20,8 +20,10 @@ public class IndexData {
     @OneToOne(
         mappedBy = "indexData",
         cascade = CascadeType.ALL,
-        orphanRemoval = true)
+        orphanRemoval = true
+    )
     private File originFile;
+
     private Long size;
     private String location;
 
@@ -29,6 +31,7 @@ public class IndexData {
         this.originFile = originFile;
         this.location = location;
         this.size = size;
+        originFile.setIndexData(this);
     }
 
     public static IndexData of(File originFile, String location, Long size) {
