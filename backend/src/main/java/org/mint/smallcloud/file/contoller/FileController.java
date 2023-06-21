@@ -224,9 +224,6 @@ public class FileController {
         }
     }
 
-
-
-
     @PostMapping("/update/label")
     public ResponseEntity<?> updateLabel(@RequestBody LabelUpdateDto labelUpdateDto) {
         String userName = userDetailsProvider
