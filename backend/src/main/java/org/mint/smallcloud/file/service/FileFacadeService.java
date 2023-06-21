@@ -97,4 +97,12 @@ public class FileFacadeService {
         Member user = memberThrowerService.getMemberByUsername(username);
         return fileService.getUsage(user);
     }
+
+    public boolean isEncoded(Long fileId, String username) {
+        Member user = memberThrowerService.getMemberByUsername(username);
+        File file = fileThrowerService.getFileById(fileId);
+        if (!file.canAccessUser(user))
+            throw new ServiceException(ExceptionStatus.NO_PERMISSION);
+        return file.isEncoded();
+    }
 }

@@ -71,6 +71,14 @@ public class FileController {
         boolean shared;
     }
 
+    @GetMapping("/{fileId}/isEncoded")
+    public ResponseDto<Boolean> isEncoded(@PathVariable Long fileId) {
+        String username = getLoginUser().getUsername();
+        return ResponseDto.<Boolean>builder()
+            .result(fileFacadeService.isEncoded(fileId, username))
+            .build();
+    }
+
     @PostMapping
     public UploadResponse upload(@RequestParam("file") MultipartFile formFile,
                                  @RequestParam("cwd") Long dirId,

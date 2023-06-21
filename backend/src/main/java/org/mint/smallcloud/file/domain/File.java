@@ -63,4 +63,8 @@ public class File extends DataNode {
     public void setIndexData(IndexData indexData) {
         this.indexData = indexData;
     }
+
+    public boolean isEncoded() {
+        return this.indexData != null;
+    }
 }
