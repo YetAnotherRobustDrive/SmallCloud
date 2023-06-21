@@ -26,6 +26,10 @@ public class File extends DataNode {
     )
     private List<Segment> segments;
 
+    @OneToOne
+    @JoinColumn(name = "INDEX_DATA_ID")
+    private IndexData indexData;
+
     protected File(FileType fileType, FileLocation location, Long size, Member member) {
         super(fileType, member);
         this.location = location;
@@ -54,5 +58,9 @@ public class File extends DataNode {
     public void updateContents(String newLoc, Long newSize) {
         location = FileLocation.of(newLoc);
         this.size = newSize;
+    }
+
+    public void setIndexData(IndexData indexData) {
+        this.indexData = indexData;
     }
 }
