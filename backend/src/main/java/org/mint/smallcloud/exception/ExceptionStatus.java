@@ -35,7 +35,10 @@ public enum ExceptionStatus {
     NOT_FOUND_OWNER(HttpStatus.NOT_FOUND, "소유자를 찾을 수 없습니다."),
     USER_LOCKED(HttpStatus.FORBIDDEN, "잠긴 유저입니다."),
     NOT_FOUND_NOTIFICATION(HttpStatus.NOT_FOUND, "알림을 찾을 수 없습니다."),
-    NOT_FOUND_ANSWER(HttpStatus.NOT_FOUND, "답변을 찾을 수 없습니다."),;
+    NOT_FOUND_ANSWER(HttpStatus.NOT_FOUND, "답변을 찾을 수 없습니다."),
+    NOT_FOUND_FILE(HttpStatus.NOT_FOUND, "파일을 찾을 수 없습니다."),
+    FILE_FAIL(HttpStatus.CONFLICT, "파일 오류가 생겼습니다."),
+    ;
 
     ExceptionStatus(HttpStatus status, String message) {
         responseDto = ErrorResponseDto.builder()

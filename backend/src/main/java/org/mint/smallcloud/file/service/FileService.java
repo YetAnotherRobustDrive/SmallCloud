@@ -11,7 +11,6 @@ import org.mint.smallcloud.user.domain.Member;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
-import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -21,34 +20,6 @@ import java.util.List;
 public class FileService {
     private final LabelService labelService;
     private final FileRepository fileRepository;
-
-    public boolean isPathExist(List<String> folders) {
-        return true;
-    }
-
-    public void moveFileToPath(List<String> folders) {
-    }
-
-    public void uploadFile(String file) {
-    }
-
-    public String downloadFile(Long id) {
-        return "";
-    }
-
-    public void removeFolder(Long id) {
-    }
-
-    public void makeFolder(String folder) {
-    }
-
-    public List<String> getFolderSortBy(Long id) {
-        return new ArrayList<>();
-    }
-
-    public String getFile(Long id) {
-        return "";
-    }
 
     public void deleteFile(File file, Member user) {
         labelService.attachTrash(file, user);
@@ -71,6 +42,7 @@ public class FileService {
             return List.<File>of();
         return fileRepository.findByFileType_NameLikeAndOwner(q, user);
     }
+
 
     public UsageDto getUsage(Member user) {
         return UsageDto.builder()
