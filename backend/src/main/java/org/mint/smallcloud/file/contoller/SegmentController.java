@@ -8,12 +8,12 @@ import org.mint.smallcloud.bucket.service.StorageService;
 import org.mint.smallcloud.exception.ExceptionStatus;
 import org.mint.smallcloud.exception.ServiceException;
 import org.mint.smallcloud.file.domain.File;
-import org.mint.smallcloud.file.domain.IndexData;
 import org.mint.smallcloud.file.domain.Segment;
 import org.mint.smallcloud.file.repository.FileRepository;
 import org.mint.smallcloud.file.repository.FolderRepository;
 import org.mint.smallcloud.file.repository.IndexDataRepository;
 import org.mint.smallcloud.file.repository.SegmentRepository;
+import org.mint.smallcloud.file.service.SegmentService;
 import org.mint.smallcloud.security.UserDetailsProvider;
 import org.mint.smallcloud.user.repository.MemberRepository;
 import org.springframework.core.io.InputStreamResource;
@@ -46,6 +46,7 @@ public class SegmentController {
     final FileRepository fileRepository;
     final FolderRepository folderRepository;
     final IndexDataRepository indexDataRepository;
+    final SegmentService segmentService;
 
     @GetMapping("/{fid}/{name}")
     public ResponseEntity<Resource> download(@PathVariable("fid") Long resourceId, @PathVariable("name") String name) throws Exception {
@@ -136,8 +137,7 @@ public class SegmentController {
                 .uploadFile(stream, mimeType, size);
             String location = fileObject.getObjectId();
 
-            IndexData indexData = IndexData.of(file, location);
-            indexDataRepository.save(indexData);
+            segmentService.createIndexData(file, location);
 
             return UploadResponse.builder()
                 .id(file.getId())
