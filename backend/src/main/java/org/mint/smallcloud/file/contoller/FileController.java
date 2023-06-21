@@ -147,7 +147,7 @@ public class FileController {
 
         return ResponseEntity.ok()
             .headers(headers)
-            .contentLength(stream.available())
+            .contentLength(file.getSize())
             .contentType(mediaType)
             .body(new InputStreamResource(stream));
     }
