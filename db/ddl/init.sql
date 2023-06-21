@@ -37,6 +37,14 @@ create table if not exists `groups`
         foreign key (parent_group_id) references `groups` (group_id)
 );
 
+create table if not exists index_data
+(
+    index_data_id bigint auto_increment
+        primary key,
+    location      varchar(255) null,
+    size          bigint       null
+);
+
 create table if not exists members
 (
     member_id             bigint auto_increment
@@ -73,10 +81,13 @@ create table if not exists data_nodes
 
 create table if not exists files
 (
-    location     varchar(40) null,
-    size         bigint      null,
-    data_node_id bigint      not null
+    location      varchar(40) null,
+    size          bigint      null,
+    data_node_id  bigint      not null
         primary key,
+    index_data_id bigint      null,
+    constraint FK6fuovkepxnp2tgw520foqpse7
+        foreign key (index_data_id) references index_data (index_data_id),
     constraint FKgl17svu4fbfrpfcsgg84qqdyd
         foreign key (data_node_id) references data_nodes (data_node_id)
 );
@@ -105,8 +116,8 @@ create table if not exists labels
 
 create table if not exists label_data_node
 (
-    label_id     bigint not null,
     data_node_id bigint not null,
+    label_id     bigint not null,
     constraint FK7fds7qeos5py9u4tn4sa5rgat
         foreign key (data_node_id) references data_nodes (data_node_id),
     constraint FK9oucl9mi0ghyk0wx3dtul34nv
@@ -140,7 +151,7 @@ create table if not exists question
 
 create table if not exists segments
 (
-    id bigint auto_increment
+    id       bigint auto_increment
         primary key,
     location varchar(255) null,
     name     varchar(255) null,
