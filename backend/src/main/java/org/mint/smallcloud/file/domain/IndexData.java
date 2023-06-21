@@ -17,7 +17,10 @@ public class IndexData {
     @Column(name = "INDEX_DATA_ID")
     private Long id;
 
-    @OneToOne(mappedBy = "indexData")
+    @OneToOne(
+        mappedBy = "indexData",
+        cascade = CascadeType.ALL,
+        orphanRemoval = true)
     private File originFile;
 
     private String location;

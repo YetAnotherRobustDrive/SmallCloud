@@ -37,7 +37,7 @@ public enum ExceptionStatus {
     NOT_FOUND_NOTIFICATION(HttpStatus.NOT_FOUND, "알림을 찾을 수 없습니다."),
     NOT_FOUND_ANSWER(HttpStatus.NOT_FOUND, "답변을 찾을 수 없습니다."),
     NOT_FOUND_FILE(HttpStatus.NOT_FOUND, "파일을 찾을 수 없습니다."),
-    FILE_UPLOAD_FAIL(HttpStatus.CONFLICT, "파일 업로드 중 오류가 생겼습니다."),
+    FILE_FAIL(HttpStatus.CONFLICT, "파일 오류가 생겼습니다."),
     ;
 
     ExceptionStatus(HttpStatus status, String message) {

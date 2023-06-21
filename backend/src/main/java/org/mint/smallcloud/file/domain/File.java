@@ -28,7 +28,7 @@ public class File extends DataNode {
 
     @OneToOne
     @JoinColumn(name = "INDEX_DATA_ID")
-    private IndexData indexData;
+    private IndexData indexData = null;
 
     protected File(FileType fileType, FileLocation location, Long size, Member member) {
         super(fileType, member);

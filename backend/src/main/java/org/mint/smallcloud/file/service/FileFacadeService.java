@@ -67,6 +67,10 @@ public class FileFacadeService {
             targetFile.getLabels().clear();
             FileLocation loc = targetFile.getLocation();
             storageService.removeFile(loc.getLocation());
+            if (targetFile.getIndexData() != null) {
+                storageService.removeFile(targetFile.getIndexData().getLocation());
+                indexDataRepository.delete(targetFile.getIndexData());
+            }
             fileRepository.delete(targetFile);
         }
         else
