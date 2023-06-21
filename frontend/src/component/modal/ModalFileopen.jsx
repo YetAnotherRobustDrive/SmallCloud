@@ -8,6 +8,10 @@ export default function ModalFileopen(props) {
     const [img, setImg] = useState(null);
     const [loading, setLoading] = useState(0);
     const imgType = ["png", "jpg", "jpeg", "gif", "bmp", "svg"];
+    const videoFormats = ["mp4", "webm", "mkv", "avi", "mov", "wmv"];
+    const [isEncoded, setIsEncoded] = useState(false);
+    const [isLoaded, setIsLoaded] = useState(true);
+
     useEffect(() => {
         if (imgType.includes(props.type)) {
             const getImg = async () => {
@@ -26,17 +30,38 @@ export default function ModalFileopen(props) {
                 });
             }
             getImg();
+            setIsLoaded(false);
         }
-        else if (props.type === "mpd") {
+        else if (videoFormats.includes(props.type)) {
             const play = async () => {
-                const innerBox = window.document.querySelector(".preview");
+                const res = await fetch(localStorage.getItem("API_SERVER") + "files/" + props.id + "/isEncoded", {
+                    method: "GET",
+                    headers: {
+                        "Authorization": "Bearer " + localStorage.getItem("accessToken"),
+                    },
+                });
+                if (res.status === 200) {
+                    const data = await res.json();
+                    setIsEncoded(data.result);
+                    if (data.result === false) {
+                        return;
+                    }
+                }
+                else {
+                    SwalError("영상을 불러오는데 실패했습니다.");
+                    return;
+                }
                 const player = window.document.querySelector("video");
                 player.hidden = false;
-                player.style.width = innerBox.offsetWidth + "px";
-                player.style.height = innerBox.offsetHeight + "px";
+                player.style.width = "70%"
+                player.style.height = "70%"
                 player.style.position = "absolute";
+                player.style.top = "55%";
+                player.style.left = "40%";
+                player.style.transform = "translate(-50%, -50%)";
                 player.style.zIndex = "100";
-                window.player.load(localStorage.getItem("API_SERVER") + "files/" + props.id + "?token=" + localStorage.getItem("accessToken"))
+                await window.player.load(localStorage.getItem("API_SERVER") + "files/" + props.id + "/mpd?token=" + localStorage.getItem("accessToken"))
+                setIsLoaded(false);
             }
             play();
         }
@@ -46,15 +71,18 @@ export default function ModalFileopen(props) {
         <div className="fileopen">
             {loading !== 0 && <ModalLoading isOpen={loading !== 0} />}
             <div className="preview">
-                {(!imgType.includes(props.type) && props.type !== "mpd") &&
-                    <div className="inner">
-                        <span>
-                            "미디어 파일이 아닙니다."
-                        </span>
-                    </div>
-                }
-                {imgType.includes(props.type) &&
-                    <img src={img} alt="loading..." className="inner" />
+                {!isLoaded && <>
+                    {(!imgType.includes(props.type) && !isEncoded) &&
+                        <div className="inner">
+                            <span>
+                                "미디어 파일이 아닙니다."
+                            </span>
+                        </div>
+                    }
+                    {imgType.includes(props.type) &&
+                        <img src={img} alt="loading..." className="inner" />
+                    }
+                </>
                 }
             </div>
             <div className="fileopen-close" onClick={() => {
