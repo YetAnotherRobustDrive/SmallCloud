@@ -39,6 +39,6 @@ export default async function GetLogo() {
         }
         return img;
     } catch (error) {
-        return img;
+        return default_logo_img;
     }
 }

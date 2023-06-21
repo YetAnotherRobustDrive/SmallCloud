@@ -3,7 +3,6 @@ import "../../css/error.css"
 import { Link } from "react-router-dom";
 import GetLogo from "../../services/config/GetLogo";
 import GetName from "../../services/config/GetName";
-
 export default function ErrorPage() {
 
     const [name, setName] = useState();
