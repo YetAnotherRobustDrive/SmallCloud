@@ -114,43 +114,6 @@ public class FileController {
             .build();
     }
 
-    @PostMapping("/mpd")
-    public UploadResponse mpdUpload(
-        @RequestParam("file") MultipartFile formFile,
-        @RequestParam("originFileId") Long originFileId,
-        HttpServletRequest request
-    ) {
-        UserDetails user = getLoginUser();
-        String userName = user.getUsername();
-        Member member = memberRepository.findByUsername(userName)
-            .orElseThrow(() -> new ServiceException(ExceptionStatus.NO_PERMISSION));
-        File originFile = fileRepository.findById(originFileId)
-            .orElseThrow(() -> new ServiceException(ExceptionStatus.NOT_FOUND_FILE));
-
-        String fileName = formFile.getOriginalFilename();
-        long fileSize = formFile.getSize();
-        String mimeType = request.getServletContext().getMimeType(fileName);
-        if (mimeType == null)
-            mimeType = "application/octet-stream";
-        FileObjectDto fileObject;
-        try {
-           fileObject = storageService.uploadFile(formFile.getInputStream(), mimeType, fileSize);
-        } catch (Exception e) {
-            throw new ServiceException(ExceptionStatus.FILE_FAIL);
-        }
-        fileFacadeService.saveIndexData(fileObject, originFile, member);
-        return UploadResponse.builder()
-            .id(originFileId)
-            .name(originFile.getName())
-            .shared(false)
-            .size(originFile.getSize())
-            .thumbnail("")
-            .securityLevel("")
-            .type(mimeType)
-            .writingStage("")
-            .build();
-    }
-
     @GetMapping("/{fileId}")
     public ResponseEntity<Resource> download(@PathVariable("fileId") Long fileId) throws Exception {
         UserDetails user = getLoginUser();
@@ -188,44 +151,6 @@ public class FileController {
             .contentType(mediaType)
             .body(new InputStreamResource(stream));
     }
-
-    @GetMapping("{fileId}/mpd")
-    public ResponseEntity<Resource> downloadMpd(@PathVariable("fileId") Long fileId) {
-        UserDetails user = getLoginUser();
-        String userName = user.getUsername();
-        Member member = memberRepository.findByUsername(userName)
-            .orElseThrow(() -> new ServiceException(ExceptionStatus.NO_PERMISSION));
-        File file = fileRepository.findById(fileId)
-            .orElseThrow(() -> new ServiceException(ExceptionStatus.NOT_FOUND_FILE));
-
-        // authority
-        if (!file.canAccessUser(member))
-            throw new ServiceException(ExceptionStatus.NO_PERMISSION);
-        if (file.getIndexData() == null)
-            throw new ServiceException(ExceptionStatus.NOT_FOUND_FILE);
-        try (InputStream stream = storageService.downloadFile(file.getIndexData().getLocation())) {
-            HttpHeaders headers = new HttpHeaders();
-            headers.add(HttpHeaders.CONTENT_DISPOSITION,
-                String.format("attachment; filename=\"%s\"",
-                    encode(file.getName())));
-            headers.add(HttpHeaders.CACHE_CONTROL,
-                "no-cache, no-store, must-revalidate");
-            headers.add(HttpHeaders.PRAGMA, "no-cache");
-            headers.add(HttpHeaders.EXPIRES, "0");
-
-            MediaType mediaType = MediaType.parseMediaType(file.getFileType().getType());
-            return ResponseEntity.ok()
-                .headers(headers)
-                .contentLength(file.getSize())
-                .contentType(mediaType)
-                .body(new InputStreamResource(stream));
-        } catch (Exception e) {
-            throw new ServiceException(ExceptionStatus.FILE_FAIL);
-        }
-    }
-
-
-
 
     @PostMapping("/update/label")
     public ResponseEntity<?> updateLabel(@RequestBody LabelUpdateDto labelUpdateDto) {
