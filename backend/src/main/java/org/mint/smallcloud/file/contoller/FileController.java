@@ -114,6 +114,43 @@ public class FileController {
             .build();
     }
 
+    @PostMapping("/mpd")
+    public UploadResponse mpdUpload(
+        @RequestParam("file") MultipartFile formFile,
+        @RequestParam("originFileId") Long originFileId,
+        HttpServletRequest request
+    ) {
+        UserDetails user = getLoginUser();
+        String userName = user.getUsername();
+        Member member = memberRepository.findByUsername(userName)
+            .orElseThrow(() -> new ServiceException(ExceptionStatus.NO_PERMISSION));
+        File originFile = fileRepository.findById(originFileId)
+            .orElseThrow(() -> new ServiceException(ExceptionStatus.NOT_FOUND_FILE));
+
+        String fileName = formFile.getOriginalFilename();
+        long fileSize = formFile.getSize();
+        String mimeType = request.getServletContext().getMimeType(fileName);
+        if (mimeType == null)
+            mimeType = "application/octet-stream";
+        FileObjectDto fileObject;
+        try {
+           fileObject = storageService.uploadFile(formFile.getInputStream(), mimeType, fileSize);
+        } catch (Exception e) {
+            throw new ServiceException(ExceptionStatus.FILE_FAIL);
+        }
+        fileFacadeService.saveIndexData(fileObject, originFile, member);
+        return UploadResponse.builder()
+            .id(originFileId)
+            .name(originFile.getName())
+            .shared(false)
+            .size(originFile.getSize())
+            .thumbnail("")
+            .securityLevel("")
+            .type(mimeType)
+            .writingStage("")
+            .build();
+    }
+
     @GetMapping("/{fileId}")
     public ResponseEntity<Resource> download(@PathVariable("fileId") Long fileId) throws Exception {
         UserDetails user = getLoginUser();
