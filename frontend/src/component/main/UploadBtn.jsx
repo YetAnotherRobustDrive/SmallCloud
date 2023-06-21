@@ -105,13 +105,25 @@ export default function UploadBtn() {
         }
 
         const uploadEncoded = async (encoded) => {
+            const formDataOrigin = new FormData();
+            const curr = await getFolder();
+            formDataOrigin.append('cwd', curr);
+            formDataOrigin.append('file', file);
+            const uploadOrigin = await PostNewFile(formDataOrigin, () => { }, () => { });
+            if (!uploadOrigin[0]) {
+                SwalError(uploadOrigin[1]);
+                return;
+            }
+            const originId = uploadOrigin[1].id;
             const mpdRaw = await window.electron.getFromLocal(encoded.mpdPath);
             const mpdFile = new File(
                 [mpdRaw],
-                encoded.mpdPath.split("/")[encoded.mpdPath.split("/").length - 1],
+                encoded.mpdPath.includes("/") ?
+                    encoded.mpdPath.split("/")[encoded.mpdPath.split("/").length - 1] :
+                    encoded.mpdPath.split("\\")[encoded.mpdPath.split("\\").length - 1],
             )
             const formData = new FormData();
-            formData.append('cwd', await getFolder());
+            formData.append('originFileId', originId);
             formData.append('file', mpdFile);
             const res = await PostNewMpd(formData);
             const segment = encoded.files;
@@ -132,6 +144,7 @@ export default function UploadBtn() {
                     return;
                 }
             }
+            //dir clear
             SwalAlert("success", "업로드가 완료되었습니다.", () => window.location.reload());
         }
 
