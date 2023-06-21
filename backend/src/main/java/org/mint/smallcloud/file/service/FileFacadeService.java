@@ -2,7 +2,6 @@ package org.mint.smallcloud.file.service;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-
 import org.mint.smallcloud.bucket.service.StorageService;
 import org.mint.smallcloud.exception.ExceptionStatus;
 import org.mint.smallcloud.exception.ServiceException;
@@ -14,6 +13,7 @@ import org.mint.smallcloud.file.dto.FileDto;
 import org.mint.smallcloud.file.dto.UsageDto;
 import org.mint.smallcloud.file.mapper.FileMapper;
 import org.mint.smallcloud.file.repository.FileRepository;
+import org.mint.smallcloud.file.repository.IndexDataRepository;
 import org.mint.smallcloud.user.domain.Member;
 import org.mint.smallcloud.user.service.MemberThrowerService;
 import org.springframework.stereotype.Service;
@@ -34,6 +34,7 @@ public class FileFacadeService {
     private final FileRepository fileRepository;
     private final FileMapper fileMapper;
     private final StorageService storageService;
+    private final IndexDataRepository indexDataRepository;
 
     public void delete(Long fileId, String username) {
         File file = fileThrowerService.getFileById(fileId);
@@ -63,6 +64,10 @@ public class FileFacadeService {
             targetFile.getLabels().clear();
             FileLocation loc = targetFile.getLocation();
             storageService.removeFile(loc.getLocation());
+            if (targetFile.getIndexData() != null) {
+                storageService.removeFile(targetFile.getIndexData().getLocation());
+                indexDataRepository.delete(targetFile.getIndexData());
+            }
             fileRepository.delete(targetFile);
         }
         else
@@ -91,5 +96,13 @@ public class FileFacadeService {
     public UsageDto getUsage(String username) {
         Member user = memberThrowerService.getMemberByUsername(username);
         return fileService.getUsage(user);
+    }
+
+    public boolean isEncoded(Long fileId, String username) {
+        Member user = memberThrowerService.getMemberByUsername(username);
+        File file = fileThrowerService.getFileById(fileId);
+        if (!file.canAccessUser(user))
+            throw new ServiceException(ExceptionStatus.NO_PERMISSION);
+        return file.isEncoded();
     }
 }

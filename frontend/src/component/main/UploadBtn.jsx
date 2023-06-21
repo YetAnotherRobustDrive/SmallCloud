@@ -7,13 +7,12 @@ import '../../css/load.css';
 import GetConfig from "../../services/config/GetConfig";
 import GetRootDir from "../../services/directory/GetRootDir";
 import PostNewFile from "../../services/file/PostNewFile";
+import PostNewMpd from "../../services/file/PostNewMpd";
+import PostNewSegments from "../../services/file/PostNewSegments";
 import GetUserUsage from "../../services/user/GetUserUsage";
 import SwalAlert from "../swal/SwalAlert";
 import SwalError from "../swal/SwalError";
-import SwalLoadingBy from "../swal/SwalLoadingBy";
 import ProgressBar from "../updown/ProgressBar";
-import PostNewSegments from "../../services/file/PostNewSegments";
-import PostNewMpd from "../../services/file/PostNewMpd";
 
 export default function UploadBtn() {
 
@@ -21,33 +20,9 @@ export default function UploadBtn() {
     const [isHover, setIsHover] = useState(false);
     const [file, setFile] = useState();
     const [filename, setFilename] = useState();
-    const [uploadState, setUploadState] = useState(0);
-    const [isOnEncrypt, setIsOnEncrypt] = useState(false);
-    const [isOnEncode, setIsOnEncode] = useState(false);
+    const [uploadState, setUploadState] = useState(0)
 
     const params = useParams();
-
-    const videoFormats = [ //지원하는 비디오 포맷
-        "video/mp4",
-        "video/webm",
-        "video/mkv",
-        "video/avi",
-        "video/mov",
-        "video/wmv",
-    ]
-
-    useEffect(() => {
-        const setPath = async () => {
-            window.electron.getFFMpegPath()
-                .then((path) => {
-                    if (path === null)
-                        SwalAlert("error", "ffmpeg를 찾을 수 없습니다.", () => {
-                            window.location.replace("/login");
-                        });
-                })
-        }
-        setPath()
-    }, [])
 
     const handleDrop = (e) => {
         e.preventDefault();
@@ -70,39 +45,6 @@ export default function UploadBtn() {
 
     const handleUpload = (e) => {
 
-        const encrypt = async (isEncryp) => {
-            return new Promise((resolve, reject) => {
-                if (isEncryp) {
-                    setTimeout(() => { //요기에 암호화 코드 넣으면 됨
-                        setIsOnEncrypt(false)
-                        resolve()
-                    }, 10000);
-                }
-                else
-                    resolve();
-            });
-        }
-        const encode = async (isEncode) => {
-            return new Promise(async (resolve, reject) => {
-                if (isEncode) {
-                    if (file !== null && file !== undefined) {
-                        let res = await window.electron.encodeFFMpeg(file.path);
-                        if (res === null) {
-                            SwalError("인코딩에 실패하였습니다.");
-                            setIsOnEncode(false)
-                            reject();
-                        }
-                        else {
-                            // setMpdPath(res.mpdPath);
-                            setIsOnEncode(false)
-                            resolve(res);
-                        }
-                    }
-                }
-                else
-                    resolve();
-            });
-        }
 
         const checkUsage = async () => {
             const configRes = await GetConfig("301");
@@ -211,21 +153,9 @@ export default function UploadBtn() {
                 SwalError("파일을 선택해주세요.");
                 return;
             }
-
-            setIsOnEncode(e.target.isEncode.checked);
-            setIsOnEncrypt(e.target.isEncryp.checked);
-
-            const encoded = await encode(e.target.isEncode.checked);
-            await encrypt(e.target.isEncryp.checked);
-
             checkUsage();
+            uploadSingle();
 
-            if (e.target.isEncode.checked) {
-                uploadEncoded(encoded);
-            }
-            else {
-                uploadSingle();
-            }
         }
         try {
             e.preventDefault();
@@ -257,8 +187,6 @@ export default function UploadBtn() {
 
     return (
         <>
-            {isOnEncode && SwalLoadingBy("인코딩 중입니다.")}
-            {(isOnEncrypt && !isOnEncode) && SwalLoadingBy("암호화 중입니다.")}
             <div className="upload-btn">
                 <form className="btn-header" onSubmit={handleUpload}>
                     {isOpen && (
@@ -279,24 +207,6 @@ export default function UploadBtn() {
                                 {filename === undefined ? "Drag & Drop or Click!" : "파일 : " + filename}
                             </span>
                             <ProgressBar value={uploadState} />
-                            <div className="optionBtn">
-                                <label><input name="isEncode" type="checkbox" onClick={
-                                    (e) => {
-                                        if (e.target.checked === true) {
-                                            SwalAlert("info", "인코딩은 파일 업로드 시간이 길어질 수 있습니다.");
-                                        }
-                                    }
-                                } disabled={
-                                    !(file !== undefined && file !== null && videoFormats.includes(file.type))
-                                } />스트리밍 최적화(인코딩)</label>
-                                <label><input name="isEncryp" type="checkbox" onClick={
-                                    (e) => {
-                                        if (e.target.checked === true) {
-                                            SwalAlert("info", "암호화는 파일 업로드 시간이 길어질 수 있습니다.");
-                                        }
-                                    }
-                                } />암호화</label>
-                            </div>
                             <button className="upBtn" type="submit">업로드</button>
                         </div>
                     )}
