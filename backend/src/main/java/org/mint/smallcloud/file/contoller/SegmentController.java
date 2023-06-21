@@ -27,10 +27,8 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.server.ResponseStatusException;
 
-import java.io.ByteArrayInputStream;
 import java.io.InputStream;
 import java.net.URLConnection;
-import java.nio.charset.StandardCharsets;
 import java.util.List;
 import java.util.Optional;
 
@@ -121,37 +119,7 @@ public class SegmentController {
     ) {
         UserDetails user = getLoginUser();
         String userName = user.getUsername();
-        memberRepository.findByUsername(userName)
-            .orElseThrow(() -> new ServiceException(ExceptionStatus.NO_PERMISSION));
-        File file = fileRepository.findById(fileId)
-            .orElseThrow(() -> new ServiceException(ExceptionStatus.NOT_FOUND_FILE));
-        String mimeType = "application/dash+xml";
-
-        try {
-            String contents = new String(formFile.getBytes(), StandardCharsets.UTF_8);
-            String modified = insertBaseURL(contents, String.format("/segments/%d/", file.getId()));
-            byte[] modifiedBytes = modified.getBytes();
-            long size = modifiedBytes.length;
-            InputStream stream = new ByteArrayInputStream(modifiedBytes);
-            FileObjectDto fileObject = storageService
-                .uploadFile(stream, mimeType, size);
-            String location = fileObject.getObjectId();
-
-            segmentService.createIndexData(file, location);
-
-            return UploadResponse.builder()
-                .id(file.getId())
-                .name(file.getName())
-                .shared(false)
-                .size(file.getSize())
-                .thumbnail("")
-                .securityLevel("")
-                .type(mimeType)
-                .writingStage("")
-                .build();
-        } catch (Exception e) {
-            throw new ServiceException(ExceptionStatus.FILE_FAIL);
-        }
+        return segmentService.createIndexData(userName, fileId, formFile);
     }
 
     private UserDetails getLoginUser() {
@@ -159,20 +127,5 @@ public class SegmentController {
             .orElseThrow(() -> new ServiceException(ExceptionStatus.NO_PERMISSION));
     }
 
-    private String insertBaseURL(String manifest, String baseUrl) {
-        int i = manifest.indexOf("<MPD");
-        if (i == -1) // illegal manifest
-            return null;
-        for (; i < manifest.length(); i++)
-            if (manifest.charAt(i) == '>')
-                break;
-        if (i == manifest.length())  // illegal manifest
-            return null;
-        StringBuilder sb = new StringBuilder();
-        sb.append(manifest.substring(0, i+1));
-        sb.append(String.format("<BaseURL>%s</BaseURL>", baseUrl));
-        sb.append(manifest.substring(i + 1));
-        return sb.toString();
-    }
 
 }

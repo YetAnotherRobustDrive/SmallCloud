@@ -180,7 +180,7 @@ public class FileController {
             MediaType mediaType = MediaType.valueOf("application/dash+xml");
             return ResponseEntity.ok()
                 .headers(headers)
-                .contentLength(stream.available())
+                .contentLength(file.getIndexData().getSize())
                 .contentType(mediaType)
                 .body(new InputStreamResource(stream));
         } catch (Exception e) {

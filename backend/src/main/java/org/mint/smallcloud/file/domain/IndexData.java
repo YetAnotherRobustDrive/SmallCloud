@@ -22,21 +22,17 @@ public class IndexData {
         cascade = CascadeType.ALL,
         orphanRemoval = true)
     private File originFile;
-
+    private Long size;
     private String location;
 
-    public void setOriginFile(File originFile) {
+    protected IndexData(File originFile, String location, Long size) {
         this.originFile = originFile;
-        this.originFile.setIndexData(this);
-    }
-
-    protected IndexData(File originFile, String location) {
-        setOriginFile(originFile);
         this.location = location;
+        this.size = size;
     }
 
-    public static IndexData of(File originFile, String location) {
-        return new IndexData(originFile, location);
+    public static IndexData of(File originFile, String location, Long size) {
+        return new IndexData(originFile, location, size);
     }
 
     @Override
