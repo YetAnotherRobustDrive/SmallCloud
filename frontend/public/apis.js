@@ -3,11 +3,16 @@ const which = require('which');
 const path = require('path');
 const { spawn } = require('child_process');
 const { chdir } = require('process');
-const { stat, readdir, readFile, existsSync} = require('fs');
+const { stat, readdir, readFile, existsSync } = require('fs');
 
 async function
   getFFMpegPath() {
   return await which('ffmpeg', { nothrow: true });
+}
+
+async function
+  getAEScryptPath() {
+  return await which('aescrypt', { nothrow: true });
 }
 
 async function
@@ -22,7 +27,8 @@ async function
     `0`, `-b_strategy`, `0`, `-seg_duration`, `2`,
     `-use_timeline`, `1`, `-init_seg_name`, initSegName,
     `-media_seg_name`, mediaSegName, `-use_template`, `1`, `-f`,
-    `dash`, outname]
+    `dash`, outname]  
+
   return await new Promise((resolve, reject) => {
     try {
       chdir(resDir)
@@ -83,8 +89,109 @@ async function
     catch (e) {
       reject(e);
     }
-  })}
+  })
+}
+
+async function
+ rmLocalFile(filepath) {
+  return new Promise((resolve, reject) => {
+    try {
+      unlink(filepath, (err, _) => {
+        if (err !== null)
+          reject(err);
+        else
+          resolve(true);
+      })
+    } catch (e) {
+      reject(e);
+    }
+  })
+}
+
+async function
+  encryptFile(aescryptPath, filepath, key) {
+  const outname = `${filepath}.aes`
+
+  const args = [`-e`, `-p`, key, filepath];
+
+  return await new Promise((resolve, reject) => {
+    try {
+      const ffmpeg = spawn(aescryptPath, args)
+      ffmpeg.stdout.on('data', (data) => {
+        console.log(data.toString())
+      })
+      ffmpeg.stderr.on('data', (data) => {
+        console.error(data.toString())
+      })
+      ffmpeg.on('close', (_) => {
+        resolve('');
+      })
+    } catch (e) {
+      reject(e);
+    }
+  }).then((_) => {
+    return new Promise((resolve, reject) => {
+      if (path === null || path === undefined) {
+        reject('path/improper');
+      } else {
+        stat(outname, (err, _) => {
+          if (err == null) {
+            resolve({ success: true, path: outname })
+          } else {
+            resolve({ success: false, path: '' })
+          }
+        })
+      }
+    })
+  });
+}
+
+async function
+  decryptFile(aescryptPath, filepat, key) {
+  const pat = /(.*).aes/;
+  const outnameM = filepath.match(pat);
+  let outname;
+  if (outnameM !== null && outnameM.length > 0) {
+    outname = outnameM[0];
+  }
+
+  const args = [`-d`, `-p`, key, filepath];
+  return await new Promise((resolve, reject) => {
+    try {
+      const ffmpeg = spawn(aescryptPath, args)
+      ffmpeg.stdout.on('data', (data) => {
+        console.log(data.toString())
+      })
+      ffmpeg.stderr.on('data', (data) => {
+        console.error(data.toString())
+      })
+      ffmpeg.on('close', (_) => {
+        resolve('');
+      })
+    } catch (e) {
+      reject(e);
+    }
+  }).then(_ => {
+    return new Promise((resolve, reject) => {
+      if (path === null || path === undefined) {
+        reject('path/improper');
+      } else {
+        stat(outname, (err, _) => {
+          if (err == null) {
+            resolve({ success: true, path: outname })
+          } else {
+            resolve({ success: false, path: '' })
+          }
+        })
+      }
+    })
+  });
+}
 
 exports.getFFMpegPath = getFFMpegPath;
 exports.encodeFFMpeg = encodeFFMpeg;
 exports.getFromLocal = getFromLocal;
+exports.getAEScryptPath = getAEScryptPath;
+exports.encryptFile = encryptFile;
+exports.decryptFile = decryptFile;
+exports.rmLocalFile = rmLocalFile;
