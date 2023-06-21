@@ -152,6 +152,41 @@ public class FileController {
             .body(new InputStreamResource(stream));
     }
 
+    @GetMapping("{fileId}/mpd")
+    public ResponseEntity<Resource> downloadMpd(@PathVariable("fileId") Long fileId) {
+        UserDetails user = getLoginUser();
+        String userName = user.getUsername();
+        Member member = memberRepository.findByUsername(userName)
+            .orElseThrow(() -> new ServiceException(ExceptionStatus.NO_PERMISSION));
+        File file = fileRepository.findById(fileId)
+            .orElseThrow(() -> new ServiceException(ExceptionStatus.NOT_FOUND_FILE));
+
+        // authority
+        if (!file.canAccessUser(member))
+            throw new ServiceException(ExceptionStatus.NO_PERMISSION);
+        if (file.getIndexData() == null)
+            throw new ServiceException(ExceptionStatus.NOT_FOUND_FILE);
+        try (InputStream stream = storageService.downloadFile(file.getIndexData().getLocation())) {
+            HttpHeaders headers = new HttpHeaders();
+            headers.add(HttpHeaders.CONTENT_DISPOSITION,
+                String.format("attachment; filename=\"%s\"",
+                    encode(file.getName())));
+            headers.add(HttpHeaders.CACHE_CONTROL,
+                "no-cache, no-store, must-revalidate");
+            headers.add(HttpHeaders.PRAGMA, "no-cache");
+            headers.add(HttpHeaders.EXPIRES, "0");
+
+            MediaType mediaType = MediaType.parseMediaType(file.getFileType().getType());
+            return ResponseEntity.ok()
+                .headers(headers)
+                .contentLength(file.getSize())
+                .contentType(mediaType)
+                .body(new InputStreamResource(stream));
+        } catch (Exception e) {
+            throw new ServiceException(ExceptionStatus.FILE_FAIL);
+        }
+    }
+
     @PostMapping("/update/label")
     public ResponseEntity<?> updateLabel(@RequestBody LabelUpdateDto labelUpdateDto) {
         String userName = userDetailsProvider
