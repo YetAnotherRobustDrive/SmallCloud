@@ -143,7 +143,7 @@ public class FileController {
         headers.add(HttpHeaders.PRAGMA, "no-cache");
         headers.add(HttpHeaders.EXPIRES, "0");
 
-        MediaType mediaType = MediaType.valueOf("application/dash+xml");
+        MediaType mediaType = MediaType.parseMediaType(file.getFileType().getType());
 
         return ResponseEntity.ok()
             .headers(headers)
@@ -177,10 +177,10 @@ public class FileController {
             headers.add(HttpHeaders.PRAGMA, "no-cache");
             headers.add(HttpHeaders.EXPIRES, "0");
 
-            MediaType mediaType = MediaType.parseMediaType(file.getFileType().getType());
+            MediaType mediaType = MediaType.valueOf("application/dash+xml");
             return ResponseEntity.ok()
                 .headers(headers)
-                .contentLength(file.getSize())
+                .contentLength(stream.available())
                 .contentType(mediaType)
                 .body(new InputStreamResource(stream));
         } catch (Exception e) {
