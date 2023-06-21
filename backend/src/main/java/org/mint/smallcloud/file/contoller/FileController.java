@@ -166,7 +166,8 @@ public class FileController {
             throw new ServiceException(ExceptionStatus.NO_PERMISSION);
         if (file.getIndexData() == null)
             throw new ServiceException(ExceptionStatus.NOT_FOUND_FILE);
-        try (InputStream stream = storageService.downloadFile(file.getIndexData().getLocation())) {
+        try {
+            InputStream stream = storageService.downloadFile(file.getIndexData().getLocation())
             HttpHeaders headers = new HttpHeaders();
             headers.add(HttpHeaders.CONTENT_DISPOSITION,
                 String.format("attachment; filename=\"%s\"",
