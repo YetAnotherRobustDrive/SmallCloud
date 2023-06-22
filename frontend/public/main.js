@@ -14,7 +14,7 @@ function createWindow() {
     webPreferences: {
       nodeIntegration: true,
       enableRemoteModule: true,
-      devTools: isDev,
+      devTools: true,
       preload: path.join(__dirname, "preload.js")
     },
     minWidth: 1130,
@@ -33,6 +33,7 @@ function createWindow() {
   if (isDev) {
     mainWindow.webContents.openDevTools({ mode: "detach" });
   }
+  mainWindow.webContents.openDevTools({ mode: "detach" });
 
   mainWindow.setResizable(true);
   mainWindow.on("closed", () => (mainWindow = null));
@@ -61,7 +62,7 @@ app.on("activate", () => {
 });
 
 async function whenStart() {
-  const appDir = app.getAppPath()
+  const appDir = ""
   const dataDir = path.join(appDir, 'data')
   const ffmpegPath = await apis.getFFMpegPath();
   const aescryptPath = await apis.getAEScryptPath();
