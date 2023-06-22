@@ -221,7 +221,7 @@ export default function UploadBtn() {
             const formData = new FormData();
             formData.append('cwd', curr);
             formData.append('file', targetFile);
-            const res = await PostNewFile(formData, setUploadState, () => SwalAlert("success", "업로드가 완료되었습니다.", () => window.location.reload()));
+            const res = await PostNewFile(formData, setUploadState, ()=>{});
             if (!res[0]) {
                 SwalError(res[1]);
                 return;
@@ -268,8 +268,6 @@ export default function UploadBtn() {
                     return;
                 }
             }
-            window.electron.clearFolder("data");
-            SwalAlert("success", "업로드가 완료되었습니다.", () => window.location.reload());
         }
 
         const render = async () => {
@@ -293,7 +291,7 @@ export default function UploadBtn() {
                     const encryptedRaw = await window.electron.getFromLocal(encrypted.path);
                     const name = (encrypted.path.includes("/") ?
                         encrypted.path.split("/")[encrypted.path.split("/").length - 1] :
-                        encrypted.path.split("\\")[encrypted.path.split("\\").length - 1]).split(".")[0] + ".aes";
+                        encrypted.path.split("\\")[encrypted.path.split("\\").length - 1]);
                     const encryptedFile = new File(
                         [encryptedRaw],
                         name,
@@ -301,10 +299,13 @@ export default function UploadBtn() {
                     uploadSingle(encryptedFile);
                     window.electron.rmLocalFile(encrypted.path)
                 }
-
                 if (!e.target.isEncode.checked && !e.target.isEncryp.checked) {
                     uploadSingle(file);
                 }
+                SwalAlert("success", "업로드가 완료되었습니다.", () => {
+                    window.electron.clearFolder("data");
+                    window.location.reload()
+                });
             } catch (error) {
                 SwalError("업로드에 실패하였습니다.");
             }

@@ -23,6 +23,8 @@ import ModalFileopen from "./ModalFileopen";
 import ModalGetString from "./ModalGetString";
 import SwalConfirm from "../swal/SwalConfirm";
 import PostPurgeFile from "../../services/file/PostPurgeFile";
+import GetDownloadAesFile from "../../services/file/GetDownloadAesFile";
+import Swal from "sweetalert2";
 
 export default function ModalFileview(props) {
     const [isFileOpen, setIsFileOpen] = useState(false);
@@ -37,8 +39,35 @@ export default function ModalFileview(props) {
 
     const handleDownload = async (e) => {
         setIsNowDownload(true);
-        await GetDownloadFile(fileData.id, setPercentage, () => { }, fileData.name)
-        setTimeout(() => setIsNowDownload(false), 250);
+        if (fileData.name.endsWith(".aes")) {
+            Swal.fire({
+                title: '암호 키 입력',
+                input: 'password',
+                inputLabel: '암호화 시 사용한 키를 입력해주세요.',
+                inputPlaceholder: '비밀번호',
+                showCancelButton: true,
+                inputValidator: (value) => {
+                    if (!value) {
+                        return '비밀번호를 입력해주세요.'
+                    }
+                }
+            }).then(async (result) => {
+                if (result.isConfirmed) {
+                    const res = await GetDownloadAesFile(fileData.id, setPercentage, () => {
+                        setTimeout(() => setIsNowDownload(false), 250);
+                    }, fileData.name, result.value)
+                    if (!res[0]) {
+                        SwalError(res[1]);
+                        return;
+                    }
+                }
+            }).finally(() => {
+                setIsNowDownload(false);
+            })
+        }
+        else {
+            await GetDownloadFile(fileData.id, setPercentage, () => { setTimeout(() => setIsNowDownload(false), 250) }, fileData.name)
+        }
     }
 
     const handleLabelEdit = (e) => {
@@ -218,7 +247,7 @@ export default function ModalFileview(props) {
                                     {(props.isDeleted !== true && fileData.isShared !== true) &&
                                         <>
                                             <button onClick={handleLabelEdit} className="icon" ><TbEdit /></button>
-                                            <button onClick={handleLabelPrune} className="icon" style={{marginLeft: "10px"}}><AiOutlineClose /></button>
+                                            <button onClick={handleLabelPrune} className="icon" style={{ marginLeft: "10px" }}><AiOutlineClose /></button>
                                         </>
                                     }
                                     <div className="label">

@@ -3,7 +3,7 @@ const which = require('which');
 const path = require('path');
 const { spawn } = require('child_process');
 const { chdir } = require('process');
-const { stat, readdir, readFile, existsSync, unlink } = require('fs');
+const { stat, readdir, readFile, existsSync, unlink, writeFile } = require('fs');
 
 async function
   getFFMpegPath() {
@@ -103,7 +103,6 @@ async function
           files.forEach((file) => {
             unlink(path.join(folderPath, file), (err, _) => {
               if (err !== null)
-
                 reject(err);
             })
           })
@@ -133,6 +132,26 @@ async function
 }
 
 async function
+  saveBlob(filepath, blob) {
+  return new Promise((resolve, reject) => {
+    try {
+      const reader = new FileReader();
+      reader.onload = () => {
+        writeFile(filepath, Buffer.from(reader.result), (err) => {
+          if (err !== null)
+            reject(err);
+          else
+            resolve(true);
+        })
+      }
+      reader.readAsArrayBuffer(blob);
+    } catch (e) {
+      reject(e);
+    }
+  })
+}
+
+async function
   encryptFile(aescryptPath, filepath, key) {
   const outname = `${filepath}.aes`
 
@@ -141,12 +160,6 @@ async function
   return await new Promise((resolve, reject) => {
     try {
       const ffmpeg = spawn(aescryptPath, args)
-      ffmpeg.stdout.on('data', (data) => {
-        console.log(data.toString())
-      })
-      ffmpeg.stderr.on('data', (data) => {
-        console.error(data.toString())
-      })
       ffmpeg.on('close', (_) => {
         resolve('');
       })
@@ -171,24 +184,17 @@ async function
 }
 
 async function
-  decryptFile(aescryptPath, filepat, key) {
+  decryptFile(aescryptPath, filepath, key) {
   const pat = /(.*).aes/;
   const outnameM = filepath.match(pat);
   let outname;
   if (outnameM !== null && outnameM.length > 0) {
     outname = outnameM[0];
   }
-
   const args = [`-d`, `-p`, key, filepath];
   return await new Promise((resolve, reject) => {
     try {
       const ffmpeg = spawn(aescryptPath, args)
-      ffmpeg.stdout.on('data', (data) => {
-        console.log(data.toString())
-      })
-      ffmpeg.stderr.on('data', (data) => {
-        console.error(data.toString())
-      })
       ffmpeg.on('close', (_) => {
         resolve('');
       })
@@ -220,3 +226,4 @@ exports.encryptFile = encryptFile;
 exports.decryptFile = decryptFile;
 exports.rmLocalFile = rmLocalFile;
 exports.clearFolder = clearFolder;
+exports.saveBlob = saveBlob;
