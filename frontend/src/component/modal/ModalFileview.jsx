@@ -63,6 +63,7 @@ export default function ModalFileview(props) {
                 }
             }).finally(() => {
                 setIsNowDownload(false);
+                window.electron.clearFolder("data");
             })
         }
         else {

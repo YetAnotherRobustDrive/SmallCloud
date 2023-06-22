@@ -64,7 +64,7 @@ async function whenStart() {
   const appDir = app.getAppPath()
   const dataDir = path.join(appDir, 'data')
   const ffmpegPath = await apis.getFFMpegPath();
-  const aescryptPath = await apis.getAEScryptPath();
+  const aescryptPath = path.join(appDir, 'public', 'dist','aescrypt.exe')
   fs.mkdir(dataDir, { recursive: true }, () => { })
   context.setDataDir(dataDir)
   context.setFFMpegPath(ffmpegPath)
