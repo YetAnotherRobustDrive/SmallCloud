@@ -126,7 +126,6 @@ export default function UploadBtn() {
                                             reject();
                                         }
                                         else {
-                                            setFile(enRes);
                                             setIsOnEncrypt(false);
                                             resolve(enRes);
                                         }
@@ -300,6 +299,7 @@ export default function UploadBtn() {
                         name,
                     )
                     uploadSingle(encryptedFile);
+                    window.electron.rmLocalFile(encrypted.path)
                 }
 
                 if (!e.target.isEncode.checked && !e.target.isEncryp.checked) {
