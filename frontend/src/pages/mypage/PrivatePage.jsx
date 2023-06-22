@@ -134,7 +134,7 @@ export default function PrivatePage() {
             "서버를 변경하시겠습니까?",
             async () => {
                 localStorage.clear();
-                SwalAlert("success", "서버 설정이 초기화되었습니다.", () => { window.location.replace('/'); })
+                SwalAlert("success", "서버 설정이 초기화되었습니다.", () => { window.location.reload(); })
             },
             () => { return; }
         );

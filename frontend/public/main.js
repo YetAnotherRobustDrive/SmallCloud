@@ -61,10 +61,10 @@ app.on("activate", () => {
 });
 
 async function whenStart() {
-  const appDir = app.getAppPath()
+  const appDir = "";
   const dataDir = path.join(appDir, 'data')
   const ffmpegPath = await apis.getFFMpegPath();
-  const aescryptPath = path.join(appDir, 'public', 'dist','aescrypt.exe')
+  const aescryptPath = await apis.getAEScryptPath();
   fs.mkdir(dataDir, { recursive: true }, () => { })
   context.setDataDir(dataDir)
   context.setFFMpegPath(ffmpegPath)
