@@ -12,6 +12,15 @@
 # Tech-Stack
 ![image](https://github.com/YetAnotherRobustDrive/SmallCloud/assets/69972996/787d4bda-e7f2-431e-9b79-4ec4331935b3)
 
+# How to run EXE
+### Encoding & Encryption are not available unless AES Crypt & FFmpeg are installed.
+```bash
+# download & install FFmpeg
+https://ffmpeg.org/download.html
+# download & install AES Crypt
+https://www.aescrypt.com/download/
+```
+
 # How to run Server and Web UI
 ```bash
 # 1. Clone this repository
