@@ -60,11 +60,10 @@ export default function ModalFileopen(props) {
                 player.style.left = "40%";
                 player.style.transform = "translate(-50%, -50%)";
                 player.style.zIndex = "100";
-                await window.player.load(localStorage.getItem("API_SERVER") + "files/" + props.id + "/mpd?token=" + localStorage.getItem("accessToken"))
-                setIsLoaded(false);
-            }
+                await window.player.load(localStorage.getItem("API_SERVER") + "files/" + props.id + "/mpd?token=" + localStorage.getItem("accessToken"))            }
             play();
         }
+        setIsLoaded(false);
     }, [])
 
     return (

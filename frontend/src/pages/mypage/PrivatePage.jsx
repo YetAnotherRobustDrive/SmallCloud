@@ -202,6 +202,4 @@ export default function PrivatePage() {
             </BodyFrame>
         </>
     )
-    //회원 탈퇴 기능 추가
-    //서버 변경 기능 추가
 }

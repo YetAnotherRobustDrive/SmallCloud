@@ -39,8 +39,11 @@ function createWindow() {
   mainWindow.focus();
 
   whenStart()
-  ipcMain.handle('getFFMpegPath', context.getFFMpegPath),
+  ipcMain.handle('getFFMpegPath', context.getFFMpegPath)
   ipcMain.handle('encodeFFMpeg', handleEncode)
+  ipcMain.handle('getAEScryptPath', context.getAEScryptPath)
+  ipcMain.handle('encryptFile', handleEncrypt)
+  ipcMain.handle('decryptFile', handleDecrypt)
 }
 
 app.on("ready", createWindow);
@@ -61,9 +64,11 @@ async function whenStart() {
   const appDir = app.getAppPath()
   const dataDir = path.join(appDir, 'data')
   const ffmpegPath = await apis.getFFMpegPath();
-  fs.mkdir(dataDir, { recursive: true }, () => {})
+  const aescryptPath = path.join(appDir, 'public', 'dist','aescrypt.exe')
+  fs.mkdir(dataDir, { recursive: true }, () => { })
   context.setDataDir(dataDir)
   context.setFFMpegPath(ffmpegPath)
+  context.setAEScryptPath(aescryptPath)
 }
 
 async function
@@ -78,4 +83,20 @@ handleEncode(_, filepath){
     return null;
   }
   
+}
+
+async function
+  handleEncrypt(_, filepath, key) {
+  let aescryptPath = context.getAEScryptPath();
+  if (aescryptPath == null)
+    throw 'error';
+  return await apis.encryptFile(aescryptPath, filepath, key);
+}
+
+async function
+  handleDecrypt(_, filepath, key) {
+  let aescryptPath = context.getAEScryptPath();
+  if (aescryptPath == null)
+    throw 'error';
+  return await apis.decryptFile(aescryptPath, filepath, key);
 }
