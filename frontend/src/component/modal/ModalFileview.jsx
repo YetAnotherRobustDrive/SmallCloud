@@ -35,11 +35,34 @@ export default function ModalFileview(props) {
     const [isNowDownload, setIsNowDownload] = useState(false);
     const [percentage, setPercentage] = useState(0);
     const [shares, setShares] = useState([]);
+    const [isFfmpegExist, setIsFfmpegExist] = useState(false);
+    const [isAescryptExist, setIsAescryptExist] = useState(false);
     const fileData = props.file;
+
+    useEffect(() => {
+        const setPath = async () => {
+            window.electron.getFFMpegPath()
+                .then((path) => {
+                    if (path !== null)
+                        setIsFfmpegExist(true);
+                })
+            window.electron.getAEScryptPath()
+                .then((path) => {
+                    if (path !== null)
+                        setIsAescryptExist(true);
+                });
+        }
+        setPath()
+    }, [])
 
     const handleDownload = async (e) => {
         setIsNowDownload(true);
         if (fileData.name.endsWith(".aes")) {
+            if (!isAescryptExist) {
+                SwalError("AEScrypt가 설치되어있지 않습니다.");
+                setIsNowDownload(false);
+                return;
+            }
             Swal.fire({
                 title: '암호 키 입력',
                 input: 'password',

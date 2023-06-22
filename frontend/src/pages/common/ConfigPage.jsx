@@ -23,7 +23,7 @@ export default function ConfigPage() {
             });
             if (res.status === 200) {
                 SwalAlert("success", "서버 연결에 성공하였습니다.",
-                    () => { setConfig(addr); window.location.replace('/login') });
+                    () => { setConfig(addr); window.location.reload() });
             } else {
                 SwalError("서버 연결에 실패하였습니다.");
                 throw new Error();

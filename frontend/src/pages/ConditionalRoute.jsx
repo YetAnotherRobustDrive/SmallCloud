@@ -6,7 +6,6 @@ import AdminConfigPage from './admin/AdminConfigPage';
 import AdminFAQUploadPage from './admin/AdminFAQUploadPage';
 import AdminGroupConfigPage from './admin/AdminGroupConfigPage';
 import AdminLogPage from './admin/AdminLogPage';
-import AdminLogoConfigPage from './admin/AdminLogoConfigPage';
 import AdminNoticeUploadPage from './admin/AdminNoticeUploadPage';
 import AdminPrivacyUploadPage from './admin/AdminPrivacyUploadPage';
 import AdminQuestionList from './admin/AdminQuestionList';
@@ -32,6 +31,8 @@ import MyPage from './mypage/MyPage';
 import PrivatePage from './mypage/PrivatePage';
 import SecurityInfoPage from './mypage/SecurityInfoPage';
 import ServiceInfoPage from './mypage/ServiceInfoPage';
+import AdminLogoConfigPage from './admin/AdminLogoConfigPage';
+import ConfigPage from './common/ConfigPage';
 
 export default function ConditionalRoute() {
     const isPrivileged = useSelector(state => state.token.isPrivileged);
@@ -41,6 +42,10 @@ export default function ConditionalRoute() {
     return (
         <Router>
             <Routes>
+                {localStorage.getItem("API_SERVER") === null &&
+                    <Route path='*' element={<ConfigPage />} />
+                }
+                {localStorage.getItem("API_SERVER") !== null &&
                     <>
                         {isAdmin &&
                             <>
@@ -100,6 +105,7 @@ export default function ConditionalRoute() {
                         }
                         <Route path="*" element={<ErrorPage />} />
                     </>
+                }
             </Routes>
         </Router>
     )
