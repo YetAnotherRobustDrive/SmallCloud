@@ -25,6 +25,8 @@ export default function UploadBtn() {
     const [uploadState, setUploadState] = useState(0);
     const [isOnEncrypt, setIsOnEncrypt] = useState(false);
     const [isOnEncode, setIsOnEncode] = useState(false);
+    const [isFfmpegExist, setIsFfmpegExist] = useState(false);
+    const [isAescryptExist, setIsAescryptExist] = useState(false);
 
     const params = useParams();
 
@@ -41,17 +43,13 @@ export default function UploadBtn() {
         const setPath = async () => {
             window.electron.getFFMpegPath()
                 .then((path) => {
-                    if (path === null)
-                        SwalAlert("error", "ffmpeg를 찾을 수 없습니다.", () => {
-                            window.location.replace("/login");
-                        });
+                    if (path !== null)
+                        setIsFfmpegExist(true);
                 })
             window.electron.getAEScryptPath()
                 .then((path) => {
-                    if (path === null)
-                        SwalAlert("error", "aescrypt를 찾을 수 없습니다.", () => {
-                            window.location.replace("/login");
-                        });
+                    if (path !== null)
+                        setIsAescryptExist(true);
                 });
         }
         setPath()
@@ -268,6 +266,11 @@ export default function UploadBtn() {
                     return;
                 }
             }
+
+            SwalAlert("success", "업로드가 완료되었습니다.", () => {
+                window.electron.clearFolder("data");
+                window.location.reload()
+            });
         }
 
         const render = async () => {
@@ -276,6 +279,15 @@ export default function UploadBtn() {
                 return;
             }
             try {
+                if (!isFfmpegExist && e.target.isEncode.checked) {
+                    SwalError("ffmpeg가 설치되어있지 않습니다.");
+                    return;
+                }
+                if (!isAescryptExist && e.target.isEncryp.checked) {
+                    SwalError("aescrypt가 설치되어있지 않습니다.");
+                    return;
+                }
+                
                 checkUsage();
 
                 const encoded = await encode(e.target.isEncode.checked);
@@ -302,10 +314,6 @@ export default function UploadBtn() {
                 if (!e.target.isEncode.checked && !e.target.isEncryp.checked) {
                     uploadSingle(file);
                 }
-                SwalAlert("success", "업로드가 완료되었습니다.", () => {
-                    window.electron.clearFolder("data");
-                    window.location.reload()
-                });
             } catch (error) {
                 SwalError("업로드에 실패하였습니다.");
             }
