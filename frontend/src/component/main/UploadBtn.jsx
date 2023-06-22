@@ -14,6 +14,7 @@ import SwalLoadingBy from "../swal/SwalLoadingBy";
 import ProgressBar from "../updown/ProgressBar";
 import PostNewSegments from "../../services/file/PostNewSegments";
 import PostNewMpd from "../../services/file/PostNewMpd";
+import Swal from "sweetalert2";
 
 export default function UploadBtn() {
 
@@ -24,7 +25,6 @@ export default function UploadBtn() {
     const [uploadState, setUploadState] = useState(0);
     const [isOnEncrypt, setIsOnEncrypt] = useState(false);
     const [isOnEncode, setIsOnEncode] = useState(false);
-    const [aescrypt, setAEScrypt] = useState('');
 
     const params = useParams();
 
@@ -52,8 +52,6 @@ export default function UploadBtn() {
                         SwalAlert("error", "aescrypt를 찾을 수 없습니다.", () => {
                             window.location.replace("/login");
                         });
-                    else
-                        setAEScrypt(path);
                 });
         }
         setPath()
@@ -84,28 +82,76 @@ export default function UploadBtn() {
             return new Promise((resolve, reject) => {
                 if (isEncryp) {
                     if (file !== null && file !== undefined) {
-                        window.electron.encryptFile(file.path, aescrypt)
-                            .then((res) => {
-                                if (res === null) {
-                                    SwalError("암호화에 실패하였습니다.");
-                                    setIsOnEncrypt(false)
-                                    resolve(null);
+                        Swal.close();
+                        Swal.fire({
+                            title: "암호화 키 입력",
+                            input: "password",
+                            inputLabel: "키 분실 시, 복구가 불가능합니다.",
+                            inputPlaceholder: "암호화 키",
+                            confirmButtonText: "확인",
+                            cancelButtonText: "취소",
+                            showCancelButton: true,
+                            allowOutsideClick: false,
+                            inputValidator: (value) => {
+                                if (!value) {
+                                    return "암호화 키를 입력해주세요.";
                                 }
-                                else {
-                                    setIsOnEncrypt(false)
-                                    resolve(res);
-                                }
-                            })
+                            }
+                        }).then((res) => {
+                            if (res.isConfirmed) {
+                                Swal.fire({
+                                    title: "암호화 키 확인",
+                                    input: "password",
+                                    inputLabel: "암호화 키를 다시 한 번 입력해주세요.",
+                                    inputPlaceholder: "암호화 키",
+                                    confirmButtonText: "확인",
+                                    cancelButtonText: "취소",
+                                    showCancelButton: true,
+                                    allowOutsideClick: false,
+                                    inputValidator: (value) => {
+                                        if (!value) {
+                                            return "암호화 키를 입력해주세요.";
+                                        }
+                                        else if (value !== res.value) {
+                                            return "암호화 키가 일치하지 않습니다.";
+                                        }
+                                    }
+                                }).then( async (res2) => {
+                                    if (res2.isConfirmed) {
+                                        setIsOnEncrypt(e.target.isEncryp.checked);
+                                        const enRes = await window.electron.encryptFile(file.path, res.value)
+                                        if (enRes === null) {
+                                            SwalError("암호화에 실패하였습니다.");
+                                            setIsOnEncrypt(false);
+                                            reject();
+                                        }
+                                        else {
+                                            setFile(enRes);
+                                            setIsOnEncrypt(false);
+                                            resolve(enRes);
+                                        }
+                                    }
+                                    else {
+                                        resolve(null);
+                                    }
+                                })
+                            }
+                            else
+                                resolve(null);
+                        });
                     }
+                    else
+                        resolve(null);
                 }
                 else
                     resolve(null);
-            });
-        }
+            })
+        };
         const encode = async (isEncode) => {
             return new Promise(async (resolve, reject) => {
                 if (isEncode) {
                     if (file !== null && file !== undefined) {
+                        setIsOnEncode(e.target.isEncode.checked);
                         let res = await window.electron.encodeFFMpeg(file.path);
                         if (res === null) {
                             SwalError("인코딩에 실패하였습니다.");
@@ -171,11 +217,11 @@ export default function UploadBtn() {
             return curr;
         }
 
-        const uploadSingle = async () => {
+        const uploadSingle = async (targetFile) => {
             const curr = await getFolder();
             const formData = new FormData();
             formData.append('cwd', curr);
-            formData.append('file', file);
+            formData.append('file', targetFile);
             const res = await PostNewFile(formData, setUploadState, () => SwalAlert("success", "업로드가 완료되었습니다.", () => window.location.reload()));
             if (!res[0]) {
                 SwalError(res[1]);
@@ -223,7 +269,7 @@ export default function UploadBtn() {
                     return;
                 }
             }
-            //dir clear
+            window.electron.clearFolder("data");
             SwalAlert("success", "업로드가 완료되었습니다.", () => window.location.reload());
         }
 
@@ -232,21 +278,32 @@ export default function UploadBtn() {
                 SwalError("파일을 선택해주세요.");
                 return;
             }
-
-            setIsOnEncode(e.target.isEncode.checked);
-            setIsOnEncrypt(e.target.isEncryp.checked);
-
             try {
-                const encoded = await encode(e.target.isEncode.checked);
-                const encrypted = await encrypt(e.target.isEncryp.checked);
-
                 checkUsage();
 
-                if (e.target.isEncode.checked) {
+                const encoded = await encode(e.target.isEncode.checked);
+                const encrypted = await encrypt(e.target.isEncryp.checked);
+                setIsOnEncrypt(false)
+                setIsOnEncode(false)
+
+                if (e.target.isEncode.checked && encoded !== null) {
                     uploadEncoded(encoded);
                 }
-                else {
-                    uploadSingle();
+
+                if (e.target.isEncryp.checked && encrypted !== null) {
+                    const encryptedRaw = await window.electron.getFromLocal(encrypted.path);
+                    const name = (encrypted.path.includes("/") ?
+                        encrypted.path.split("/")[encrypted.path.split("/").length - 1] :
+                        encrypted.path.split("\\")[encrypted.path.split("\\").length - 1]).split(".")[0] + ".aes";
+                    const encryptedFile = new File(
+                        [encryptedRaw],
+                        name,
+                    )
+                    uploadSingle(encryptedFile);
+                }
+
+                if (!e.target.isEncode.checked && !e.target.isEncryp.checked) {
+                    uploadSingle(file);
                 }
             } catch (error) {
                 SwalError("업로드에 실패하였습니다.");
@@ -307,8 +364,8 @@ export default function UploadBtn() {
                             <div className="optionBtn">
                                 <label><input name="isEncode" type="checkbox" onClick={
                                     (e) => {
-                                        if (e.target.checked === true) {
-                                            SwalAlert("info", "인코딩은 파일 업로드 시간이 길어질 수 있습니다.");
+                                        if (e.target.checked === true && document.getElementsByName("isEncryp")[0].checked === true) {
+                                            SwalAlert("info", "인코딩과 암호화를 동시에 선택할 경우, 각각 2개의 파일이 업로드됩니다.");
                                         }
                                     }
                                 } disabled={
@@ -316,8 +373,8 @@ export default function UploadBtn() {
                                 } />스트리밍 최적화(인코딩)</label>
                                 <label><input name="isEncryp" type="checkbox" onClick={
                                     (e) => {
-                                        if (e.target.checked === true) {
-                                            SwalAlert("info", "암호화는 파일 업로드 시간이 길어질 수 있습니다.");
+                                        if (e.target.checked === true && document.getElementsByName("isEncode")[0].checked === true) {
+                                            SwalAlert("info", "인코딩과 암호화를 동시에 선택할 경우, 각각 2개의 파일이 업로드됩니다.");
                                         }
                                     }
                                 } />암호화</label>

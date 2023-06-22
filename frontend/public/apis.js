@@ -3,7 +3,7 @@ const which = require('which');
 const path = require('path');
 const { spawn } = require('child_process');
 const { chdir } = require('process');
-const { stat, readdir, readFile, existsSync } = require('fs');
+const { stat, readdir, readFile, existsSync, unlink } = require('fs');
 
 async function
   getFFMpegPath() {
@@ -90,6 +90,30 @@ async function
       reject(e);
     }
   })
+}
+
+async function
+  clearFolder(folderPath) {
+  return new Promise((resolve, reject) => {
+    try {
+      readdir(folderPath, (err, files) => {
+        if (err !== null)
+          reject(err);
+        else {
+          files.forEach((file) => {
+            unlink(path.join(folderPath, file), (err, _) => {
+              if (err !== null)
+
+                reject(err);
+            })
+          })
+          resolve(true);
+        }
+      })
+    } catch (e) {
+      reject(e);
+    }
+  }) 
 }
 
 async function
@@ -195,3 +219,4 @@ exports.getAEScryptPath = getAEScryptPath;
 exports.encryptFile = encryptFile;
 exports.decryptFile = decryptFile;
 exports.rmLocalFile = rmLocalFile;
+exports.clearFolder = clearFolder;
