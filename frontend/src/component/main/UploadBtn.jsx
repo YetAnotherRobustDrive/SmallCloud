@@ -52,7 +52,11 @@ export default function UploadBtn() {
                         setIsAescryptExist(true);
                 });
         }
-        setPath()
+        try {
+            setPath()            
+        } catch (error) {
+            console.log(error);
+        }
     }, [])
 
     const handleDrop = (e) => {

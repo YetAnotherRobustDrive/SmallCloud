@@ -52,7 +52,11 @@ export default function ModalFileview(props) {
                         setIsAescryptExist(true);
                 });
         }
-        setPath()
+        try {
+            setPath()
+        } catch (error) {
+            console.log(error);
+        }
     }, [])
 
     const handleDownload = async (e) => {
