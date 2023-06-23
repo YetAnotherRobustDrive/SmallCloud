@@ -1,8 +1,5 @@
 package org.mint.smallcloud.share.domain;
 
-import lombok.AccessLevel;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
 import org.mint.smallcloud.file.domain.DataNode;
 import org.mint.smallcloud.group.domain.Group;
 import org.mint.smallcloud.user.domain.Member;
@@ -14,8 +11,6 @@ import javax.persistence.*;
 @Entity
 @Inheritance(strategy = InheritanceType.JOINED)
 @DiscriminatorColumn
-@NoArgsConstructor(access = AccessLevel.PROTECTED)
-@Getter
 public abstract class Share {
 
     @Id
@@ -26,6 +21,9 @@ public abstract class Share {
     @ManyToOne
     @JoinColumn(name = "FILE")
     private DataNode file;
+
+    protected Share() {
+    }
 
     @Override
     public boolean equals(Object obj) {
@@ -74,4 +72,11 @@ public abstract class Share {
 
     public abstract String getTargetName();
 
+    public Long getId() {
+        return this.id;
+    }
+
+    public DataNode getFile() {
+        return this.file;
+    }
 }

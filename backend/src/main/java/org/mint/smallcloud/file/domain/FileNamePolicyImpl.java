@@ -1,16 +1,17 @@
 package org.mint.smallcloud.file.domain;
 
-import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
+import org.slf4j.Logger;
 import org.springframework.stereotype.Component;
 
 import java.util.regex.Pattern;
 
 @Component
-@RequiredArgsConstructor
-@Slf4j
 public class FileNamePolicyImpl implements FileNamePolicy {
     private static final Pattern fileSuffixPattern = Pattern.compile("_[0-9]+$");
+    private static final Logger log = org.slf4j.LoggerFactory.getLogger(FileNamePolicyImpl.class);
+
+    public FileNamePolicyImpl() {
+    }
 
     public String nextFileName(String fileName) {
         if (fileSuffixPattern.matcher(fileName).find()) {

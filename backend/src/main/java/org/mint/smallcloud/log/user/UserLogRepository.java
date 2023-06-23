@@ -1,6 +1,5 @@
 package org.mint.smallcloud.log.user;
 
-import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
@@ -13,10 +12,13 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Repository
-@RequiredArgsConstructor
 public class UserLogRepository {
 
     private final EntityManager em;
+
+    public UserLogRepository(EntityManager em) {
+        this.em = em;
+    }
 
     public void saveAndFlush(UserLog userLog) {
         em.persist(userLog);
@@ -40,7 +42,7 @@ public class UserLogRepository {
         if (status != null)
             conditionsWhereJpql.add("ul.status = :status");
         if (action != null)
-             conditionsWhereJpql.add("ul.action like :action");
+            conditionsWhereJpql.add("ul.action like :action");
         String whereJpql = conditionsWhereJpql.isEmpty() ? "" : " where " + String.join(" and ", conditionsWhereJpql);
 
         TypedQuery<UserLog> query = em.createQuery(
@@ -49,7 +51,7 @@ public class UserLogRepository {
             .setFirstResult((int) pageable.getOffset())
             .setMaxResults(pageable.getPageSize());
 
-        TypedQuery<Long> countingQuery= em.createQuery(
+        TypedQuery<Long> countingQuery = em.createQuery(
             countingJpqlSelect + fromJpql + whereJpql,
             Long.class);
         if (username != null) {
@@ -87,9 +89,9 @@ public class UserLogRepository {
         return new PageImpl<>(content, pageable, total);
     }
 
-    public List<UserLog> findByActionStartsWith(String action){
+    public List<UserLog> findByActionStartsWith(String action) {
         return em.createQuery("select ul from UserLog ul where ul.action like :action", UserLog.class)
-                .setParameter("action", "%" + action + "%")
-                .getResultList();
+            .setParameter("action", "%" + action + "%")
+            .getResultList();
     }
 }

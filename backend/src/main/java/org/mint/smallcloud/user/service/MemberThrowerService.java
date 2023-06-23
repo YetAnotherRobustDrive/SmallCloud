@@ -1,19 +1,21 @@
 package org.mint.smallcloud.user.service;
 
-import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 import org.mint.smallcloud.exception.ExceptionStatus;
 import org.mint.smallcloud.exception.ServiceException;
 import org.mint.smallcloud.user.domain.Member;
 import org.mint.smallcloud.user.domain.Role;
 import org.mint.smallcloud.user.repository.MemberRepository;
+import org.slf4j.Logger;
 import org.springframework.stereotype.Service;
 
 @Service
-@RequiredArgsConstructor
-@Slf4j
 public class MemberThrowerService {
+    private static final Logger log = org.slf4j.LoggerFactory.getLogger(MemberThrowerService.class);
     private final MemberRepository memberRepository;
+
+    public MemberThrowerService(MemberRepository memberRepository) {
+        this.memberRepository = memberRepository;
+    }
 
     public Member getCommonByUsername(String username) {
         Member member = memberRepository

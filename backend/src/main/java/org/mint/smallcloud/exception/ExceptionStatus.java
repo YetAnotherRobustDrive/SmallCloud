@@ -2,13 +2,9 @@ package org.mint.smallcloud.exception;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonUnwrapped;
-import lombok.Getter;
-import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 
 @JsonFormat(shape = JsonFormat.Shape.OBJECT)
-@RequiredArgsConstructor
-@Getter
 public enum ExceptionStatus {
     NOT_FOUND_COMMON_MEMBER(HttpStatus.NOT_FOUND, "회원이 존재하지 않습니다."),
     NOT_FOUND_ADMIN_MEMBER(HttpStatus.NOT_FOUND, "관리자가 존재하지 않습니다."),
@@ -50,4 +46,12 @@ public enum ExceptionStatus {
 
     @JsonUnwrapped
     private final ErrorResponseDto responseDto;
+
+    private ExceptionStatus(ErrorResponseDto responseDto) {
+        this.responseDto = responseDto;
+    }
+
+    public ErrorResponseDto getResponseDto() {
+        return this.responseDto;
+    }
 }

@@ -1,8 +1,7 @@
 package org.mint.smallcloud.security.config;
 
-import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 import org.mint.smallcloud.security.FilterExceptionManager;
+import org.slf4j.Logger;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.web.AuthenticationEntryPoint;
 import org.springframework.stereotype.Component;
@@ -13,10 +12,13 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
 @Component
-@RequiredArgsConstructor
-@Slf4j
 public class CustomAuthenticationEntryPoint implements AuthenticationEntryPoint {
+    private static final Logger log = org.slf4j.LoggerFactory.getLogger(CustomAuthenticationEntryPoint.class);
     private final FilterExceptionManager filterExceptionManager;
+
+    public CustomAuthenticationEntryPoint(FilterExceptionManager filterExceptionManager) {
+        this.filterExceptionManager = filterExceptionManager;
+    }
 
     @Override
     public void commence(HttpServletRequest request, HttpServletResponse response, AuthenticationException authException) throws IOException, ServletException {

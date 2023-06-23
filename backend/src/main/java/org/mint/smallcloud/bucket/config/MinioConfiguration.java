@@ -3,7 +3,6 @@ package org.mint.smallcloud.bucket.config;
 import io.minio.BucketExistsArgs;
 import io.minio.MakeBucketArgs;
 import io.minio.MinioClient;
-import lombok.RequiredArgsConstructor;
 import org.mint.smallcloud.bucket.service.CustomMinioProperties;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
@@ -11,10 +10,13 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Profile;
 
 @Configuration
-@RequiredArgsConstructor
 @Profile("local")
 public class MinioConfiguration {
     private final CustomMinioProperties minioProperties;
+
+    public MinioConfiguration(CustomMinioProperties minioProperties) {
+        this.minioProperties = minioProperties;
+    }
 
     @Bean
     public MinioClient minioClient(

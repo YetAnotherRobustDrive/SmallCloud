@@ -1,15 +1,9 @@
 package org.mint.smallcloud.file.domain;
 
-import lombok.AccessLevel;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-
 import javax.persistence.Column;
 import javax.persistence.Embeddable;
 
 @Embeddable
-@NoArgsConstructor(access = AccessLevel.PROTECTED)
-@Getter
 public class FileType {
     public static final String FOLDER = "FOLDER";
 
@@ -23,7 +17,18 @@ public class FileType {
         this.type = type;
     }
 
+    protected FileType() {
+    }
+
     public static FileType of(String name, String type) {
         return new FileType(name, type);
+    }
+
+    public String getName() {
+        return this.name;
+    }
+
+    public String getType() {
+        return this.type;
     }
 }

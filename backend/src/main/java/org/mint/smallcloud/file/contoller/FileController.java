@@ -1,9 +1,5 @@
 package org.mint.smallcloud.file.contoller;
 
-import lombok.Builder;
-import lombok.Getter;
-import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 import org.mint.smallcloud.ResponseDto;
 import org.mint.smallcloud.bucket.dto.FileObjectDto;
 import org.mint.smallcloud.bucket.service.StorageService;
@@ -25,6 +21,7 @@ import org.mint.smallcloud.security.UserDetailsProvider;
 import org.mint.smallcloud.user.domain.Member;
 import org.mint.smallcloud.user.domain.Roles;
 import org.mint.smallcloud.user.repository.MemberRepository;
+import org.slf4j.Logger;
 import org.springframework.core.io.InputStreamResource;
 import org.springframework.core.io.Resource;
 import org.springframework.http.HttpHeaders;
@@ -47,9 +44,8 @@ import java.util.Optional;
 
 @RestController
 @RequestMapping("/files")
-@RequiredArgsConstructor
-@Slf4j
 public class FileController {
+    private static final Logger log = org.slf4j.LoggerFactory.getLogger(FileController.class);
     private final StorageService storageService;
     private final FolderRepository folderRepository;
     private final FileRepository fileRepository;
@@ -58,8 +54,16 @@ public class FileController {
     private final LabelService labelService;
     private final FileFacadeService fileFacadeService;
 
-    @Builder
-    @Getter
+    public FileController(StorageService storageService, FolderRepository folderRepository, FileRepository fileRepository, UserDetailsProvider userDetailsProvider, MemberRepository memberRepository, LabelService labelService, FileFacadeService fileFacadeService) {
+        this.storageService = storageService;
+        this.folderRepository = folderRepository;
+        this.fileRepository = fileRepository;
+        this.userDetailsProvider = userDetailsProvider;
+        this.memberRepository = memberRepository;
+        this.labelService = labelService;
+        this.fileFacadeService = fileFacadeService;
+    }
+
     public static class UploadResponse {
         Long id;
         String securityLevel;
@@ -69,6 +73,115 @@ public class FileController {
         String type;
         String thumbnail;
         boolean shared;
+
+        UploadResponse(Long id, String securityLevel, String writingStage, String name, Long size, String type, String thumbnail, boolean shared) {
+            this.id = id;
+            this.securityLevel = securityLevel;
+            this.writingStage = writingStage;
+            this.name = name;
+            this.size = size;
+            this.type = type;
+            this.thumbnail = thumbnail;
+            this.shared = shared;
+        }
+
+        public static UploadResponseBuilder builder() {
+            return new UploadResponseBuilder();
+        }
+
+        public Long getId() {
+            return this.id;
+        }
+
+        public String getSecurityLevel() {
+            return this.securityLevel;
+        }
+
+        public String getWritingStage() {
+            return this.writingStage;
+        }
+
+        public String getName() {
+            return this.name;
+        }
+
+        public Long getSize() {
+            return this.size;
+        }
+
+        public String getType() {
+            return this.type;
+        }
+
+        public String getThumbnail() {
+            return this.thumbnail;
+        }
+
+        public boolean isShared() {
+            return this.shared;
+        }
+
+        public static class UploadResponseBuilder {
+            private Long id;
+            private String securityLevel;
+            private String writingStage;
+            private String name;
+            private Long size;
+            private String type;
+            private String thumbnail;
+            private boolean shared;
+
+            UploadResponseBuilder() {
+            }
+
+            public UploadResponseBuilder id(Long id) {
+                this.id = id;
+                return this;
+            }
+
+            public UploadResponseBuilder securityLevel(String securityLevel) {
+                this.securityLevel = securityLevel;
+                return this;
+            }
+
+            public UploadResponseBuilder writingStage(String writingStage) {
+                this.writingStage = writingStage;
+                return this;
+            }
+
+            public UploadResponseBuilder name(String name) {
+                this.name = name;
+                return this;
+            }
+
+            public UploadResponseBuilder size(Long size) {
+                this.size = size;
+                return this;
+            }
+
+            public UploadResponseBuilder type(String type) {
+                this.type = type;
+                return this;
+            }
+
+            public UploadResponseBuilder thumbnail(String thumbnail) {
+                this.thumbnail = thumbnail;
+                return this;
+            }
+
+            public UploadResponseBuilder shared(boolean shared) {
+                this.shared = shared;
+                return this;
+            }
+
+            public UploadResponse build() {
+                return new UploadResponse(this.id, this.securityLevel, this.writingStage, this.name, this.size, this.type, this.thumbnail, this.shared);
+            }
+
+            public String toString() {
+                return "FileController.UploadResponse.UploadResponseBuilder(id=" + this.id + ", securityLevel=" + this.securityLevel + ", writingStage=" + this.writingStage + ", name=" + this.name + ", size=" + this.size + ", type=" + this.type + ", thumbnail=" + this.thumbnail + ", shared=" + this.shared + ")";
+            }
+        }
     }
 
     @GetMapping("/{fileId}/isEncoded")
@@ -106,8 +219,8 @@ public class FileController {
         FileObjectDto fileObject = storageService.uploadFile(formFile.getInputStream(), mimeType, fileSize);
 
         File file = File.of(folder, FileType.of(fileName, mimeType),
-                            FileLocation.of(fileObject.getObjectId()),
-                            fileSize, memberOpt.get());
+            FileLocation.of(fileObject.getObjectId()),
+            fileSize, memberOpt.get());
 
         file = fileRepository.save(file);
         return UploadResponse.builder()
@@ -144,10 +257,10 @@ public class FileController {
 
         HttpHeaders headers = new HttpHeaders();
         headers.add(HttpHeaders.CONTENT_DISPOSITION,
-                    String.format("attachment; filename=\"%s\"",
-                                  encode(file.getName())));
+            String.format("attachment; filename=\"%s\"",
+                encode(file.getName())));
         headers.add(HttpHeaders.CACHE_CONTROL,
-                    "no-cache, no-store, must-revalidate");
+            "no-cache, no-store, must-revalidate");
         headers.add(HttpHeaders.PRAGMA, "no-cache");
         headers.add(HttpHeaders.EXPIRES, "0");
 
@@ -199,9 +312,9 @@ public class FileController {
     @PostMapping("/update/label")
     public ResponseEntity<?> updateLabel(@RequestBody LabelUpdateDto labelUpdateDto) {
         String userName = userDetailsProvider
-                .getUserDetails().orElseThrow(() -> new ServiceException(ExceptionStatus.NO_PERMISSION)).getUsername();
+            .getUserDetails().orElseThrow(() -> new ServiceException(ExceptionStatus.NO_PERMISSION)).getUsername();
         labelService.updateFile(labelUpdateDto, userName);
-        return  ResponseEntity.ok().build();
+        return ResponseEntity.ok().build();
     }
 
     @Secured(Roles.S_COMMON)
@@ -253,19 +366,19 @@ public class FileController {
         UserDetails user = getLoginUser();
         List<FileDto> files = fileFacadeService.search(q, user.getUsername());
         return ResponseDto.<List<FileDto>>builder()
-                .result(files)
-                .build();
+            .result(files)
+            .build();
     }
 
 
     private String encode(String fileName) {
         try {
             return URLEncoder.encode(fileName, StandardCharsets.UTF_8);
-        } catch(Exception e) {
+        } catch (Exception e) {
             return fileName;
         }
     }
-    
+
     private UserDetails getLoginUser() {
         return userDetailsProvider.getUserDetails()
             .orElseThrow(() -> new ServiceException(ExceptionStatus.NO_PERMISSION));
@@ -277,7 +390,7 @@ public class FileController {
         UserDetails user = getLoginUser();
         UsageDto usage = fileFacadeService.getUsage(user.getUsername());
         return UsageDto.builder()
-                .used(usage.getUsed())
-                .build();
+            .used(usage.getUsed())
+            .build();
     }
 }

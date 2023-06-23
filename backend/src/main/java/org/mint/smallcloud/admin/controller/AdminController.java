@@ -1,6 +1,5 @@
 package org.mint.smallcloud.admin.controller;
 
-import lombok.RequiredArgsConstructor;
 import org.mint.smallcloud.admin.domain.AdminConfig;
 import org.mint.smallcloud.admin.dto.AdminConfigDto;
 import org.mint.smallcloud.admin.dto.ChangePasswordDto;
@@ -10,12 +9,15 @@ import org.springframework.security.access.annotation.Secured;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
-@RequiredArgsConstructor
 @RestController
 @RequestMapping("/admin")
 @Validated
 public class AdminController {
     private final AdminService adminService;
+
+    public AdminController(AdminService adminService) {
+        this.adminService = adminService;
+    }
 
     @Secured(Roles.S_ADMIN)
     @PostMapping("/lock/{username}")

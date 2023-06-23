@@ -1,8 +1,6 @@
 package org.mint.smallcloud.share.service;
 
 
-import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 import org.mint.smallcloud.exception.ExceptionStatus;
 import org.mint.smallcloud.exception.ServiceException;
 import org.mint.smallcloud.file.domain.DataNode;
@@ -23,19 +21,19 @@ import org.mint.smallcloud.share.repository.GroupShareRepository;
 import org.mint.smallcloud.share.repository.MemberShareRepository;
 import org.mint.smallcloud.user.domain.Member;
 import org.mint.smallcloud.user.service.MemberThrowerService;
+import org.slf4j.Logger;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
-import java.util.ArrayList;
 
 @Service
-@RequiredArgsConstructor
-@Slf4j
 @Transactional
 public class ShareService {
+    private static final Logger log = org.slf4j.LoggerFactory.getLogger(ShareService.class);
     private final GroupShareRepository groupShareRepository;
     private final MemberShareRepository memberShareRepository;
     private final MemberThrowerService memberThrowerService;
@@ -44,6 +42,18 @@ public class ShareService {
     private final FileMapper fileMapper;
     private final FolderMapper folderMapper;
     private final ApplicationEventPublisher applicationEventPublisher;
+
+    public ShareService(GroupShareRepository groupShareRepository, MemberShareRepository memberShareRepository, MemberThrowerService memberThrowerService, GroupThrowerService groupThrowerService, DataNodeRepository dataNodeRepository, FileMapper fileMapper, FolderMapper folderMapper, ApplicationEventPublisher applicationEventPublisher) {
+        this.groupShareRepository = groupShareRepository;
+        this.memberShareRepository = memberShareRepository;
+        this.memberThrowerService = memberThrowerService;
+        this.groupThrowerService = groupThrowerService;
+        this.dataNodeRepository = dataNodeRepository;
+        this.fileMapper = fileMapper;
+        this.folderMapper = folderMapper;
+        this.applicationEventPublisher = applicationEventPublisher;
+    }
+
     public void create(String loginUsername, ShareRequestDto dto) {
         Member accessor = memberThrowerService.getMemberByUsername(loginUsername);
         DataNode file = dataNodeRepository.findById(dto.getFileId())
@@ -71,7 +81,7 @@ public class ShareService {
                     .content(String.format("\"%s\"을(를) 공유 받았습니다.", file.getName()))
                     .owner(m)
                     .build()));
-        }
+    }
 
     public void delete(String loginUsername, ShareRequestDto dto) {
         Member accessor = memberThrowerService.getMemberByUsername(loginUsername);
@@ -105,6 +115,7 @@ public class ShareService {
             return;
         groupShareRepository.save(GroupShare.of(target, file));
     }
+
     private void createMemberShare(Member target, DataNode file) {
         if (memberShareRepository.existsByFileIdAndTarget_Username(file.getId(), target.getUsername()))
             return;

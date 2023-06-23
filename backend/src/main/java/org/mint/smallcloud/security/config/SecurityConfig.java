@@ -1,6 +1,5 @@
 package org.mint.smallcloud.security.config;
 
-import lombok.RequiredArgsConstructor;
 import org.mint.smallcloud.security.FilterExceptionManager;
 import org.mint.smallcloud.security.UserDetailsProvider;
 import org.mint.smallcloud.security.jwt.JwtFilter;
@@ -17,7 +16,6 @@ import org.springframework.web.cors.CorsConfigurationSource;
 
 
 @Configuration
-@RequiredArgsConstructor
 @EnableWebSecurity
 @EnableGlobalMethodSecurity(securedEnabled = true, prePostEnabled = true)
 public class SecurityConfig {
@@ -27,6 +25,15 @@ public class SecurityConfig {
     private final CustomAuthenticationEntryPoint authenticationEntryPoint;
     private final CustomAccessDeniedHandler accessDeniedHandler;
     private final CorsConfigurationSource corsConfigurationSource;
+
+    public SecurityConfig(JwtTokenProvider jwtTokenProvider, UserDetailsProvider userDetailsProvider, FilterExceptionManager filterExceptionManager, CustomAuthenticationEntryPoint authenticationEntryPoint, CustomAccessDeniedHandler accessDeniedHandler, CorsConfigurationSource corsConfigurationSource) {
+        this.jwtTokenProvider = jwtTokenProvider;
+        this.userDetailsProvider = userDetailsProvider;
+        this.filterExceptionManager = filterExceptionManager;
+        this.authenticationEntryPoint = authenticationEntryPoint;
+        this.accessDeniedHandler = accessDeniedHandler;
+        this.corsConfigurationSource = corsConfigurationSource;
+    }
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {

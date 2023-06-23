@@ -17,7 +17,7 @@ public class CorsConfig {
         String frontOrigin,
         @Value("${server.front-port}")
         String frontPort
-        ) {
+    ) {
         String FRONT_LOCALHOST = "http://localhost:";
         FRONT_ORIGIN = frontOrigin;
         FRONT_LOCALHOST_ORIGIN = FRONT_LOCALHOST + frontPort;

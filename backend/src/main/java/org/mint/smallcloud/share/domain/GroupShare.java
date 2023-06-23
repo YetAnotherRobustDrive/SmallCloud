@@ -1,9 +1,6 @@
 package org.mint.smallcloud.share.domain;
 
 
-import lombok.AccessLevel;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
 import org.mint.smallcloud.file.domain.DataNode;
 import org.mint.smallcloud.group.domain.Group;
 import org.mint.smallcloud.user.domain.Member;
@@ -15,12 +12,13 @@ import javax.persistence.Table;
 
 @Table(name = "GROUP_SHARES")
 @Entity
-@NoArgsConstructor(access = AccessLevel.PROTECTED)
-@Getter
 public class GroupShare extends Share {
     @ManyToOne
     @JoinColumn(name = "GROUP_ID")
     private Group target;
+
+    protected GroupShare() {
+    }
 
     @Override
     public boolean equals(Object obj) {
@@ -56,5 +54,9 @@ public class GroupShare extends Share {
     @Override
     public String getTargetName() {
         return getTarget().getName();
+    }
+
+    public Group getTarget() {
+        return this.target;
     }
 }

@@ -1,7 +1,5 @@
 package org.mint.smallcloud.log.controller;
 
-import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 import org.mint.smallcloud.exception.ExceptionStatus;
 import org.mint.smallcloud.exception.ServiceException;
 import org.mint.smallcloud.log.dto.RequestLogDto;
@@ -10,6 +8,7 @@ import org.mint.smallcloud.log.dto.ResponseLoginLogDto;
 import org.mint.smallcloud.log.service.LogService;
 import org.mint.smallcloud.security.UserDetailsProvider;
 import org.mint.smallcloud.user.domain.Roles;
+import org.slf4j.Logger;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.security.access.annotation.Secured;
@@ -21,12 +20,16 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/logs")
-@Slf4j
-@RequiredArgsConstructor
 @Validated
 public class LogController {
+    private static final Logger log = org.slf4j.LoggerFactory.getLogger(LogController.class);
     private final LogService logService;
     private final UserDetailsProvider userDetailsProvider;
+
+    public LogController(LogService logService, UserDetailsProvider userDetailsProvider) {
+        this.logService = logService;
+        this.userDetailsProvider = userDetailsProvider;
+    }
 
 
     // 사용자 log 가져오기
@@ -40,14 +43,14 @@ public class LogController {
 
     private UserDetails getLoginUser() {
         return userDetailsProvider.getUserDetails()
-                .orElseThrow(() -> new ServiceException(ExceptionStatus.NO_PERMISSION));
+            .orElseThrow(() -> new ServiceException(ExceptionStatus.NO_PERMISSION));
     }
 
     // 관리자 log 가져오기
     @Secured({Roles.S_ADMIN})
     @PostMapping("/admin")
     public Page<ResponseLogDto> getAdminLogs(
-            @RequestBody RequestLogDto requestLogDto, Pageable pageable) {
+        @RequestBody RequestLogDto requestLogDto, Pageable pageable) {
         return logService.findLogs(requestLogDto, pageable);
     }
 }

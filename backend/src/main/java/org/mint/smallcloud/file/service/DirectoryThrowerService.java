@@ -1,18 +1,20 @@
 package org.mint.smallcloud.file.service;
 
-import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 import org.mint.smallcloud.exception.ExceptionStatus;
 import org.mint.smallcloud.exception.ServiceException;
 import org.mint.smallcloud.file.domain.Folder;
 import org.mint.smallcloud.file.repository.FolderRepository;
+import org.slf4j.Logger;
 import org.springframework.stereotype.Service;
 
 @Service
-@Slf4j
-@RequiredArgsConstructor
 public class DirectoryThrowerService {
+    private static final Logger log = org.slf4j.LoggerFactory.getLogger(DirectoryThrowerService.class);
     private final FolderRepository folderRepository;
+
+    public DirectoryThrowerService(FolderRepository folderRepository) {
+        this.folderRepository = folderRepository;
+    }
 
     public Folder getDirectoryById(Long directoryId) {
         return folderRepository.findById(directoryId)

@@ -1,8 +1,5 @@
 package org.mint.smallcloud.group.domain;
 
-import lombok.AccessLevel;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
 import org.mint.smallcloud.share.domain.GroupShare;
 import org.mint.smallcloud.user.domain.Member;
 
@@ -12,8 +9,6 @@ import java.util.List;
 
 @Table(name = "GROUPS")
 @Entity
-@NoArgsConstructor(access = AccessLevel.PROTECTED)
-@Getter
 public class Group {
 
     @Id
@@ -48,6 +43,9 @@ public class Group {
     protected Group(String name, Group parentGroup) {
         this.name = name;
         this.parentGroup = parentGroup;
+    }
+
+    protected Group() {
     }
 
     public static Group of(String name, Group parent) {
@@ -120,5 +118,29 @@ public class Group {
     public void addShare(GroupShare rst) {
         if (!getShares().contains(rst))
             getShares().add(rst);
+    }
+
+    public Long getId() {
+        return this.id;
+    }
+
+    public String getName() {
+        return this.name;
+    }
+
+    public Group getParentGroup() {
+        return this.parentGroup;
+    }
+
+    public List<Group> getSubGroups() {
+        return this.subGroups;
+    }
+
+    public List<GroupShare> getShares() {
+        return this.shares;
+    }
+
+    public List<Member> getMembers() {
+        return this.members;
     }
 }

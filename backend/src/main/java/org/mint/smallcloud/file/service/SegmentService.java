@@ -1,6 +1,5 @@
 package org.mint.smallcloud.file.service;
 
-import lombok.RequiredArgsConstructor;
 import org.mint.smallcloud.bucket.dto.FileObjectDto;
 import org.mint.smallcloud.bucket.service.StorageService;
 import org.mint.smallcloud.exception.ExceptionStatus;
@@ -21,13 +20,19 @@ import java.io.InputStream;
 import java.nio.charset.StandardCharsets;
 
 @Service
-@RequiredArgsConstructor
 @Transactional
 public class SegmentService {
     private final IndexDataRepository indexDataRepository;
     private final MemberRepository memberRepository;
     private final FileRepository fileRepository;
     private final StorageService storageService;
+
+    public SegmentService(IndexDataRepository indexDataRepository, MemberRepository memberRepository, FileRepository fileRepository, StorageService storageService) {
+        this.indexDataRepository = indexDataRepository;
+        this.memberRepository = memberRepository;
+        this.fileRepository = fileRepository;
+        this.storageService = storageService;
+    }
 
     public SegmentController.UploadResponse createIndexData(String userName, Long fileId, MultipartFile formFile) {
         Member member = memberRepository.findByUsername(userName)
@@ -76,7 +81,7 @@ public class SegmentService {
         if (i == manifest.length())  // illegal manifest
             return null;
         StringBuilder sb = new StringBuilder();
-        sb.append(manifest.substring(0, i+1));
+        sb.append(manifest.substring(0, i + 1));
         sb.append(String.format("<BaseURL>%s</BaseURL>", baseUrl));
         sb.append(manifest.substring(i + 1));
         return sb.toString();

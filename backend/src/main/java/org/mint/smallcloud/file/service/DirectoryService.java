@@ -1,7 +1,5 @@
 package org.mint.smallcloud.file.service;
 
-import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 import org.mint.smallcloud.exception.ExceptionStatus;
 import org.mint.smallcloud.exception.ServiceException;
 import org.mint.smallcloud.file.domain.FileNamePolicy;
@@ -9,19 +7,25 @@ import org.mint.smallcloud.file.domain.Folder;
 import org.mint.smallcloud.file.repository.FolderRepository;
 import org.mint.smallcloud.label.service.LabelService;
 import org.mint.smallcloud.user.domain.Member;
+import org.slf4j.Logger;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
 import java.util.List;
 
 @Service
-@Slf4j
-@RequiredArgsConstructor
 @Transactional
 public class DirectoryService {
+    private static final Logger log = org.slf4j.LoggerFactory.getLogger(DirectoryService.class);
     private final FolderRepository folderRepository;
     private final LabelService labelService;
     private final FileNamePolicy fileNamePolicy;
+
+    public DirectoryService(FolderRepository folderRepository, LabelService labelService, FileNamePolicy fileNamePolicy) {
+        this.folderRepository = folderRepository;
+        this.labelService = labelService;
+        this.fileNamePolicy = fileNamePolicy;
+    }
 
     public void createRootDirectory(Member member) {
         folderRepository.save(Folder.createRoot(member));

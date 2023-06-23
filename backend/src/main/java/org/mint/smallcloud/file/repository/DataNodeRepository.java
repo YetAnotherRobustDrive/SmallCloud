@@ -11,6 +11,7 @@ import java.util.List;
 @Repository
 public interface DataNodeRepository extends JpaRepository<DataNode, Long> {
     List<DataNode> findByAuthor(Member author);
+
     @Query("select dn from DataNode dn join dn.labels l where l.name = :labelName")
     List<DataNode> findDataNodeByLabelName(String labelName);
 }

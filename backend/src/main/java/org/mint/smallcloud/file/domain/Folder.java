@@ -1,8 +1,5 @@
 package org.mint.smallcloud.file.domain;
 
-import lombok.AccessLevel;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
 import org.mint.smallcloud.user.domain.Member;
 
 import javax.persistence.*;
@@ -12,8 +9,6 @@ import java.util.stream.Collectors;
 
 @Entity
 @Table(name = "FOLDERS")
-@NoArgsConstructor(access = AccessLevel.PROTECTED)
-@Getter
 public class Folder extends DataNode {
 
     @OneToMany(
@@ -28,6 +23,9 @@ public class Folder extends DataNode {
 
     protected Folder(String name, Member member) {
         super(FileType.of(name, FileType.FOLDER), member);
+    }
+
+    protected Folder() {
     }
 
     public static Folder of(Folder folder, String name, Member member) {
@@ -61,6 +59,7 @@ public class Folder extends DataNode {
         }
         return false;
     }
+
     public List<Folder> getSubFolders() {
         return getSubDataNodes().stream().filter(dataNode -> dataNode instanceof Folder)
             .map(dataNode -> (Folder) dataNode)
@@ -75,5 +74,9 @@ public class Folder extends DataNode {
 
     public boolean isRoot() {
         return this.getName().equals(ROOT_NAME);
+    }
+
+    public List<DataNode> getSubDataNodes() {
+        return this.subDataNodes;
     }
 }

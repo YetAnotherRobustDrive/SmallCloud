@@ -10,7 +10,10 @@ import java.util.List;
 @Repository
 public interface NotificationRepository extends JpaRepository<Notification, Long> {
     void deleteByIdAndOwner(Long id, Member owner);
+
     List<Notification> findTop5ByOwnerOrderByLocalDateTimeDesc(Member owner);
+
     Long countByOwner(Member owner);
+
     boolean existsByIdAndOwner(Long id, Member owner);
 }

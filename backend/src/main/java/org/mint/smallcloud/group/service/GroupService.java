@@ -1,10 +1,9 @@
 package org.mint.smallcloud.group.service;
 
-import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 import org.mint.smallcloud.group.domain.Group;
 import org.mint.smallcloud.group.repository.GroupRepository;
 import org.mint.smallcloud.user.domain.Member;
+import org.slf4j.Logger;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
@@ -12,12 +11,16 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @Service
-@RequiredArgsConstructor
-@Slf4j
 @Transactional
 public class GroupService {
+    private static final Logger log = org.slf4j.LoggerFactory.getLogger(GroupService.class);
     private final GroupRepository groupRepository;
     private final GroupThrowerService groupThrowerService;
+
+    public GroupService(GroupRepository groupRepository, GroupThrowerService groupThrowerService) {
+        this.groupRepository = groupRepository;
+        this.groupThrowerService = groupThrowerService;
+    }
 
     public void createRootGroup(String groupName) {
         groupThrowerService.checkDuplicateGroupName(groupName);

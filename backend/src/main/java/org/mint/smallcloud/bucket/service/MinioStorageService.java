@@ -3,7 +3,6 @@ package org.mint.smallcloud.bucket.service;
 import io.minio.*;
 import io.minio.errors.ErrorResponseException;
 import io.minio.errors.InsufficientDataException;
-import lombok.RequiredArgsConstructor;
 import org.mint.smallcloud.bucket.dto.FileObjectDto;
 import org.mint.smallcloud.bucket.exception.DownloadException;
 import org.mint.smallcloud.bucket.exception.RemoveException;
@@ -16,12 +15,16 @@ import java.io.InputStream;
 import java.util.UUID;
 
 @Service
-@RequiredArgsConstructor
 @Profile("local")
 public class MinioStorageService implements StorageService {
 
     private final MinioClient minioClient;
     private final CustomMinioProperties minioProperties;
+
+    public MinioStorageService(MinioClient minioClient, CustomMinioProperties minioProperties) {
+        this.minioClient = minioClient;
+        this.minioProperties = minioProperties;
+    }
 
     @Override
     public FileObjectDto uploadFile(InputStream stream, String contentType, long size) throws UploadException, StorageSettingException {

@@ -10,5 +10,6 @@ import java.util.List;
 @Repository
 public interface QuestionRepository extends JpaRepository<Question, Long> {
     List<Question> findByWriter(String writer);
+
     List<Question> findByAnswer(Answer answer);
 }

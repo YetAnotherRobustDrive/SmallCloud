@@ -1,6 +1,5 @@
 package org.mint.smallcloud.user.controller;
 
-import lombok.RequiredArgsConstructor;
 import org.mint.smallcloud.ResponseDto;
 import org.mint.smallcloud.exception.ExceptionStatus;
 import org.mint.smallcloud.exception.ServiceException;
@@ -25,11 +24,15 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/users")
-@RequiredArgsConstructor
 @Validated
 public class UserController {
     private final MemberFacadeService memberFacadeService;
     private final UserDetailsProvider userDetailsProvider;
+
+    public UserController(MemberFacadeService memberFacadeService, UserDetailsProvider userDetailsProvider) {
+        this.memberFacadeService = memberFacadeService;
+        this.userDetailsProvider = userDetailsProvider;
+    }
 
     @Secured({Roles.S_ADMIN})
     @RequestMapping(
@@ -97,10 +100,10 @@ public class UserController {
         UserDetails user = userDetailsProvider
             .getUserDetails()
             .orElseThrow(() -> new ServiceException
-                         (ExceptionStatus.NO_PERMISSION));
-        
+                (ExceptionStatus.NO_PERMISSION));
+
         memberFacadeService.updatePhoto(user.getUsername(),
-                                        req.getImageFile());
+            req.getImageFile());
         return ResponseEntity.ok().build();
     }
 
@@ -110,8 +113,8 @@ public class UserController {
         UserDetails user = userDetailsProvider
             .getUserDetails()
             .orElseThrow(() -> new ServiceException
-                         (ExceptionStatus.NO_PERMISSION));
-        
+                (ExceptionStatus.NO_PERMISSION));
+
         PhotoDownloadResponseDto res =
             memberFacadeService.downloadPhoto(user.getUsername());
         HttpHeaders headers = new HttpHeaders();
@@ -122,11 +125,11 @@ public class UserController {
         headers.setCacheControl("no-cache, no-store, must-revalidate");
         return new ResponseEntity<Resource>(res.getPhotoResource(), headers, HttpStatus.OK);
     }
-    
+
     @Secured({Roles.S_ADMIN})
     @GetMapping("/profile-photo/{username}")
     public ResponseEntity<Resource> downloadPhotoForSuperUser(@PathVariable String username) {
-        
+
         PhotoDownloadResponseDto res =
             memberFacadeService.downloadPhoto(username);
         HttpHeaders headers = new HttpHeaders();
@@ -136,15 +139,15 @@ public class UserController {
         headers.setExpires(0);
         headers.setCacheControl("no-cache, no-store, must-revalidate");
         return new ResponseEntity<Resource>(res.getPhotoResource(),
-                                            headers,
-                                            HttpStatus.OK);
-        
+            headers,
+            HttpStatus.OK);
+
     }
 
     @GetMapping("/profile-photo/logo")
     public ResponseEntity<Resource> downloadAdminPhoto() {
         PhotoDownloadResponseDto res =
-                memberFacadeService.downloadLogo();
+            memberFacadeService.downloadLogo();
         HttpHeaders headers = new HttpHeaders();
         headers.setContentLength(res.getContentLength());
         headers.setContentType(MediaType.parseMediaType(res.getContentType()));
@@ -159,14 +162,14 @@ public class UserController {
         UserDetails user = userDetailsProvider
             .getUserDetails()
             .orElseThrow(() -> new ServiceException
-                         (ExceptionStatus.NO_PERMISSION));
+                (ExceptionStatus.NO_PERMISSION));
         memberFacadeService.updatePassword(user.getUsername(), dto);
     }
 
     @Secured(Roles.S_COMMON)
     @PostMapping("/password/expired")
     public PasswordChangedDateDto getPasswordChangedDate(
-            @Valid @RequestBody LoginDto loginDto) {
+        @Valid @RequestBody LoginDto loginDto) {
         return memberFacadeService.getPasswordChangedDate(loginDto);
     }
 }

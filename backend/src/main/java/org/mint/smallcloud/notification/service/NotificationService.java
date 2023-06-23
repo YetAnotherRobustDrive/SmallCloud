@@ -1,6 +1,5 @@
 package org.mint.smallcloud.notification.service;
 
-import lombok.RequiredArgsConstructor;
 import org.mint.smallcloud.notification.domain.Notification;
 import org.mint.smallcloud.notification.dto.NotificationCountDto;
 import org.mint.smallcloud.notification.mapper.NotificationMapper;
@@ -14,13 +13,19 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @Service
-@RequiredArgsConstructor
 @Transactional
 public class NotificationService {
     private final NotificationRepository notificationRepository;
     private final NotificationThrowerService notificationThrowerService;
     private final MemberThrowerService memberThrowerService;
     private final NotificationMapper notificationMapper;
+
+    public NotificationService(NotificationRepository notificationRepository, NotificationThrowerService notificationThrowerService, MemberThrowerService memberThrowerService, NotificationMapper notificationMapper) {
+        this.notificationRepository = notificationRepository;
+        this.notificationThrowerService = notificationThrowerService;
+        this.memberThrowerService = memberThrowerService;
+        this.notificationMapper = notificationMapper;
+    }
 
     public void delete(Long notificationId, String userName) {
         Member member = memberThrowerService.getMemberByUsername(userName);
@@ -31,8 +36,8 @@ public class NotificationService {
         Member member = memberThrowerService.getMemberByUsername(userName);
         List<Notification> notifications = notificationThrowerService.findTop5ByOwnerOrderByLocalDateTimeDesc(member);
         return NotificationCountDto.builder()
-                .notificationDtoList(notifications.stream().map(notificationMapper::toNotificationResponseDto).collect(Collectors.toList()))
-                .count(notificationRepository.countByOwner(member))
-                .build();
+            .notificationDtoList(notifications.stream().map(notificationMapper::toNotificationResponseDto).collect(Collectors.toList()))
+            .count(notificationRepository.countByOwner(member))
+            .build();
     }
 }

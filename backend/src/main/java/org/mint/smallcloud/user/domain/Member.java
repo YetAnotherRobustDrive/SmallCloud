@@ -1,8 +1,5 @@
 package org.mint.smallcloud.user.domain;
 
-import lombok.AccessLevel;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
 import org.mint.smallcloud.file.domain.FileLocation;
 import org.mint.smallcloud.group.domain.Group;
 import org.mint.smallcloud.share.domain.MemberShare;
@@ -16,8 +13,6 @@ import java.util.List;
 
 @Table(name = "MEMBERS")
 @Entity
-@NoArgsConstructor(access = AccessLevel.PROTECTED)
-@Getter
 public class Member {
 
     private final static PasswordEncoder passwordEncoder = new BCryptPasswordEncoder(BCryptPasswordEncoder.BCryptVersion.$2A);
@@ -73,6 +68,9 @@ public class Member {
         this.role = role;
         this.joinedDate = LocalDateTime.now();
         this.changedPasswordDate = LocalDateTime.now();
+    }
+
+    protected Member() {
     }
 
     private String hashPassword(String password) {
@@ -180,5 +178,53 @@ public class Member {
 
     public boolean canLogin() {
         return !locked && (expiredDate == null || expiredDate.isAfter(LocalDateTime.now()));
+    }
+
+    public Long getId() {
+        return this.id;
+    }
+
+    public String getUsername() {
+        return this.username;
+    }
+
+    public String getPassword() {
+        return this.password;
+    }
+
+    public String getNickname() {
+        return this.nickname;
+    }
+
+    public LocalDateTime getJoinedDate() {
+        return this.joinedDate;
+    }
+
+    public LocalDateTime getChangedPasswordDate() {
+        return this.changedPasswordDate;
+    }
+
+    public LocalDateTime getExpiredDate() {
+        return this.expiredDate;
+    }
+
+    public boolean isLocked() {
+        return this.locked;
+    }
+
+    public FileLocation getProfileImageLocation() {
+        return this.profileImageLocation;
+    }
+
+    public Role getRole() {
+        return this.role;
+    }
+
+    public Group getGroup() {
+        return this.group;
+    }
+
+    public List<MemberShare> getShares() {
+        return this.shares;
     }
 }

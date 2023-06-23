@@ -1,17 +1,10 @@
 package org.mint.smallcloud.board.domain;
 
-import lombok.AccessLevel;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
-
 import javax.persistence.*;
 import java.time.LocalDateTime;
 
 @Table(name = "QUESTION")
 @Entity
-@NoArgsConstructor(access = AccessLevel.PROTECTED)
-@Getter
 public class Question {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -75,6 +68,9 @@ public class Question {
         this.createdDate = LocalDateTime.now();
     }
 
+    protected Question() {
+    }
+
     public static Question question(String title, String content) {
         return new Question(title, content);
     }
@@ -113,5 +109,33 @@ public class Question {
     @Override
     public int hashCode() {
         return this.id.hashCode();
+    }
+
+    public Long getId() {
+        return this.id;
+    }
+
+    public String getTitle() {
+        return this.title;
+    }
+
+    public String getContent() {
+        return this.content;
+    }
+
+    public String getContact() {
+        return this.contact;
+    }
+
+    public LocalDateTime getCreatedDate() {
+        return this.createdDate;
+    }
+
+    public String getWriter() {
+        return this.writer;
+    }
+
+    public Answer getAnswer() {
+        return this.answer;
     }
 }

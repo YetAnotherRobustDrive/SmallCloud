@@ -14,7 +14,7 @@ import org.mint.smallcloud.share.domain.Share;
 import org.mint.smallcloud.share.dto.ShareDto;
 import org.mint.smallcloud.share.mapper.ShareMapper;
 
-@Mapper( componentModel = "spring")
+@Mapper(componentModel = "spring")
 public interface FolderMapper {
     FolderMapper INSTANCE = Mappers.getMapper(FolderMapper.class);
 
@@ -30,7 +30,7 @@ public interface FolderMapper {
     }
 
     @Named("toShareDto")
-    static ShareDto toShareDto (Share share) {
+    static ShareDto toShareDto(Share share) {
         return ShareMapper.INSTANCE.toShareDto(share);
     }
 }

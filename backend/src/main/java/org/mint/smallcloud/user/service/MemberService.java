@@ -1,7 +1,5 @@
 package org.mint.smallcloud.user.service;
 
-import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 import org.mint.smallcloud.bucket.dto.FileObjectDto;
 import org.mint.smallcloud.bucket.service.StorageService;
 import org.mint.smallcloud.exception.ExceptionStatus;
@@ -19,6 +17,7 @@ import org.mint.smallcloud.user.dto.UserProfileRequestDto;
 import org.mint.smallcloud.user.dto.UserProfileResponseDto;
 import org.mint.smallcloud.user.mapper.UserMapper;
 import org.mint.smallcloud.user.repository.MemberRepository;
+import org.slf4j.Logger;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -27,18 +26,26 @@ import java.net.URLConnection;
 import java.util.List;
 import java.util.stream.Collectors;
 
-@Slf4j
 @Service
-@RequiredArgsConstructor
 @Transactional
 public class MemberService {
 
+    private static final Logger log = org.slf4j.LoggerFactory.getLogger(MemberService.class);
     private final MemberThrowerService memberThrowerService;
     private final MemberRepository memberRepository;
     private final UserMapper userMapper;
     private final StorageService storageService;
     private final DirectoryService directoryService;
     private final LabelService labelService;
+
+    public MemberService(MemberThrowerService memberThrowerService, MemberRepository memberRepository, UserMapper userMapper, StorageService storageService, DirectoryService directoryService, LabelService labelService) {
+        this.memberThrowerService = memberThrowerService;
+        this.memberRepository = memberRepository;
+        this.userMapper = userMapper;
+        this.storageService = storageService;
+        this.directoryService = directoryService;
+        this.labelService = labelService;
+    }
 
     public UserDetailsDto getUserDetails(String username) {
         Member member = memberThrowerService.getMemberByUsername(username);
@@ -110,7 +117,7 @@ public class MemberService {
         String mimeType = URLConnection.guessContentTypeFromName(file.getOriginalFilename());
         FileObjectDto fileObj =
             storageService.uploadFile(file.getInputStream(), mimeType, file.getSize());
-        member.setProfileImageLocation(FileLocation.of(fileObj.getObjectId()));   
+        member.setProfileImageLocation(FileLocation.of(fileObj.getObjectId()));
     }
 
     public List<String> search(String q) {

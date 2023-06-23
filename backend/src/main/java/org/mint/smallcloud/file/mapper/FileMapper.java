@@ -5,8 +5,6 @@ import org.mapstruct.Mapping;
 import org.mapstruct.Named;
 import org.mapstruct.factory.Mappers;
 import org.mint.smallcloud.file.domain.File;
-import org.mint.smallcloud.file.domain.Folder;
-import org.mint.smallcloud.file.dto.DirectoryDto;
 import org.mint.smallcloud.file.dto.FileDto;
 import org.mint.smallcloud.label.domain.Label;
 import org.mint.smallcloud.label.dto.LabelDto;
@@ -33,7 +31,7 @@ public interface FileMapper {
     }
 
     @Named("toShareDto")
-    static ShareDto toShareDto (Share share) {
+    static ShareDto toShareDto(Share share) {
         return ShareMapper.INSTANCE.toShareDto(share);
     }
 }

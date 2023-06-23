@@ -1,11 +1,10 @@
 package org.mint.smallcloud.security;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 import org.mint.smallcloud.exception.ErrorResponseDto;
 import org.mint.smallcloud.exception.ExceptionStatus;
 import org.mint.smallcloud.exception.ServiceException;
+import org.slf4j.Logger;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Component;
 
@@ -14,14 +13,17 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
 @Component
-@RequiredArgsConstructor
-@Slf4j
 public class FilterExceptionManager {
     private static final String ATTRIBUTE_NAME = "exception";
     private static final String CONTENT_TYPE_NAME = "Content-Type";
     private static final String CONTENT_TYPE = "application/json";
     private static final String UTF_8 = "utf-8";
+    private static final Logger log = org.slf4j.LoggerFactory.getLogger(FilterExceptionManager.class);
     private final ObjectMapper objectMapper;
+
+    public FilterExceptionManager(ObjectMapper objectMapper) {
+        this.objectMapper = objectMapper;
+    }
 
     public void addException(HttpServletRequest request, Exception exception) {
         if (request.getAttribute(ATTRIBUTE_NAME) != null)

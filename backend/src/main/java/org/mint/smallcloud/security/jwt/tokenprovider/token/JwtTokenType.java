@@ -1,10 +1,7 @@
 package org.mint.smallcloud.security.jwt.tokenprovider.token;
 
-import lombok.Getter;
-
 import java.util.Optional;
 
-@Getter
 public enum JwtTokenType {
     ACCESS("ACCESS"), REFRESH("REFRESH");
     private String value;
@@ -22,5 +19,9 @@ public enum JwtTokenType {
             default:
                 return Optional.empty();
         }
+    }
+
+    public String getValue() {
+        return this.value;
     }
 }

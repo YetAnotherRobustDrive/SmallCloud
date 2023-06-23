@@ -1,16 +1,16 @@
 package org.mint.smallcloud.security.jwt.tokenprovider;
 
 import io.jsonwebtoken.*;
-import lombok.extern.slf4j.Slf4j;
 import org.mint.smallcloud.exception.ExceptionStatus;
 import org.mint.smallcloud.exception.ServiceException;
 import org.mint.smallcloud.security.jwt.tokenprovider.token.JwtTokenType;
 import org.mint.smallcloud.user.domain.Role;
+import org.slf4j.Logger;
 import org.springframework.stereotype.Component;
 
 @Component
-@Slf4j
 public class JwtTokenParser {
+    private static final Logger log = org.slf4j.LoggerFactory.getLogger(JwtTokenParser.class);
     private final JwtParser jwtParser;
     private final JwtTokenProperties jwtTokenProperties;
 

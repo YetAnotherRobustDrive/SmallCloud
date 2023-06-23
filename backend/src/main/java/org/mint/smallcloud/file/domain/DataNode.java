@@ -1,8 +1,5 @@
 package org.mint.smallcloud.file.domain;
 
-import lombok.AccessLevel;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
 import org.mint.smallcloud.label.domain.Label;
 import org.mint.smallcloud.share.domain.Share;
 import org.mint.smallcloud.user.domain.Member;
@@ -15,10 +12,8 @@ import java.util.List;
 
 @Table(name = "DATA_NODES")
 @Entity
-@NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Inheritance(strategy = InheritanceType.JOINED)
 @DiscriminatorColumn
-@Getter
 public abstract class DataNode {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -60,6 +55,9 @@ public abstract class DataNode {
         this.fileType = fileType;
         this.createdDate = LocalDateTime.now();
         this.author = author;
+    }
+
+    protected DataNode() {
     }
 
     public static Folder createFolder(Folder parent, String name, Member member) {
@@ -167,5 +165,33 @@ public abstract class DataNode {
             iter.remove();
             label.deleteFile(this);
         }
+    }
+
+    public Long getId() {
+        return this.id;
+    }
+
+    public FileType getFileType() {
+        return this.fileType;
+    }
+
+    public LocalDateTime getCreatedDate() {
+        return this.createdDate;
+    }
+
+    public Member getAuthor() {
+        return this.author;
+    }
+
+    public Folder getParentFolder() {
+        return this.parentFolder;
+    }
+
+    public List<Share> getShares() {
+        return this.shares;
+    }
+
+    public List<Label> getLabels() {
+        return this.labels;
     }
 }

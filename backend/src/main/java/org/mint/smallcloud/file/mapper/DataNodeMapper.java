@@ -29,7 +29,7 @@ public interface DataNodeMapper {
     }
 
     @Named("toShareDto")
-    static ShareDto toShareDto (Share share) {
+    static ShareDto toShareDto(Share share) {
         return ShareMapper.INSTANCE.toShareDto(share);
     }
 

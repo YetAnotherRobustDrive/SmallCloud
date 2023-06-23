@@ -1,7 +1,6 @@
 package org.mint.smallcloud.board.mapper;
 
 import org.mapstruct.Mapper;
-import org.mapstruct.Mapping;
 import org.mapstruct.factory.Mappers;
 import org.mint.smallcloud.board.domain.Board;
 import org.mint.smallcloud.board.dto.BoardDto;

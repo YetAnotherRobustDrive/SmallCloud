@@ -1,8 +1,5 @@
 package org.mint.smallcloud.file.contoller;
 
-import lombok.Builder;
-import lombok.Getter;
-import lombok.RequiredArgsConstructor;
 import org.mint.smallcloud.bucket.dto.FileObjectDto;
 import org.mint.smallcloud.bucket.service.StorageService;
 import org.mint.smallcloud.exception.ExceptionStatus;
@@ -33,7 +30,6 @@ import java.util.List;
 import java.util.Optional;
 
 @RestController
-@RequiredArgsConstructor
 @RequestMapping("/segments")
 public class SegmentController {
 
@@ -45,6 +41,17 @@ public class SegmentController {
     final FolderRepository folderRepository;
     final IndexDataRepository indexDataRepository;
     final SegmentService segmentService;
+
+    public SegmentController(SegmentRepository segmentRepository, StorageService storageService, MemberRepository memberRepository, UserDetailsProvider userDetailsProvider, FileRepository fileRepository, FolderRepository folderRepository, IndexDataRepository indexDataRepository, SegmentService segmentService) {
+        this.segmentRepository = segmentRepository;
+        this.storageService = storageService;
+        this.memberRepository = memberRepository;
+        this.userDetailsProvider = userDetailsProvider;
+        this.fileRepository = fileRepository;
+        this.folderRepository = folderRepository;
+        this.indexDataRepository = indexDataRepository;
+        this.segmentService = segmentService;
+    }
 
     @GetMapping("/{fid}/{name}")
     public ResponseEntity<Resource> download(@PathVariable("fid") Long resourceId, @PathVariable("name") String name) throws Exception {
@@ -60,7 +67,7 @@ public class SegmentController {
             String mime = URLConnection.guessContentTypeFromName(name);
             if (mime == null) mime = "application/octet-stream";
             MediaType mediaType = MediaType.parseMediaType(mime);
-            
+
             headers.setCacheControl("no-cache, no-store, must-revalidate");
             headers.setPragma("no-cache");
             headers.setExpires(0);
@@ -70,7 +77,7 @@ public class SegmentController {
                 .contentLength(fileSize)
                 .contentType(mediaType)
                 .body(new InputStreamResource(stream));
-        }        
+        }
     }
 
     @PostMapping("/{fid}")
@@ -82,12 +89,12 @@ public class SegmentController {
         if (mime == null) mime = "application/octet-stream";
         FileObjectDto fileDto
             = storageService.uploadFile(file.getInputStream(),
-                                        mime, file.getSize());
+            mime, file.getSize());
         String location = fileDto.getObjectId();
         Optional<File> resourceFileOpt = fileRepository.findById(resourceId);
         File resourceFile = resourceFileOpt
             .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND,
-                                                           "segment/notfound"));
+                "segment/notfound"));
         Segment seg = Segment.builder()
             .file(resourceFile)
             .location(location)
@@ -97,9 +104,7 @@ public class SegmentController {
         segmentRepository.save(seg);
         return ResponseEntity.ok().build();
     }
-    
-    @Builder
-    @Getter
+
     public static class UploadResponse {
         Long id;
         String securityLevel;
@@ -109,6 +114,115 @@ public class SegmentController {
         String type;
         String thumbnail;
         boolean shared;
+
+        UploadResponse(Long id, String securityLevel, String writingStage, String name, Long size, String type, String thumbnail, boolean shared) {
+            this.id = id;
+            this.securityLevel = securityLevel;
+            this.writingStage = writingStage;
+            this.name = name;
+            this.size = size;
+            this.type = type;
+            this.thumbnail = thumbnail;
+            this.shared = shared;
+        }
+
+        public static UploadResponseBuilder builder() {
+            return new UploadResponseBuilder();
+        }
+
+        public Long getId() {
+            return this.id;
+        }
+
+        public String getSecurityLevel() {
+            return this.securityLevel;
+        }
+
+        public String getWritingStage() {
+            return this.writingStage;
+        }
+
+        public String getName() {
+            return this.name;
+        }
+
+        public Long getSize() {
+            return this.size;
+        }
+
+        public String getType() {
+            return this.type;
+        }
+
+        public String getThumbnail() {
+            return this.thumbnail;
+        }
+
+        public boolean isShared() {
+            return this.shared;
+        }
+
+        public static class UploadResponseBuilder {
+            private Long id;
+            private String securityLevel;
+            private String writingStage;
+            private String name;
+            private Long size;
+            private String type;
+            private String thumbnail;
+            private boolean shared;
+
+            UploadResponseBuilder() {
+            }
+
+            public UploadResponseBuilder id(Long id) {
+                this.id = id;
+                return this;
+            }
+
+            public UploadResponseBuilder securityLevel(String securityLevel) {
+                this.securityLevel = securityLevel;
+                return this;
+            }
+
+            public UploadResponseBuilder writingStage(String writingStage) {
+                this.writingStage = writingStage;
+                return this;
+            }
+
+            public UploadResponseBuilder name(String name) {
+                this.name = name;
+                return this;
+            }
+
+            public UploadResponseBuilder size(Long size) {
+                this.size = size;
+                return this;
+            }
+
+            public UploadResponseBuilder type(String type) {
+                this.type = type;
+                return this;
+            }
+
+            public UploadResponseBuilder thumbnail(String thumbnail) {
+                this.thumbnail = thumbnail;
+                return this;
+            }
+
+            public UploadResponseBuilder shared(boolean shared) {
+                this.shared = shared;
+                return this;
+            }
+
+            public UploadResponse build() {
+                return new UploadResponse(this.id, this.securityLevel, this.writingStage, this.name, this.size, this.type, this.thumbnail, this.shared);
+            }
+
+            public String toString() {
+                return "SegmentController.UploadResponse.UploadResponseBuilder(id=" + this.id + ", securityLevel=" + this.securityLevel + ", writingStage=" + this.writingStage + ", name=" + this.name + ", size=" + this.size + ", type=" + this.type + ", thumbnail=" + this.thumbnail + ", shared=" + this.shared + ")";
+            }
+        }
     }
 
 

@@ -1,7 +1,5 @@
 package org.mint.smallcloud.board.controller;
 
-import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 import org.mint.smallcloud.ResponseDto;
 import org.mint.smallcloud.board.domain.BoardType;
 import org.mint.smallcloud.board.dto.AnswerDto;
@@ -15,6 +13,7 @@ import org.mint.smallcloud.exception.ExceptionStatus;
 import org.mint.smallcloud.exception.ServiceException;
 import org.mint.smallcloud.security.UserDetailsProvider;
 import org.mint.smallcloud.user.domain.Roles;
+import org.slf4j.Logger;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.annotation.Secured;
@@ -30,15 +29,21 @@ import java.util.Optional;
 
 @RestController
 @RequestMapping("/inquiries")
-@Slf4j
-@RequiredArgsConstructor
 @Validated
 public class BoardController {
 
+    private static final Logger log = org.slf4j.LoggerFactory.getLogger(BoardController.class);
     private final AnswerService answerService;
     private final QuestionService questionService;
     private final BoardService boardService;
     private final UserDetailsProvider userDetailsProvider;
+
+    public BoardController(AnswerService answerService, QuestionService questionService, BoardService boardService, UserDetailsProvider userDetailsProvider) {
+        this.answerService = answerService;
+        this.questionService = questionService;
+        this.boardService = boardService;
+        this.userDetailsProvider = userDetailsProvider;
+    }
 
     // 전체 question 가져오기
     @Secured({Roles.S_ADMIN})
@@ -64,7 +69,7 @@ public class BoardController {
         }
         Optional<UserDetails> authentication = userDetailsProvider.getUserDetails();
         QuestionDto questionDto1 = QuestionDto.builder()
-                .title(questionDto.getTitle())
+            .title(questionDto.getTitle())
             .content(questionDto.getContent())
             .contact(questionDto.getContact())
             .writer(authentication.map(UserDetails::getUsername).orElse(null))
@@ -114,7 +119,7 @@ public class BoardController {
     @Secured({Roles.S_ADMIN, Roles.S_COMMON})
     @GetMapping("/board/created")
     public BoardDto getBoardCreatedDate(@RequestParam BoardType boardType, @RequestParam int createdDate) {
-           return boardService.findBoardCreatedDate(boardType, createdDate);
+        return boardService.findBoardCreatedDate(boardType, createdDate);
     }
 
     // answer 조회

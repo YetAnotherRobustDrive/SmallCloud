@@ -1,8 +1,7 @@
 package org.mint.smallcloud.security;
 
-import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 import org.mint.smallcloud.exception.ServiceException;
+import org.slf4j.Logger;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -14,9 +13,12 @@ import java.util.Optional;
  * spring security context에 user정보를 저장하고, 가져오는 class
  */
 @Component
-@RequiredArgsConstructor
-@Slf4j
 public class UserDetailsProvider {
+    private static final Logger log = org.slf4j.LoggerFactory.getLogger(UserDetailsProvider.class);
+
+    public UserDetailsProvider() {
+    }
+
     /**
      * UserDetails 를 가져온다.
      *

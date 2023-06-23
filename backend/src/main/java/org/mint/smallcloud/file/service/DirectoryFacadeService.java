@@ -1,7 +1,5 @@
 package org.mint.smallcloud.file.service;
 
-import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 import org.mint.smallcloud.exception.ExceptionStatus;
 import org.mint.smallcloud.exception.ServiceException;
 import org.mint.smallcloud.file.domain.File;
@@ -11,6 +9,7 @@ import org.mint.smallcloud.file.mapper.FileMapper;
 import org.mint.smallcloud.file.mapper.FolderMapper;
 import org.mint.smallcloud.user.domain.Member;
 import org.mint.smallcloud.user.service.MemberThrowerService;
+import org.slf4j.Logger;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
@@ -18,15 +17,22 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @Service
-@RequiredArgsConstructor
-@Slf4j
 @Transactional
 public class DirectoryFacadeService {
+    private static final Logger log = org.slf4j.LoggerFactory.getLogger(DirectoryFacadeService.class);
     private final DirectoryThrowerService directoryThrowerService;
     private final DirectoryService directoryService;
     private final MemberThrowerService memberThrowerService;
     private final FolderMapper folderMapper;
     private final FileMapper fileMapper;
+
+    public DirectoryFacadeService(DirectoryThrowerService directoryThrowerService, DirectoryService directoryService, MemberThrowerService memberThrowerService, FolderMapper folderMapper, FileMapper fileMapper) {
+        this.directoryThrowerService = directoryThrowerService;
+        this.directoryService = directoryService;
+        this.memberThrowerService = memberThrowerService;
+        this.folderMapper = folderMapper;
+        this.fileMapper = fileMapper;
+    }
 
     public void create(Long directoryId, DirectoryCreateDto dto, String username) {
         Folder folder = directoryThrowerService.getDirectoryById(directoryId);

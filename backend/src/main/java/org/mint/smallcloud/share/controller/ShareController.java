@@ -1,6 +1,5 @@
 package org.mint.smallcloud.share.controller;
 
-import lombok.RequiredArgsConstructor;
 import org.mint.smallcloud.exception.ExceptionStatus;
 import org.mint.smallcloud.exception.ServiceException;
 import org.mint.smallcloud.file.dto.DirectoryDto;
@@ -17,10 +16,15 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/share")
-@RequiredArgsConstructor
 public class ShareController {
     private final ShareService shareService;
     private final UserDetailsProvider userDetailsProvider;
+
+    public ShareController(ShareService shareService, UserDetailsProvider userDetailsProvider) {
+        this.shareService = shareService;
+        this.userDetailsProvider = userDetailsProvider;
+    }
+
     // create
     @Secured(Roles.S_COMMON)
     @PostMapping("/create")

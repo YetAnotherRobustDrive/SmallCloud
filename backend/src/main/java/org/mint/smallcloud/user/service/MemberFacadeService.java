@@ -1,7 +1,5 @@
 package org.mint.smallcloud.user.service;
 
-import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 import org.mint.smallcloud.exception.ExceptionStatus;
 import org.mint.smallcloud.exception.ServiceException;
 import org.mint.smallcloud.file.domain.FileLocation;
@@ -10,6 +8,7 @@ import org.mint.smallcloud.security.dto.LoginDto;
 import org.mint.smallcloud.security.service.AuthThrowerService;
 import org.mint.smallcloud.user.domain.Member;
 import org.mint.smallcloud.user.dto.*;
+import org.slf4j.Logger;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -17,15 +16,22 @@ import javax.transaction.Transactional;
 import java.util.List;
 
 @Service
-@RequiredArgsConstructor
 @Transactional
-@Slf4j
 public class MemberFacadeService {
+    private static final Logger log = org.slf4j.LoggerFactory.getLogger(MemberFacadeService.class);
     private final MemberService memberService;
     private final MemberThrowerService memberThrowerService;
     private final AuthThrowerService authThrowerService;
     private final FolderRepository folderRepository;
     private final ProfilePhotoService photoService;
+
+    public MemberFacadeService(MemberService memberService, MemberThrowerService memberThrowerService, AuthThrowerService authThrowerService, FolderRepository folderRepository, ProfilePhotoService photoService) {
+        this.memberService = memberService;
+        this.memberThrowerService = memberThrowerService;
+        this.authThrowerService = authThrowerService;
+        this.folderRepository = folderRepository;
+        this.photoService = photoService;
+    }
 
     public void delete(String username) {
         memberService.deregisterCommon(username);
@@ -72,7 +78,7 @@ public class MemberFacadeService {
     public void updatePhoto(String username, MultipartFile imageFile)
         throws Exception {
         memberService.updatePhoto(memberThrowerService.getMemberByUsername(username),
-                                  imageFile);
+            imageFile);
     }
 
     public PhotoDownloadResponseDto downloadPhoto(String username) {
@@ -80,6 +86,7 @@ public class MemberFacadeService {
         FileLocation location = member.getProfileImageLocation();
         return photoService.downloadPhoto(location);
     }
+
     public PhotoDownloadResponseDto downloadLogo() {
         Member admin = memberThrowerService.getMemberByUsername("admin");
         FileLocation location = admin.getProfileImageLocation();
@@ -102,7 +109,7 @@ public class MemberFacadeService {
     public PasswordChangedDateDto getPasswordChangedDate(LoginDto loginDto) {
         Member member = memberThrowerService.getMemberByUsername(loginDto.getId());
         return PasswordChangedDateDto.builder()
-                .changedPasswordDate(member.getChangedPasswordDate())
-                .build();
+            .changedPasswordDate(member.getChangedPasswordDate())
+            .build();
     }
 }

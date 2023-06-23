@@ -1,7 +1,5 @@
 package org.mint.smallcloud.group.service;
 
-import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 import org.mint.smallcloud.group.domain.Group;
 import org.mint.smallcloud.group.dto.GroupRequestDto;
 import org.mint.smallcloud.group.dto.GroupTreeDto;
@@ -10,6 +8,7 @@ import org.mint.smallcloud.user.domain.Member;
 import org.mint.smallcloud.user.dto.UserProfileResponseDto;
 import org.mint.smallcloud.user.mapper.UserMapper;
 import org.mint.smallcloud.user.service.MemberThrowerService;
+import org.slf4j.Logger;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
 
@@ -18,16 +17,23 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @Service
-@RequiredArgsConstructor
-@Slf4j
 @Transactional
 public class GroupFacadeService {
 
+    private static final Logger log = org.slf4j.LoggerFactory.getLogger(GroupFacadeService.class);
     private final GroupThrowerService groupThrowerService;
     private final MemberThrowerService memberThrowerService;
     private final GroupService groupService;
     private final UserMapper userMapper;
     private final ApplicationEventPublisher applicationEventPublisher;
+
+    public GroupFacadeService(GroupThrowerService groupThrowerService, MemberThrowerService memberThrowerService, GroupService groupService, UserMapper userMapper, ApplicationEventPublisher applicationEventPublisher) {
+        this.groupThrowerService = groupThrowerService;
+        this.memberThrowerService = memberThrowerService;
+        this.groupService = groupService;
+        this.userMapper = userMapper;
+        this.applicationEventPublisher = applicationEventPublisher;
+    }
 
     public void create(GroupRequestDto groupRequestDto) {
         if (groupRequestDto.getParentName() == null)
@@ -47,9 +53,9 @@ public class GroupFacadeService {
         member.setGroup(group);
         group.getMembers().forEach(m -> {
             applicationEventPublisher.publishEvent(
-                    NoticeEventAfterCommit.builder()
-                            .owner(m)
-                            .content(String.format("\"%s\" 그룹에 \"%s\"님이 추가되었습니다.", group.getName(), username))
+                NoticeEventAfterCommit.builder()
+                    .owner(m)
+                    .content(String.format("\"%s\" 그룹에 \"%s\"님이 추가되었습니다.", group.getName(), username))
             );
         });
     }
@@ -82,19 +88,19 @@ public class GroupFacadeService {
     public GroupTreeDto readGroupTree(String groupName) {
         Group group = groupThrowerService.getGroupByName(groupName);
         return GroupTreeDto.builder()
-                .name(group.getName())
-                .subGroups(getSubGroups(group))
+            .name(group.getName())
+            .subGroups(getSubGroups(group))
             .build();
     }
 
     private List<GroupTreeDto> getSubGroups(Group group) {
         System.out.println(group.getSubGroups().size());
         return group.getSubGroups().stream()
-                .map(subGroup -> GroupTreeDto.builder()
-                        .name(subGroup.getName())
-                        .subGroups(getSubGroups(subGroup))
-                    .build())
-                .collect(Collectors.toList());
+            .map(subGroup -> GroupTreeDto.builder()
+                .name(subGroup.getName())
+                .subGroups(getSubGroups(subGroup))
+                .build())
+            .collect(Collectors.toList());
     }
 
     public List<UserProfileResponseDto> getUserList(String groupName) {

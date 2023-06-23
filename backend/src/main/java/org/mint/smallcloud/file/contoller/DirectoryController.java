@@ -1,7 +1,5 @@
 package org.mint.smallcloud.file.contoller;
 
-import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 import org.mint.smallcloud.ResponseDto;
 import org.mint.smallcloud.exception.ExceptionStatus;
 import org.mint.smallcloud.exception.ServiceException;
@@ -9,6 +7,7 @@ import org.mint.smallcloud.file.dto.*;
 import org.mint.smallcloud.file.service.DirectoryFacadeService;
 import org.mint.smallcloud.security.UserDetailsProvider;
 import org.mint.smallcloud.user.domain.Roles;
+import org.slf4j.Logger;
 import org.springframework.security.access.annotation.Secured;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.validation.annotation.Validated;
@@ -19,12 +18,16 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/directory")
-@RequiredArgsConstructor
-@Slf4j
 @Validated
 public class DirectoryController {
+    private static final Logger log = org.slf4j.LoggerFactory.getLogger(DirectoryController.class);
     private final DirectoryFacadeService directoryFacadeService;
     private final UserDetailsProvider userDetailsProvider;
+
+    public DirectoryController(DirectoryFacadeService directoryFacadeService, UserDetailsProvider userDetailsProvider) {
+        this.directoryFacadeService = directoryFacadeService;
+        this.userDetailsProvider = userDetailsProvider;
+    }
 
     @Secured(Roles.S_COMMON)
     @PostMapping("/{directoryId}/create")
@@ -120,7 +123,7 @@ public class DirectoryController {
         UserDetails user = getLoginUser();
         List<DirectoryDto> folders = directoryFacadeService.search(q, user.getUsername());
         return ResponseDto.<List<DirectoryDto>>builder()
-                .result(folders)
-                .build();
+            .result(folders)
+            .build();
     }
 }

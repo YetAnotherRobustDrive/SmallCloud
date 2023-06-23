@@ -1,18 +1,20 @@
 package org.mint.smallcloud.group.service;
 
-import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 import org.mint.smallcloud.exception.ExceptionStatus;
 import org.mint.smallcloud.exception.ServiceException;
 import org.mint.smallcloud.group.domain.Group;
 import org.mint.smallcloud.group.repository.GroupRepository;
+import org.slf4j.Logger;
 import org.springframework.stereotype.Service;
 
 @Service
-@RequiredArgsConstructor
-@Slf4j
 public class GroupThrowerService {
+    private static final Logger log = org.slf4j.LoggerFactory.getLogger(GroupThrowerService.class);
     private final GroupRepository groupRepository;
+
+    public GroupThrowerService(GroupRepository groupRepository) {
+        this.groupRepository = groupRepository;
+    }
 
     public Group getGroupByName(String groupName) {
         return groupRepository.findByName(groupName)

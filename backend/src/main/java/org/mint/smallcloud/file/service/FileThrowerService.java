@@ -1,18 +1,20 @@
 package org.mint.smallcloud.file.service;
 
-import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 import org.mint.smallcloud.exception.ExceptionStatus;
 import org.mint.smallcloud.exception.ServiceException;
 import org.mint.smallcloud.file.domain.File;
 import org.mint.smallcloud.file.repository.FileRepository;
+import org.slf4j.Logger;
 import org.springframework.stereotype.Service;
 
 @Service
-@RequiredArgsConstructor
-@Slf4j
 public class FileThrowerService {
+    private static final Logger log = org.slf4j.LoggerFactory.getLogger(FileThrowerService.class);
     private final FileRepository fileRepository;
+
+    public FileThrowerService(FileRepository fileRepository) {
+        this.fileRepository = fileRepository;
+    }
 
     public File getFileById(Long id) {
         return fileRepository.findById(id)

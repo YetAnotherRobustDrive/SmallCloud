@@ -1,8 +1,5 @@
 package org.mint.smallcloud.log.user;
 
-import lombok.AccessLevel;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
 import org.mint.smallcloud.user.domain.Member;
 
 import javax.persistence.*;
@@ -10,8 +7,6 @@ import java.time.LocalDateTime;
 
 @Table(name = "USER_LOG")
 @Entity
-@NoArgsConstructor(access = AccessLevel.PROTECTED)
-@Getter
 public class UserLog {
     @Id
     @Column(name = "SHARE_ID")
@@ -33,6 +28,9 @@ public class UserLog {
 
     @Column(name = "STATUS")
     private Boolean status;
+
+    protected UserLog() {
+    }
 
     @Override
     public boolean equals(Object obj) {
@@ -63,5 +61,29 @@ public class UserLog {
             ", time=" + time +
             ", action='" + action + '\'' +
             '}';
+    }
+
+    public Long getId() {
+        return this.id;
+    }
+
+    public Member getMember() {
+        return this.member;
+    }
+
+    public LocalDateTime getTime() {
+        return this.time;
+    }
+
+    public String getAction() {
+        return this.action;
+    }
+
+    public String getIpAddr() {
+        return this.ipAddr;
+    }
+
+    public Boolean getStatus() {
+        return this.status;
     }
 }

@@ -1,11 +1,10 @@
 package org.mint.smallcloud.log.user;
 
 
-import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 import org.mint.smallcloud.security.UserDetailsProvider;
 import org.mint.smallcloud.user.domain.Member;
 import org.mint.smallcloud.user.repository.MemberRepository;
+import org.slf4j.Logger;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Propagation;
@@ -21,14 +20,19 @@ import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 
-@Slf4j
 @Component
-@RequiredArgsConstructor
 public class UserLogInterceptor implements HandlerInterceptor {
+    private static final Logger log = org.slf4j.LoggerFactory.getLogger(UserLogInterceptor.class);
     private final UserDetailsProvider userDetailsProvider;
     private final MemberRepository memberRepository;
     private final UserLogRepository userLogRepository;
     private static final List<String> IP_HEADERS = Arrays.asList("X-Forwarded-For", "Proxy-Client-IP", "WL-Proxy-Client-IP", "HTTP_CLIENT_IP", "HTTP_X_FORWARDED_FOR");
+
+    public UserLogInterceptor(UserDetailsProvider userDetailsProvider, MemberRepository memberRepository, UserLogRepository userLogRepository) {
+        this.userDetailsProvider = userDetailsProvider;
+        this.memberRepository = memberRepository;
+        this.userLogRepository = userLogRepository;
+    }
 
     @Override
     @Transactional(propagation = Propagation.REQUIRES_NEW)

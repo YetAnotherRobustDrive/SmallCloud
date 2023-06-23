@@ -1,8 +1,5 @@
 package org.mint.smallcloud.file.domain;
 
-import lombok.AccessLevel;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
 import org.mint.smallcloud.user.domain.Member;
 
 import javax.persistence.*;
@@ -10,8 +7,6 @@ import java.util.List;
 
 @Table(name = "FILES")
 @Entity
-@NoArgsConstructor(access = AccessLevel.PROTECTED)
-@Getter
 public class File extends DataNode {
     @Embedded
     private FileLocation location;
@@ -34,6 +29,9 @@ public class File extends DataNode {
         super(fileType, member);
         this.location = location;
         this.size = size;
+    }
+
+    protected File() {
     }
 
     public static File of(Folder parent, FileType fileType, FileLocation location, Long size, Member member) {
@@ -66,5 +64,21 @@ public class File extends DataNode {
 
     public boolean isEncoded() {
         return this.indexData != null;
+    }
+
+    public FileLocation getLocation() {
+        return this.location;
+    }
+
+    public Long getSize() {
+        return this.size;
+    }
+
+    public List<Segment> getSegments() {
+        return this.segments;
+    }
+
+    public IndexData getIndexData() {
+        return this.indexData;
     }
 }

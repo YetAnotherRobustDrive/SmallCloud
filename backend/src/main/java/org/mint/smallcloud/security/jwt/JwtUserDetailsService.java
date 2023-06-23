@@ -1,21 +1,24 @@
 package org.mint.smallcloud.security.jwt;
 
-import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 import org.mint.smallcloud.security.dto.UserDetailsDto;
 import org.mint.smallcloud.security.mapper.UserDetailsResolver;
 import org.mint.smallcloud.user.domain.Role;
 import org.mint.smallcloud.user.service.MemberService;
+import org.slf4j.Logger;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.stereotype.Service;
 
 @Service
-@Slf4j
-@RequiredArgsConstructor
 public class JwtUserDetailsService implements UserDetailsService {
+    private static final Logger log = org.slf4j.LoggerFactory.getLogger(JwtUserDetailsService.class);
     private final MemberService userService;
     private final UserDetailsResolver userDetailsResolver;
+
+    public JwtUserDetailsService(MemberService userService, UserDetailsResolver userDetailsResolver) {
+        this.userService = userService;
+        this.userDetailsResolver = userDetailsResolver;
+    }
 
     @Override
     public UserDetails loadUserByUsername(String userName) {

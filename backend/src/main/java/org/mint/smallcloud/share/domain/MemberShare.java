@@ -1,8 +1,5 @@
 package org.mint.smallcloud.share.domain;
 
-import lombok.AccessLevel;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
 import org.mint.smallcloud.file.domain.DataNode;
 import org.mint.smallcloud.user.domain.Member;
 
@@ -13,8 +10,6 @@ import javax.persistence.Table;
 
 @Table(name = "MEMBER_SHARES")
 @Entity
-@NoArgsConstructor(access = AccessLevel.PROTECTED)
-@Getter
 public class MemberShare extends Share {
     @ManyToOne
     @JoinColumn(name = "USER_ID")
@@ -23,6 +18,9 @@ public class MemberShare extends Share {
     protected MemberShare(Member target, DataNode file) {
         super(file);
         this.target = target;
+    }
+
+    protected MemberShare() {
     }
 
     public static MemberShare of(Member target, DataNode file) {
@@ -53,5 +51,9 @@ public class MemberShare extends Share {
     @Override
     public String getTargetName() {
         return getTarget().getUsername();
+    }
+
+    public Member getTarget() {
+        return this.target;
     }
 }

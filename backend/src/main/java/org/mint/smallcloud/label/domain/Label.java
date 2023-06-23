@@ -1,8 +1,5 @@
 package org.mint.smallcloud.label.domain;
 
-import lombok.AccessLevel;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
 import org.mint.smallcloud.file.domain.DataNode;
 import org.mint.smallcloud.user.domain.Member;
 
@@ -12,8 +9,6 @@ import java.util.List;
 
 @Table(name = "LABELS")
 @Entity
-@NoArgsConstructor(access = AccessLevel.PROTECTED)
-@Getter
 public class Label {
 
     @Id
@@ -28,12 +23,15 @@ public class Label {
     @JoinColumn(name = "OWNER")
     private Member owner;
 
-    @ManyToMany(mappedBy = "labels" ,cascade = CascadeType.ALL)
+    @ManyToMany(mappedBy = "labels", cascade = CascadeType.ALL)
     private List<DataNode> files = new ArrayList<>();
 
     protected Label(String name, Member owner) {
         this.name = name;
         this.owner = owner;
+    }
+
+    protected Label() {
     }
 
     public static Label of(String name, Member owner) {
@@ -68,7 +66,24 @@ public class Label {
     public void setName(String name) {
         this.name = name;
     }
+
     public boolean isTrash() {
         return this.name.equals(DefaultLabelType.defaultTrash.getLabelName());
+    }
+
+    public Long getId() {
+        return this.id;
+    }
+
+    public String getName() {
+        return this.name;
+    }
+
+    public Member getOwner() {
+        return this.owner;
+    }
+
+    public List<DataNode> getFiles() {
+        return this.files;
     }
 }

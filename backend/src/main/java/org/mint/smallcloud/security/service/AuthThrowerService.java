@@ -1,6 +1,5 @@
 package org.mint.smallcloud.security.service;
 
-import lombok.RequiredArgsConstructor;
 import org.mint.smallcloud.exception.ExceptionStatus;
 import org.mint.smallcloud.exception.ServiceException;
 import org.mint.smallcloud.security.UserDetailsProvider;
@@ -10,10 +9,14 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
 @Service
-@RequiredArgsConstructor
 public class AuthThrowerService {
     private final UserDetailsProvider userDetailsProvider;
     private final UserDetailsResolver userDetailsResolver;
+
+    public AuthThrowerService(UserDetailsProvider userDetailsProvider, UserDetailsResolver userDetailsResolver) {
+        this.userDetailsProvider = userDetailsProvider;
+        this.userDetailsResolver = userDetailsResolver;
+    }
 
     public UserDetails getLoginUserDetails() {
         return userDetailsProvider.getUserDetails()

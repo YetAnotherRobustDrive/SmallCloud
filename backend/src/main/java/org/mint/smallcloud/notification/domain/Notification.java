@@ -1,8 +1,5 @@
 package org.mint.smallcloud.notification.domain;
 
-import lombok.AccessLevel;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
 import org.mint.smallcloud.user.domain.Member;
 
 import javax.persistence.*;
@@ -10,8 +7,6 @@ import java.time.LocalDateTime;
 
 @Table(name = "NOTIFICATIONS")
 @Entity
-@NoArgsConstructor(access = AccessLevel.PROTECTED)
-@Getter
 public class Notification {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -34,7 +29,26 @@ public class Notification {
         this.localDateTime = localDateTime;
     }
 
+    protected Notification() {
+    }
+
     public static Notification of(String content, Member owner, LocalDateTime localDateTime) {
         return new Notification(content, owner, localDateTime);
+    }
+
+    public Long getId() {
+        return this.id;
+    }
+
+    public String getContent() {
+        return this.content;
+    }
+
+    public Member getOwner() {
+        return this.owner;
+    }
+
+    public LocalDateTime getLocalDateTime() {
+        return this.localDateTime;
     }
 }

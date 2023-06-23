@@ -1,15 +1,9 @@
 package org.mint.smallcloud.file.domain;
 
-import lombok.AccessLevel;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-
 import javax.persistence.*;
 
 @Table(name = "IndexData")
 @Entity
-@NoArgsConstructor(access = AccessLevel.PROTECTED)
-@Getter
 public class IndexData {
 
     @Id
@@ -34,6 +28,9 @@ public class IndexData {
         originFile.setIndexData(this);
     }
 
+    protected IndexData() {
+    }
+
     public static IndexData of(File originFile, String location, Long size) {
         return new IndexData(originFile, location, size);
     }
@@ -44,5 +41,21 @@ public class IndexData {
         if (obj == null) return false;
         return obj instanceof IndexData
             && ((IndexData) obj).getId().equals(this.getId());
+    }
+
+    public Long getId() {
+        return this.id;
+    }
+
+    public File getOriginFile() {
+        return this.originFile;
+    }
+
+    public Long getSize() {
+        return this.size;
+    }
+
+    public String getLocation() {
+        return this.location;
     }
 }

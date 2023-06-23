@@ -1,11 +1,8 @@
 package org.mint.smallcloud.user.domain;
 
-import lombok.Getter;
-
 import java.util.Optional;
 
 
-@Getter
 public enum Role {
     ADMIN(Roles.ADMIN),
     COMMON(Roles.COMMON),
@@ -27,5 +24,9 @@ public enum Role {
                 return Optional.of(PRIVILEGE);
         }
         return Optional.empty();
+    }
+
+    public String getValue() {
+        return this.value;
     }
 }

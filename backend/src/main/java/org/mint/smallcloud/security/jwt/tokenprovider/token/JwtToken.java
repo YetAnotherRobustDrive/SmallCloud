@@ -2,8 +2,6 @@ package org.mint.smallcloud.security.jwt.tokenprovider.token;
 
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
-import lombok.AccessLevel;
-import lombok.Getter;
 import org.mint.smallcloud.security.jwt.dto.JwtTokenDto;
 import org.mint.smallcloud.security.jwt.dto.JwtTokenPropertiesDto;
 
@@ -11,7 +9,6 @@ import java.security.Key;
 import java.time.LocalDateTime;
 import java.util.Map;
 
-@Getter(AccessLevel.PROTECTED)
 public abstract class JwtToken {
     private String username;
     private LocalDateTime now;
@@ -22,7 +19,6 @@ public abstract class JwtToken {
     private Key key;
     private SignatureAlgorithm signatureAlgorithm;
 
-    @Getter(AccessLevel.NONE)
     private boolean isPrepared = false;
 
     private String accessToken;
@@ -90,4 +86,36 @@ public abstract class JwtToken {
     protected abstract long getAccessTokenExpireSec();
 
     protected abstract long getRefreshTokenExpireSec();
+
+    protected String getUsername() {
+        return this.username;
+    }
+
+    protected LocalDateTime getNow() {
+        return this.now;
+    }
+
+    protected String getGrantType() {
+        return this.grantType;
+    }
+
+    protected String getRoleField() {
+        return this.roleField;
+    }
+
+    protected String getTokenTypeHeader() {
+        return this.tokenTypeHeader;
+    }
+
+    protected Key getKey() {
+        return this.key;
+    }
+
+    protected SignatureAlgorithm getSignatureAlgorithm() {
+        return this.signatureAlgorithm;
+    }
+
+    protected Map<String, Object> getPayload() {
+        return this.payload;
+    }
 }

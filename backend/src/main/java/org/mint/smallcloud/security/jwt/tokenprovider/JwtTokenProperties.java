@@ -3,7 +3,6 @@ package org.mint.smallcloud.security.jwt.tokenprovider;
 import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
-import lombok.Getter;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpHeaders;
 import org.springframework.stereotype.Component;
@@ -11,7 +10,6 @@ import org.springframework.stereotype.Component;
 import java.security.Key;
 
 @Component
-@Getter
 class JwtTokenProperties {
     @Value("${jwt.secret}")
     private String secretKey;
@@ -30,5 +28,37 @@ class JwtTokenProperties {
 
     String getGrantTypePrefix() {
         return grantType + ' ';
+    }
+
+    public String getSecretKey() {
+        return this.secretKey;
+    }
+
+    public String getAuthoritiesField() {
+        return this.authoritiesField;
+    }
+
+    public String getAuthorizationHeader() {
+        return this.authorizationHeader;
+    }
+
+    public String getGrantType() {
+        return this.grantType;
+    }
+
+    public SignatureAlgorithm getSignaturealgorithm() {
+        return this.signaturealgorithm;
+    }
+
+    public String getRoleField() {
+        return this.roleField;
+    }
+
+    public String getTypeHeaderField() {
+        return this.typeHeaderField;
+    }
+
+    public String getQueryParam() {
+        return this.queryParam;
     }
 }

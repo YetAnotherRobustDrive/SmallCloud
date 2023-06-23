@@ -1,6 +1,5 @@
 package org.mint.smallcloud.security.jwt.tokenprovider;
 
-import lombok.RequiredArgsConstructor;
 import org.mint.smallcloud.exception.ExceptionStatus;
 import org.mint.smallcloud.exception.ServiceException;
 import org.mint.smallcloud.security.jwt.dto.JwtTokenPropertiesDto;
@@ -16,9 +15,12 @@ import java.util.Collections;
 import java.util.Map;
 
 @Component
-@RequiredArgsConstructor
 public class JwtTokenFactory {
     private final JwtTokenProperties jwtTokenProperties;
+
+    public JwtTokenFactory(JwtTokenProperties jwtTokenProperties) {
+        this.jwtTokenProperties = jwtTokenProperties;
+    }
 
     public JwtToken createWithRole(String username, LocalDateTime now, Role role) {
         return createNotPreparedToken(role).prepare(username, now, createPropertiesDto(), Collections.emptyMap());

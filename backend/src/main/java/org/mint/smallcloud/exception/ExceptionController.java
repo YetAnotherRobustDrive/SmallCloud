@@ -1,6 +1,6 @@
 package org.mint.smallcloud.exception;
 
-import lombok.extern.log4j.Log4j2;
+import org.apache.logging.log4j.Logger;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.FieldError;
@@ -12,9 +12,10 @@ import javax.validation.ConstraintViolationException;
 import java.util.HashMap;
 import java.util.Map;
 
-@Log4j2
 @RestControllerAdvice
 public class ExceptionController {
+    private static final Logger log = org.apache.logging.log4j.LogManager.getLogger(ExceptionController.class);
+
     @ExceptionHandler(ServiceException.class)
     public ResponseEntity<?> serviceExceptionHandler(ServiceException e) {
         ErrorResponseDto responseDto = e.getStatus().getResponseDto();

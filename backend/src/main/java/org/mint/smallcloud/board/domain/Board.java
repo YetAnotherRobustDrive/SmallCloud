@@ -1,17 +1,11 @@
 package org.mint.smallcloud.board.domain;
 
-import lombok.AccessLevel;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-
 import javax.persistence.*;
 import java.time.LocalDateTime;
 
 @Table(name = "BOARDS")
 @Entity
-@NoArgsConstructor(access = AccessLevel.PROTECTED)
-@Getter
-public class    Board {
+public class Board {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "BOARD_ID")
@@ -37,13 +31,14 @@ public class    Board {
 //    @ManyToOne(targetEntity = Member.class)
 //    @JoinColumn(name = "id")
 //    private Member writer;
-
-
-    protected Board(String title, String content, BoardType boardType){
+    protected Board(String title, String content, BoardType boardType) {
         this.title = title;
         this.content = content;
         this.boardType = boardType;
         this.createdDate = LocalDateTime.now();
+    }
+
+    protected Board() {
     }
 
     public static Board board(String title, String content, BoardType boardType) {
@@ -51,4 +46,23 @@ public class    Board {
     }
 
 
+    public Long getId() {
+        return this.id;
+    }
+
+    public String getTitle() {
+        return this.title;
+    }
+
+    public String getContent() {
+        return this.content;
+    }
+
+    public LocalDateTime getCreatedDate() {
+        return this.createdDate;
+    }
+
+    public BoardType getBoardType() {
+        return this.boardType;
+    }
 }

@@ -1,7 +1,5 @@
 package org.mint.smallcloud.security.controller;
 
-import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 import org.mint.smallcloud.ResponseDto;
 import org.mint.smallcloud.security.dto.LoginDto;
 import org.mint.smallcloud.security.jwt.dto.JwtTokenDto;
@@ -10,6 +8,7 @@ import org.mint.smallcloud.user.domain.Roles;
 import org.mint.smallcloud.user.dto.RegisterDto;
 import org.mint.smallcloud.validation.BlankMessages;
 import org.mint.smallcloud.validation.PasswordValidation;
+import org.slf4j.Logger;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.annotation.Secured;
 import org.springframework.validation.annotation.Validated;
@@ -21,11 +20,14 @@ import javax.validation.constraints.NotBlank;
 
 @RestController
 @RequestMapping("/auth")
-@Slf4j
-@RequiredArgsConstructor
 @Validated
 public class AuthController {
+    private static final Logger log = org.slf4j.LoggerFactory.getLogger(AuthController.class);
     private final AuthFacadeService authFacadeService;
+
+    public AuthController(AuthFacadeService authFacadeService) {
+        this.authFacadeService = authFacadeService;
+    }
 
     @PostMapping("/login")
     public JwtTokenDto login(@Valid @RequestBody LoginDto loginDto) {
