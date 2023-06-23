@@ -26,7 +26,6 @@ export default async function GetDownloadAesFile(targetID, setter, after, filena
                                 await window.electron.saveBlob('data/' + filename, new Blob([res]));
                                 await window.electron.decryptFile('data/' + filename, key);
                                 const blob = await window.electron.getFromLocal('data/' + filename.split('.')[0] + '.' + filename.split('.')[1]);
-
                                 const url = window.URL.createObjectURL(blob);
                                 const link = document.createElement('a');
                                 link.href = url;
@@ -42,6 +41,7 @@ export default async function GetDownloadAesFile(targetID, setter, after, filena
                                 resolve(tRes);
                                 
                             } catch (error) {
+                                console.log(error);
                                 resolve({
                                     "status": 500,
                                     "data": error
@@ -57,6 +57,7 @@ export default async function GetDownloadAesFile(targetID, setter, after, filena
 
         const res = await download();
         if (res.status === 200) {
+            await window.electron.clearFolder('data');
             after();
             return [true, res.data];  //성공
         }
