@@ -1,7 +1,5 @@
 package org.mint.smallcloud.security.jwt;
 
-import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 import org.mint.smallcloud.exception.ServiceException;
 import org.mint.smallcloud.security.FilterExceptionManager;
 import org.mint.smallcloud.security.UserDetailsProvider;
@@ -20,8 +18,6 @@ import java.io.IOException;
 /**
  * jwt token의 인증을 위한 filter 한 번 실행
  */
-@RequiredArgsConstructor
-@Slf4j
 public class JwtFilter extends OncePerRequestFilter {
 
     private static final Logger log = org.slf4j.LoggerFactory.getLogger(JwtFilter.class);
