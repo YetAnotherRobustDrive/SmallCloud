@@ -78,7 +78,7 @@ export default function ModalFileview(props) {
                 if (result.isConfirmed) {
                     const res = await GetDownloadAesFile(fileData.id, setPercentage, () => {
                         setTimeout(() => setIsNowDownload(false), 250);
-                    }, fileData.name, result.value)
+                    }, fileData.name, result.value) 
                     if (!res[0]) {
                         SwalError(res[1]);
                         return;
