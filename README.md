@@ -12,6 +12,15 @@
 # Tech-Stack
 ![image](https://github.com/YetAnotherRobustDrive/SmallCloud/assets/69972996/787d4bda-e7f2-431e-9b79-4ec4331935b3)
 
+# How to run EXE
+### Encoding & Encryption are not available unless AES Crypt & FFmpeg are installed.
+```bash
+# download & install FFmpeg
+https://ffmpeg.org/download.html
+# download & install AES Crypt
+https://www.aescrypt.com/download/
+```
+
 # How to run Server and Web UI
 ```bash
 # 1. Clone this repository
@@ -20,15 +29,16 @@ git clone https://github.com/YetAnotherRobustDrive/SmallCloud
 # 2. Move to the directory
 cd SmallCloud
 
-# 3. Create '.env' file and fill the env list
-touch .env 
+# 3. Create an env file with the following script
+./make_env.pl
 
 # 4. Run docker-compose
 docker-compose up -d
 ```
 
-### ENV List
-```bash
+### ENV Example List
+
+```env
 SMALLCLOUD_SECRET=491e6074d7c427d40d50198db59feacfeb53db960cb61862b5e25e970cc2a9e3
 SMALLCLOUD_ORIGIN=http://localhost:3000
 SMALLCLOUD_BACKEND_PORT=8000
@@ -49,4 +59,5 @@ SMALLCLOUD_MINIO_USER=miniouser
 SMALLCLOUD_MINIO_PASSWORD=miniopassword
 SMALLCLOUD_MINIO_BUCKET_NAME=bucketname
 ```
+
 ![Footer](https://capsule-render.vercel.app/api?type=waving&color=auto&height=200&section=footer)

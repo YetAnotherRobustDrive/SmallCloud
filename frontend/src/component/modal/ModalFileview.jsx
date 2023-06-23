@@ -52,7 +52,11 @@ export default function ModalFileview(props) {
                         setIsAescryptExist(true);
                 });
         }
-        setPath()
+        try {
+            setPath()
+        } catch (error) {
+            console.log(error);
+        }
     }, [])
 
     const handleDownload = async (e) => {
@@ -86,6 +90,7 @@ export default function ModalFileview(props) {
                 }
             }).finally(() => {
                 setIsNowDownload(false);
+                window.electron.clearFolder("data");
             })
         }
         else {
