@@ -27,6 +27,9 @@ export default function QuestionPage() {
             res[1].forEach(async (item) => {
                 if (item.answerId !== null) {
                     const answerRes = await GetBoardListFrom('inquiries/search/answer?answerId=' + item.answerId);
+                    if(answerRes[1] === null) {
+                        return;
+                    }
                     item.answer = answerRes[1].content;
                     setMyQuestionAns([
                         ...myQuestionAns,
@@ -40,7 +43,7 @@ export default function QuestionPage() {
             setMyQuestion(res[1]);
         }
         fetchMyQuestion();
-    }, [myQuestionAns]);
+    }, []);
 
     const handleSubmit = async (e) => {
         e.preventDefault();
