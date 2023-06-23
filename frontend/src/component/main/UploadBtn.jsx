@@ -224,6 +224,10 @@ export default function UploadBtn() {
                 SwalError(res[1]);
                 return;
             }
+
+            SwalAlert("success", "업로드가 완료되었습니다.", () => {
+                window.location.reload()
+            });
         }
 
         const uploadEncoded = async (encoded) => {
