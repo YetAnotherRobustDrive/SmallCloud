@@ -61,7 +61,7 @@ app.on("activate", () => {
 });
 
 async function whenStart() {
-  const appDir = app.getAppPath()
+  const appDir = "";
   const dataDir = path.join(appDir, 'data')
   const ffmpegPath = await apis.getFFMpegPath();
   const aescryptPath = await apis.getAEScryptPath();

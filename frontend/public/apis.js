@@ -20,7 +20,7 @@ async function
   const filename = path.parse(filepath).name
   const initSegName = `init-${filename}$RepresentationID$.$ext$`
   const mediaSegName = `chunk-${filename}$RepresentationID$-$Number%05d$.$ext$`
-  const outname = path.join(resDir, filename + '.mpd')
+  const outname = path.join(filename + '.mpd')
   const args = [`-i`, filepath, `-map`, `0`, `-c:a`, `aac`, `-c:v`, `libx264`,
     `-profile:v`, `main`, `-vf`, `scale=iw:ih`,
     `-bf`, `1`, `-keyint_min`, `60`, `-g`, `60`, `-sc_threshold`,
@@ -31,6 +31,8 @@ async function
 
   return await new Promise((resolve, reject) => {
     try {
+      const pwd = process.cwd();
+      console.log("pwd", pwd);
       chdir(resDir)
       const ffmpeg = spawn(ffmpegPath, args)
       ffmpeg.stdout.on('data', (data) => {
@@ -40,22 +42,28 @@ async function
         console.error(data.toString())
       })
       ffmpeg.on('close', (code) => {
+        chdir(pwd);
         resolve(code);
       })
+      
     } catch (e) {
       reject(e);
     }
   }).then((_) => {
     return new Promise((resolve, reject) => {
-      stat(outname, (err, _) => {
-        if (err !== null)
+      stat(path.join(resDir, outname), (err, _) => {
+        if (err !== null) {
+          console.log("stat err", err);
+          console.log("stat", _);
           reject(err);
+        }
         else
-          resolve(outname);
+          resolve(path.join(resDir, outname));
       })
     })
   }).then((mpdPath) => {
     return new Promise((resolve, reject) => {
+      console.log("mpdPath", mpdPath);
       readdir(resDir, (err, files) => {
         if (err !== null)
           reject(err);
@@ -74,6 +82,7 @@ async function
 
 async function
   getFromLocal(filepath) {
+    console.log("getFromLocal", filepath);
   return new Promise((resolve, reject) => {
     try {
       if (!existsSync(filepath)) {
