@@ -134,7 +134,7 @@ export default function PrivatePage() {
             "서버를 변경하시겠습니까?",
             async () => {
                 localStorage.clear();
-                SwalAlert("success", "서버 설정이 초기화되었습니다.", () => { window.location.reload(); })
+                SwalAlert("success", "서버 설정이 초기화되었습니다.", () => { window.location.replace('/'); })
             },
             () => { return; }
         );
@@ -202,4 +202,6 @@ export default function PrivatePage() {
             </BodyFrame>
         </>
     )
+    //회원 탈퇴 기능 추가
+    //서버 변경 기능 추가
 }

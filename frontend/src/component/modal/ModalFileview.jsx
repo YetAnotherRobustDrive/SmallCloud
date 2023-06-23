@@ -23,8 +23,6 @@ import ModalFileopen from "./ModalFileopen";
 import ModalGetString from "./ModalGetString";
 import SwalConfirm from "../swal/SwalConfirm";
 import PostPurgeFile from "../../services/file/PostPurgeFile";
-import GetDownloadAesFile from "../../services/file/GetDownloadAesFile";
-import Swal from "sweetalert2";
 
 export default function ModalFileview(props) {
     const [isFileOpen, setIsFileOpen] = useState(false);
@@ -35,67 +33,12 @@ export default function ModalFileview(props) {
     const [isNowDownload, setIsNowDownload] = useState(false);
     const [percentage, setPercentage] = useState(0);
     const [shares, setShares] = useState([]);
-    const [isFfmpegExist, setIsFfmpegExist] = useState(false);
-    const [isAescryptExist, setIsAescryptExist] = useState(false);
     const fileData = props.file;
-
-    useEffect(() => {
-        const setPath = async () => {
-            window.electron.getFFMpegPath()
-                .then((path) => {
-                    if (path !== null)
-                        setIsFfmpegExist(true);
-                })
-            window.electron.getAEScryptPath()
-                .then((path) => {
-                    if (path !== null)
-                        setIsAescryptExist(true);
-                });
-        }
-        try {
-            setPath()
-        } catch (error) {
-            console.log(error);
-        }
-    }, [])
 
     const handleDownload = async (e) => {
         setIsNowDownload(true);
-        if (fileData.name.endsWith(".aes")) {
-            if (!isAescryptExist) {
-                SwalError("AEScrypt가 설치되어있지 않습니다.");
-                setIsNowDownload(false);
-                return;
-            }
-            Swal.fire({
-                title: '암호 키 입력',
-                input: 'password',
-                inputLabel: '암호화 시 사용한 키를 입력해주세요.',
-                inputPlaceholder: '비밀번호',
-                showCancelButton: true,
-                inputValidator: (value) => {
-                    if (!value) {
-                        return '비밀번호를 입력해주세요.'
-                    }
-                }
-            }).then(async (result) => {
-                if (result.isConfirmed) {
-                    const res = await GetDownloadAesFile(fileData.id, setPercentage, () => {
-                        setTimeout(() => setIsNowDownload(false), 250);
-                    }, fileData.name, result.value)
-                    if (!res[0]) {
-                        SwalError(res[1]);
-                        return;
-                    }
-                }
-            }).finally(() => {
-                setIsNowDownload(false);
-                window.electron.clearFolder("data");
-            })
-        }
-        else {
-            await GetDownloadFile(fileData.id, setPercentage, () => { setTimeout(() => setIsNowDownload(false), 250) }, fileData.name)
-        }
+        await GetDownloadFile(fileData.id, setPercentage, () => { }, fileData.name)
+        setTimeout(() => setIsNowDownload(false), 250);
     }
 
     const handleLabelEdit = (e) => {
@@ -246,9 +189,6 @@ export default function ModalFileview(props) {
                             {props.isDeleted === true && <div className='icon' onClick={handlePurge}><TbFileShredder /></div>}
                             <div className='icon' onClick={() => setIsFileOpen(true)}><MdOpenInFull /></div>
                             <div className='icon' onClick={() => {
-
-                                window.document.querySelector("video").hidden = true;
-                                window.document.querySelector("video").pause();
                                 props.after()
                             }}><AiOutlineClose /></div>
                         </div>
@@ -275,7 +215,7 @@ export default function ModalFileview(props) {
                                     {(props.isDeleted !== true && fileData.isShared !== true) &&
                                         <>
                                             <button onClick={handleLabelEdit} className="icon" ><TbEdit /></button>
-                                            <button onClick={handleLabelPrune} className="icon" style={{ marginLeft: "10px" }}><AiOutlineClose /></button>
+                                            <button onClick={handleLabelPrune} className="icon" style={{marginLeft: "10px"}}><AiOutlineClose /></button>
                                         </>
                                     }
                                     <div className="label">
