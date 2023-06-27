@@ -3,8 +3,8 @@
   "homepage": ".",
   "author": "Mint <https://github.com/YetAnotherRobustDrive>",
   "description": "Yet Another Robust Drive",
-  "name": "yard",
-  "version": "1.0.0",
+  "name": "s-cloud",
+  "version": "1.1.0",
   "license": "MIT",
   "private": true,
   "email": "",
@@ -53,7 +53,7 @@
   },
   "build": {
     "extends": null,
-    "productName": "YARD",
+    "productName": "S-Cloud",
     "appId": "org.mint.smallcloud",
     "files": [
       "*.js",

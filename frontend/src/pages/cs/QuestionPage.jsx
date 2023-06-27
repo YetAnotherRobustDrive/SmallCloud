@@ -40,7 +40,7 @@ export default function QuestionPage() {
             setMyQuestion(res[1]);
         }
         fetchMyQuestion();
-    }, [myQuestionAns]);
+    }, []);
 
     const handleSubmit = async (e) => {
         e.preventDefault();
