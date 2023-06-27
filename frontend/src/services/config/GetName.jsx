@@ -8,15 +8,15 @@ export default async function GetName() {
         const res = await fetch(localStorage.getItem("API_SERVER") + "admin/config/logo", model);
         if (res.status === 200) {
             if (res.body === null) {
-                return "YARD";
+                return "S-Cloud";
             }
             const data = await res.json();
             return data.value;  //성공
         }
         else {
-            return "YARD"; //실패
+            return "S-Cloud"; //실패
         }
     } catch (e) {
-        return "YARD";
+        return "S-Cloud";
     }
 }
