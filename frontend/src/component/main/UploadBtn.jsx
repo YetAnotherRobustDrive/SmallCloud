@@ -224,11 +224,35 @@ export default function UploadBtn() {
                 SwalError(res[1]);
                 return;
             }
-
-            SwalAlert("success", "업로드가 완료되었습니다.", () => {
-                window.location.reload()
-            });
         }
+
+        const uploadSegment = async (mpdFile, files, originId) => {
+
+            const formData = new FormData();
+            formData.append('originFileId', originId);
+            formData.append('file', mpdFile);
+            const res = await PostNewMpd(formData);
+            const segment = files;
+
+            for (let i = 0; i < segment.length; i++) {
+                if (segment[i] === undefined) {
+                    throw new Error("인코딩에 실패하였습니다.");
+                }
+                const segRaw = await window.electron.getFromLocal("data/" + segment[i]);
+                const segFile = new File(
+                    [segRaw],
+                    segment[i],
+                )
+                const formData = new FormData();
+                formData.append('file', segFile);
+                const res2 = await PostNewSegments(formData, res[1].id);
+                if (!res2[0]) {
+                    SwalError(res2[1]);
+                    return;
+                }
+            }
+        }
+
 
         const uploadEncoded = async (encoded) => {
             const formDataOrigin = new FormData();
@@ -248,32 +272,7 @@ export default function UploadBtn() {
                     encoded.mpdPath.split("/")[encoded.mpdPath.split("/").length - 1] :
                     encoded.mpdPath.split("\\")[encoded.mpdPath.split("\\").length - 1],
             )
-            const formData = new FormData();
-            formData.append('originFileId', originId);
-            formData.append('file', mpdFile);
-            const res = await PostNewMpd(formData);
-            const segment = encoded.files;
-            for (let i = 0; i < segment.length; i++) {
-                if (segment[i] === undefined) {
-                    throw new Error("인코딩에 실패하였습니다.");
-                }
-                const segRaw = await window.electron.getFromLocal("data/" + segment[i]);
-                const segFile = new File(
-                    [segRaw],
-                    segment[i],
-                )
-                const formData = new FormData();
-                formData.append('file', segFile);
-                const res2 = await PostNewSegments(formData, res[1].id);
-                if (!res2[0]) {
-                    SwalError(res2[1]);
-                    return;
-                }
-            }
-
-            SwalAlert("success", "업로드가 완료되었습니다.", () => {
-                window.location.reload()
-            });
+            await uploadSegment(mpdFile, encoded.files, originId);    
         }
 
         const render = async () => {
@@ -294,13 +293,13 @@ export default function UploadBtn() {
                 checkUsage();
 
                 const encoded = await encode(e.target.isEncode.checked);
-                const encrypted = await encrypt(e.target.isEncryp.checked);
-                setIsOnEncrypt(false)
                 setIsOnEncode(false)
 
                 if (e.target.isEncode.checked && encoded !== null) {
-                    uploadEncoded(encoded);
+                    await uploadEncoded(encoded);
                 }
+                const encrypted = await encrypt(e.target.isEncryp.checked);
+                setIsOnEncrypt(false)
 
                 if (e.target.isEncryp.checked && encrypted !== null) {
                     const encryptedRaw = await window.electron.getFromLocal(encrypted.path);
@@ -311,12 +310,16 @@ export default function UploadBtn() {
                         [encryptedRaw],
                         name,
                     )
-                    uploadSingle(encryptedFile);
+                    await uploadSingle(encryptedFile);
                     window.electron.rmLocalFile(encrypted.path)
                 }
                 if (!e.target.isEncode.checked && !e.target.isEncryp.checked) {
-                    uploadSingle(file);
+                    await uploadSingle(file);
                 }
+
+                SwalAlert("success", "업로드가 완료되었습니다.", () => {
+                    window.location.reload()
+                });            
             } catch (error) {
                 SwalError("업로드에 실패하였습니다.");
             }
